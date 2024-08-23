@@ -1,0 +1,100 @@
+/* responsive layout */
+@mixin mobile-layout {
+	@media (max-width: $padded-break-mobile) { 
+		@content;
+	}
+}
+
+@mixin tablet-layout {
+	@media (min-width: $padded-break-mobile) and (max-width: $padded-break-desktop){
+		@content;
+	}
+}
+
+@mixin desktop-layout {
+	@media (min-width: $padded-break-desktop) {
+		@content;
+	}
+}
+
+@mixin layout-grid-template-columns($media) {
+  grid-template-columns: minmax($layout-padding, 1fr) minmax(auto, $media) minmax($layout-padding, 1fr)
+}
+
+@mixin base-layout {
+  display: grid;
+	grid-template-columns: $layout-padding 1fr $layout-padding;
+  height: calc(100vh);
+  
+	> *:not(.full) { 
+		grid-column: 2;
+	}
+
+  > *.full { 
+		grid-column: 1/-1;
+	}
+}
+
+@mixin header-grid-template-columns($platform) {
+  @if $platform == 'mobile' {
+    grid-template-columns: minmax($layout-padding, 1fr) minmax(auto, calc(#{$break-mobile})) minmax($layout-padding, 1fr)
+  }
+
+  @if $platform == 'tablet' {
+    grid-template-columns: $layout-padding 70px 1fr $layout-padding
+  }
+
+  @if $platform == 'desktop' {
+    grid-template-columns: minmax($layout-padding, 1fr) 70px minmax(auto, calc(#{$break-desktop} - 70px)) minmax($layout-padding, 1fr)
+  }
+}
+
+@mixin footer-grid-template-columns($media) {
+  grid-template-columns: minmax($layout-padding, 1fr) minmax(auto, $media) minmax($layout-padding, 1fr)
+}
+
+@mixin conditional-button($type: 'default') {
+  @if $type == 'default' {
+    background-color: var(--button-default-background);
+    color: var(--button-default-text);
+  }
+
+  @if $type == 'default-hover' {
+    background-color: var(--button-default-background-hover);
+    color: var(--button-default-text-hover);
+  }
+
+  @if $type == 'negative' {
+    background-color: var(--button-negative-background);
+    color: var(--button-default-text);
+  }
+
+  @if $type == 'negative-hover' {
+    background-color: var(--button-negative-background-hover);
+    color: var(--button-default-text-hover);
+  }
+}
+
+/* scrollbar */
+@mixin scrollbar {
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        width: 12px;
+
+        &-thumb {
+            background-color: var(--scrollbar-thumb-background);
+            border-radius: 0;
+        }
+          
+        &-track {
+            background-color: var(--scrollbar-track-background);
+            border-radius: 0;
+    
+            &:hover {
+                background-color: var(--scrollbar-track-background-hover);
+                border: 1px solid var(--scrollbar-track-border-hover);
+            }
+        }
+    }
+}

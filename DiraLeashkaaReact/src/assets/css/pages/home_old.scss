@@ -1,0 +1,91 @@
+.home {
+    background-color: var(--background);
+
+    h1 {
+        background: var(--home-section-title-background);
+        padding: 0 10px;
+        margin: 20px 0;
+        border-top: 1px solid var(--home-section-title-border);
+        border-bottom: 1px solid var(--home-section-title-border);
+        font-size: rem(20px);
+        font-weight: bold;
+    }
+
+    .my-cities {
+
+        article {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+            & > div {
+
+                margin: 0 6px 20px;
+                color: var(--text);
+                height: 180px;
+                justify-content: center;
+                display: inline-grid;
+    
+                &.selected {
+                    div {
+                        border: 5px solid var(--home-my-cites-border-selected);
+                    }
+    
+                    span {
+                        color: var(--home-my-cites-text-selected);
+                    }
+                }
+    
+                div {
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    border: 5px solid var(--home-my-cites-border);
+                    margin: 2px;
+    
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }   
+                }
+    
+                span {
+                    text-align: center;
+                    display: block;
+                }
+            }
+        }
+
+        @include mobile-layout {
+            width: calc(100vw - 52px);
+            overflow-x: auto;
+
+            article {
+                display: flex;
+                
+                & > div {
+                    height: 130px;
+
+                    div {
+                        width: 100px;
+                        height: 100px;
+                    }
+                }
+            }
+        }
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+        div {
+            background-color: brown;
+            margin: 10px;
+            height: 150px;
+        }
+    }
+}
+
+/**/

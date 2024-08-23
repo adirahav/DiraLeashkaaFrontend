@@ -1,0 +1,124 @@
+:root {
+    /* palette */
+    --palette1: #ffffff;
+    --palette2:#eeeeee;
+    --palette2_transparent:#55eeeeee;
+    --palette3:#dddddd;
+    --palette4:#b0b0c1;
+    --palette5:#717376;
+    --palette5_transparent:#80717376;
+    --palette6:#f6e0eb;
+    --palette7:#eb4a7c;
+    --palette8:#c9e6fa;
+    --palette9:#44d9e6fa;
+    --palette10:#ffcc00;
+    --palette11:#547421;
+    --palette12:#e2efd9;
+    
+    --background: var(--palette2);
+    --header-background: var(--palette7);
+    --footer-background: var(--palette7);
+
+    --text: var(--palette5);
+    --text-error: var(--palette6);
+    --text-success: var(--palette5);
+    --text-message: var(--palette3);
+    --text-warning: var(--palette8);
+
+    --scrollbar-thumb-background: var(--palette3);
+    --scrollbar-track-background: var(--palette2);
+    --scrollbar-track-background-hover: var(--palette8);
+    --scrollbar-track-border-hover: var(--palette8);
+
+    --alert-background: var(--palette1);
+    --alert-header-background: var(--palette7);
+    --alert-icon-background-hover: var(--palette2);
+
+    --button-default-background: var(--palette5);
+    --button-default-background-hover: var(--palette4);
+    --button-default-text: var(--palette3);
+    --button-default-text-hover: var(--palette1);
+    --button-negative-background: var(--palette6);
+    --button-negative-background-hover: var(--palette7);
+    --button-negative-text: var(--palette3);
+    --button-negative-text-hover: var(--palette1);
+    
+    --icon-medal: var(--palette7);
+    --icon-miss-content: var(--palette5);
+
+    --home-section-title-background: var(--palette4);
+    --home-section-title-text: var(--palette1);
+    --home-section-title-border: var(--palette5);
+    --home-section-subtitle-background: var(--palette2);
+    --home-section-subtitle-text: var(--palette5);
+    --home-my-cites-border: var(--palette1);
+    --home-my-cites-border-selected: var(--palette7);
+    --home-my-cites-text-selected: var(--palette7);
+    
+    --nav-icon: var(--palette1);
+    --nav-text: var(--palette1);
+    --nav-header-color: var(--palette1);
+
+    --overlay-background: var(--palette2_transperent);
+
+    --form-background: var(--palette1);
+    --form-field-background: var(--palette2);
+    --form-field-calc-background: var(--palette3);
+    --form-field-autofill-background: var(--palette8);
+    --form-field-empty-background: var(--palette6);
+    --form-field-label: var(--palette5);
+    --form-field-text: var(--palette5);
+    --form-field-hint: var(--palette5);
+    --form-spinner-divider: var(--palette3);
+    --form-spinner-border: var(--palette3);
+    --form-icon-restore: var(--palette9);
+    
+    --number-picker-icon: var(--palette4);
+    --number-picker-icon-light: var(--palette3);
+
+    --form-spinner-background: var(--palette2);
+    --formText: var(--palette5);
+    --formDisableText: var(--palette4);
+    --formLabel: var(--palette4);
+    --formSpinnerDividerDark: var(--palette4);
+    --formBackground: var(--palette2);
+    --formBackgroundWizard: var(--palette3);
+    --formBackgroundDisable: var(--palette3);
+    --formBackgroundAutoFill: var(--palette9);
+    --formBackgroundEmpty: var(--palette6);
+    --formBackgroundTotal: var(--palette1);
+    --formBackgroundTotalBorder: var(--palette2);
+    --formError: var(--palette7);
+
+    --mobile-divider: var(--palette2);
+    --mobile-divider-drawer: var(--palette3);
+    --mobile-header-background: var(--palette2);
+    --mobile-header-divider: var(--palette3);
+    --mobile-overlay-background: var(--palette5_transperent);
+    --mobile-nav-background: var(--palette2);
+    --mobile-nav-header-background: var(--palette7);
+    --mobile-nav-header-color: var(--palette7);
+    --mobile-nav-icon: var(--palette7);
+    --mobile-nav-text: var(--palette5);
+    --mobile-home-section-title-background: var(--palette3);
+    --mobile-home-section-title-text: var(--palette5);
+}
+
+$tmpl1: repeat(auto-fill, minmax(250px, 1fr));
+
+
+$header-height: 60px;
+$footer-height: 40px;
+$logo-width: 50px;
+$logo-height: 50px;
+
+/* responsive layout */
+$layout-padding: 20px;
+
+$break-mobile: 767px;
+$break-tablet: 768px;
+$break-desktop: 1024px;
+
+$padded-break-mobile: $break-mobile + $layout-padding * 2;        // screen <= 807px
+$padded-break-tablet: $break-mobile + $layout-padding * 2;        // screen >  808px
+$padded-break-desktop: $break-desktop + $layout-padding * 2;      // screen >= 1064px

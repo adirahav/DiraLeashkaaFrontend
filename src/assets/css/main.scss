@@ -1,0 +1,24 @@
+/* Setup */
+@import './setup/typography';
+@import './setup/vars';
+@import './setup/functions';
+@import './setup/mixins';
+
+/* Basics */
+@import "./basics/base.scss";
+@import "./basics/helpers.scss";
+@import "./basics/layout.scss";
+@import "./basics/animations.scss";
+
+/* Pages */
+@import "./pages/home.scss";
+@import "./pages/property.scss";
+
+/* Components */
+@import "./cmps/header.scss";
+@import "./cmps/footer.scss";
+@import "./cmps/alert.scss";
+@import "./cmps/dynamic-modal.scss";
+@import "./cmps/loading.scss";
+@import "./cmps/chat.scss";
+@import "./cmps/form-fields.scss";

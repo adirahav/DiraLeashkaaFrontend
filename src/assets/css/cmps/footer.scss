@@ -1,0 +1,91 @@
+footer {
+    height: $footer-height;
+    background-color: var(--footer-background);
+    display: grid;  
+    align-items: center;
+
+    div {
+        grid-column: 2;
+        text-align: center;
+        
+        display: flex;
+        height: 40px;
+        
+        nav {
+            align-self: center;
+            margin: 0 auto;
+
+            ul {    
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                align-items: center;
+    
+                li {
+                    padding: 0 40px 0 0;
+
+                    &:first-child {
+                        padding: 0;
+                    }
+
+                    span {
+                        color: var(--nav-text)
+                    }
+
+                    a {
+                        align-items: center;
+                        display: inline-flex;
+
+                        &:hover {
+                            text-decoration: none;
+                            cursor: default;
+
+                            span, svg {
+                                transform: scale(105%);
+                            }
+                        }
+
+                        span {
+                            color: var(--nav-text)
+                        }
+    
+                        svg {
+                            margin-left: 5px;
+                            margin-top: 3px;
+                            color: var(--nav-icon);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include desktop-layout {
+        @include footer-grid-template-columns($break-desktop);
+    } 
+
+    @include tablet-layout {
+        @include footer-grid-template-columns($break-tablet);
+
+        div {
+            nav {
+                ul {    
+                    li {
+                        a {
+                            svg {
+                                display: none!important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include mobile-layout {
+        @include footer-grid-template-columns($break-mobile);
+
+        display: none;
+    }
+}

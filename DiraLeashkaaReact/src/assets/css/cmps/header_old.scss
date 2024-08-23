@@ -1,0 +1,118 @@
+header {
+    height: $header-height;
+    background-color: var(--header-background);
+    display: grid;  
+    align-items: center;
+    color: white;
+
+    .logo {
+        grid-column: 2;
+        display: flex;
+        align-items: center;
+
+        img {
+            width: $logo-width;
+            height: $logo-height;
+            margin-left: 10px;
+        }
+
+        h1 {
+            font-family: gveret-levin;
+        }
+    }
+
+    nav {
+        grid-column: 3;
+
+        ul {    
+            list-style: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+
+            li {
+                padding: 0 40px 0 0;
+            }
+        }
+    }
+    
+    @include mobile-layout {
+        .tablet, .desktop { display: none }
+        @include header-grid-template-columns('mobile');
+    
+        .logo > svg {
+            margin-right: 10px;
+        }
+            
+        nav {
+            height: 100%;
+            width: 70%;
+            background-color: var(--mobile-nav-background);
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: 1000;
+
+            &.showing {
+                -webkit-animation: slide-from-right 0.3s forwards;
+                animation: slide-from-right 0.3s forwards;   
+                display: inline; 
+            }
+
+            &.hiding {
+                -webkit-animation: slide-to-right 0.3s forwards;
+                animation: slide-to-right 0.3s forwards;    
+            }
+
+            &.show {
+                display: inline;
+            }
+
+            &.hide {
+                display: none;
+            }
+
+            ul {
+                display: block;
+
+                li {
+                    margin: 0px 20px;
+                    padding: 10px 0;
+
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: $logo-width;
+                        height: $logo-height;
+                        margin-left: 10px;
+                    }
+
+                    &.divider {
+                        border-bottom: 1px solid var(--mobile-nav-divider);
+                    }
+                }
+            }
+        }
+    }
+
+	@include tablet-layout {
+        .mobile, .desktop { display: none }
+        @include header-grid-template-columns('tablet');
+
+        nav {
+            ul {    
+                li {
+                    padding: 0 18px 0 0;
+                }
+            }
+        }
+    }
+
+    @include desktop-layout {
+        .mobile, .tablet { display: none }
+        @include header-grid-template-columns('desktop');
+    }
+
+    
+}

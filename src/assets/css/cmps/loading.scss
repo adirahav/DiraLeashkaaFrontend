@@ -1,0 +1,15 @@
+.loading {
+    margin: 0 auto;
+
+    svg {
+        width: 30px;
+        height: 30px;
+        animation-name: loading;
+        animation-duration: .8s;
+        animation-iteration-count: infinite;
+        animation-timing-function: steps(8,end);  
+        
+        fill: rgb(245, 245, 245);
+    }
+    
+}

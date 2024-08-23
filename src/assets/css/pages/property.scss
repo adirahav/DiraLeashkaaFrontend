@@ -1,0 +1,407 @@
+.property {
+    padding-top: 60px;
+    padding-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+
+    
+    .form {
+        grid-column: 1;
+        background-color: var(--form-background);
+        padding: 60px 20px 20px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        width: 390px;
+        position: relative;
+    }
+
+    .data {
+        grid-column: 2;
+        background-color: green;
+    }
+}
+
+.property .container .form .city-logo {
+    width: 100px; 
+    height: 100px;
+    border-radius: 50%; 
+    overflow: hidden;
+    border: 5px solid var(--home-my-cites-border);
+    margin: -63px 0 0 0;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.property .container .form .city-logo img {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover;
+}
+
+.property .container .form article {
+    display: flex;
+    width: 420px;
+    margin: 8px;
+    align-items: center; 
+}
+
+.property .container .form .label {
+    flex-shrink: 0; 
+    width: 130px;
+    text-align: right; 
+    padding-right: 10px; 
+    color: var(--form-text);
+    font-size: 14px;
+}
+
+.property .container .form .label i.fa-exclamation {
+    color: var(--icon-type3);
+    margin: 0 5px;
+}
+
+.property .container .form .field {
+    flex-grow: 1; 
+}
+
+.property .container .form .field input {
+    transition: background-color 0.3s ease; 
+    direction: ltr;
+    text-align: right;
+}
+
+.property .container .form .field-string .field input {
+    direction: rtl;
+}
+
+.property .container .form .field-searchable-dropdown .select2-selection,
+.property .container .form .field-required-searchable-dropdown .select2-selection,
+.property .container .form .field-string .field input,
+.property .container .form .field-string .field select,
+.property .container .form .field-number .field input {
+    background-color: var(--form-background);
+}
+
+.property .container .form .field-auto-fill .field input {
+    background-color: var(--form-background-autofill);
+}
+
+.property .container .form .field-calc .field input {
+    background-color: var(--form-background-disable);
+}
+
+.property .container .form .field-calc-bold .field input {
+    background-color: var(--form-background-disable);
+    font-weight: bold;
+}
+
+.property .container .form .field-calc-editable .field input {
+    background-color: var(--form-background);
+}
+
+
+.property .container .form .field input.empty,
+.property .container .form .field .select2-selection.empty {
+    background-color: var(--form-background-empty);
+}
+
+.property .container .form .field i.fa-arrows-rotate {
+    color: var(--icon-type4);
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+/*.property .container .form*/ .select2-dropdown .select2-results__options {
+    text-align: right;
+}
+
+.property .container .form .divider {
+    border: none;
+    border-top: 1px solid var(--divider);
+    margin: 20px 8px 0 22px;
+}
+
+.property .container .form .field-calc-total .divider {
+    width: 230px;
+    margin: 5px 0 7px;
+}
+
+.property .container .form .field-calc-total .label {
+    margin-top: 13px;
+}
+
+.property .container .form .field-calc-total span {
+    color: var(--form-text);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.property .container .form .title {
+    font-size: 14px;
+    margin-right: 9px;
+}
+
+.property .container .data {
+    width: 100%;
+}
+
+.property .container .interests {
+    margin-right: 18px;
+}
+
+.property .container .interests .table {
+    width: 100%;
+    background-color: white;
+    border-top-left-radius: 10px;
+    margin: 0 auto 20px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.property .container .interests .table-container {
+    width: 100%;
+    margin: 20px auto;
+    direction: ltr;
+}
+
+.property .container .interests .table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    direction: rtl;
+}
+
+.property .container .interests table td {
+    background: transparent;
+    border: 0;
+    text-align: right;
+    vertical-align: top;
+    position: relative;
+    direction: rtl;
+    font-size: 14px;
+    width: 20%;
+    padding: 10px 0;
+    display: inline-flex;
+}
+
+.property .container .interests table td:first-of-type {
+    width: 15%;
+}
+
+.property .container .interests table td:nth-of-type(2) {
+    width: 25%;
+}
+
+.property .container .interests table td i {
+    left: 6px;
+    top: 10px;
+}
+
+.property .container .interests table td i.fa-arrows-rotate {
+    color: var(--icon-type4);
+    margin: 2px 7px;
+    cursor: pointer;
+}
+
+.property .container .interests .number-picker {
+    position: absolute;
+    top: 12px;
+    background: white;
+}
+
+.property .container .yield {
+    flex: 1;
+    margin-right: 18px;
+}
+
+.property .container .yield h1 {
+    background: var(--home-section-title-background);
+    padding: 0 10px;
+    margin-top: 0;
+    border-top: 1px solid var(--home-section-title-border);
+    border-bottom: 1px solid var(--home-section-title-border);
+    font-size: 18px;
+}
+
+.property .container .yield h2 {
+    color: var(--text);
+    font-size: 18px;
+}
+
+.property .container .yield .chart {
+    /*border-radius: 10px; */
+    overflow: hidden;
+    border-bottom-left-radius: 10px;
+}
+
+.property .container .yield .table {
+    width: 100%;
+    background-color: white;
+    /*border-radius: 10px;*/
+    margin: 20px auto;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.property .container .yield .table-container {
+    width: 100%;
+    margin: 20px auto;
+    overflow-x: auto;
+    height: 300px;
+    direction: ltr;
+}
+
+.property .container .yield .table-container::-webkit-scrollbar {
+    width: 12px;
+}
+  
+.property .container .yield .table-container::-webkit-scrollbar-thumb {
+    background-color: var(--table-scrollbar-thumb);
+}
+  
+.property .container .yield .table-container::-webkit-scrollbar-track {
+    background-color: var(--table-scrollbar-track);
+}
+
+.property .container .yield .table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    direction: rtl;
+}
+
+.property .container .yield .table-container table thead {
+    position: sticky;
+    top: -1px;
+    z-index: 100;
+    border-top: 1px solid var(--table-border);
+  }
+
+.property .container .yield .table-container table th, 
+.property .container .yield .table-container table td {
+    padding: 8px;
+    text-align: center;
+    direction: ltr;
+    color: var(--text);
+    background: var(--table-td-background);
+    border: 1px solid var(--table-border);
+    position: relative;
+}
+
+.property .container .yield .table-container table td i {
+    /*font-size: 12px;
+    position: absolute;*/
+    left: 6px;
+    top: 10px;
+}
+
+.property .container .yield .table-container table td.selected {
+    background: var(--table-td-background-selected);
+}
+
+.property .container .yield .table-container table td.bold {
+    background: var(--table-td-background-bold);
+}
+
+.property .container .yield .table-container table td.negative {
+    color: var(--text-negative);
+}
+
+.property .container .yield .table-container table td.disable {
+    color: var(--text-disable);
+}
+
+.property .container .yield .table-container table th {
+    background: var(--table-td-background-header);
+}
+
+.property .container .data.lock {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+}
+
+.property .container .data.lock::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.property .container .data.lock .unavailable-overlay {
+    position: absolute;
+    top: 120px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    z-index: 999;
+    flex-direction: column;
+}
+
+.property .container .data.lock .unavailable-overlay img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+.property .container .data.lock .unavailable-overlay div {
+    font-size: 30px;
+    margin-top: 30px;
+}
+.property .container .data.lock .interests {
+    filter: blur(10px);
+    overflow: hidden;
+}
+
+.property .container .data.lock .yield {
+    filter: blur(10px);
+}
+
+.property .container .data.lock .yield .table-container {
+    overflow: hidden;
+}
+
+
+input {
+    width: 214px;
+    height: 20px;
+    padding: 5px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--form-text);
+}
+
+.field-drop-down .field::after {
+    border-color: #888 transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px 4px 0 4px;
+}
+
+.select2-container {
+    width: 230px!important;
+    height: 30px;
+    direction: rtl;
+}
+
+.select2-container .select2-selection__arrow {
+    left: 1px;
+    right: inherit!important;
+} 
+
+.select2-container .select2-selection__rendered {
+    padding-right: 8px!important;
+    font-size: 14px;
+    color: var(--form-text);
+}
+
+.select2-selection--single {
+    border: 0!important;
+}
+

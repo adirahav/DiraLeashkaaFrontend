@@ -1,0 +1,320 @@
+.home {
+    background-color: var(--background);
+
+    h1 {
+        background: var(--home-section-title-background);
+        color: var(--home-section-title-text);
+        padding: 0 10px;
+        margin: 20px 0;
+        font-size: rem(20px);
+    }
+
+    h2 {
+        background: var(--home-section-subtitle-background);
+        color: var(--home-section-subtitle-text);
+        padding: 0 10px;
+        margin: 20px 0;
+        font-size: rem(20px);
+    }
+
+    .my-cities {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+        & > article {
+            
+            margin: 0 6px 20px;
+            color: var(--text);
+            height: 180px;
+            justify-content: center;
+            display: inline-grid;
+
+            &.selected {
+                div {
+                    border: 5px solid var(--home-my-cites-border-selected);
+                }
+
+                span {
+                    color: var(--home-my-cites-text-selected);
+                }
+            }
+
+            div {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 5px solid var(--home-my-cites-border);
+                margin: 2px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }   
+            }
+
+            span {
+                text-align: center;
+                display: block;
+            }
+        }
+    }
+
+    .my-properties {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+        & > article {
+            background-color: white;
+            
+            margin: 0 6px 20px;
+            color: var(--text);
+            min-height: 180px;
+            justify-content: right;
+            display: grid;
+            grid-template-rows: 1fr 20px;
+            padding: 5px 10px;
+
+            & > div {
+                & > div {
+                    svg {
+                        float: left;
+                        margin: 0 2px 2px 0;
+
+                        &[data-testid="StarBorderIcon"] {
+                            fill: var(--icon-medal);
+                        }
+                        
+                        &[data-testid="RuleIcon"] {
+                            fill: var(--icon-miss-content);
+                        }
+                    }
+                }
+
+                & > img {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+        div {
+            background-color: brown;
+            margin: 10px;
+            height: 150px;
+        }
+    }
+
+    .best-yields {
+        h2 {
+
+        }
+
+        & > div {
+            display: grid;
+            grid-gap: 10px;
+
+            .data {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+        
+                & > article {
+                    background-color: white;
+                    margin: 0 6px 20px;
+                    color: var(--text);
+                    min-height: 180px;
+                    text-align: center;
+                    display: grid;
+                    padding: 5px 10px;
+                    
+                    h3 {
+                        margin: auto;
+                    }
+
+                    img {
+                        margin: 0 auto 5px;
+                    }
+                }
+            }
+    
+            .chart {
+                margin-bottom: 20px;
+            }
+                
+        }        
+    }
+
+    @include tablet-layout {
+
+        & {
+            grid-column: 1 / -1!important;
+        }
+
+        h1, h2 {
+            padding:  0 20px;
+        }
+        
+        .my-cities {
+            display: flex;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            margin: 0 20px;
+
+            article {
+                height: 130px;
+                
+                & > div {
+                    width: 100px;
+                    height: 100px;
+                }
+            }
+        }
+
+        .my-properties {
+            display: flex;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            margin: 0 20px;
+            max-width: calc(100% - 40px); 
+
+            article {
+                div, span {
+                    width: 200px;
+                }
+            }
+        }
+
+        .best-yields {
+            & > div {
+                grid-template-columns: 1fr 1fr;
+                margin: 0 20px;
+
+                .data {
+                    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            
+                    & > article {
+                        min-height: 100px;
+                        display: grid;
+                        grid-template-columns: 2fr 5fr;
+            
+                        h3 {
+                            grid-column: 2;
+                            margin: auto;
+                            height: 50px;
+                            padding: 0;
+                        }
+    
+                        img {
+                            grid-column: 1;
+                            grid-row: 1 / -1;
+                            width: 40px;
+                            height: 40px;
+                        }
+    
+                        span {
+                            grid-column: 2;
+                            font-weight: bold;
+                        }
+    
+                    }
+                }                
+            }        
+        }
+    }
+
+    @media (min-width: 807px) and (max-width: 850px) { // small tablet
+        .best-yields {
+            & > div {
+                
+                .data {
+                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+                    & > article {
+                        h3 {
+                            font-size: 1em;
+                        }
+
+                        img {
+                            width: 34px;
+                            height: 34px;
+                        }
+
+                        span {
+                            font-size: 15px;
+                        }
+                    }
+                }            
+            }        
+        }
+    }
+
+    @include mobile-layout {
+        & {
+            grid-column: 1 / -1!important;
+        }
+
+        h1 {
+            background: var(--mobile-home-section-title-background);
+            color: var(--mobile-home-section-title-text);
+            border-top: 1px solid var(--home-section-title-border);
+            border-bottom: 1px solid var(--home-section-title-border);
+            border-bottom-left-radius: 15px;
+            border-top-left-radius: 15px;
+            margin-left: 20px;
+        }
+        
+        h1, h2 {
+            padding:  0 20px;
+        }
+        
+        .my-cities {
+            display: flex;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            margin: 0 20px;
+
+            article {
+                height: 100px;
+
+                & > div {
+                    width: 78px;
+                    height: 78px;
+                }
+            }
+        }
+
+        .my-properties {
+            display: flex;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            margin: 0 20px;
+            max-width: calc(100% - 40px); 
+
+            article {
+                div, span {
+                    width: 94px;
+                }
+            }
+        }
+
+        .best-yields {
+            & > div {
+                margin: 0 20px;
+
+                .data {
+                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            
+                    
+                }                
+            }        
+        }
+        
+    }       
+}
+
+/**/

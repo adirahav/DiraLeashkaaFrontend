@@ -1,0 +1,86 @@
+:root {
+    /* palette */
+    /*--palette1: white;
+    --palette2: #cccccc;
+    --palette3: black;
+    --palette4: blue;
+    --palette5: #008000;
+    --palette6: red;
+    --palette7: yellow;
+    --palette8: orange;*/
+    //////////////////////////////////////xxxxxxxxxxxxxxxxxxxxxxxxxx
+    --palette1: white;
+    --palette1_transparent: #ffffffcc;
+    --palette2: #eeeeee;
+    --palette2_transparent: #00000011;
+    --palette3: #dddddd;
+    --palette4: #b0b0c1;
+    --palette5: #717376;
+    --palette5_transparent: #71737680;
+    --palette6: #f6e0eb;
+    --palette7: #eb4a7c;
+    --palette8: #c9e6fa;
+    --palette9: #d9e6fa44;
+    --palette10: #ffcc00;
+    --palette11: #547421;
+    --palette12: #e2efd9;
+    
+    
+    --background: var(--palette2);
+    --text: var(--palette5);
+    --text-error: var(--palette6);
+    --text-success: var(--palette5);
+    --text-message: var(--palette3);
+    --text-warning: var(--palette8);
+
+    --header-background: var(--palette7);
+    --footer-background: var(--palette7);
+
+    --scrollbar-thumb-background: var(--palette7);
+    --scrollbar-track-background: var(--palette3);
+    --scrollbar-track-background-hover: var(--palette3);
+    --scrollbar-track-border-hover: var(--palette3);
+
+    --alert-background: var(--palette1);
+    --alert-header-background: var(--palette7);
+    --alert-icon-background-hover: var(--palette7);
+
+    --button-default-background: var(--palette5);
+    --button-default-background-hover: var(--palette4);
+    --button-default-text: var(--palette3);
+    --button-default-text-hover: var(--palette1);
+    --button-negative-background: var(--palette6);
+    --button-negative-background-hover: var(--palette7);
+    --button-negative-text: var(--palette3);
+    --button-negative-text-hover: var(--palette1);
+    
+    --home-section-title-background: var(--palette3);
+    --home-section-title-border: var(--palette4);
+    --home-my-cites-border: var(--palette1);
+    --home-my-cites-border-selected: var(--palette7);
+    --home-my-cites-text-selected: var(--palette7);
+
+    --mobile-overlay-background: var(--palette5_transparent);
+    --mobile-nav-background: var(--palette2);
+    --mobile-nav-divider: var(--palette3);
+
+}
+
+$tmpl1: repeat(auto-fill, minmax(250px, 1fr));
+
+
+$header-height: 60px;
+$footer-height: 40px;
+$logo-width: 50px;
+$logo-height: 50px;
+
+/* responsive layout */
+$layout-padding: 20px;
+
+$break-mobile: 767px;
+$break-tablet: 768px;
+$break-desktop: 1024px;
+
+$padded-break-mobile: $break-mobile + $layout-padding * 2;        // screen <= 807px
+$padded-break-tablet: $break-mobile + $layout-padding * 2;        // screen >  808px
+$padded-break-desktop: $break-desktop + $layout-padding * 2;      // screen >= 1064px

@@ -1,0 +1,20 @@
+.main-layout {
+    
+    @include base-layout;  
+    @include scrollbar;
+    
+    @include mobile-layout {
+        .tablet, .desktop { display: none }
+        @include layout-grid-template-columns($break-mobile);
+    }
+
+	@include tablet-layout {
+        .mobile, .desktop { display: none }
+        @include layout-grid-template-columns($break-mobile);
+    }
+
+    @include desktop-layout {
+        .mobile, .tablet { display: none }
+        @include layout-grid-template-columns($break-desktop);
+    }
+}
