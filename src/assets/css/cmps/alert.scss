@@ -7,8 +7,8 @@
     width: 400px;
     min-height: 290px;
     margin: 20px auto; 
-    border: 1px solid #ccc;
-    border-radius: 16px;
+    border: 1px solid var(--alert-border);
+    border-radius: 10px;
     z-index: 5;
     background-color: var(--alert-background);
     -webkit-box-shadow: 0 0 0 100vmax var(--overlay-background);
@@ -16,7 +16,7 @@
 
     header {
         background-color: var(--alert-header-background);
-        border-radius: 16px 16px 0 0;
+        border-radius: 10px 10px 0 0;
         height: 48px;
         display: flex;
         justify-content: space-between;
@@ -29,12 +29,17 @@
 
             h2 {
                 font-size: 14px;
-                padding: 3px 0 0 10px;
+                padding: 3px 10px 0 0;
+                color: var(--alert-header-title);
             }
         }
+
+        svg:first-child {
+            color: var(--alert-header-icon-warning);
+        }
         
-        svg:not(:first-child):hover {
-            background-color: var(--alert-icon-background-hover);
+        svg:not(:first-child) {
+            color: var(--alert-header-icon-close);
         }
     }
     
@@ -54,6 +59,10 @@
         color: var(--text-error);
     }
     
+    &.tooltip header div {
+        color: var(--text-tooltip);
+    }
+
     .message {
         @include scrollbar;
         
@@ -84,10 +93,10 @@
         button {
             width: 104px;
             height: 36px;
-            border-radius: 18px;
+            border-radius: 8px;
             border: 0;
             font-weight: bold;
-            margin: 5px 5px 0;
+            margin: 5px;
 
             
             &.positive {
@@ -105,6 +114,15 @@
                     @include conditional-button('negative-hover');
                 }
             }
+        }
+    }
+
+    @include mobile-layout {
+        width: calc(100% - 40px);
+        min-height: 210px;
+
+        .message {
+            height: 100px;
         }
     }
 }

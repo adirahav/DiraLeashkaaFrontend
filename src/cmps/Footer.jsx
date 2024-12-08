@@ -1,11 +1,9 @@
 import { NavLink } from "react-router-dom"
-import { useSelector } from 'react-redux'                   /* STORE: [CART] STEP 13 */
-import { addToCart } from '../store/actions/cart.actions'   /* STORE: [CART] STEP 14 */
+import { useSelector } from 'react-redux'                   
 import { ContactUsIcon, ShareIcon, TermsOfUseIcon, IconSizes } from "../assets/icons" 
 import { useEffect, useState } from "react"
 
 export function Footer() {
-    const cart = useSelector(storeState => storeState.cartModule.cart)   /* STORE: [CART] STEP 16 */
     const [showAllFooter, setShowAllFooter] = useState(false)
 
     useEffect(() => {

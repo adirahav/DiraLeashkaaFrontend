@@ -1,0 +1,122 @@
+
+.dialog {
+    position: absolute;
+    top: calc(50% - 20px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    min-height: 290px;
+    margin: 20px auto; 
+    border: 1px solid var(--alert-border);
+    border-radius: 10px;
+    direction: ltr;
+    z-index: 5;
+    -webkit-box-shadow: 0 0 0 100vmax var(--overlay-background);
+    box-shadow: 0 0 0 100vmax var(--overlay-background);
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 4fr 1fr;
+    display: grid;
+    gap: 0;
+    grid-template-areas:
+        "m i"
+        "b i";
+
+    &.no_internet {
+        background-color: var(--dialog_background_no_internet);
+    }
+
+    .image {
+        grid-area: i;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        } 
+    }
+    
+    .message {
+        grid-area: m;
+        padding: 20px;
+        direction: rtl;
+
+        h2 {
+            color: var(--dialog_title);
+            padding: 0 0 10px 0;
+        }
+
+        p {
+            color: var(--dialog_text);
+        }
+    }
+    
+    .buttons {
+        grid-area: b;
+
+        border: 0;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+        margin: 0 20px;
+        text-align: center;
+
+        button {
+            width: 104px;
+            height: 36px;
+            border-radius: 8px;
+            border: 0;
+            font-weight: bold;
+            margin: 5px;
+
+            
+            &.positive {
+                @include conditional-button('default');
+
+                &:hover {
+                    @include conditional-button('default-hover');
+                }
+            }
+            
+            &.negative {
+                @include conditional-button('negative');
+
+                &:hover {
+                    @include conditional-button('negative-hover');
+                }
+            }
+        }
+    }
+
+    @include tablet-layout {
+        max-width: calc(100vw - 40px);
+    }
+    
+    @include mobile-layout {
+        
+        grid-template-columns: 1fr;
+        grid-template-rows: 4fr 3fr 1fr;
+        grid-template-areas:
+            "i" 
+            "m"
+            "b";
+
+        width: calc(100vw - 40px);
+        height: calc(100% - 40px);
+
+        .image {
+            img {
+                border-top-right-radius: 10px;
+                border-top-left-radius: 10px;
+                border-bottom-right-radius: 0;
+                max-height: 340px;
+            }
+            
+        }
+
+        .message {
+            
+        }
+    }
+}

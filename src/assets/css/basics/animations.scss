@@ -1,108 +1,63 @@
 @keyframes slide-in-out {
-    0% {
-        transform: translateY(150%);
-    }
-
-    12% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    90% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(150%);
-        opacity: 0;
-    }
+    0% { transform: translateY(150%); }
+    12% { transform: translateY(0); opacity: 1; }
+    90% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(150%); opacity: 0; }
 }
 
 @keyframes fadein {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes fadeout {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 @keyframes scalein {
-    from {
-        transform: scale(0.6);
-    }
-
-    to {
-        transform: scale(1);
-    }
+    from { transform: scale(0.6); }
+    to { transform: scale(1); }
 }
 
 @keyframes scaleout {
-    from {
-        transform: scale(1);
-    }
-
-    to {
-        transform: scale(0.6);
-    }
+    from { transform: scale(1); }
+    to { transform: scale(0.6); }
 }
 
 @keyframes scaleinsoft {
-    from {
-        transform: scale(0.8);
-    }
-
-    to {
-        transform: scale(1);
-    }
+    from { transform: scale(0.8); }
+    to { transform: scale(1); }
 }
 
 @keyframes slide-from-left {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(0);
-    }
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
 }
 
 @keyframes slide-to-left {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-100%);
-    }
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
 }
 
 @keyframes slide-from-right {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
+    from { transform: translateX(100%); }
+    to { transform: translateX(0);  }
 }
 
 @keyframes slide-to-right {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(100%);
-    }
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
+@keyframes slide-from-bottom {
+    from { bottom: -100%; }
+    to { bottom: 0; }
+}
+
+@keyframes slide-to-bottom {
+    from { bottom: 0; }
+    to { bottom: -100%; }
 }
 
 @keyframes loading {
@@ -113,3 +68,94 @@
         transform: rotate(540deg);
     }
 }
+
+@keyframes loading0-animation {
+    0% { background-color: var(--loading-0) }
+    20% { background-color: var(--loading-1) }
+    40% { background-color: var(--loading-2) }
+    60% { background-color: var(--loading-3) }
+    80% { background-color: var(--loading-4) }
+    100% { background-color: var(--loading-0) } 
+}
+
+@keyframes loading1-animation {
+    0% { background-color: var(--loading-1) }
+    20% { background-color: var(--loading-2) }
+    40% { background-color: var(--loading-3) }
+    60% { background-color: var(--loading-4) }
+    80% { background-color: var(--loading-0) }
+    100% { background-color: var(--loading-1) } 
+}
+
+@keyframes loading2-animation {
+    0% { background-color: var(--loading-2) }
+    20% { background-color: var(--loading-3) }
+    40% { background-color: var(--loading-4) }
+    60% { background-color: var(--loading-0) }
+    80% { background-color: var(--loading-1) }
+    100% { background-color: var(--loading-2) } 
+}
+
+@keyframes loading3-animation {
+    0% { background-color: var(--loading-3) }
+    20% { background-color: var(--loading-4) }
+    40% { background-color: var(--loading-0) }
+    60% { background-color: var(--loading-1) }
+    80% { background-color: var(--loading-2) }
+    100% { background-color: var(--loading-3) } 
+}
+
+@keyframes loading4-animation {
+    0% { background-color: var(--loading-4) }
+    20% { background-color: var(--loading-0) }
+    40% { background-color: var(--loading-1) }
+    60% { background-color: var(--loading-2) }
+    80% { background-color: var(--loading-3) }
+    100% { background-color: var(--loading-4) } 
+}
+
+@keyframes loading5-animation {
+    0% { background-color: var(--loading-4) }
+    20% { background-color: var(--loading-0) }
+    40% { background-color: var(--loading-1) }
+    60% { background-color: var(--loading-2) }
+    80% { background-color: var(--loading-3) }
+    100% { background-color: var(--loading-4) } 
+}
+
+@keyframes loading6-animation {
+    0% { background-color: var(--loading-4) }
+    20% { background-color: var(--loading-0) }
+    40% { background-color: var(--loading-1) }
+    60% { background-color: var(--loading-2) }
+    80% { background-color: var(--loading-3) }
+    100% { background-color: var(--loading-4) } 
+}
+
+@keyframes loading7-animation {
+    0% { background-color: var(--loading-4) }
+    20% { background-color: var(--loading-0) }
+    40% { background-color: var(--loading-1) }
+    60% { background-color: var(--loading-2) }
+    80% { background-color: var(--loading-3) }
+    100% { background-color: var(--loading-4) } 
+}
+
+@keyframes loading8-animation {
+    0% { background-color: var(--loading-4) }
+    20% { background-color: var(--loading-0) }
+    40% { background-color: var(--loading-1) }
+    60% { background-color: var(--loading-2) }
+    80% { background-color: var(--loading-3) }
+    100% { background-color: var(--loading-4) } 
+}
+
+@keyframes loading9-animation {
+    0% { border-top: 1px solid var(--loading-0) }
+    20% { border-top: 1px solid var(--loading-1) }
+    40% { border-top: 1px solid var(--loading-2) }
+    60% { border-top: 1px solid var(--loading-3) }
+    80% { border-top: 1px solid var(--loading-4) }
+    100% { border-top: 1px solid var(--loading-0) } 
+}
+

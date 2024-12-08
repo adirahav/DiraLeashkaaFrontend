@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { imageUploadService } from '../services/image-upload.service'
+import { imageUploadService } from '../services/imageUpload.service'
 
 export function ImageUpload({ onUploaded = null }) {
     const [imgData, setImgData] = useState({

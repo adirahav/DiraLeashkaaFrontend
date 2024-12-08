@@ -16,7 +16,7 @@ async function getCounter() {
         const counter = await httpService.put(BASE_URL, coockieData)
         return counter
     } catch(err) {
-        console.log(`Had problems get counter`)
+        console.error(`Had problems get counter`)
         throw err
     }
 }

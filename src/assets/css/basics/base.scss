@@ -20,6 +20,17 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-y: hidden;
+
+    @include mobile-layout {
+
+        &.landscape {
+            transform: rotate(90deg);
+            transform-origin: center;
+            width: 100vh;
+            height: 100vw;
+            overflow: hidden;
+        }
+    }
 }
 
 img {

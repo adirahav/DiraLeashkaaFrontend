@@ -1,8 +1,12 @@
-/* STORE: [USER] STEP 5 */
+import { authService } from "../../services/auth.service.js"
 import { userService } from "../../services/user.service.js"
 
 export const LOGGEDIN_USER = 'LOGGEDIN_USER'
-export const GET_USERS = 'GET_USERS'
+export const GET_HOME = "GET_HOME"
+export const ABOUT_DELETE_PROPERTY = "ABOUT_DELETE_PROPERTY"
+export const DELETING_PROPERTY_START = "DELETING_PROPERTY_START"
+export const DELETING_PROPERTY_DONE = "DELETING_PROPERTY_DONE"
+export const LONG_PRESSED_PROPERTY = "LONG_PRESSED_PROPERTY"
 export const UPDATE_USER = 'UPDATE_USER'
 export const DELETE_USER = 'DELETE_USER'
 export const SIGNUP = 'SIGNUP'
@@ -10,8 +14,16 @@ export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 
 const initialState = {
-    users: null,
-    loggedinUser: userService.getLoggedinUser()
+    home: {
+        properties: null,
+        bestYields: null,
+        isPropertiesNeedToRefresh: true,
+        isBestYieldsNeedToRefresh: true,
+        aboutDeleteId: null,
+        isDeleting: false,
+        longPressedId: null
+    },
+    loggedinUser: authService.getLoggedinUser()
 }
 
 export function userReducer(state = initialState, action = {}) {
@@ -22,16 +34,55 @@ export function userReducer(state = initialState, action = {}) {
                 ...state,
                 loggedinUser: action.loggedinUser
             }
-        case GET_USERS:
+        case GET_HOME:
             return {
                 ...state,
-                users: action.users
+                home: {
+                    ...state.home,
+                    properties: action.home?.properties,
+                    bestYields: action.home?.bestYields,
+                    isPropertiesNeedToRefresh: action.home?.isPropertiesNeedToRefresh,
+                    isBestYieldsNeedToRefresh: action.home?.isBestYieldsNeedToRefresh,
+                }
+            }
+        case ABOUT_DELETE_PROPERTY:
+            return {
+                ...state,
+                home: {
+                    ...state.home,
+                    aboutDeleteId: action.propertyId
+                }
+            }
+        case DELETING_PROPERTY_START:
+            return {
+                ...state,
+                home: {
+                    ...state.home,
+                    isDeleting: true
+                }
+            }
+        case DELETING_PROPERTY_DONE:
+            return {
+                ...state,
+                home: {
+                    ...state.home,
+                    isDeleting: false
+                }
+            }
+        case LONG_PRESSED_PROPERTY:
+            return {
+                ...state,
+                home: {
+                    ...state.home,
+                    longPressed: action.propertyId
+                }
             }
 
         case UPDATE_USER:
+            userService.saveLocalUser(action.savedUser)
             return {
                 ...state,
-                users: state.users.map((currUser) => currUser._id === action.userToSave._id ? action.userToSave : currUser),
+                loggedinUser: action.savedUser
             }
         
         case DELETE_USER:
@@ -41,9 +92,9 @@ export function userReducer(state = initialState, action = {}) {
             }
 
         case SIGNUP:
+            userService.saveLocalUser(action.signupUser)
             return {
                 ...state,
-                users: state.users.concat(action.signupUser),
                 loggedinUser: action.signupUser
             }
 

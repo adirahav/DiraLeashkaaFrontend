@@ -1,0 +1,299 @@
+.form-field {
+  border: 1px solid var(--form-field-border);
+  color: rgb(0, 0, 0);
+  border-radius: 3px;
+  margin: 15px 0;
+  width: 268px;
+  position: relative;
+
+  label {
+      display: flex;
+      height: 34px;
+      position: relative;
+      color: var(--form-field-label);
+          
+      span {
+          color: var(--form-field-label);
+          font-size: 0.75rem;
+          right: 8px;
+          line-height: 36px;
+          position: absolute;
+          transform-origin: left;
+      }
+
+      input {
+          border: 0;
+          flex: 1 0 auto;
+          padding: 9px 8px 7px;
+          background: var(--form-field-input-background);
+          color: var(--form-field-input-text);
+
+          &:valid  {
+              font-size: rem(12px);
+              padding: 14px 8px 2px;
+          
+              & + span {
+                  transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+              }
+          }
+
+          &:focus-visible {
+              outline: 0;
+          }
+
+          &[disabled] {
+            color: var(--form-field-input-disabled-text);      
+            cursor: not-allowed;       
+            opacity: 0.6;     
+            
+            & + span {
+              transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+          }
+        }
+      }
+  }
+
+  .tooltip {
+    position: absolute;
+    top: 8px;
+    right: -29px;
+    color: var(--form-field-tooltip-background);
+  }
+
+  &.email {
+    text-align: left;
+    direction: ltr;
+  }
+
+  &.password {
+    text-align: left;
+    direction: ltr;
+
+    svg {
+      position: absolute;
+      top: 15px;
+      right: 13px;
+    }
+  }
+  
+  &.button {
+    border: 0;
+    background-color: transparent;
+    text-align: center;
+    width: fit-content;
+
+    button {
+      width: 75px;
+      height: 36px;
+      border-radius: 8px;
+      border: 0;
+      padding: 10px 20px;
+      margin: 5px;
+      background: var(--form-field-button-background);
+      cursor: default;
+
+      span {
+        color: var(--form-field-button-text);
+      }
+    }
+
+    &.disabled {
+      button {
+        background-color: var(--form-field-button-disabled-background);
+        
+        span {
+          color: var(--form-field-button-disabled-text);
+        }
+      }
+    }
+
+    &.loading {
+      button {   
+        padding: 0px 20px;
+
+        svg {
+          width: 20px;
+          height: 20px;
+          margin-bottom: -4px;
+          fill: var(--loading);
+          animation-name: loading;
+          animation-duration: .8s;
+          animation-iteration-count: infinite;
+          animation-timing-function: steps(8,end);  
+        }
+      }
+    }
+
+    &.link {
+      button {
+        background-color: transparent;
+        width: auto;
+
+        span {
+          color: var(--form-field-button-link-text);
+        }
+      }
+    }
+  }
+
+  &.error {
+    border: 1px solid var(--form-field-error-border);
+  }
+
+  &-error {
+    color: var(--form-field-error-text);
+    font-size: 0.75rem;
+  }
+
+  &.checkbox {
+    width: fit-content;
+    margin: 20px;
+    border: 0;
+
+    label {
+      white-space: nowrap;
+      height: unset;
+      display: inline-block;
+
+      span {
+        font-size: 1rem;  
+        transform: scale(0.8333333333) translateY(-10px) translateX(5px);
+        position: absolute;
+        top: 10px;
+        line-height: 24px;
+      }
+
+      input {
+        width: 20px;
+        height: 20px;
+
+        &:valid {
+          
+        }
+
+        &:checked {
+          
+        }
+      }
+
+    }
+
+    & ~ .form-field-error {
+      color: var(--form-field-error-text);
+      font-size: 0.75rem;
+      top: -16px;
+      position: relative;
+      right: 23px;
+      text-align: right;
+    }
+  }
+ 
+  &.code {
+    border: 0;
+    direction: ltr;
+
+    span {
+      color: var(--form-field-label);
+      display: block;
+      direction: rtl;
+      text-align: center;
+    }
+
+    input {
+      width: 50px;
+      height: 50px;
+      margin: 10px 11px;
+      border: 1px solid var(--form-field-border);
+      text-align: center;
+      font-weight: lighter;
+      font-size: 20px;
+      color: var(--form-field-label);
+
+      &:first-of-type {
+        margin-left: 0;
+      }
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+
+    &.error {
+      input {
+        border: 1px solid var(--form-field-error-border);
+      }
+    }
+  }
+
+  &.dropdown {
+    label {
+      select {
+        border: 0;
+        flex: 1 0 auto;
+        padding: 9px 8px 7px;
+        background: var(--form-field-input-background);
+        color: var(--form-field-input-text);
+
+        &:valid  {
+            font-size: rem(12px);
+            padding: 14px 8px 2px;
+        
+            & + span {
+                transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+            }
+        }
+
+        &:focus-visible {
+            outline: 0;
+        }
+        
+      }
+    }
+
+    &:has(select:valid option:not(:first-child):checked) label select {
+      &:valid  {
+        padding: 0 8px;
+    
+        & + span {
+            display: none;
+        }
+      }
+    }
+  }
+
+  &.textarea {
+    height: 100px;
+    
+    label {
+      textarea {
+        border: 0;
+        flex: 1 0 auto;
+        padding: 9px 8px 7px;
+        background: var(--form-field-input-background);
+        color: var(--form-field-input-text);
+        height: 100px;
+
+        &:invalid  {
+            font-size: rem(12px);
+            padding: 14px 8px 2px;
+        
+            & + span {
+                transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+            }
+        }
+
+        &:valid  {
+          padding: 4px 8px;
+      
+          & + span {
+              display: none;
+          }
+        }
+    
+      &:focus-visible {
+            outline: 0;
+        }
+      }
+    }
+  }
+}

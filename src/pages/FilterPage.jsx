@@ -5,12 +5,16 @@ import { FilterSearch } from '../cmps/FilterSearch'
 import { FilterSort } from '../cmps/FilterSort'
 import { FilterPaging } from '../cmps/FilterPaging'
 import { itemService } from '../services/item.service'
+import { useSplash } from '../SplashContext'
 
 export function FilterPage() {
     const [items, setItems] = useState()
     const [filter, setFilter] = useState(itemService.getDefaultFilter())
     const [sort, setSort] = useState(itemService.getDefaultSort())
     const [paging, setPaging] = useState(itemService.getDefaultPaging())
+
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
 
     useEffect(() => {
         fetchItems()
@@ -28,12 +32,12 @@ export function FilterPage() {
 
     // filter
     function onSetFilter(newFilter) {
-        setFilter(newFilter);
+        setFilter(newFilter)
     }
 
     // sort
     function onSetSort(newSort) {
-        setSort(newSort);
+        setSort(newSort)
     }
 
     // paging

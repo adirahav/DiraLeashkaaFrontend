@@ -1,0 +1,11 @@
+.copyright {
+    text-align: left;
+    ;
+    @include tablet-layout {
+        grid-template-columns: 200px 520px;
+    }
+    
+    @include mobile-layout {
+        margin: 20px;
+    }
+}

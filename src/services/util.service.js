@@ -10,7 +10,22 @@ const MEDIA_WIDTH = {
     DESKTOP: 1064
 }
 
+const REG_EXP = {
+    EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    PASSWORD: /^.{8,20}$/,
+
+    //phone:    "^[0][5]\\d{1}(\\-)\\d{7}$"
+    //age:    "^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$"        // 17-120: 1[7-9] covers numbers between 17 and 19 ; [2-9][0-9] covers numbers between 20 and 99 ; 1[01][0-9] covers numbers between 100 and 119 ; and 120 covers the number 120
+}
+
 export const utilService = {
+    getPhrase,
+    getFixedParameter, 
+    getLocalStorage,
+    formatNumber,
+    formatFloat,
+    parseNumber, 
+
     makeId,
     saveToStorage,
     loadFromStorage,
@@ -19,7 +34,59 @@ export const utilService = {
     throttle,
     priceFormat,
     percentFormat,
-    PLATFORM
+    PLATFORM,
+    REG_EXP,
+}
+
+function getPhrase(key, phrases) {
+    const phrase = phrases?.find(phrase => phrase.key === key)
+    return phrase ? phrase.value : ""
+}
+
+function getFixedParameter(type, key, fixedParameters) {
+    
+    if (!fixedParameters) {
+        return null
+    }
+
+    const fixedParameter = fixedParameters[key]
+    
+    if (fixedParameter) {
+        return JSON.parse(fixedParameter)
+    } else {
+        if (type === "array") {
+            return null
+        } else {
+            return null
+        }
+    }
+}
+
+function getLocalStorage(type, key) {
+    if (localStorage.getItem(key)) {
+        return localStorage.getItem(key)
+    } else {
+        if (type === "array") {
+            return []
+        } else {
+            return null
+        }
+    }
+}
+
+function formatNumber(value, allowZero) {
+    if (allowZero && value === 0) return 0
+    if (!value || value === '') return ''
+    value = value.toString().replace(/,/g, "")
+    return parseInt(value, 10).toLocaleString()
+}
+
+function formatFloat(value) {
+    return parseFloat(value).toFixed(1)
+}
+
+function parseNumber(value) {
+    return value.toString().replace(/,/g, '')
 }
 
 function makeId(length = 5) {
@@ -84,7 +151,7 @@ function priceFormat(price) {
       currency: 'ILS',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(price);
+    }).format(price)
 }
 
 function percentFormat(value) {

@@ -56,6 +56,10 @@ footer {
                             color: var(--nav-icon);
                         }
                     }
+
+                    &:nth-child(5), &:nth-child(6) {
+                        margin-top: -5px;
+                    }
                 }
             }
         }
@@ -76,6 +80,10 @@ footer {
                             svg {
                                 display: none!important;
                             }
+                        }
+
+                        &:nth-child(5), &:nth-child(6) {
+                            margin-top: 0;
                         }
                     }
                 }

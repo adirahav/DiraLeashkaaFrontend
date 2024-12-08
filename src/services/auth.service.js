@@ -1,34 +1,50 @@
 import { httpService } from './http.service'
 import { userService } from './user.service.js'
 
-const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
+export const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
+export const STORAGE_KEY_LAST_LOGGEDIN_EMAIL = "email"
 
 const BASE_URL = 'auth/'
 
 export const authService = {
     login,
     signup,
-    logout
+    logout,
+    getLoggedinUser,
+    getLastLoggedinEmail
 }
 
-async function login(credentials) {
-    credentials.password = "123456"
+async function login(email, password) {
+    const credentials = { email, password }
+
     const user = await httpService.post(BASE_URL + 'login', credentials)
-    //console.log('user', user);
     if (user) {
-        return userService.saveLocalUser(user)
+        delete user._id
+        userService.saveLocalUser(user)
     }
+    return user
+    
 }
 
 async function signup(credentials) {
     const user = await httpService.post(BASE_URL + 'signup', credentials)
     if (user) {
-        return userService.saveLocalUser(user)
+        userService.saveLocalUser(user)
     }
+    return user
 }
 
 async function logout() {
-    await httpService.post(BASE_URL + 'logout')
+    if (getLoggedinUser()) {
+        localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, getLoggedinUser()?.email)
+    }
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
 }
 
+function getLoggedinUser() {
+    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
+}
+
+function getLastLoggedinEmail() {
+    return localStorage.getItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
+}

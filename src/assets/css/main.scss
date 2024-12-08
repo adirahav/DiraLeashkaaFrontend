@@ -11,14 +11,26 @@
 @import "./basics/animations.scss";
 
 /* Pages */
+@import "./pages/login.scss";
+@import "./pages/signup.scss";
+@import "./pages/forgot-password.scss";
+@import "./pages/personal-info.scss";
+@import "./pages/financial-details.scss";
 @import "./pages/home.scss";
 @import "./pages/property.scss";
+@import "./pages/terms-of-use.scss";
+@import "./pages/copyright.scss";
+@import "./pages/contact-us.scss";
 
 /* Components */
 @import "./cmps/header.scss";
 @import "./cmps/footer.scss";
 @import "./cmps/alert.scss";
-@import "./cmps/dynamic-modal.scss";
+@import "./cmps/toast.scss";
+@import "./cmps/dialog.scss";
 @import "./cmps/loading.scss";
-@import "./cmps/chat.scss";
-@import "./cmps/form-fields.scss";
+@import "./cmps/overlay.scss";
+@import "./cmps/property-field.scss";
+@import "./cmps/form-field.scss";
+@import "./cmps/resizable-table.scss";
+@import "./cmps/react-tabs.scss";

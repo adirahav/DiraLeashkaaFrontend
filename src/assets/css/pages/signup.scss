@@ -1,0 +1,317 @@
+.signup {
+    
+    height: max-content;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 200px 550px;
+    grid-gap: 10px;
+   
+    .title {
+        border: 1px solid var(--signup-border);
+        background-color: var(--signup-background);
+        color: var(--signup-title-text);
+        font-family: gveret-levin;
+        font-size: 48px;
+        padding: 0;
+        background-repeat: no-repeat;
+        display: inline-block;
+        margin: 0;
+        grid-column: auto;
+        margin: 47px auto 36px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        grid-column: 1/-1;
+        width: 100%;
+        height: 92px;
+        margin: 0;
+        text-align: center;
+        padding: 10px;
+
+        &.loading0 { animation: loading0-animation 3s infinite; * { display: none; } }
+    }
+    
+    .menu {
+        grid-column: 1;
+        border: 1px solid var(--signup-border);
+        background-color: var(--signup-background);
+        height: 100%;
+        margin: 0;
+        list-style: none;
+        padding: 0;
+
+        li {
+            padding: 10px;
+            color: var(--signup-menu-text);
+            background-color: var(--signup-menu-background);
+            display: flex;
+            font-size: 16px;
+
+            svg {
+                margin-left: 5px;
+            }
+
+            &.active {
+                color: var(--signup-menu-active-text);
+                background-color: var(--signup-menu-active-background);
+                font-size: 17px;
+
+                svg {
+                    transform: scale(105%);
+                }
+            }
+        }
+
+        &.loading1 { animation: loading1-animation 3s infinite; * { display: none; } }
+    }
+
+    .form {
+        grid-column: 2;
+        display: block;
+        position: relative;
+        border: 1px solid var(--signup-border);
+        background-color: var(--signup-background);
+        padding: 30px 0;
+        box-sizing: content-box;
+        justify-self: center;
+        height: 400px;
+        width: 100%;
+
+        & > div {
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .form-field-error {
+            width: 268px;
+        }
+
+        .error:not(.form-field) {
+            height: 40px;
+            font-size: 16px;
+            padding: 4px 8px;
+            width: 268px;
+            color: var(--form-field-error-text);
+        }
+
+        .buttons {
+            display: flex;
+            margin: 10px auto;
+            justify-content: space-evenly;
+            width: 300px;
+            height: 75px;
+            bottom: 0;
+            position: absolute;
+            right: calc((100% - 300px) / 2);
+        }
+
+        .html-area {
+            .text {
+                @include scrollbar;
+                width: calc(100% - 40px);
+                padding: 0 10px;
+                box-sizing: border-box;
+                margin: 0 20px;
+                height: 250px;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        }
+
+        .programs {
+            width: 370px;
+            height: 365px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-gap: 0;
+            margin: 0;
+
+            & > article {
+                background-color: var(--signup-property-background);
+                color: var(--text);
+                height: 165px;
+                justify-content: center;
+                display: grid;
+                grid-template-rows: 1fr 50px;
+                padding: 5px 10px;
+                position: relative;
+                text-align: center;
+                margin: 0 auto 10px;
+                width: 150px;
+    
+                .duration {
+                    
+                    h2 {
+                        margin: 10px;
+                        padding: 0;
+                        background: transparent;
+                        font-size: 16px;
+                        font-family: gveret-levin;
+                    }
+    
+                    img {
+                        margin-top: 5px;
+                    }
+                }
+    
+                .price {
+                    font-family: gveret-levin;
+                }
+    
+                &:not(.before-deleting, .deleting) {
+                    .delete-overlay {
+                        display: none;
+                    }
+                } 
+    
+                &.before-deleting, &.deleting {
+                    .footer img {
+                        display: none;
+                    }
+                } 
+    
+                &.selected {
+                    color: var(--signup-property-selected-text);
+                }
+            }
+        }
+
+        .welcome {
+            h2 {
+                font-size: 16px;
+            }
+
+            svg {
+                width: 450px!important;
+                height: 450px!important;
+                position: relative;
+                top: -30px;
+                right: -38px;
+            }
+        }
+
+        &.loading1 { animation: loading1-animation 3s infinite; * { display: none; } }
+    }
+
+    .footer {
+        grid-column: 1/-1;
+        border: 1px solid var(--signup-border);
+        background-color: var(--signup-background);
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        text-align: center;
+        height: 65px;
+
+        div {
+            margin: 22px 0;
+
+            a {
+                cursor: default;
+
+                u {
+                    font-weight: bold;
+                    text-decoration: none;
+                    color: var(--signup-link-text);
+                }
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }  
+
+        &.loading2 { animation: loading2-animation 3s infinite; div { display: none; } }
+    }
+
+    &.presonal_info {
+        .form {
+            .form-field {
+                &:last-of-type {
+                    label input:valid + span {
+                        right: 3px;
+                    }
+                }
+            }
+        }
+    }
+
+    &.financial_details {
+        .form {
+            .form-field {
+                &:last-of-type {
+                    label input:valid + span {
+                        right: -2px;
+                    }
+                }
+            }
+        }
+    }
+
+    @include tablet-layout {
+        grid-template-columns: 200px 520px;
+    }
+    
+    @include mobile-layout {
+        grid-template-columns: 1fr;
+        grid-gap: 0;
+        width: calc(100% - 40px);
+        margin: 20px;
+
+        .title {
+            height: 85px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            height: 90px;
+            border-bottom: 0;
+            background-color: var(--mobile-signup-background);
+            
+            li {
+                display: grid;
+                width: 25%;
+                color: var(--mobile-signup-menu-text);
+                background-color: var(--mobile-signup-menu-background);
+                
+                svg {
+                    margin: auto;
+                    text-align: center;
+                    border-radius: 50%;
+                    background-color: var(--mobile-signup-menu-icon-background);
+                    border: 5px solid var(--mobile-signup-menu-icon-background);
+                    fill: var(--mobile-signup-menu-icon-color);
+                    width: 30px;
+                    height: 30px;
+                }
+
+                span {
+                    margin: auto;
+                    text-align: center;
+                }
+
+                &.active {
+                    color: var(--mobile-signup-menu-active-text);
+                    background-color: var(--mobile-signup-menu-active-background);
+
+                    svg {
+                        background-color: var(--mobile-signup-menu-active-icon-background);
+                        border: 5px solid var(--mobile-signup-menu-active-icon-background);
+
+                        fill: var(--mobile-signup-menu-active-icon-color);
+                    }
+                }
+            }
+        }
+
+        .form {
+            grid-column: 1;
+            border-top: 0;
+            height: calc(100vh - 360px);
+        }
+
+        .footer {
+            margin-top: 10px;
+        }
+    }
+}

@@ -1,17 +1,17 @@
 import { useEffect, useState, useRef } from "react"
-import { eventBusService } from "../services/event-bus.service"
+import { eventBusService } from "../services/eventBus.service"
 import { Button } from "@mui/material"
-import { IconSizes, SuccessIcon, ErrorIcon, WarningIcon, MessageIcon, CloseIcon} from '../assets/icons'
+import { IconSizes, SuccessIcon, ErrorIcon, WarningIcon, MessageIcon, CloseIcon, TooltipIcon} from '../assets/icons'
 
 window.showSuccessAlert = showSuccessAlert
 window.showWarningAlert = showWarningAlert
 window.showErrorAlert = showErrorAlert
-window.showMessageAlert = showMessageAlert
+window.showTooltipAlert = showTooltipAlert
 
 export function Alert() {
 
     const [displayAlert, setDisplayAlert] = useState(false)    
-    const [type, setType] = useState('message')    // error | warning | success | message
+    const [type, setType] = useState('message')    // error | warning | success | message | tooltip
     const [message, setMessage] = useState('')
     const [positiveButton, setPositiveButton] = useState({show: true, text: "", onPress: null, closeAfterPress: true})
     const [negativeButton, setNegativeButton] = useState({show: true, text: "", onPress: null, closeAfterPress: true})
@@ -89,10 +89,11 @@ export function Alert() {
 
     function getHeader() {  
         switch (type) {
-            case "error":     return <><div><ErrorIcon sx={ IconSizes.Medium } /><h2>Error</h2></div></>
-            case "warning":   return <><div><WarningIcon sx={ IconSizes.Medium } /><h2>Warning</h2></div></>
-            case "success":   return <><div><SuccessIcon sx={ IconSizes.Medium } /><h2>Success</h2></div></>
-            case "message":   return <><div><MessageIcon sx={ IconSizes.Medium } /><h2>Message</h2></div></>
+            case "error":     return <><div><ErrorIcon sx={ IconSizes.Medium } /><h2>שגיאה</h2></div></>
+            case "warning":   return <><div><WarningIcon sx={ IconSizes.Medium } /><h2>אזהרה</h2></div></>
+            case "success":   return <><div><SuccessIcon sx={ IconSizes.Medium } /><h2>הצלחה</h2></div></>
+            case "message":   return <><div><MessageIcon sx={ IconSizes.Medium } /><h2>הודעה</h2></div></>
+            case "tooltip":   return <><div><TooltipIcon sx={ IconSizes.Medium } /><h2>הסבר</h2></div></>
             default: <></>
         }
     }
@@ -104,7 +105,7 @@ export function Alert() {
                 {closeButton.show && <CloseIcon sx={ IconSizes.Small } onClick={onClose} />}
             </header>
             <section className="message">
-                <p>{message.replace(/<br\s*\/?>/g, '\n')}</p>
+                <p dangerouslySetInnerHTML={{ __html: message }}></p>
             </section>
             <section className="buttons">
                 {positiveButton.show && <Button variant="contained" className='positive' onClick={() => handleButton(positiveButton)}>{positiveButton.text}</Button>}
@@ -132,4 +133,8 @@ export function showSuccessAlert(data) {
 
 export function showMessageAlert(data) {
     showAlert({ ...data, type: 'message' })
+}
+
+export function showTooltipAlert(data) {
+    showAlert({ ...data, type: 'tooltip' })
 }

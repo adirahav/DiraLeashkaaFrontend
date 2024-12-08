@@ -1,29 +1,59 @@
 /* responsive layout */
 @mixin mobile-layout {
 	@media (max-width: $padded-break-mobile) { 
-		@content;
+    @content;
+	}
+}
+
+@mixin mobile-landscape-layout {
+	@media (orientation: landscape) { 
+    @content;
 	}
 }
 
 @mixin tablet-layout {
-	@media (min-width: $padded-break-mobile) and (max-width: $padded-break-desktop){
+	@media (min-width: $padded-break-mobile) and (max-width: $padded-break-desktop) and (orientation: landscape) {
 		@content;
 	}
 }
 
 @mixin desktop-layout {
 	@media (min-width: $padded-break-desktop) {
-		@content;
+    @content;
 	}
 }
 
-@mixin layout-grid-template-columns($media) {
-  grid-template-columns: minmax($layout-padding, 1fr) minmax(auto, $media) minmax($layout-padding, 1fr)
+@mixin layout-grid-template-columns($platform) {
+  @if $platform == 'mobile' {
+    grid-template-columns: minmax($layout-padding-mobile, 1fr) minmax(auto, $break-mobile) minmax($layout-padding-mobile, 1fr)
+  }
+
+  @if $platform == 'tablet' {
+    grid-template-columns: minmax($layout-padding-tablet, 1fr) minmax(auto, $break-tablet) minmax($layout-padding-tablet, 1fr)
+  }
+
+  @if $platform == 'desktop' {
+    grid-template-columns: minmax($layout-padding-desktop, 1fr) minmax(auto, $break-desktop) minmax($layout-padding-desktop, 1fr)
+  }
+}
+
+@mixin layout-grid-template-rows($platform) {
+  @if $platform == 'mobile' {
+    grid-template-rows: 50px 1fr;
+  }
+
+  @if $platform == 'tablet' {
+    grid-template-rows: 60px 1fr 40px;
+  }
+
+  @if $platform == 'desktop' {
+    grid-template-rows: 60px 1fr 40px;
+  }
 }
 
 @mixin base-layout {
   display: grid;
-	grid-template-columns: $layout-padding 1fr $layout-padding;
+	grid-template-columns: $layout-padding-desktop 1fr $layout-padding-desktop;
   height: calc(100vh);
   
 	> *:not(.full) { 
@@ -37,20 +67,20 @@
 
 @mixin header-grid-template-columns($platform) {
   @if $platform == 'mobile' {
-    grid-template-columns: minmax($layout-padding, 1fr) minmax(auto, calc(#{$break-mobile})) minmax($layout-padding, 1fr)
+    grid-template-columns: minmax($layout-padding-mobile, 1fr) minmax(auto, calc(#{$break-mobile})) minmax($layout-padding-mobile, 1fr)
   }
 
   @if $platform == 'tablet' {
-    grid-template-columns: $layout-padding 70px 1fr $layout-padding
+    grid-template-columns: $layout-padding-tablet 70px 1fr $layout-padding-tablet
   }
 
   @if $platform == 'desktop' {
-    grid-template-columns: minmax($layout-padding, 1fr) 70px minmax(auto, calc(#{$break-desktop} - 70px)) minmax($layout-padding, 1fr)
+    grid-template-columns: minmax($layout-padding-desktop, 1fr) 70px minmax(auto, calc(#{$break-desktop} - 70px)) minmax($layout-padding-desktop, 1fr)
   }
 }
 
 @mixin footer-grid-template-columns($media) {
-  grid-template-columns: minmax($layout-padding, 1fr) minmax(auto, $media) minmax($layout-padding, 1fr)
+  grid-template-columns: minmax($layout-padding-desktop, 1fr) minmax(auto, $media) minmax($layout-padding-desktop, 1fr)
 }
 
 @mixin conditional-button($type: 'default') {

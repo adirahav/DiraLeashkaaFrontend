@@ -1,24 +1,76 @@
-/* STORE: [USER] STEP 4 */
 import { authService } from "../../services/auth.service.js"
 import { userService } from "../../services/user.service.js"
-import { LOGGEDIN_USER, GET_USERS, UPDATE_USER, DELETE_USER, SIGNUP, LOGIN, LOGOUT } from "../reducers/user.reducer.js"
+import { LOGGEDIN_USER, 
+    GET_HOME, ABOUT_DELETE_PROPERTY, DELETING_PROPERTY_START, DELETING_PROPERTY_DONE, LONG_PRESSED_PROPERTY,
+    UPDATE_USER, DELETE_USER, SIGNUP, LOGIN, LOGOUT } from "../reducers/user.reducer.js"
+import { LOADING_DONE, LOADING_START } from "../reducers/app.reducer.js"
 import { store } from "../store.js"
+import { propertyService } from "../../services/property.service.js"
 
 export function setLoggedinUser(loggedinUser) {
     try {
         store.dispatch({type: LOGGEDIN_USER, loggedinUser})
     } catch(err) {
-        console.log("Had issues loggedin user")
+        console.error("Had issues loggedin user")
         throw err
     }
 }
 
-export async function loadUsers() {
+export async function getHome() {
     try {
-        const users = await userService.getUsers()    
-        store.dispatch({type: GET_USERS, users})
+        store.dispatch({ type: LOADING_START })
+        const home = await userService.home()    
+        store.dispatch({type: GET_HOME, home})
     } catch(err) {
-        console.log("Had issues loading users")
+        console.error("Had issues loading home data")
+        throw err
+    } finally {
+        store.dispatch({ type: LOADING_DONE })
+    }
+}
+
+export async function onDeleteProperty(propertyId) {
+    try {
+        const home = await propertyService.archive(propertyId)
+        store.dispatch({type: GET_HOME, home})
+    } catch(err) {
+        console.error("Had issues delete property")
+        throw err
+    }
+}
+
+export function onAboutDeletingProperty(propertyId) {
+    try {
+        store.dispatch({ type: ABOUT_DELETE_PROPERTY, propertyId })
+    } catch(err) {
+        console.error("Had issues start deleting property")
+        throw err
+    }
+}
+
+export function onDeletingPropertyStart() {
+    try {
+        store.dispatch({ type: DELETING_PROPERTY_START })
+    } catch(err) {
+        console.error("Had issues start deleting property")
+        throw err
+    }
+}
+
+export function onDeletingPropertyDone() {
+    try {
+        store.dispatch({ type: DELETING_PROPERTY_DONE })
+    } catch(err) {
+        console.error("Had issues done deleting property")
+        throw err
+    }
+}
+
+export function onLongPressProperty(propertyId) {
+    try {
+        store.dispatch({ type: LONG_PRESSED_PROPERTY, propertyId })
+    } catch(err) {
+        console.error("Had issues long press property")
         throw err
     }
 }
@@ -26,10 +78,9 @@ export async function loadUsers() {
 export async function updateUser(userToSave) {
     try {   
         const savedUser = await userService.save(userToSave)
-        console.log('Updated User:', savedUser)
-        store.dispatch({type: UPDATE_USER, userToSave})
+        store.dispatch({type: UPDATE_USER, savedUser})
     } catch(err) {
-        console.log("Had issues updating user")
+        console.error("Had issues updating user")
         throw err
     }
 }
@@ -37,10 +88,9 @@ export async function updateUser(userToSave) {
 export async function removeUser(userId) {
     try {   
         await userService.remove(userId)
-        console.log('Deleted Succesfully!')
         store.dispatch({type: DELETE_USER, userId})
     } catch(err) {
-        console.log("Had issues removing user")
+        console.error("Had issues removing user")
         throw err
     }
 }
@@ -48,22 +98,19 @@ export async function removeUser(userId) {
 export async function signup(credentials) {
     try { 
         const signupUser = await authService.signup(credentials)
-        console.log(`${signupUser.fullname} signup succesfully!`)
         store.dispatch({type: SIGNUP, signupUser})
     } catch(err) {
-        console.log(`User had issues signup`)
+        console.error(`User had issues signup`)
         throw err
     }
 }
 
-export async function login(credentials) {
+export async function login(email, password) {
     try { 
-        
-        const loggedinUser = await authService.login(credentials)
-        console.log(`${loggedinUser.fullname} loggedin succesfully!`)
+        const loggedinUser = await authService.login(email, password)
         store.dispatch({type: LOGIN, loggedinUser})
     } catch(err) {
-        console.log(`${credentials.fullname} had issues login`)
+        console.error(`${email} had issues login`)
         throw err
     }
 }
@@ -71,10 +118,9 @@ export async function login(credentials) {
 export async function logout() {
     try {   
         await authService.logout()
-        console.log(`User logged out succesfully!`)
         store.dispatch({type: LOGOUT})
     } catch(err) {
-        console.log("Had issues logged out user")
+        console.error("Had issues logged out user")
         throw err
     }
 }

@@ -5,16 +5,28 @@
     
     @include mobile-layout {
         .tablet, .desktop { display: none }
-        @include layout-grid-template-columns($break-mobile);
+        @include layout-grid-template-columns('mobile');
+
+        &:not(.logout) {
+            @include layout-grid-template-rows('mobile');
+        }
     }
 
 	@include tablet-layout {
         .mobile, .desktop { display: none }
-        @include layout-grid-template-columns($break-mobile);
+        @include layout-grid-template-columns('tablet');
+
+        &:not(.logout) {
+            @include layout-grid-template-rows('tablet');
+        }
     }
 
     @include desktop-layout {
         .mobile, .tablet { display: none }
-        @include layout-grid-template-columns($break-desktop);
+        @include layout-grid-template-columns('desktop');
+        
+        &:not(.logout) {
+            @include layout-grid-template-rows('desktop');
+        }
     }
 }

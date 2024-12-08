@@ -1,49 +1,184 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
-import { HomeCities } from '../cmps/HomeCities';
-import { HomeProperties } from '../cmps/HomeProperties';
-import { HomeBestYields } from '../cmps/HomeBestYields';
+import { HomeCities } from '../cmps/HomeCities'
+import { HomeProperties } from '../cmps/HomeProperties'
+import { HomeBestYields } from '../cmps/HomeBestYields'
+import { Overlay } from '../cmps/Overlay'
+import { utilService } from '../services/util.service'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { getHome, onDeletingPropertyDone, onDeletingPropertyStart, onDeleteProperty, onAboutDeletingProperty } from '../store/actions/user.actions.js'
+import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
+import { useSelector } from 'react-redux'
+import { IconSizes, AddPropertyIcon } from "../assets/icons"
+import { useSplash } from '../contexts/SplashContext.jsx'
+import imgArrowDown from '../assets/images/lottie_arrow_down.json'
+import Lottie from 'lottie-react'
+import AdSense from "react-adsense"
 
 export function HomePage() {
+    const [showOverlay, setShowOverlay] = useState(false)
+    const [selectedCity, setSelectedCity] = useState(null)
+    const [bestYield, setBestYield] = useState(null)
+
+    const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
+    
+    const homeState = useSelector(storeState => storeState.userModule.home)
+    
+    const navigate = useNavigate()
+
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
+    const fixedParameters = splash?.fixedParameters
+
+    const [citiesNames, setCitiesNames] = useState()
+
+    const MIN_DELETE_PROPERTY_AWAIT_SEC = 3
 
     useEffect(() => {
-        /* setTimeout(() => {
-             showErrorAlert({
-                 message: 'Error alert example',
-                 closeButton: { show: true, autoClose: false }, 
-                 positiveButton: { show: true, text: "Yes", onPress: null, closeAfterPress: true }, 
-                 negativeButton: { show: true, text: "No", onPress: null, closeAfterPress: true }, 
-             });
-         }, 1000);*/
+        if (!phrases) {
+            onLoadingStart()  
+        } else if (phrases) {
+            setCitiesNames(utilService.getFixedParameter("array", "cities", fixedParameters))
+            fetchHome() 
+        }
+
+    }, [phrases])
+
+    const fetchHome = async () => {
+        try {
+            setShowOverlay(true)
+            await getHome()
+        } catch (error) {
+            console.error(`Error fetching home data:`, error)
+        } 
+        finally {
+            setShowOverlay(false)
+        }
+    }
+
+    useEffect(() => {
+        if (homeState && homeState.bestYields?.length > 0) {
+            setBestYield(homeState.bestYields[0])
+        }
+    }, [homeState])
+
  
-         
-     },[]);
- 
-     // my cities
-     function onCityPress(city) {
-         console.log(`onCityPress: ${city}`);
-     }
- 
-     // city properties
-     function onPropertyPress(property) {
-         console.log(`onPropertyPress: ${property}`);
-     }
+    // my cities
+    function onCityPress(city) {
+        setSelectedCity(city)
+    }
+
+    const citiesTitle = isLoadingState ? '' : utilService.getPhrase("home_cities_title", phrases)
+    const citiesClass = isLoadingState ? 'loading0' : '' 
+
+    const propertiesTitle = selectedCity 
+                                ? selectedCity === "else"
+                                    ? utilService.getPhrase("home_properties_title_else", phrases)
+                                    : utilService.getPhrase("home_properties_title", phrases)
+                                             .replace("%1$s", citiesNames.find(city => city.key === selectedCity).value)
+                                : ''
+    const propertiesClass = isLoadingState ? 'loading0' : ''
+    
+    // city properties
+    function onPropertyPress(ev, property) {
+        
+        if ((ev.target.offsetParent.className === 'before-deleting' || ev.target.offsetParent.className === 'delete-overlay') && !homeState.isDeleting) {
+            ev.preventDefault()
+            ev.stopPropagation()
+            onDeletingProperty(property)
+        } else if (!property._id) {
+            navigate(`/property?city=${property.city}`)
+        } else {
+            navigate(`/property?propertyId=${property._id}`)
+        }
+        
+    }
+
+    async function onDeletingProperty(property) {
+        const propertyId = property._id
+        const city = property.city
+        
+        onDeletingPropertyStart()
+        
+
+        const deleteStartTime = new Date()
+    
+        await onDeleteProperty(propertyId)
+    
+        const deleteEndTime = new Date()
+    
+        const diffSeconds = (deleteEndTime.getTime() - deleteStartTime.getTime()) / 1000
+    
+        if (diffSeconds < MIN_DELETE_PROPERTY_AWAIT_SEC) {
+            await new Promise(resolve => setTimeout(resolve, (MIN_DELETE_PROPERTY_AWAIT_SEC - diffSeconds) * 1000))
+        }
+
+        const sameCityCount = city === "else" || !city
+                                ? homeState.properties?.filter(property => property.city === city || !property.city).length
+                                : homeState.properties?.filter(property => property.city === city).length
+        
+        if (sameCityCount === 1) {
+            setSelectedCity(null)
+        }
+        
+        onAboutDeletingProperty(null)
+        onDeletingPropertyDone()
+    }
+
+    // best yield
+    const bestYieldTitle = !isLoadingState && phrases && fixedParameters
+                            ? utilService.getPhrase("home_best_yield_title", phrases)
+                                         .replace("%1$d", utilService.getFixedParameter("number", "bestYield", fixedParameters)
+                                                                     .find(item => item.key === "yearsPeriod").value)
+                            : ''
+                            
+    const bestYieldClass = isLoadingState ? 'loading0' : ''
+
+    // add property
+    const addPropertyClass = isLoadingState ? 'hide' : 'add-button'
+    
+    if (!isLoadingState && homeState.properties?.length === 0) {
+        return (<>
+            <Header />
+            <main className="home container start">
+                <h2>{utilService.getPhrase("home_lets_start", phrases)}</h2>
+                <Lottie 
+                    animationData={imgArrowDown} 
+                    loop={true} 
+                    autoplay={true} 
+                    onClick={() =>  navigate(`/property`)}  />
+                <div>
+                    <NavLink to="/property" className={addPropertyClass}><AddPropertyIcon sx={IconSizes.Small} /></NavLink>
+                </div>
+            </main>
+            <AdSense.Google
+                client="ca-pub-0000000000000000" 
+                slot="0000000000" 
+                style={{ display: "block" }}
+                format="auto"
+                responsive="true"
+              />
+            <Footer />
+        </>)
+    }
 
     return (<>
         <Header />
         <main className="home container">
-            <h1>הערים/ישובים שלי</h1>
-            <HomeCities cities={[{name:'elad', label:'אלעד'},{name:'elad', label:'אלעד'}]} onCityPress={onCityPress} />
+            {showOverlay && <Overlay />}
+            <h1 className={citiesClass}>{citiesTitle}</h1>
+            <HomeCities citiesNames={citiesNames} selectedCity={selectedCity} onCityPress={onCityPress} />
             
-            <h2>הנכסים שלי <span>באלעד</span></h2>
-            <HomeProperties properties={[{address:'ארבע העונות 102', price:'595000'}, {address:'ארבע העונות 102', price:'595000'}, {address:'ארבע העונות 102', price:'595000'}, {address:'ארבע העונות 102', price:'595000'}, {address:'ארבע העונות 102', price:'595000'}]} onPropertyPress={onPropertyPress} />
+            <h2 className={propertiesClass} dangerouslySetInnerHTML={{ __html: propertiesTitle}}></h2>
+            <HomeProperties 
+                selectedCity={selectedCity}
+                bestYield={bestYield} 
+                onPropertyPress={onPropertyPress} />
 
-            <h1>הנכס המוביל בתשואה לאחר 10 שנים</h1>
-            <HomeBestYields properties={[{"address":"בן גוריון 9, רמלה", "profit": 709863.0162499993,
-                "profitNpv": 554543.8537387034,
-                "averageReturn": 6.316679182690188,
-                "averageReturnOnEquity": 5.645307964657875,}]} />
+            <h1 className={bestYieldClass} dangerouslySetInnerHTML={{ __html: bestYieldTitle}}></h1>
+            <HomeBestYields properties={homeState?.bestYields} />
+            <NavLink to="/property" className={addPropertyClass}><AddPropertyIcon sx={IconSizes.Small} /><span>הוסף נכס</span></NavLink>
         </main>
         <Footer />
     </>)

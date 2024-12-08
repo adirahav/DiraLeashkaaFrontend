@@ -22,7 +22,7 @@ async function query(filter, sort, paging) {
         const data = await httpService.get(BASE_URL, { params })
         return data
     } catch(err) {
-        console.log("Had problems getting items")
+        console.error("Had problems getting items")
         throw err
     }
 }
@@ -32,7 +32,7 @@ async function getById(itemId) {
         const item = await httpService.get(BASE_URL + itemId)
         return item
     } catch(err) {
-        console.log(`Had problems getting item ${itemId}`)
+        console.error(`Had problems getting item ${itemId}`)
         throw err
     }
 }
@@ -42,7 +42,7 @@ async function remove(itemId) {
         await httpService.delete(BASE_URL + itemId)
         return itemId
     } catch(err) {
-        console.log(`Had problems delete item ${itemId}`)
+        console.error(`Had problems delete item ${itemId}`)
         throw err
     }
 }
@@ -60,7 +60,7 @@ async function save(itemToSave) {
         const savedItem = await httpService[method](BASE_URL, itemToSave)
         return savedItem
     } catch(err) {
-        console.log(`Had problems save item ${itemId}`)
+        console.error(`Had problems save item ${itemId}`)
         throw err
     }
 }

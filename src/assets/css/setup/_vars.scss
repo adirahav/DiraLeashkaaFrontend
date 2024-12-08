@@ -6,7 +6,7 @@
     --palette3:#dddddd;
     --palette4:#b0b0c1;
     --palette5:#717376;
-    --palette5_transparent:#80717376;
+    --palette5_transparent:#71737633;
     --palette6:#f6e0eb;
     --palette7:#eb4a7c;
     --palette8:#c9e6fa;
@@ -24,20 +24,35 @@
     --text-success: var(--palette5);
     --text-message: var(--palette3);
     --text-warning: var(--palette8);
+    --text-tooltip: var(--palette8);
 
+    --loading: var(--palette3);
+    
     --scrollbar-thumb-background: var(--palette3);
     --scrollbar-track-background: var(--palette2);
     --scrollbar-track-background-hover: var(--palette8);
     --scrollbar-track-border-hover: var(--palette8);
 
     --alert-background: var(--palette1);
+    --alert-border: var(--palette3);
     --alert-header-background: var(--palette7);
-    --alert-icon-background-hover: var(--palette2);
+    --alert-header-title: var(--palette1);
+    --alert-header-icon-warning: var(--palette1);
+    --alert-header-icon-close: var(--palette1);
+    
+    --toast-debug-background: var(--palette8);
+    --toast-debug-text: var(--palette5);
+    --toast-warning-background: var(--palette7);
+    --toast-warning-text: var(--palette1);
+    --toast-notify-background: var(--palette2);
+    --toast-notify-text: var(--palette7);
+    --toast-error-background: var(--palette7);
+    --toast-error-text: var(--palette1);
 
-    --button-default-background: var(--palette5);
-    --button-default-background-hover: var(--palette4);
-    --button-default-text: var(--palette3);
-    --button-default-text-hover: var(--palette1);
+    --button-default-background: var(--palette7);
+    --button-default-background-hover: var(--palette7);
+    --button-default-text: var(--palette1);
+    --button-default-text-hover: var(--palette6);
     --button-negative-background: var(--palette6);
     --button-negative-background-hover: var(--palette7);
     --button-negative-text: var(--palette3);
@@ -46,6 +61,27 @@
     --icon-medal: var(--palette7);
     --icon-miss-content: var(--palette5);
 
+    --login-border: var(--palette3);
+    --login-background: var(--palette1);
+    --login-title-text: var(--palette7);
+    --login-link-text: var(--palette7);
+    --login-error-text: var(--palette7);
+
+    --signup-border: var(--palette3);
+    --signup-background: var(--palette1);
+    --signup-menu-text: var(--palette5);
+    --signup-menu-background: var(--palette1);
+    --signup-menu-active-text: var(--palette1);
+    --signup-menu-active-background: var(--palette7);
+    --signup-title-text: var(--palette7);
+    --signup-link-text: var(--palette7);
+    --signup-error-text: var(--palette7);
+    --signup-property-background: var(--palette2);
+    --signup-property-selected-text: var(--palette7);
+
+    --home-add-button-background: var(--palette7);
+    --home-add-button-border: var(--palette2);
+    --home-add-button-text: var(--palette1);
     --home-section-title-background: var(--palette4);
     --home-section-title-text: var(--palette1);
     --home-section-title-border: var(--palette5);
@@ -54,41 +90,54 @@
     --home-my-cites-border: var(--palette1);
     --home-my-cites-border-selected: var(--palette7);
     --home-my-cites-text-selected: var(--palette7);
-    
+    --home-my-property-content-background: var(--palette1);
+    --home-my-property-menu-background: var(--palette2);
+    --home-my-property-menu-border: var(--palette4);
+    --home-my-property-delete-overlay-background: var(--palette5_transparent);
+    --home-my-property-delete-overlay-text: var(--palette7);
+    --home-best-yield-content-background: var(--palette1);
+
     --nav-icon: var(--palette1);
     --nav-text: var(--palette1);
     --nav-header-color: var(--palette1);
 
-    --overlay-background: var(--palette2_transperent);
+    --overlay-background: var(--palette5_transparent);
 
-    --form-background: var(--palette1);
-    --form-field-background: var(--palette2);
-    --form-field-calc-background: var(--palette3);
-    --form-field-autofill-background: var(--palette8);
-    --form-field-empty-background: var(--palette6);
+    --property-form-background: var(--palette1);
+    --property-form-spinner-divider: var(--palette3);
+    --property-form-spinner-border: var(--palette3);
+    --property-form-spinner-background: var(--palette2);
+    --property-form-spinner-search-background: var(--palette1);
+    --property-form-spinner-search-text: var(--palette5);
+    --property-form-spinner-search-border: var(--palette2);
+    --property-form-icon-restore: var(--palette9);
+    --property-field-background: var(--palette2);
+    --property-field-calc-background: var(--palette3);
+    --property-field-autofill-background: var(--palette8);
+    --property-field-empty-background: var(--palette6);
+    --property-field-label: var(--palette5);
+    --property-field-text: var(--palette5);
+    --property-field-hint: var(--palette5);
+    --property-field-warning-icon: var(--palette10);
+    --property-field-warning-text: var(--palette7);
+    
+    --form-field-border: var(--palette3);
     --form-field-label: var(--palette5);
-    --form-field-text: var(--palette5);
-    --form-field-hint: var(--palette5);
-    --form-spinner-divider: var(--palette3);
-    --form-spinner-border: var(--palette3);
-    --form-icon-restore: var(--palette9);
+    --form-field-input-text: var(--palette5);
+    --form-field-input-disabled-text: var(--palette5);
+    --form-field-input-background: var(--palette2);
+    --form-field-error-border: var(--palette7);
+    --form-field-error-text: var(--palette7);
+    --form-field-message-text: var(--palette5);
+    --form-field-button-background: var(--palette7);
+    --form-field-button-text: var(--palette1);
+    --form-field-button-disabled-background: var(--palette2);
+    --form-field-button-disabled-text: var(--palette4);
+    --form-field-button-link-text: var(--palette5);
+    --form-field-tooltip-background: var(--palette7);
     
     --number-picker-icon: var(--palette4);
     --number-picker-icon-light: var(--palette3);
-
-    --form-spinner-background: var(--palette2);
-    --formText: var(--palette5);
-    --formDisableText: var(--palette4);
-    --formLabel: var(--palette4);
-    --formSpinnerDividerDark: var(--palette4);
-    --formBackground: var(--palette2);
-    --formBackgroundWizard: var(--palette3);
-    --formBackgroundDisable: var(--palette3);
-    --formBackgroundAutoFill: var(--palette9);
-    --formBackgroundEmpty: var(--palette6);
-    --formBackgroundTotal: var(--palette1);
-    --formBackgroundTotalBorder: var(--palette2);
-    --formError: var(--palette7);
 
     --mobile-divider: var(--palette2);
     --mobile-divider-drawer: var(--palette3);
@@ -102,6 +151,58 @@
     --mobile-nav-text: var(--palette5);
     --mobile-home-section-title-background: var(--palette3);
     --mobile-home-section-title-text: var(--palette5);
+    --mobile-property-menu-background: var(--palette7);
+    --mobile-property-menu-zoom-in: var(--palette7);
+    --mobile-property-menu-zoom-out: var(--palette1);
+    --mobile-property-menu-text: var(--palette1);
+    --mobile-property-menu-text-selected: var(--palette10);
+    --mobile-table-cell-background: var(--palette2);
+    --mobile-form-spinner-border: var(--palette3);
+    --mobile-signup-menu-text: var(--palette5);
+    --mobile-signup-menu-background: var(--palette1);
+    --mobile-signup-menu-active-text: var(--palette7);
+    --mobile-signup-menu-active-background: var(--palette1);
+    --mobile-signup-menu-icon-background: var(--palette3);
+    --mobile-signup-menu-active-icon-background: var(--palette7);
+    --mobile-signup-menu-icon-color: var(--palette1);
+    --mobile-signup-menu-active-icon-color: var(--palette1);
+
+    --table-text: var(--palette5);
+    --table-head-background: var(--palette1);
+    --table-cell-background: var(--palette1);
+    --table-cell-negative-text: var(--palette7);
+    --table-border: var(--palette3); 
+    --table-scrollbar-track-background: var(--palette1);
+    --table-scrollbar-track-background-hover: var(--palette1);
+    --table-scrollbar-track-border-hover: var(--palette1);
+
+    --chart-background: var(--palette1);
+
+    --tabs-tab-text: var(--palette5);
+    --tabs-tab-text-selected: var(--palette5);
+    --tabs-tab-border-selected: var(--palette5);
+
+    --loading-0: #f3f3f3;
+    --loading-1: #f5f5f5;
+    --loading-2: #f7f7f7;
+    --loading-3: #fafafa;
+    --loading-4: #fbfbfb;
+    --loading-5: #fbfbfb;
+    --loading-6: #fbfbfb;
+    --loading-7: #fbfbfb;
+    --loading-8: #fbfbfb;
+    --loading-9: #fbfbfb;
+
+    --dialog_title: var(--palette7);
+    --dialog_text: var(--palette5);
+    --dialog_background_no_internet: rgba(17, 97, 182, 0.05);
+    --dialog_background_expired_registration: #118882EC;
+    --dialog_background_beta_version: #1162B6AA;
+    --dialog_background_data_error: #11EEEEEE;
+    --dialog_background_server_down: #11EEEEEE;
+    --dialog_background_blocked: #11eb4a7c;
+    --dialog_background_announcement: #119FFFE5;
+    --dialog_background_unsubscribe: #1162B6AA;
 }
 
 $tmpl1: repeat(auto-fill, minmax(250px, 1fr));
@@ -113,12 +214,14 @@ $logo-width: 50px;
 $logo-height: 50px;
 
 /* responsive layout */
-$layout-padding: 20px;
+$layout-padding-mobile: 0;
+$layout-padding-tablet: 20px;
+$layout-padding-desktop: 20px;
 
 $break-mobile: 767px;
 $break-tablet: 768px;
 $break-desktop: 1024px;
 
-$padded-break-mobile: $break-mobile + $layout-padding * 2;        // screen <= 807px
-$padded-break-tablet: $break-mobile + $layout-padding * 2;        // screen >  808px
-$padded-break-desktop: $break-desktop + $layout-padding * 2;      // screen >= 1064px
+$padded-break-mobile: $break-mobile + $layout-padding-mobile * 2;        // screen <= 807px
+$padded-break-tablet: $break-tablet + $layout-padding-tablet * 2;        // screen >  808px
+$padded-break-desktop: $break-desktop + $layout-padding-desktop * 2;     // screen >= 1064px

@@ -1,0 +1,378 @@
+.rc-table {
+  @include scrollbar;
+  &::-webkit-scrollbar-track  {
+    background-color: var(--table-scrollbar-track-background);
+
+    &:hover {
+      background-color: var(--table-scrollbar-track-background-hover);
+      border: 1px solid var(--table-scrollbar-track-border-hover);
+    }
+  }
+
+  height: 327px;
+  position: relative;
+  box-sizing: border-box;
+  color: var(--table-text);
+  font-size: 12px;
+  line-height: 1.5;
+  direction: ltr;
+  margin: 0;
+
+  // ================= Global =================
+  table {
+    width: 100%;
+    border-spacing: 0px;
+    direction: rtl;
+  }
+
+  th,
+  td {
+    position: relative;
+    box-sizing: border-box;
+    padding: 0;
+    padding: 6px 8px;
+    white-space: normal;
+    word-break: break-word;
+    border: 1px solid var(--table-border);
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    transition: box-shadow 0.3s;
+    text-align: center;
+    direction: ltr;
+
+    &::after {
+      content: attr(data-value);
+      visibility: hidden;
+      display: block;
+      height: 0;
+    }
+
+    &[data-value^="-"] {
+      color: var(--table-cell-negative-text);
+    }
+    
+    .rc-table {
+      border-right: 0;
+      border-left: 1px solid var(--table-border);
+    }
+  }
+
+  // ================== Cell ==================
+  &-fixed-column-gapped {
+    .rc-table-cell-fix-left-last::after,
+    .rc-table-cell-fix-right-first::after {
+      display: none !important;
+    }
+  }
+
+  &-cell {
+    background: var(--table-cell-background);
+
+    &-fix-left,
+    &-fix-right {
+      z-index: 2;
+    }
+
+    &-fix-right:last-child:not(&-fix-sticky) {
+      border-right-color: transparent;
+    }
+
+    .rc-table & {
+      &-fix-right:last-child {
+        border-right-color: 1px solid var(--table-border);
+      }
+      &-fix-left:last-child {
+        border-left-color: transparent;
+      }
+    }
+
+    &-fix-left-first {
+        .rc-table & {
+        box-shadow: 1px 0 0 1px solid var(--table-border);
+      }
+    }
+
+    &-fix-left-first::after,
+    &-fix-left-last::after {
+      position: absolute;
+      top: 0;
+      right: -1px;
+      bottom: -1px;
+      width: 20px;
+      transform: translateX(100%);
+      transition: box-shadow 0.3s;
+      content: '';
+      pointer-events: none;
+    }
+
+    &-fix-left-all::after {
+      display: none;
+    }
+
+    &-fix-right-first,
+    &-fix-right-last {
+      box-shadow: -1px 0 0 1px solid var(--table-border);
+
+      .rc-table & {
+        box-shadow: none;
+      }
+
+      &::after {
+        position: absolute;
+        top: 0;
+        bottom: -1px;
+        left: -1px;
+        width: 20px;
+        transform: translateX(-100%);
+        transition: box-shadow 0.3s;
+        content: '';
+        pointer-events: none;
+      }
+    }
+
+    &-ellipsis {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      // Fixed first or last should special process
+      &.rc-table-cell-fix-left-first,
+      &.rc-table-cell-fix-left-last,
+      &.rc-table-cell-fix-right-first &.rc-table-cell-fix-right-last {
+        overflow: visible;
+
+        .rc-table-cell-content {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    &-row-hover {
+      background: #fff4f4;
+    }
+  }
+
+  &-ping-left {
+    .rc-table-cell-fix-left-first::after,
+    .rc-table-cell-fix-left-last::after {
+      box-shadow: inset 10px 0 8px -8px green;
+    }
+  }
+
+  &-ping-right {
+    .rc-table-cell-fix-right-first::after,
+    .rc-table-cell-fix-right-last::after {
+      box-shadow: inset -10px 0 8px -8px green;
+    }
+  }
+
+  // ================= Expand =================
+  &-expand-icon-col {
+    width: 60px;
+  }
+
+  &-row-expand-icon-cell {
+    text-align: center;
+  }
+
+  // ================= Header =================
+  thead {
+    th {
+      text-align: center;
+      background: var(--table-head-background);
+
+      span {
+        right: unset;
+        left: 0;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+');
+        transform: rotate(90deg);
+
+        display: none;
+      }
+    }
+
+    .rc-table-cell-scrollbar::after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -1px;
+      width: 1px;
+      background: var(--table-head-background);
+      content: '';
+
+      .rc-table {
+        right: -1px;
+        left: auto;
+      }
+    }
+  }
+
+  &-header {
+    border: 1px solid var(--table-border);
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  // ================= Empty ==================
+  &-placeholder {
+    text-align: center;
+  }
+
+  // ================== Body ==================
+  tbody {
+    tr {
+      td {
+        background: var(--table-cell-background);
+      }
+
+      th {
+        background: var(--table-head-background);
+      }
+    }
+  }
+
+  &-content {
+    border: 1px solid var(--table-border);
+    border-right: 0;
+    border-bottom: 0;
+    border-radius: 5px 0 0 0;
+  }
+
+  &-body {
+    border: 1px solid var(--table-border);
+    border-right: 0;
+    border-bottom: 0;
+    border-top: 0;
+  }
+
+  &-fixed-column &-body::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    border-right: 1px solid var(--table-border);
+    content: '';
+  }
+
+  // ================= Expand =================
+  &-expanded-row {
+    .rc-table-cell {
+      box-shadow: inset 0 8px 8px -8px green;
+    }
+
+    &-fixed {
+      box-sizing: border-box;
+      margin: -16px -8px;
+      margin-right: -8px - 2 * 1px;
+      padding: 16px 8px;
+
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 1px;
+        bottom: 0;
+        width: 0;
+        border-right: 1px solid var(--table-border);
+        content: '';
+      }
+    }
+  }
+
+  &-row-expand-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    color: #aaa;
+    line-height: 16px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid currentColor;
+    cursor: pointer;
+
+    &.rc-table-row-expanded::after {
+      content: '-';
+    }
+
+    &.rc-table-row-collapsed::after {
+      content: '+';
+    }
+
+    &.rc-table-row-spaced {
+      visibility: hidden;
+    }
+  }
+
+  // ================= Title ==================
+  &-title {
+    padding: 16px 8px;
+    border: 1px solid var(--table-border);
+    border-bottom: 0;
+  }
+
+  // ================= Caption ==================
+  &-caption {
+    padding: 16px 8px;
+    border-right: 1px solid var(--table-border);
+    border-bottom: 1px solid var(--table-border);
+  }
+
+  // ================= Footer =================
+  &-footer {
+    padding: 16px 8px;
+    border: 1px solid var(--table-border);
+    border-top: 0;
+  }
+
+  tfoot {
+    td {
+      background: #fff;
+    }
+  }
+
+  &-summary {
+    border-top: 1px solid var(--table-border);
+    border-left: 1px solid var(--table-border);
+  }
+
+  &-sticky {
+    &-holder {
+      position: sticky;
+      z-index: 2;
+    }
+    &-scroll {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #f3f3f3;
+      opacity: 0.6;
+      transition: transform 0.1s ease-in 0s;
+      &:hover {
+        transform: scaleY(1.2);
+        transform-origin: center bottom;
+      }
+      &-bar {
+        height: 8px;
+        background-color: #bbb;
+        border-radius: 4px;
+        &:hover {
+          background-color: #999;
+        }
+        &-active {
+          background-color: #999;
+        }
+      }
+    }
+  }
+
+  @include tablet-layout {
+    &-header {
+      border-top: 0;
+    }
+  }
+}
