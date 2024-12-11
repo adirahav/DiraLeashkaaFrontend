@@ -173,7 +173,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
         }, [params.hasError])
         
         const handleValueChange = (e) => {
-            const value = e.target.value
+            const value = e.target.value.trim()
             setValueToEdit(value)
             debouncedOnChange(value)
         }

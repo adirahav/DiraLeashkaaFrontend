@@ -6,7 +6,7 @@ import { PropertyField } from './PropertyField'
 import { ZoomIn } from '../assets/icons'
 import { useSplash } from '../contexts/SplashContext'
 
-export function PropertyInterests({property, display, onUpdate, onCloseInterests}) {   
+export function PropertyInterests({property, display, fragment, onUpdate, onCloseInterests}) {   
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
@@ -108,7 +108,7 @@ export function PropertyInterests({property, display, onUpdate, onCloseInterests
         interest: "depreciationForTaxPurposes" + (depreciationForTaxPurposes.depreciationForTaxPurposesPercent ? depreciationForTaxPurposes.depreciationForTaxPurposesPercent : "Default"),    
     }
 
-    const mainClass = `interests ${display ? "show" : ""}`
+    const mainClass = `interests ${fragment} ${display ? "show" : ""}`
     
     return (
         <section className={mainClass}>

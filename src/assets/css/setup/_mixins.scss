@@ -127,4 +127,10 @@
             }
         }
     }
+
+    @include mobile-layout {
+      &::-webkit-scrollbar {
+        width: 0px;
+      }
+    }
 }

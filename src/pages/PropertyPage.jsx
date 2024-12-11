@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { PropertyForm } from '../cmps/PropertyForm'
@@ -44,6 +44,8 @@ export function PropertyPage() {
     
     const { splash } = useSplash()
     const phrases = splash?.phrases
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (propertyId) {
@@ -145,6 +147,7 @@ export function PropertyPage() {
             setShowOverlay(false)
         } catch (error) {
             console.error(`Error fetching property ${propertyId}:`, error)
+            navigate("/home") 
         } 
     }
 
@@ -279,7 +282,7 @@ export function PropertyPage() {
                         חסרים נתונים לחישוב
                     </div>
                 </div>}
-                {property?.showMortgagePrepayment && <PropertyInterests property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />}
+                {property?.showMortgagePrepayment && <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />}
                 {!isFirstLoading && !lockYields && <PropertyYieldForecast data={property?.calcYieldForecast} />}
                 {!isFirstLoading && !lockYields && property?.showMortgagePrepayment && <PropertyAmortizationSchedule data={property?.calcAmortizationSchedule} />}
                 {!isFirstLoading && !lockYields && <PropertyChart data={property?.calcYieldForecast} />}

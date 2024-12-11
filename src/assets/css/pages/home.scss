@@ -187,11 +187,14 @@
             }
 
             & > .footer {
+                position: relative;
+
                 .icon-delete {
                     width: 15px;
                     height: 15px;
                     float: left;
-
+                    position: absolute;
+                    
                     &.disable {
                         
                     }
@@ -533,8 +536,8 @@
         }
 
         .add-button {
-            bottom: 30px;
-            left: 30px;
+            bottom: 10px;
+            left: 20px;
             right: unset;
             border-radius: 50%;
             border: 3px solid var(--home-add-button-border);
@@ -620,7 +623,7 @@
                 margin: 0 20px;
 
                 .data {
-                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
                 }    
                 
                 .chart {

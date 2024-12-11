@@ -152,13 +152,6 @@ export function HomePage() {
                     <NavLink to="/property" className={addPropertyClass}><AddPropertyIcon sx={IconSizes.Small} /></NavLink>
                 </div>
             </main>
-            <AdSense.Google
-                client="ca-pub-0000000000000000" 
-                slot="0000000000" 
-                style={{ display: "block" }}
-                format="auto"
-                responsive="true"
-              />
             <Footer />
         </>)
     }

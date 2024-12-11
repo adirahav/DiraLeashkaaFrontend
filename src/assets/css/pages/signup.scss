@@ -1,7 +1,7 @@
 .signup {
     
     height: max-content;
-    margin: auto;
+    margin: 20px auto auto;
     display: grid;
     grid-template-columns: 200px 550px;
     grid-gap: 10px;
@@ -307,7 +307,7 @@
         .form {
             grid-column: 1;
             border-top: 0;
-            height: calc(100vh - 360px);
+            height: calc(100vh - 400px);
         }
 
         .footer {

@@ -187,6 +187,10 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         try {
             setCity({...city, selectedValue: property.city})
 
+            if (property.updatedByField !== "cityElse") {
+                setCityElse({...cityElse, value: property.cityElse})
+            }
+            
             if (property.updatedByField !== "address") {
                 setAddress({...address, value: property.address})
             }
@@ -395,9 +399,29 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         mortgageMonthlyRepayment: "mortgageMonthlyRepayment" + (mortgageMonthlyRepayment.value ? mortgageMonthlyRepayment.value : "Default"),
         mortgageMonthlyYield: "mortgageMonthlyYield" + (mortgageMonthlyYield.value ? mortgageMonthlyYield.value : "Default"),
     }
+
+    const [cityLogoIcon, setCityLogoIcon] = useState(null)
+
+    useEffect(() => {
+        (async () => {
+            if (!isLoadingState) {
+                const iconPath = await getCityLogoIcon(city)
+                setCityLogoIcon(iconPath)
+            }
+        })()
+    }, [city, isLoadingState])
+
+    const getCityLogoIcon = async (city) => {
+        try {
+            const module = await import(`../assets/images/icon_city_${city.selectedValue === 'choose' || !city.selectedValue ? 'else' : city.selectedValue}.png`)
+            return module.default
+        } catch (error) {
+            const fallback = await import('../assets/images/icon_city_else.png')
+            return fallback.default
+        }
+    }
     
     const sectionClass = `form ${city.selectedValue === "else" ? "city-else" : ""}`
-    const cityLogoIcon = `/src/assets/images/icon_city_${city.selectedValue === 'choose' || !city.selectedValue ? 'else' : city.selectedValue}.png`
     const cityLogoClass = 'city-logo' + (isFirstLoading 
                                             ? ' loading1' : '')
     const h3Class = isFirstLoading ? 'loading0' : ''

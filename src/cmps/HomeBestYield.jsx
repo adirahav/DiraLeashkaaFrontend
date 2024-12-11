@@ -11,11 +11,26 @@ export function HomeBestYield({ property }) {
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
+    const fixedParameters = splash?.fixedParameters
+
+    const cityName = property?.city && property.city !== "else"
+                        ? utilService.getFixedParameter("array", "cities", fixedParameters)
+                            .find(city => city.key === property.city).value
+                        : property.city === "else"
+                            ? property.cityElse
+                            : null
+    const address = property.address && cityName
+                        ? property.address + ", " + cityName
+                        : property.address && !cityName
+                            ? property.address
+                            : !property.address && cityName
+                                ? cityName
+                                : null
     
     return (
         <>
             {property && <>
-                <h2>{property.address}</h2>
+                {address && <h2>{address}</h2>}
                 <div>
                     <div className='data'>
                         <article>

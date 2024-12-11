@@ -1,11 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { utilService } from '../services/util.service'
 import { useSelector } from 'react-redux'
 
 export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {   
 
+    const [cityIcon, setCityIcon] = useState(null)
+
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
+    useEffect(() => {
+        (async () => {
+            if (!isLoadingState) {
+                const iconPath = await getCityIcon(city)
+                setCityIcon(iconPath)
+            }
+        })()
+    }, [city, isLoadingState])
+
+    const getCityIcon = async (city) => {
+        try {
+            const module = await import(`../assets/images/icon_city_${city || 'else'}.png`)
+            return module.default
+        } catch (error) {
+            const fallback = await import('../assets/images/icon_city_else.png')
+            return fallback.default
+        }
+    }
+
     const handleCityPress = (ev) => {
         if (city) {
             onCityPress(city)
@@ -18,10 +39,6 @@ export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {
                             ? `loading${index}`
                             : ''
 
-    const cityIcon = !isLoadingState 
-                        ? `/src/assets/images/icon_city_${city ? city : 'else'}.png`
-                        : ''
-    
     const cityLabel = !isLoadingState
                         ? !city || city === "else"
                             ? citiesNames?.find(c => c.key === "else").value 

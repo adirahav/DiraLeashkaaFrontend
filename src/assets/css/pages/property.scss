@@ -40,6 +40,12 @@
             span {
                 line-height: 30px;
             }
+
+            &.percent {
+                span {
+                    line-height: normal;
+                }
+            }
         }
 
         &:not(.city-else) {
@@ -109,6 +115,7 @@
                 background-color: var(--property-form-background);
                 border-top-left-radius: 10px;
                 height: 160px;
+                width: auto;
                 padding-top: 5px;
                 
                 .zoom-in {
@@ -530,7 +537,7 @@
                     background-color: var(--chart-background);
                 }
 
-                &.interests.show {
+                &.interests.show:not(.form) {
                     display: inline-table;
                     position: absolute;
                     z-index: 1;
@@ -702,5 +709,9 @@
             }
         }
     }
+}
+
+.adsbygoogle {
+    grid-column: 1!important;
 }
 

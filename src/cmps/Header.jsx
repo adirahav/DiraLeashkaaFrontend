@@ -15,14 +15,19 @@ export function Header() {
     const headerRef = useRef()
     const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)   
     const [showAllHeader, setShowAllHeader] = useState(false)
+    const [showBack, setShowBack] = useState(false)
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        setShowAllHeader(!(
-               (window.location.toString().includes("terms-of-use") 
-             || window.location.toString().includes("contact-us")) && loggedinUser===null
-        )) 
+        const hasAllHeader = 
+            !((window.location.toString().includes("terms-of-use") 
+            || window.location.toString().includes("contact-us")) && loggedinUser===null)
+        
+        setShowAllHeader(hasAllHeader)
+        
+        setShowBack(!hasAllHeader || !(window.location.toString().includes("home")) && loggedinUser!==null)
+        
     }, [])
 
     useEffect(() => {
@@ -91,11 +96,13 @@ export function Header() {
         <header className='full' ref={headerRef}>
             <div className="logo">
                 {showAllHeader && <MenuIcon className="mobile" onClick={onToggleMenu} sx={ IconSizes.Medium } />}
+                {!showAllHeader && <div className="mobile" style={{width:55}}></div>}
                 <NavLink to="/">
                     <img  className="tablet-or-desktop" src={logo} />
                     <h1 className="mobile">דירה להשקעה</h1>
                 </NavLink>  
-                {showAllHeader && <BackIcon className="mobile" onClick={onPressBack} sx={ IconSizes.Medium } />}
+                {showBack && <BackIcon className="mobile" onClick={onPressBack} sx={ IconSizes.Medium } />}
+                {!showBack && <div className="mobile" style={{width:55}}></div>}
             </div>
             {!showAllHeader &&<h1>דירה להשקעה</h1>}
             <nav className={navClass} onAnimationEnd={handleAnimationEnd}>
