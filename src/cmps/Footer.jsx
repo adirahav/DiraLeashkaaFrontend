@@ -43,10 +43,12 @@ export function Footer() {
         }
     }
 
-    const webUrl = utilService.getFixedParameter("version", fixedParameters).find(entry => entry.key === "url").value
+    const version = utilService.getFixedParameter("version", fixedParameters)
+    const webUrl = version.find(entry => entry.key === "url").value
     const shareDescription = utilService.getPhrase("web_share_text", phrases)  
     const shareUrl = `whatsapp://send?text= ${shareDescription} ${webUrl}`
-
+    const versionNumber = version.find(entry => entry.key === "lastVersion").value
+    
     return (<>
         <footer className='full'>
             <div>
@@ -56,7 +58,7 @@ export function Footer() {
                         {showAllFooter && <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>}
                         {showAllFooter && <li><NavLink to={shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>}
                         {showAllFooter && <li><span>|</span></li>}
-                        {showAllFooter && <li><span>גירסה 2.4</span></li>}
+                        {showAllFooter && <li><span>גירסה {parseFloat(versionNumber).toFixed(1)}</span></li>}
                         {showAllFooter && <li><NavLink to="/copyright"><span>זכויות יוצרים</span></NavLink></li>}
                     </ul>
                 </nav>                

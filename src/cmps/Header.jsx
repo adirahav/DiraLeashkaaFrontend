@@ -97,9 +97,11 @@ export function Header() {
         }
     }
 
-    const webUrl = utilService.getFixedParameter("version", fixedParameters).find(entry => entry.key === "url").value
+    const version = utilService.getFixedParameter("version", fixedParameters)
+    const webUrl = version.find(entry => entry.key === "url").value
     const shareDescription = utilService.getPhrase("web_share_text", phrases)  
     const shareUrl = `whatsapp://send?text= ${shareDescription} ${webUrl}`
+    const versionNumber = version.find(entry => entry.key === "lastVersion").value
     
     return (<>
         <header className='full' ref={headerRef}>
@@ -128,7 +130,7 @@ export function Header() {
                     <li className="mobile"><NavLink to={shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
                     <li className="logout"><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
                     <li className="mobile divider"></li>
-                    <li className="mobile"><span>גירסה 2.4</span></li>
+                    <li className="mobile"><span>גירסה {parseFloat(versionNumber).toFixed(1)}</span></li>
                     <li className="mobile divider"></li>
                     <li className="mobile"><NavLink to="/copyright"><span>זכויות יוצרים</span></NavLink></li>
                 </ul>}

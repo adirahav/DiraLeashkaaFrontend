@@ -148,13 +148,14 @@ export default App
 - לשים פרסומות
 ? עמוד הבית - מחיקה משובש
 
-
 - הרבה נכסים מעטים מאד את קצב העליה
-- לינק לאפליקציה
-
 - מחשבונים
+- image upload
+- lazy load
+
+- לינק לאפליקציה
 - לעצב מחדש
 - micro services
-- lazy load
-- image upload
+
+
 */
