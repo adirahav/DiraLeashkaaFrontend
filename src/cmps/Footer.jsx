@@ -4,51 +4,43 @@ import { ContactUsIcon, ShareIcon, TermsOfUseIcon, IconSizes } from "../assets/i
 import { useEffect, useState } from "react"
 import { useSplash } from '../contexts/SplashContext'
 import { utilService } from "../services/util.service"
+import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 
 export function Footer() {
     const [showAllFooter, setShowAllFooter] = useState(false)
+    const [version, setVersion] = useState(null)
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
 
+    const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
+
     useEffect(() => {
         setShowAllFooter(!window.location.toString().includes("terms-of-use")) 
     }, [])
 
-    const handleShare = async (ev) => {
-        const version = utilService.getFixedParameter("version", fixedParameters) 
-        const linkToShare = version.find(entry => entry.key === "url").value 
-        const shareData = {
-            title: 'שתפו עם חברים!',
-            text: 'בדוק איזו דירה תניב לך את התשואה הגבוהה ביותר! לחץ על הקישור למחשבון שלנו והתחל לתכנן את ההשקעה המשתלמת שלך: דירה להשקעה',
-            url: linkToShare,
+    useEffect(() => {
+        if (!isLoadingState && phrases) {
+            const version = utilService.getFixedParameter("version", fixedParameters)
+            const webUrl = version.find(entry => entry.key === "url").value
+            const shareDescription = utilService.getPhrase("web_share_text", phrases)  
+                
+            setVersion({
+                shareUrl: `whatsapp://send?text= ${shareDescription} ${webUrl}`,
+                versionNumber: version.find(entry => entry.key === "lastVersion").value
+            })
         }
+    }, [isLoadingState])
 
-        if (navigator.share) {
-            try {
-                await navigator.share(shareData)
-                console.log('Link shared successfully')
-            } catch (error) {
-                console.error('Error sharing the link:', error)
-            }
+    useEffect(() => {
+        if (!phrases) {
+            onLoadingStart()  
         } else {
-            try {
-                await navigator.clipboard.writeText(linkToShare)
-                alert('Link copied to clipboard!')
-            } catch (error) {
-                console.error('Error copying the link to clipboard:', error)
-                alert('Unable to share. Please copy the link manually.')
-            }
+            onLoadingDone()  
         }
-    }
+    }, [phrases])
 
-    const version = utilService.getFixedParameter("version", fixedParameters)
-    const webUrl = version.find(entry => entry.key === "url").value
-    const shareDescription = utilService.getPhrase("web_share_text", phrases)  
-    const shareUrl = `whatsapp://send?text= ${shareDescription} ${webUrl}`
-    const versionNumber = version.find(entry => entry.key === "lastVersion").value
-    
     return (<>
         <footer className='full'>
             <div>
@@ -56,9 +48,9 @@ export function Footer() {
                     <ul>
                         <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                         {showAllFooter && <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>}
-                        {showAllFooter && <li><NavLink to={shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>}
+                        {showAllFooter && <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>}
                         {showAllFooter && <li><span>|</span></li>}
-                        {showAllFooter && <li><span>גירסה {parseFloat(versionNumber).toFixed(1)}</span></li>}
+                        {showAllFooter && <li><span>גירסה {parseFloat(version?.versionNumber).toFixed(1)}</span></li>}
                         {showAllFooter && <li><NavLink to="/copyright"><span>זכויות יוצרים</span></NavLink></li>}
                     </ul>
                 </nav>                

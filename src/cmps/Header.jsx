@@ -8,6 +8,7 @@ import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon
          BackIcon} from "../assets/icons"
 import { logout } from "../store/actions/user.actions"
 import { useSplash } from '../contexts/SplashContext'
+import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 const { PLATFORM } = utilService
 
 export function Header() {
@@ -17,12 +18,15 @@ export function Header() {
     const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)   
     const [showAllHeader, setShowAllHeader] = useState(false)
     const [showBack, setShowBack] = useState(false)
+    const [version, setVersion] = useState(null)
 
     const navigate = useNavigate()
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
+
+    const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
 
     useEffect(() => {
         const hasAllHeader = 
@@ -34,6 +38,27 @@ export function Header() {
         setShowBack(!hasAllHeader || !(window.location.toString().includes("home")) && loggedinUser!==null)
         
     }, [])
+
+    useEffect(() => {
+        if (!phrases) {
+            onLoadingStart()  
+        } else {
+            onLoadingDone()  
+        }
+    }, [phrases])
+
+    useEffect(() => {
+        if (!isLoadingState && phrases) {
+            const version = utilService.getFixedParameter("version", fixedParameters)
+            const webUrl = version.find(entry => entry.key === "url").value
+            const shareDescription = utilService.getPhrase("web_share_text", phrases)  
+                
+            setVersion({
+                shareUrl: `whatsapp://send?text= ${shareDescription} ${webUrl}`,
+                versionNumber: version.find(entry => entry.key === "lastVersion").value
+            })
+        }
+    }, [isLoadingState])
 
     useEffect(() => {
         if (navClass) {
@@ -97,12 +122,6 @@ export function Header() {
         }
     }
 
-    const version = utilService.getFixedParameter("version", fixedParameters)
-    const webUrl = version.find(entry => entry.key === "url").value
-    const shareDescription = utilService.getPhrase("web_share_text", phrases)  
-    const shareUrl = `whatsapp://send?text= ${shareDescription} ${webUrl}`
-    const versionNumber = version.find(entry => entry.key === "lastVersion").value
-    
     return (<>
         <header className='full' ref={headerRef}>
             <div className="logo">
@@ -127,10 +146,10 @@ export function Header() {
                     <li><NavLink to="/property"><AddPropertyIcon sx={IconSizes.Small} /><span><b>הוסף נכס</b></span></NavLink></li>
                     <li className="mobile"><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li className="mobile"><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
-                    <li className="mobile"><NavLink to={shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
+                    <li className="mobile"><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
                     <li className="logout"><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
                     <li className="mobile divider"></li>
-                    <li className="mobile"><span>גירסה {parseFloat(versionNumber).toFixed(1)}</span></li>
+                    <li className="mobile"><span>גירסה {parseFloat(version?.versionNumber).toFixed(1)}</span></li>
                     <li className="mobile divider"></li>
                     <li className="mobile"><NavLink to="/copyright"><span>זכויות יוצרים</span></NavLink></li>
                 </ul>}
