@@ -7,6 +7,7 @@ import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon
          PersonalDetailsIcon, RegistrationDetailsIcon, AddPropertyIcon, ShareIcon, TermsOfUseIcon, 
          BackIcon} from "../assets/icons"
 import { logout } from "../store/actions/user.actions"
+import { useSplash } from '../contexts/SplashContext'
 const { PLATFORM } = utilService
 
 export function Header() {
@@ -18,6 +19,10 @@ export function Header() {
     const [showBack, setShowBack] = useState(false)
 
     const navigate = useNavigate()
+
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
+    const fixedParameters = splash?.fixedParameters
 
     useEffect(() => {
         const hasAllHeader = 
@@ -91,6 +96,10 @@ export function Header() {
             console.error("Logout failed", error)
         }
     }
+
+    const webUrl = utilService.getFixedParameter("version", fixedParameters).find(entry => entry.key === "url").value
+    const shareDescription = utilService.getPhrase("web_share_text", phrases)  
+    const shareUrl = `whatsapp://send?text= ${shareDescription} ${webUrl}`
     
     return (<>
         <header className='full' ref={headerRef}>
@@ -116,7 +125,7 @@ export function Header() {
                     <li><NavLink to="/property"><AddPropertyIcon sx={IconSizes.Small} /><span><b>הוסף נכס</b></span></NavLink></li>
                     <li className="mobile"><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li className="mobile"><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
-                    <li className="mobile"><NavLink to="/share"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
+                    <li className="mobile"><NavLink to={shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
                     <li className="logout"><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
                     <li className="mobile divider"></li>
                     <li className="mobile"><span>גירסה 2.4</span></li>

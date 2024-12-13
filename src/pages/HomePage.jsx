@@ -39,7 +39,7 @@ export function HomePage() {
         if (!phrases) {
             onLoadingStart()  
         } else if (phrases) {
-            setCitiesNames(utilService.getFixedParameter("array", "cities", fixedParameters))
+            setCitiesNames(utilService.getFixedParameter("cities", fixedParameters))
             fetchHome() 
         }
 
@@ -129,7 +129,7 @@ export function HomePage() {
     // best yield
     const bestYieldTitle = !isLoadingState && phrases && fixedParameters
                             ? utilService.getPhrase("home_best_yield_title", phrases)
-                                         .replace("%1$d", utilService.getFixedParameter("number", "bestYield", fixedParameters)
+                                         .replace("%1$d", utilService.getFixedParameter("bestYield", fixedParameters)
                                                                      .find(item => item.key === "yearsPeriod").value)
                             : ''
                             

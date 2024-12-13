@@ -17,7 +17,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         return {
             label: utilService.getPhrase(labelKey, phrases), 
             selectedValue: null, 
-            options: utilService.getFixedParameter("array", options, fixedParameters), 
+            options: utilService.getFixedParameter(options, fixedParameters), 
             suggestedOptions: utilService.getLocalStorage("array", savedSuggested) 
         }
     }
@@ -34,7 +34,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         return {
             label: utilService.getPhrase(labelKey, phrases), 
             warning: warningKey ? utilService.getPhrase(warningKey, phrases) : "", 
-            options: utilService.getFixedParameter("array", options, fixedParameters), 
+            options: utilService.getFixedParameter(options, fixedParameters), 
             selectedValue: null
         }
     }
@@ -66,7 +66,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     }
     
     const defultCalcEditableState = (labelWithPercentKey, labelWithCustomValueKey, numberPickerProperties) => {
-        const propertyInputs = utilService.getFixedParameter("array", "propertyInputs", fixedParameters)
+        const propertyInputs = utilService.getFixedParameter("propertyInputs", fixedParameters)
         const numberPicker = propertyInputs?.find(prop => prop.name === numberPickerProperties)
         delete numberPicker?.name
         
@@ -286,8 +286,8 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                 selectedValue: property.calcMortgagePeriod,
                 hasWarning: property.calcMortgagePeriod !== null 
                          && user.calcAge !== null 
-                         && utilService.getFixedParameter("number", "mortgageMaxAge", fixedParameters) != null
-                         && property.calcMortgagePeriod + user.calcAge > utilService.getFixedParameter("number", "mortgageMaxAge", fixedParameters)
+                         && utilService.getFixedParameter("mortgageMaxAge", fixedParameters) != null
+                         && property.calcMortgagePeriod + user.calcAge > utilService.getFixedParameter("mortgageMaxAge", fixedParameters)
             })
             setMortgageMonthlyRepayment({...mortgageMonthlyRepayment, value: property.calcMortgageMonthlyRepayment})
             setMortgageMonthlyYield({

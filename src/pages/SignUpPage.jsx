@@ -419,7 +419,7 @@ export function SignUpPage() {
         generalError: "generalError"
     }
 
-    const programs = utilService.getFixedParameter("array", "payPrograms", fixedParameters)
+    const programs = utilService.getFixedParameter("payPrograms", fixedParameters)
     
     const formClass = `signup ${(Object.keys(STEP).find(key => STEP[key] === step) || Object.keys(STEP)[0]).toLowerCase()}`
     const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`

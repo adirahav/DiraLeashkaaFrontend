@@ -14,7 +14,7 @@ export function HomeBestYield({ property }) {
     const fixedParameters = splash?.fixedParameters
 
     const cityName = property?.city && property.city !== "else"
-                        ? utilService.getFixedParameter("array", "cities", fixedParameters)
+                        ? utilService.getFixedParameter("cities", fixedParameters)
                             .find(city => city.key === property.city).value
                         : property.city === "else"
                             ? property.cityElse

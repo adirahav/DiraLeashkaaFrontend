@@ -43,7 +43,7 @@ function getPhrase(key, phrases) {
     return phrase ? phrase.value : ""
 }
 
-function getFixedParameter(type, key, fixedParameters) {
+function getFixedParameter(key, fixedParameters) {
     
     if (!fixedParameters) {
         return null
@@ -53,13 +53,9 @@ function getFixedParameter(type, key, fixedParameters) {
     
     if (fixedParameter) {
         return JSON.parse(fixedParameter)
-    } else {
-        if (type === "array") {
-            return null
-        } else {
-            return null
-        }
-    }
+    } 
+
+    return null
 }
 
 function getLocalStorage(type, key) {

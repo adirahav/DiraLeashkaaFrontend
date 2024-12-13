@@ -13,7 +13,7 @@ export function PropertyInterests({property, display, fragment, onUpdate, onClos
     const fixedParameters = splash?.fixedParameters
 
     const defultCalcEditableState = (labelKey, numberPickerProperties) => {
-        const indexesAndInterests = utilService.getFixedParameter("array", "indexesAndInterests", fixedParameters)
+        const indexesAndInterests = utilService.getFixedParameter("indexesAndInterests", fixedParameters)
         const numberPicker = indexesAndInterests.find(prop => prop.name === numberPickerProperties)
         delete numberPicker.name
         
