@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { utilService } from '../services/util.service'
 import { useSelector } from 'react-redux'
 
 export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {   

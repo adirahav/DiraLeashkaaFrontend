@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { HomeBestYield } from './HomeBestYield'
 import { useSelector } from 'react-redux'
 import { utilService } from '../services/util.service'
-import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSplash } from '../contexts/SplashContext.jsx'
 
 export function HomeBestYields({ properties }) { 
@@ -10,14 +9,6 @@ export function HomeBestYields({ properties }) {
     const phrases = splash?.phrases
   
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
-
-    useEffect(() => {
-        if (!phrases) {
-            onLoadingStart()  
-        } else {
-            onLoadingDone()  
-        }
-    }, [phrases])
 
     return (
         <section className="best-yields">

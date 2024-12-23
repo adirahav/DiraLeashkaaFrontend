@@ -24,11 +24,9 @@ export const httpService = {
 }
 
 async function ajax(endpoint, method = 'GET', data = null) {
-    if (data) {
-        data = {
-            ...data,
-            platform: "web",
-        }
+    data = {
+        ...data,
+        platform: "web",
     }
 
     try {

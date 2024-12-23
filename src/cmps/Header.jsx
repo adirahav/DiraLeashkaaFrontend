@@ -8,7 +8,6 @@ import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon
          BackIcon} from "../assets/icons"
 import { logout } from "../store/actions/user.actions"
 import { useSplash } from '../contexts/SplashContext'
-import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 const { PLATFORM } = utilService
 
 export function Header() {
@@ -40,15 +39,7 @@ export function Header() {
     }, [])
 
     useEffect(() => {
-        if (!phrases) {
-            onLoadingStart()  
-        } else {
-            onLoadingDone()  
-        }
-    }, [phrases])
-
-    useEffect(() => {
-        if (!isLoadingState && phrases) {
+        if (!isLoadingState && phrases && fixedParameters) {
             const version = utilService.getFixedParameter("version", fixedParameters)
             const webUrl = version.find(entry => entry.key === "url").value
             const shareDescription = utilService.getPhrase("web_share_text", phrases)  
@@ -151,7 +142,7 @@ export function Header() {
                     <li className="mobile divider"></li>
                     <li className="mobile"><span>גירסה {parseFloat(version?.versionNumber).toFixed(1)}</span></li>
                     <li className="mobile divider"></li>
-                    <li className="mobile"><NavLink to="/copyright"><span>זכויות יוצרים</span></NavLink></li>
+                    <li className="mobile"><span>Icons made by itim2101 from www.flaticon.com</span></li>
                 </ul>}
             </nav>
         </header>

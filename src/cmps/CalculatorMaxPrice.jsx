@@ -1,32 +1,66 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react'
-import { PropertyField } from './PropertyField'
-import { utilService } from '../services/util.service'
+import { PropertyField } from './PropertyField.jsx'
+import { utilService } from '../services/util.service.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSplash } from '../contexts/SplashContext.jsx'
 import { useSelector } from 'react-redux'
+import { authService } from '../services/auth.service.js'
+import { calculatorService } from '../services/calculator.service.js'
+import { useNavigate } from 'react-router-dom'
+import { Overlay } from './Overlay.jsx'
 
-export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPropertyId}) { 
+export function CalculatorMaxPrice() { 
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
 
+    const navigate = useNavigate()
+
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
-    
-    const defultSearchableDropdownState = (labelKey, options, savedSuggested) => {
-        return {
-            label: utilService.getPhrase(labelKey, phrases), 
-            selectedValue: null, 
-            options: utilService.getFixedParameter(options, fixedParameters), 
-            suggestedOptions: utilService.getLocalStorage("array", savedSuggested) 
+    const loggedinUser = authService.getLoggedinUser()
+
+    const [property, setProperty] = useState()
+    const [isFirstLoading, setIsFirstLoading] = useState(true)
+    const [showOverlay, setShowOverlay] = useState(false)
+
+    useEffect(() => {
+        if (!isLoadingState && isFirstLoading) {
+            fetchCalculator()  
+        } 
+    }, [isLoadingState])
+
+    const fetchCalculator = async () => {
+        try {
+            onLoadingStart()  
+            setShowOverlay(true)
+            const property = await calculatorService.getMaxPrice()
+            setProperty(property)   
+            setIsFirstLoading(false)
+            setShowOverlay(false)
+        } catch (error) {
+            console.error(`Error fetching calculator maxPrice:`, error)
+            navigate("/home") 
+        } 
+        finally {
+            onLoadingDone()  
         }
     }
 
-    const defultStringState = (labelKey, maxLength) => {
-        return {
-            label: utilService.getPhrase(labelKey, phrases), 
-            value: "", 
-            maxLength
+    const updateCalculator = async (fieldName, fieldValue) => {
+        try {
+            onLoadingStart()  
+            setShowOverlay(true)
+            const property = await calculatorService.updateMaxPrice(fieldName, fieldValue)
+            setProperty(property)   
+            setIsFirstLoading(false)
+            setShowOverlay(false)
+        } catch (error) {
+            console.error(`Error update calculator maxPrice:`, error)
+            navigate("/home") 
+        } 
+        finally {
+            onLoadingDone()  
         }
     }
 
@@ -85,10 +119,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         }
     }
 
-    const [cityIcon, setCityIcon] = useState(null)
-    const [city, setCity] = useState(defultSearchableDropdownState("property_city_label", "cities", "userCities"))
-    const [cityElse, setCityElse] = useState(defultStringState("property_city_else_label", 20))
-    const [address, setAddress] = useState(defultStringState("property_address_label", 30))
+    const [maxPrice, setMaxPrice] = useState(0)
     const [apartmentType, setApartmentType] = useState(defultDropdownState("property_apartment_type_label", null, "apartmentTypes"))
     const [price, setPrice] = useState(defultNumberState("property_price_label", 9))
     const [equity, setEquity] = useState(defultAutoFillState("property_equity_label", 9))
@@ -116,12 +147,6 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     const [structureInsurance, setStructureInsurance] = useState(defultNumberState("property_structure_insurance_label", 3))
     const [rentCleaningExpenses, setRentCleaningExpenses] = useState(defultCalcState("property_rent_cleaning_expenses_label", ""))
     
-    const [mortgagePeriod, setMortgagePeriod] = useState(defultDropdownState("property_mortgage_period_label", "property_mortgage_period_warning", "mortgagePeriods"))
-    const [mortgageMonthlyRepayment, setMortgageMonthlyRepayment] = useState(defultCalcState("property_mortgage_monthly_repayment_label", "property_mortgage_monthly_repayment_warning"))
-    const [mortgageMonthlyYield, setMortgageMonthlyYield] = useState(defultCalcState("property_mortgage_monthly_yield_label", "property_mortgage_monthly_yield_warning"))
-    
-    const [showMortgagePrepayment, setShowMortgagePrepayment] = useState(true)
-    
     useEffect(() => {
         if (property) {
             loadProperty()
@@ -129,72 +154,93 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     }, [property])
 
     useEffect(() => {
-        if (!isLoadingState && !property && !queryPropertyId) {
-            setEquity({ ...equity, value: user?.equity, defaultValue: user?.equity})
-            setIncomes({ ...incomes, value: user?.incomes, defaultValue: user?.incomes})
-            setCommitments({ ...commitments, value: user?.commitments, defaultValue: user?.commitments})
+        if (!isLoadingState && !property) {
+            setEquity({ ...equity, value: loggedinUser?.equity, defaultValue: loggedinUser?.equity})
+            setIncomes({ ...incomes, value: loggedinUser?.incomes, defaultValue: loggedinUser?.incomes})
+            setCommitments({ ...commitments, value: loggedinUser?.commitments, defaultValue: loggedinUser?.commitments})
         }
     }, [isLoadingState])
 
-    /*useEffect(() => {
-        if (!phrases) {
-            setCity(defultSearchableDropdownState("property_city_label", "cities", "userCities"))
-            setCityElse(defultStringState("property_city_else_label", 20))
-            setAddress(defultStringState("property_address_label", 30))
-            setApartmentType(defultDropdownState("property_apartment_type_label", null, "apartmentTypes"))
-            setPrice(defultNumberState("property_price_label", 9))
-            setEquity(defultAutoFillState("property_equity_label", 9))
-            setEquityCleaningExpenses(defultCalcState("property_equity_cleaning_expenses_label", "property_equity_cleaning_expenses_warning"))
-            setMortgageRequired("property_mortgage_required_label", "property_mortgage_required_warning")
-        
-            setIncomes(defultAutoFillState("property_incomes_label", 7))  
-            setCommitments(defultAutoFillState("property_commitments_label", 6)) 
-            setDisposableIncome(defultCalcState("property_disposable_income_label")) 
-            setPossibleMonthlyRepayment(defultCalcEditableState("property_possible_monthly_payment_label", "", "possibleMonthlyRepaymentPercent"))
-
-            setMaxPercentOfFinancing(defultCalcState("property_max_percent_of_financing_label")) 
-            setActualPercentOfFinancing(defultCalcState("property_actual_percent_of_financing_label", "property_actual_percent_of_financing_warning")) 
-            
-            setTransferTax(defultCalcState("property_transfer_tax_label"))
-            setLawyer(defultCalcEditableState("property_lawyer_label", "property_lawyer_label_without_value", "lawyerPercent"))
-            setRealEstateAgent(defultCalcEditableState("property_real_estate_agent_label", "property_real_estate_agent_label_without_value", "realEstateAgentPercent"))
-            
-            setBrokerMortgage(defultNumberState("property_broker_mortgage_label", 5))
-            setRepairing(defultNumberState("property_repairing_label", 7))
-            setIncidentalsTotal(defultCalcTotalState("property_incidentals_total_label"))
-            
-            setRent(defultCalcEditableState("property_rent_label", "property_rent_label_without_value", "rentPercent"))  
-            setLifeInsurance(defultNumberState("property_life_insurance_label", 3))
-            setStructureInsurance(defultNumberState("property_structure_insurance_label", 3))
-            setRentCleaningExpenses(defultCalcState("property_rent_cleaning_expenses_label", ""))
-            
-            setMortgagePeriod(defultDropdownState("property_mortgage_period_label", "property_mortgage_period_warning", "mortgagePeriods"))
-            setMortgageMonthlyRepayment(defultCalcState("property_mortgage_monthly_repayment_label", "property_mortgage_monthly_repayment_warning"))
-            setMortgageMonthlyYield(defultCalcState("property_mortgage_monthly_yield_label", "property_mortgage_monthly_yield_warning"))
-            
-            
+    useEffect(() => {
+        if (price?.value) {
+            //if (maxPrice === 0) {
+                setMaxPrice(price.value)
+            //} else {
+            //    updateMaxPrice(maxPrice, price.value)
+            //}
         }
+    }, [price?.value])
 
-    }, [phrases])*/
+    function updateMaxPrice(currentPrice, targetPrice) {
+        const getIncrement = (difference) => {
+            if (difference <= 100) return 1
+            if (difference <= 1000) return 10
+            if (difference <= 10000) return 100
+            if (difference <= 100000) return 1000
+            if (difference <= 1000000) return 10000
+            return 10000
+        };
 
+        const getDelay = (difference) => {
+            if (difference <= 100) return 400
+            if (difference <= 1000) return 200
+            if (difference <= 10000) return 100
+            if (difference <= 100000) return 20
+            if (difference <= 1000000) return 10
+            return 10
+        };
+    
+        let difference = getIncrement(Math.abs(targetPrice - currentPrice))
+        let delay = getDelay(Math.abs(targetPrice - currentPrice))
+        let didOverTarget = false
+
+        const adjustPrice = () => {
+            setMaxPrice((current) => {
+                if (current < targetPrice) {
+                    const nextValue = current + difference
+                    
+                    if (nextValue > targetPrice) {
+                        didOverTarget = true
+                    }
+
+                    if (didOverTarget) {
+                        difference = getIncrement(Math.abs(targetPrice - nextValue))
+                        delay = getDelay(Math.abs(targetPrice - currentPrice))
+                    }
+    
+                    setTimeout(adjustPrice, delay)
+                    return nextValue
+                }
+    
+                if (current > targetPrice) {
+                    const nextValue = current - difference
+                    
+                    if (nextValue < targetPrice) {
+                        didOverTarget = true
+                    }
+
+                    if (didOverTarget) {
+                        difference = getIncrement(Math.abs(targetPrice - nextValue))
+                        delay = getDelay(Math.abs(targetPrice - currentPrice))
+                    }
+    
+                    setTimeout(adjustPrice, delay)
+                    return nextValue
+                }
+    
+                return targetPrice
+            })
+        }
+    
+        adjustPrice()
+    }
+    
 
     const loadProperty = () => {
         try {
-            setCity({...city, selectedValue: property.city})
-
-            if (property.updatedByField !== "cityElse") {
-                setCityElse({...cityElse, value: property.cityElse})
-            }
-            
-            if (property.updatedByField !== "address") {
-                setAddress({...address, value: property.address})
-            }
-            
             setApartmentType({...apartmentType, selectedValue: property.apartmentType})
 
-            if (property.updatedByField !== "price") {
-                setPrice({...price, value: property.price})
-            }
+            setPrice({...price, value: property.price})
 
             if (property.updatedByField !== "equity") {
                 setEquity({...equity, value: property.calcEquity, defaultValue: property.defaultEquity})
@@ -208,7 +254,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             setMortgageRequired({
                 ...mortgageRequired, 
                 value: property.calcMortgageRequired,
-                hasWarning: !user.calcCanTakeMortgage && property.calcMortgageRequired > 0
+                hasWarning: !loggedinUser.calcCanTakeMortgage && property.calcMortgageRequired > 0
             })
             
             if (property.updatedByField !== "incomes") {
@@ -276,29 +322,13 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                 value: property.calcRentCleaningExpenses
             })
 
-            setMortgagePeriod({
-                ...mortgagePeriod, 
-                selectedValue: property.calcMortgagePeriod,
-                hasWarning: property.calcMortgagePeriod !== null 
-                         && user.calcAge !== null 
-                         && utilService.getFixedParameter("mortgageMaxAge", fixedParameters) != null
-                         && property.calcMortgagePeriod + user.calcAge > utilService.getFixedParameter("mortgageMaxAge", fixedParameters)
-            })
-            setMortgageMonthlyRepayment({...mortgageMonthlyRepayment, value: property.calcMortgageMonthlyRepayment})
-            setMortgageMonthlyYield({
-                ...mortgageMonthlyYield, 
-                value: property.calcMortgageMonthlyYield,
-                hasWarning: property.calcMortgageMonthlyYield !== null && property.calcMortgageMonthlyYield < 0
-            })
-            
-            setShowMortgagePrepayment(property?.showMortgagePrepayment)
         } catch (error) {
             console.error(`Error load property ${property._id}:`, error)
         } 
     }
 
-    function onValueChanged(fieldName, value) {
-        onUpdate(fieldName, value) 
+    function onValueChanged(fieldName, fieldValue) {
+        updateCalculator(fieldName, fieldValue) 
     }
 
     function onPercentChanged(fieldName, customPercent) {
@@ -356,15 +386,12 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                     break
         }  */
         
-        onUpdate(fieldName, customPercent) 
+        updateCalculator(fieldName, customPercent) 
     }
 
     const keys = {
-        city: "city" + (city.selectedValue ? city.selectedValue : "Default"),
-        cityElse: "cityElse" + (cityElse.value ? cityElse.value : "Default"),
-        address: "address" + (address.value ? address.value : "Default"),
+        maxPrice: "maxPrice" + (maxPrice ? maxPrice : "Default"),
         apartmentType: "apartmentType" + (apartmentType.selectedValue ? apartmentType.selectedValue : "Default"),
-        price: "price" + (price.value ? price.value : "Default"),
         equity: "equity" + (equity.value ? equity.value : "Default"),
         equityCleaningExpenses: "equityCleaningExpenses" + (equityCleaningExpenses.value ? equityCleaningExpenses.value : "Default"),
         mortgageRequired: "mortgageRequired" + (mortgageRequired.value ? mortgageRequired.value : "Default"),
@@ -390,47 +417,17 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         structureInsurance: "structureInsurance" + (structureInsurance.value ? structureInsurance.value : "Default"),
         rentCleaningExpenses: "rentCleaningExpenses" + (rentCleaningExpenses.value ? rentCleaningExpenses.value : "Default"),
         
-        mortgagePeriod: "mortgagePeriod" + (mortgagePeriod.value ? mortgagePeriod.value : "Default"),
-        mortgageMonthlyRepayment: "mortgageMonthlyRepayment" + (mortgageMonthlyRepayment.value ? mortgageMonthlyRepayment.value : "Default"),
-        mortgageMonthlyYield: "mortgageMonthlyYield" + (mortgageMonthlyYield.value ? mortgageMonthlyYield.value : "Default"),
     }
 
-    const [cityLogoIcon, setCityLogoIcon] = useState(null)
-
-    useEffect(() => {
-        (async () => {
-            if (!isLoadingState) {
-                const iconPath = await getCityLogoIcon(city)
-                setCityLogoIcon(iconPath)
-            }
-        })()
-    }, [city, isLoadingState])
-
-    const getCityLogoIcon = async (city) => {
-        try {
-            const module = await import(`../assets/images/icon_city_${city.selectedValue === 'choose' || !city.selectedValue ? 'else' : city.selectedValue}.png`)
-            return module.default
-        } catch (error) {
-            const fallback = await import('../assets/images/icon_city_else.png')
-            return fallback.default
-        }
-    }
-    
-    const sectionClass = `form ${city.selectedValue === "else" ? "city-else" : ""}`
-    const cityLogoClass = 'city-logo' + (isFirstLoading 
-                                            ? ' loading1' : '')
     const h3Class = isFirstLoading ? 'loading0' : ''
     const hrClass = isFirstLoading ? 'loading9' : ''
 
     return (<>
-        {!isFirstLoading && <img className={cityLogoClass} src={cityLogoIcon} />}
-        {isFirstLoading && <div className={cityLogoClass}><div /></div>}
-        <section className={sectionClass}>
-            <PropertyField type={"SEARCHABLE_DROP_DOWN"} key={keys.city} params={city} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('city', value)} />
-            {city.selectedValue === "else" && <PropertyField type={"STRING"} key={keys.cityElse} params={cityElse} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('cityElse', value)} />}
-            <PropertyField type={"STRING"} key={keys.address} params={address} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('address', value)} />
+        {showOverlay && <Overlay />}
+        <section className="form">
+            <h3>מחיר דירה מקסימלי:</h3>
+            <h2>{utilService.formatNumber(maxPrice, true)} ש"ח</h2>
             <PropertyField type={"DROP_DOWN"} key={keys.apartmentType} params={apartmentType} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('apartmentType', value)} />
-            <PropertyField type={"NUMBER"} key={keys.price} params={price} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('price', value)} />
             <PropertyField type={"AUTO_FILL"} key={keys.equity} params={equity} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('equity', value)} />
             <PropertyField type={"CALC"} key={keys.equityCleaningExpenses} params={equityCleaningExpenses} isFirstLoading={isFirstLoading} />
             <PropertyField type={"CALC"} key={keys.mortgageRequired} params={mortgageRequired} isFirstLoading={isFirstLoading} />
@@ -462,17 +459,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             <PropertyField type={"CALC_EDITABLE"} key={keys.rent} params={rent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('rentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('rentPercent', percent)} />    
             <PropertyField type={"NUMBER"} key={keys.lifeInsurance} params={lifeInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lifeInsurance', value)} />    
             <PropertyField type={"NUMBER"} key={keys.structureInsurance} params={structureInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('structureInsurance', value)} />    
-            <PropertyField type={"CALC"} key={keys.rentCleaningExpenses} params={rentCleaningExpenses} isFirstLoading={isFirstLoading} />
-            
-            {property?.showMortgagePrepayment && <>
-                <hr className={hrClass} />
-
-                <h3 className={h3Class}>{utilService.getPhrase("property_mortgage_repayment_title", phrases)}</h3>
-                <PropertyField type={"DROP_DOWN"} key={keys.mortgagePeriod} params={mortgagePeriod} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('mortgagePeriod', value)} />
-                <PropertyField type={"CALC"} key={keys.mortgageMonthlyRepayment} params={mortgageMonthlyRepayment} isFirstLoading={isFirstLoading} />
-                <PropertyField type={"CALC"} key={keys.mortgageMonthlyYield} params={mortgageMonthlyYield} isFirstLoading={isFirstLoading} />
-            </>}
-            
+            <PropertyField type={"CALC"} key={keys.rentCleaningExpenses} params={rentCleaningExpenses} isFirstLoading={isFirstLoading} />            
         </section>    
     </>
     )

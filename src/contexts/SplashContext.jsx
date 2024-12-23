@@ -19,7 +19,7 @@ export const SplashProvider = ({ children }) => {
     const [forceFetchSplash, setForceFetchSplash] = useState(false)
 
     useEffect(() => {
-        if (forceFetchSplash || !splash || !splash.fixedParameters || !splash.phrases) {
+        if (forceFetchSplash || !splash || !splash.phrases || !splash.fixedParameters || !splash.calculators) {
             fetchSplash()
         } else {
             localStorage.setItem("phrases", JSON.stringify(splash.phrases))

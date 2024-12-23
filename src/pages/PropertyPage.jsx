@@ -44,27 +44,26 @@ export function PropertyPage() {
     
     const { splash } = useSplash()
     const phrases = splash?.phrases
+    const fixedParameters = splash?.fixedParameters
+    const calculators = splash?.calculators
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (propertyId) {
-           fetchProperty() 
-        }
-        else {
-            setIsFirstLoading(false)
-            setShowInterestsContainer(true) 
-            setLockYields(true)
-        }
-    }, [propertyId])
-
-    useEffect(() => {
-        if (!phrases) {
+        if (!phrases || !fixedParameters || !calculators) {
             onLoadingStart()  
         } else {
             onLoadingDone()  
+
+            if (propertyId) {
+                fetchProperty() 
+            } else {
+                setIsFirstLoading(false)
+                setShowInterestsContainer(true) 
+                setLockYields(true)
+            }
         }
-    }, [phrases])
+    }, [splash, propertyId])
 
     useEffect(() => {
         if (city) {
@@ -140,6 +139,7 @@ export function PropertyPage() {
 
     const fetchProperty = async () => {
         try {
+            onLoadingStart()  
             setShowOverlay(true)
             const property = await propertyService.getById(propertyId)
             setProperty(property)   
@@ -149,6 +149,9 @@ export function PropertyPage() {
             console.error(`Error fetching property ${propertyId}:`, error)
             navigate("/home") 
         } 
+        finally {
+            onLoadingDone()  
+        }
     }
 
     const updateProperty = async (fieldName, fieldValue) => {

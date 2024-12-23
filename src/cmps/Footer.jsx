@@ -4,7 +4,6 @@ import { ContactUsIcon, ShareIcon, TermsOfUseIcon, IconSizes } from "../assets/i
 import { useEffect, useState } from "react"
 import { useSplash } from '../contexts/SplashContext'
 import { utilService } from "../services/util.service"
-import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 
 export function Footer() {
     const [showAllFooter, setShowAllFooter] = useState(false)
@@ -21,7 +20,7 @@ export function Footer() {
     }, [])
 
     useEffect(() => {
-        if (!isLoadingState && phrases) {
+        if (!isLoadingState && phrases && fixedParameters) {
             const version = utilService.getFixedParameter("version", fixedParameters)
             const webUrl = version.find(entry => entry.key === "url").value
             const shareDescription = utilService.getPhrase("web_share_text", phrases)  
@@ -33,14 +32,6 @@ export function Footer() {
         }
     }, [isLoadingState])
 
-    useEffect(() => {
-        if (!phrases) {
-            onLoadingStart()  
-        } else {
-            onLoadingDone()  
-        }
-    }, [phrases])
-
     return (<>
         <footer className='full'>
             <div>
@@ -51,11 +42,10 @@ export function Footer() {
                         {showAllFooter && <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>}
                         {showAllFooter && <li><span>|</span></li>}
                         {showAllFooter && <li><span>גירסה {parseFloat(version?.versionNumber).toFixed(1)}</span></li>}
-                        {showAllFooter && <li><NavLink to="/copyright"><span>זכויות יוצרים</span></NavLink></li>}
                     </ul>
-                </nav>                
+                </nav>
             </div>
-            
+            <div className="copyright">Icons made by itim2101 from www.flaticon.com</div>
         </footer>
     </>)
 }

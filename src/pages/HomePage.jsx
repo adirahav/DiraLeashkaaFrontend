@@ -14,7 +14,6 @@ import { IconSizes, AddPropertyIcon } from "../assets/icons"
 import { useSplash } from '../contexts/SplashContext.jsx'
 import imgArrowDown from '../assets/images/lottie_arrow_down.json'
 import Lottie from 'lottie-react'
-import AdSense from "react-adsense"
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -30,32 +29,22 @@ export function HomePage() {
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
+    const calculators = splash?.calculators
 
     const [citiesNames, setCitiesNames] = useState()
 
     const MIN_DELETE_PROPERTY_AWAIT_SEC = 3
 
     useEffect(() => {
-        if (!phrases) {
+        if (!phrases || !fixedParameters || !calculators) {
             onLoadingStart()  
-        } else if (phrases) {
+        } else {
+            onLoadingDone() 
             setCitiesNames(utilService.getFixedParameter("cities", fixedParameters))
             fetchHome() 
         }
 
-    }, [phrases])
-
-    const fetchHome = async () => {
-        try {
-            setShowOverlay(true)
-            await getHome()
-        } catch (error) {
-            console.error(`Error fetching home data:`, error)
-        } 
-        finally {
-            setShowOverlay(false)
-        }
-    }
+    }, [splash])
 
     useEffect(() => {
         if (homeState && homeState.bestYields?.length > 0) {
@@ -63,6 +52,19 @@ export function HomePage() {
         }
     }, [homeState])
 
+    const fetchHome = async () => {
+        try {
+            onLoadingStart() 
+            setShowOverlay(true)
+            await getHome()
+        } catch (error) {
+            console.error(`Error fetching home data:`, error)
+        } 
+        finally {
+            setShowOverlay(false)
+            onLoadingDone() 
+        }
+    }
  
     // my cities
     function onCityPress(city) {
@@ -76,7 +78,7 @@ export function HomePage() {
                                 ? selectedCity === "else"
                                     ? utilService.getPhrase("home_properties_title_else", phrases)
                                     : utilService.getPhrase("home_properties_title", phrases)
-                                             .replace("%1$s", citiesNames.find(city => city.key === selectedCity).value)
+                                             .replace("%1$s", citiesNames?.find(city => city.key === selectedCity).value)
                                 : ''
     const propertiesClass = isLoadingState ? 'loading0' : ''
     

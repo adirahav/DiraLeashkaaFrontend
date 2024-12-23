@@ -23,6 +23,7 @@ import { Alert } from './cmps/Alert'
 import { Toast } from './cmps/Toast.jsx'
 import { Dialog, } from './cmps/Dialog.jsx'
 import { CopyrightPage } from './pages/CopyrightPage.jsx'
+import { CalculatorPage } from './pages/CalculatorPage.jsx'
 
 function RouteGuard({ children }) {
   const [isOnline, setIsOnline] = useState(true)
@@ -100,10 +101,10 @@ function App() {
                   <Route path="/home" element={<RouteGuard><HomePage /></RouteGuard>} />
                   <Route path="/property" element={<RouteGuard><Orientation><PropertyPage /></Orientation></RouteGuard>} />
                   <Route path="/calculators" element={<RouteGuard><CalculatorsPage /></RouteGuard>} />
+                  <Route path="/calculator" element={<RouteGuard><CalculatorPage /></RouteGuard>} />
                   <Route path="/personal-info" element={<RouteGuard><PersonalInfoPage /></RouteGuard>} />
                   <Route path="/financial-details" element={<RouteGuard><FinancialDetailsPage /></RouteGuard>} />
                   <Route path="/terms-of-use" element={<RouteGuard><TermsOfUsePage /></RouteGuard>} />
-                  <Route path="/copyright" element={<RouteGuard><CopyrightPage /></RouteGuard>} />
                   <Route path="/contact-us" element={<RouteGuard><ContactUsPage /></RouteGuard>} />
               </Routes>
               

@@ -65,6 +65,16 @@ footer {
         }
     }
 
+    .copyright {
+        position: absolute;
+        font-size: 12px;
+        left: 0;
+        bottom: 0px;
+        padding: 26px 15px 0;
+        color: var(--nav-text);
+        height: 40px;
+    }
+
     @include desktop-layout {
         @include footer-grid-template-columns($break-desktop);
     } 

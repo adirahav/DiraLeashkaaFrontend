@@ -25,6 +25,8 @@ export const utilService = {
     formatNumber,
     formatFloat,
     parseNumber, 
+    toSnakeCase,
+    toKebabCase,
 
     makeId,
     saveToStorage,
@@ -83,6 +85,14 @@ function formatFloat(value) {
 
 function parseNumber(value) {
     return value.toString().replace(/,/g, '')
+}
+
+function toSnakeCase(str) {
+    return str?.replace(/([A-Z])/g, "_$1").toLowerCase()
+}
+
+function toKebabCase(str) {
+    return str?.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
 function makeId(length = 5) {
