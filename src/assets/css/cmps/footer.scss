@@ -1,6 +1,6 @@
 footer {
     height: $footer-height;
-    background-color: var(--footer-background);
+    background-color: var(--nav-footer-background);
     display: grid;  
     align-items: center;
 
@@ -30,7 +30,7 @@ footer {
                     }
 
                     span {
-                        color: var(--nav-text)
+                        color: var(--nav-footer-text)
                     }
 
                     a {
@@ -47,13 +47,13 @@ footer {
                         }
 
                         span {
-                            color: var(--nav-text)
+                            color: var(--nav-footer-text)
                         }
     
                         svg {
                             margin-left: 5px;
                             margin-top: 3px;
-                            color: var(--nav-icon);
+                            color: var(--nav-footer-icon);
                         }
                     }
 
@@ -71,7 +71,7 @@ footer {
         left: 0;
         bottom: 0px;
         padding: 26px 15px 0;
-        color: var(--nav-text);
+        color: var(--nav-footer-text);
         height: 40px;
     }
 

@@ -1,95 +1,98 @@
 .calculator {
 
     &.max-price {
-        padding-top: 65px;
-        padding-bottom: 20px;
-        display: grid;
-        grid-template-columns: 1fr 380px 1fr;
         
+        h1 {
+            color: var(--text);
+            padding: 0;
+            margin: 42px 0 20px;
+            font-size: 24px;
+            font-weight: bold;
+            height: 24px;
+        }
+
         .form {
-            grid-column: 2;
-            background-color: var(--property-form-background);
-            padding: 20px;
-            border-radius: 10px;
-            width: 380px; 
-
-            h3:nth-child(1) {
-                color: var(--calculator-header);
-                font-size: 20px;
-                font-family: "gveret-levin";
-                text-align: center;
-            }
-    
-            h2:nth-child(2) {
-                color: var(--calculator-header);
-                font-size: 24px;
-                font-family: "gveret-levin";
-                text-align: center;
-            }
-
-            .property-field {
-                span {
-                    line-height: 30px;
+            @include container;
+            width: 100%;
+            margin-bottom: 35px;
+            
+            article {
+                &:not(:nth-child(1)) {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));    
                 }
-    
-                &.percent {
+                
+                .property-field {
                     span {
-                        line-height: normal;
+                        line-height: 30px;
+                    }
+        
+                    &.percent {
+                        span {
+                            line-height: normal;
+                        }
                     }
                 }
-            }
-    
-            *:nth-child(5), *:nth-child(9), *:nth-child(11):has(u), *:nth-child(13), *:nth-child(14), *:nth-child(24):has(u), *:nth-child(27) {
-                &.property-field {
-                    span {
-                        line-height: 16px;
+        
+                &:nth-child(1) {
+                    @include inside-container;
+                    width: 250px;
+                    height: 100px;
+                    text-align: center;
+                    display: grid;
+                    padding: 18px 10px;
+                    margin: 0 auto 20px;
+
+                    h2 {
+                        color: var(--calculator-result-text);
+                        font-weight: bold;
+                    }
+
+                    h3 {
+                        font-size: 16px;
                     }
                 }
-            }
 
-            *:nth-child(11):has(u) {
-                &.property-field {
-                    span {
-                        u {
-                            display: block;
+                &:nth-child(2) {
+                    *:nth-child(3), *:nth-child(4) { 
+                        &.property-field {
+                            span {
+                                line-height: 16px;
+                            }
+                        }
+                    }
+                }
+    
+                &:nth-child(4) {
+                    *:nth-child(2), *:nth-child(4) {
+                        &.property-field {
+                            span {
+                                line-height: 16px;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(6) {
+                    *:nth-child(1), *:nth-child(2) {
+                        &.property-field {
+                            span {
+                                line-height: 16px;
+                            }
+                        }
+                    }
+                }
+    
+                &:nth-child(10) {
+                    *:nth-child(1), *:nth-child(4) {
+                        &.property-field {
+                            span {
+                                line-height: 16px;
+                            }
                         }
                     }
                 }
             }
-
-            *:nth-child(7) {
-                &.property-field.warning {
-                    span {
-                        line-height: 16px;
-                    }
-                }
-            }
-            
-        }
-    
-        .data {
-            grid-column: 2;
-            padding-right: 20px;
-    
-            section {
-                .title {
-                    margin: 0 0 10px;
-                    padding: 0;
-                    display: flex;
-                    
-                    img {
-                        width: 30px;
-                        height: 30px;
-                        margin: 0 10px;
-                    }
-                }
-            }  
-    
-            &.loading3 { .loading-calc-yields {animation: loading3-animation 3s infinite } }
-        }
-    
-        .menu {
-            display: none;
         }
     
         @include tablet-layout {

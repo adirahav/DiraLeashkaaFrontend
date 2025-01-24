@@ -60,6 +60,7 @@ export function ContactUsPage() {
         if (!phrases) {
             onLoadingStart()  
         } else {
+            setSubmit({...submit, text: utilService.getPhrase("button_send", phrases)})
             onLoadingDone()  
         }
         
@@ -105,7 +106,7 @@ export function ContactUsPage() {
     const handleSubmit = async (event) => {
         
         event?.preventDefault()
-
+        
         if (submit.isLoading) {
             return
         }
@@ -148,14 +149,16 @@ export function ContactUsPage() {
         submit: "submitDefault",
     }
 
-    const formClass = `contact-us ${isLoadingState ? 'loading0' : ''}`
+    const formClass = `contact-us form ${isLoadingState ? 'loading0' : ''}`
+    const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`
     const noteClass = `note ${note.type}`
-
+    const articleClass = `fields ${isLoadingState || !phrases ? 'loading1' : ''}`
+    
     return (<>
         <Header />
         <form className={formClass}>
-            <article>
-                <h2>{utilService.getPhrase('actionbar_title_contact_us', phrases)}</h2>
+            <h2 className={titleClass}>{utilService.getPhrase('actionbar_title_contact_us', phrases)}</h2>
+            <article className={articleClass}>
                 <FormField type={"DROP_DOWN"} key={keys.subject} params={contactUs.subject} onChange={(value, hasError) => handleValueChanged('subject', value, hasError)} />
                 <FormField type={"TEXT_AREA"} key={keys.message} params={contactUs.message} onChange={(value, hasError) => handleValueChanged('message', value, hasError)} />
                 <div className={noteClass}>{note.text}</div>

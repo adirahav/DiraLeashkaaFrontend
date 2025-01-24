@@ -1,5 +1,7 @@
 
 .alert {
+    @include modal-container;
+
     position: absolute;
     top: calc(50% - 20px);
     left: 50%;
@@ -7,28 +9,25 @@
     width: 400px;
     min-height: 290px;
     margin: 20px auto; 
-    border: 1px solid var(--alert-border);
-    border-radius: 10px;
+    padding-bottom: 26px;
     z-index: 5;
     background-color: var(--alert-background);
-    -webkit-box-shadow: 0 0 0 100vmax var(--overlay-background);
-    box-shadow: 0 0 0 100vmax var(--overlay-background);
 
     header {
         background-color: var(--alert-header-background);
-        border-radius: 10px 10px 0 0;
+        border-radius: 8px 8px 0 0;
         height: 48px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 10px;
+        padding: 0 15px;
         box-sizing: border-box;
 
         div {
             display: flex;
 
             h2 {
-                font-size: 14px;
+                font-size: 16px;
                 padding: 3px 10px 0 0;
                 color: var(--alert-header-title);
             }
@@ -77,7 +76,7 @@
         
         p {
             border: 0;
-            margin: 10px 20px;
+            margin: 10px 32px;
             white-space: pre-line;
         }
     }
@@ -88,22 +87,20 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 20px;
+        margin: 0 2px 0 12px;
+        padding: 25px;
 
         button {
-            width: 104px;
-            height: 36px;
-            border-radius: 8px;
-            border: 0;
-            font-weight: bold;
-            margin: 5px;
-
             
             &.positive {
                 @include conditional-button('default');
 
                 &:hover {
                     @include conditional-button('default-hover');
+                    
+                    span {
+                        transform: scale(105%);
+                    }
                 }
             }
             

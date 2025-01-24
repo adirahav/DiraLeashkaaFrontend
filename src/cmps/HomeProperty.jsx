@@ -1,21 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { utilService } from '../services/util.service'
-import { IconSizes, MedaltIcon, MissDataIcon, AddPropertyIcon } from '../assets/icons'
+import { IconSizes, MedaltIcon, MissDataIcon, AddPropertyIcon, DeleteIcon, EditIcon } from '../assets/icons'
 import propertyImage from '../assets/images/property.jpg'
-import addIcon from '../assets/images/icon_big_add.png'
-import deleteIcon from '../assets/images/icon_delete.png'
-import deleteIconDisable from '../assets/images/icon_delete_disable.png'
 import deletingIcon from '../assets/images/anim_delete.gif'
 import { useSelector } from 'react-redux'
 import { onAboutDeletingProperty, onLongPressProperty } from '../store/actions/user.actions'
 import { useSplash } from '../contexts/SplashContext'
+import { FormField } from './FormField'
 
 export function HomeProperty({ index, property, isBestYield, onPropertyPress }) {   
+    const defultButtonState = (textKey) => {
+        return {
+            text: utilService.getPhrase(textKey, phrases), 
+            isDisabled: true,
+            isLoading: false
+        }
+    }
+    
     const { splash } = useSplash()
     const phrases = splash?.phrases
 
     const [status, setStatus] = useState('')
     const propertyRef = useRef()
+
+    const [deleteButtons, setDeleteButtons] = useState({
+        confirm: defultButtonState("button_delete"),
+        cancel: defultButtonState("button_cancel")
+    })
+
 
     const isDeletingState = useSelector(storeState => storeState.userModule.home.isDeleting)
     const isDeletingRef = useRef(isDeletingState)
@@ -39,25 +51,10 @@ export function HomeProperty({ index, property, isBestYield, onPropertyPress }) 
         }
     }, [aboutDeleteIdState])
 
-    /*useEffect(() => {
-        longPressedIdRef.current = longPressedIdState
-        if (property && longPressedIdRef.current !== property?._id) {
-            setStatus('')
-        }
-    }, [longPressedIdState])*/
-
     useEffect(() => { 
         if (index || property) {
             setTimeout(() => {
                 document.addEventListener('click', handleClickOutside)
-
-                /*document.addEventListener('mousedown', handleLongPressStart)
-                document.addEventListener('mouseup', handleLongPressEnd)
-                document.addEventListener('mouseleave', handleLongPressEnd)
-
-                document.addEventListener('touchstart', handleLongPressStart)
-                document.addEventListener('touchend', handleLongPressEnd)
-                document.addEventListener('touchmove', handleLongPressEnd)*/
             }, 0)
         }
 
@@ -66,54 +63,56 @@ export function HomeProperty({ index, property, isBestYield, onPropertyPress }) 
         }
     }, [index, property])
 
-    const handlePropertyPress = (ev, property) => {
-        /*if (isLongPress) {
-            return
-        }*/
-
+    const handleEdit = (ev) => {
         if (!isDeletingRef.current) {
-            if (ev.target.className === 'icon-delete') {
-                ev.stopPropagation()
-                setStatus('before-deleting')
-                onAboutDeletingProperty(property._id) 
-                //onLongPressProperty(null)  
-            } else {
-                setStatus('deleting')
-                onPropertyPress(ev, property)
-            } 
-        } 
+            onPropertyPress(ev, property)
+        }
+    }
+
+    const handleBeforeDelete = () => {
+        if (!isDeletingRef.current) {
+            setStatus('before-deleting')
+            onAboutDeletingProperty(property._id) 
+            setDeleteButtons((prevDeleteButtons) => {
+                return {
+                    confirm: { ...prevDeleteButtons.confirm, text: utilService.getPhrase("button_delete", phrases), isDisabled: false, isLoading: false },
+                    cancel: { ...prevDeleteButtons.cancel, text: utilService.getPhrase("button_cancel", phrases), isDisabled: false, isLoading: false }
+                }
+            })
+        }
+    }
+
+    const handleConfirmDelete = (ev) => {
+        if (property._id === aboutDeleteIdRef.current && !isDeletingRef.current) {
+            setDeleteButtons((prevDeleteButtons) => {
+                return {
+                    confirm: { ...prevDeleteButtons.confirm, isLoading: true },
+                    cancel: { ...prevDeleteButtons.cancel, isDisabled: true }
+                }
+            })
+
+            onPropertyPress(ev, property)
+        }
+
+    }
+
+    const handleCancleDelete = (ev) => {
+        if (property._id === aboutDeleteIdRef.current) {
+            setStatus('')
+            onAboutDeletingProperty(null)
+        }
     }
 
     function handleClickOutside(ev) {
-        if (propertyRef.current && !propertyRef.current.contains(ev.target) && !isDeletingRef.current /*&& longPressedIdRef.current !== property?._id*/) {
-            setStatus('')
-            onAboutDeletingProperty(null)
-            //onLongPressProperty(null)
+        if (property._id === aboutDeleteIdRef.current && 
+            !isDeletingRef.current &&
+            !ev.target.closest('.delete-overlay') && 
+            !ev.target.parentElement.className.baseVal?.includes("icon-delete") &&
+            !ev.target.parentElement.className.baseVal?.includes("icon-edit")) {
+            console.log("outside") 
+            handleCancleDelete(ev)
         }
     }
-
-    /*function handleLongPressStart(ev) {
-        console.log("handleLongPressStart")
-        if (propertyRef.current && propertyRef.current.contains(ev.target) && !isDeletingRef.current) {
-            if (property?._id && longPressedIdRef.current !== property?._id) {
-                ev.stopPropagation()
-                setStatus('before-deleting')
-                onLongPressProperty(property._id)  
-                longPressTimeout = setTimeout(() => {
-                    setIsLongPress(true)
-                }, 500)
-            } 
-        }
-    }
-
-    function handleLongPressEnd(ev) {
-        clearTimeout(longPressTimeout)
-
-        if (isLongPress) {
-            ev.stopPropagation()
-            setIsLongPress(false)
-        }
-    }*/
 
     const articleClass = (!property
                             ? `loading${index}`
@@ -122,11 +121,8 @@ export function HomeProperty({ index, property, isBestYield, onPropertyPress }) 
                                 : '')
                        + (status)
 
-    const deleteIconSrc = property && aboutDeleteIdState === property?._id
-                            ? null
-                            : property?._id && isDeletingState
-                                ? deleteIconDisable
-                                : deleteIcon
+    const actionsClass = 'actions' 
+                       + (isDeletingState ? ' disabled' : '')
 
     const address =  (!property?.city || property?.city === "else") 
                         ? property?.cityElse 
@@ -136,30 +132,45 @@ export function HomeProperty({ index, property, isBestYield, onPropertyPress }) 
                             : property?.address
                         : property?.address 
     
+    const keys = {
+        confirmDelete: "confirmDelete",
+        cancelDelete: "cancelDelete"
+    }
+
     return (
-        <article ref={propertyRef} className={articleClass} onClick={(ev) => handlePropertyPress(ev, property)}>
+        <article ref={propertyRef} className={articleClass}>
             <div className='container'>
+                {property && property._id && <img src={propertyImage} />}  
                 <div>
-                    {isBestYield && <MedaltIcon sx={IconSizes.Small} />}
-                    {property?.calcYieldForecast && <MissDataIcon sx={IconSizes.Small} />}
                     <h2>{address}</h2>
+                    {property && !property._id && <div><AddPropertyIcon sx={IconSizes.Small} /></div>}  
+                    {property && <span className='price'>{property?.price ? utilService.priceFormat(property?.price) : ''}</span>}
                 </div>
-                {property && property._id && <img src={propertyImage} />}
-                {/*property && !property._id && <img src={addIcon} />*/}
-                {property && !property._id && <div><AddPropertyIcon sx={IconSizes.Small} /></div>}
+                <div>
+                    <div className='indications'>
+                        {property && isBestYield && <MedaltIcon sx={IconSizes.Small} titleAccess='התשואה הטובה ביותר' />}
+                        {property && !property?.calcYieldForecast && <MissDataIcon sx={IconSizes.Small} titleAccess='חסרים נתונים' />}
+                    </div>
+                    <div className={actionsClass}>
+                        {property && property?._id && <DeleteIcon className='icon-delete' sx={IconSizes.Small} title='מחק' onClick={handleBeforeDelete} />}  
+                        {property && property?._id && <EditIcon className='icon-edit' sx={IconSizes.Small} title='ערוך' onClick={handleEdit} />}  
+                    </div>
+                </div>
             </div>
             {property && property._id && <div className='delete-overlay'>
                 <div>
-                    {status === 'before-deleting' && <img src={deleteIcon} />}
+                    {status === 'before-deleting' && 
+                        <div>
+                            <h2>האם למחוק?</h2>
+                            <div className='buttons'>
+                                <FormField type={"BUTTON"} key={keys.confirmDelete} params={deleteButtons.confirm} onPress={handleConfirmDelete} />
+                                <FormField type={"BUTTON"} key={keys.cancelDelete} params={deleteButtons.cancel} onPress={handleCancleDelete} />
+                            </div>
+                        </div>}
                     {status === 'deleting' && <img src={deletingIcon} />}
-                    {status === 'before-deleting' && <span>{utilService.getPhrase("home_properties_menu_delete", phrases)}</span>}
                 </div>
             </div>}
-            {property && 
-                <span className='footer'>
-                    {property?.price ? utilService.priceFormat(property?.price) : ''}
-                    {property?._id && deleteIconSrc && <img  className='icon-delete' src={deleteIconSrc} />}
-                </span>}
+            
         </article>
     )
 }

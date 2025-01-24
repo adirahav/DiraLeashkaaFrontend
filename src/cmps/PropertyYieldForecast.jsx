@@ -3,7 +3,6 @@ import { Resizable } from 'react-resizable'
 import Table from 'rc-table'
 import { utilService } from '../services/util.service'
 import 'react-resizable/css/styles.css'
-import iconYieldForecastOn from '../assets/images/icon_yield_forecast_on.png'
 import { useSplash } from '../contexts/SplashContext'
 
 export function PropertyYieldForecast({data}) {   
@@ -127,12 +126,12 @@ export function PropertyYieldForecast({data}) {
     })) : []
 
 
-    return (
+    return (<>
+        <h2 className="title">{utilService.getPhrase('property_yield_forecast_label', phrases)}</h2>  
         <section className="yield-forecast">
-          <h2 className="title"><img src={iconYieldForecastOn} />{utilService.getPhrase('property_yield_forecast_label', phrases)}</h2>  
           <Table sticky={true} components={{ header: { cell: ResizableTitle } }} columns={mergedColumns} data={formattedData} />
         </section>
-      )
+    </>) 
     
 }
 

@@ -1,6 +1,7 @@
 header {
     height: $header-height;
-    background-color: var(--header-background);
+    background-color: var(--nav-header-background);
+    border-bottom: 1px solid var(--nav-header-border);
     display: grid;  
     align-items: center;
     position: sticky;
@@ -11,10 +12,10 @@ header {
         grid-column: 2;
         display: flex;
         align-items: center;
-
+        height: 72px;
+        
         a {
             img {
-                width: $logo-width;
                 height: $logo-height;
             }
 
@@ -24,7 +25,7 @@ header {
         }
 
         svg {
-            color: var(--nav-icon);
+            color: var(--nav-header-icon);
             margin-left: 10px;
         }
     }
@@ -45,6 +46,9 @@ header {
             display: flex;
             align-items: center;
             justify-content: flex-start; 
+            height: $header-height;
+            margin: 0;
+            padding: 0;
 
             li {
                 padding: 0 0 0 40px;
@@ -63,20 +67,22 @@ header {
                         }
                     } 
                     
-                    span {
-                        color: var(--nav-text)
-                    }
+                    /*span {
+                        color: var(--nav-header-text)
+                    }*/
                     
                     svg {
                         margin-left: 5px;
-                        margin-top: 3px;
-                        color: var(--nav-icon);
+                        margin-top: 2px;
+                        color: var(--nav-header-icon);
                     }
                 }
 
                 &.welcome {
                     span {
-                        color: var(--nav-text);
+                        color: var(--nav-header-text);
+                        top: -1px;
+                        position: relative;
                     }
                 } 
 
@@ -92,18 +98,24 @@ header {
         .mobile, .desktop { display: none }
         @include header-grid-template-columns('tablet');
 
+        grid-template-columns: 20px 1fr 768px 1fr 20px;
+
         & {
             .logo {
-                img {
-                    margin-bottom: 7px;
+                margin: auto;
+
+                a {
+                    height: 40px;
+                    margin-left: 20px;
                 }
             }
         }
 
         nav {
-            ul {
-                margin-top: 10px;
+            height: 72px;
+            grid-column: 3 / 5;
 
+            ul {
                 li {
                     a {
                         display: inline-grid;

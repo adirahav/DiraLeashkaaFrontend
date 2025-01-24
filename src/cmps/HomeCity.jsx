@@ -6,6 +6,7 @@ export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {
     const [cityIcon, setCityIcon] = useState(null)
 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
+    const isDeletingState = useSelector(storeState => storeState.userModule.home.isDeleting)
     
     useEffect(() => {
         (async () => {
@@ -27,7 +28,7 @@ export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {
     }
 
     const handleCityPress = (ev) => {
-        if (city) {
+        if (city && !isDeletingState) {
             onCityPress(city)
         }
     }
@@ -47,7 +48,7 @@ export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {
 
     return (
         <article className={divClass} onClick={() => handleCityPress(this)}>
-            <div>{cityIcon && <img src={cityIcon} />}</div>
+            {cityIcon && <img src={cityIcon} />}
             <span>{cityLabel}</span>
         </article>
     )

@@ -34,23 +34,23 @@ export function HomeBestYield({ property }) {
                 <div>
                     <div className='data'>
                         <article>
-                            <h3>{utilService.getPhrase("home_best_yield_average_return", phrases)}</h3>
                             <img src={averageReturnImage} />
+                            <h3>{utilService.getPhrase("home_best_yield_average_return", phrases)}</h3>
                             <span>{utilService.percentFormat(property.averageReturn)}</span>
                         </article>
                         <article>
-                            <h3>{utilService.getPhrase("home_best_yield_average_return_on_equity", phrases)}</h3>
                             <img src={averageReturnOnEquityImage} />
+                            <h3>{utilService.getPhrase("home_best_yield_average_return_on_equity", phrases)}</h3>
                             <span>{utilService.percentFormat(property.averageReturnOnEquity)}</span>
                         </article>
                         <article>
-                            <h3>{utilService.getPhrase("home_best_yield_total_profit", phrases)}</h3>
                             <img src={totalProfitImage} />
+                            <h3>{utilService.getPhrase("home_best_yield_total_profit", phrases)}</h3>
                             <span>{utilService.priceFormat(property.profit)}</span>
                         </article>
                         <article>
-                            <h3>{utilService.getPhrase("home_best_yield_total_profit_npv", phrases)}</h3>
                             <img src={npvImage} />
+                            <h3>{utilService.getPhrase("home_best_yield_total_profit_npv", phrases)}</h3>
                             <span>{utilService.priceFormat(property.profitNpv)}</span>
                         </article>
                     </div>

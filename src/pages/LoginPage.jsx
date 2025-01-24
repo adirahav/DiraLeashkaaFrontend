@@ -7,11 +7,14 @@ import { FormField } from '../cmps/FormField.jsx'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useSplash } from '../contexts/SplashContext.jsx'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
+import { Footer } from '../cmps/Footer.jsx'
+import { Header } from '../cmps/Header.jsx'
 
 export function LoginPage() {
     const [error, setError] = useState(null)
     
     const { splash, setForceFetchSplash } = useSplash()
+    const phrases = splash?.phrases
 
     const navigate = useNavigate()
 
@@ -21,14 +24,14 @@ export function LoginPage() {
     const defultInputState = (name, labelKey, value) => {
         return {
             name,
-            label: utilService.getPhrase(labelKey, splash?.phrases), 
+            label: utilService.getPhrase(labelKey, phrases), 
             value
         }
     }
 
     const defultButtonState = (textKey) => {
         return {
-            text: utilService.getPhrase(textKey, splash?.phrases), 
+            text: utilService.getPhrase(textKey, phrases), 
             isDisabled: true,
             isLoading: false
         }
@@ -54,18 +57,18 @@ export function LoginPage() {
     }, [email, password])
 
     useEffect(() => {
-        if (splash?.phrases) {
-            setEmail({ ...email, label: utilService.getPhrase("login_email_label", splash?.phrases)})
-            setPassword({ ...password, label: utilService.getPhrase("login_password_label", splash?.phrases)})
-            setSubmit({ ...submit, text: utilService.getPhrase("login_submit", splash?.phrases)})
+        if (phrases) {
+            setEmail({ ...email, label: utilService.getPhrase("login_email_label", phrases)})
+            setPassword({ ...password, label: utilService.getPhrase("login_password_label", phrases)})
+            setSubmit({ ...submit, text: utilService.getPhrase("login_submit", phrases)})
         }
 
-        if (!splash?.phrases) {
+        if (!phrases) {
             onLoadingStart()  
         } else {
             onLoadingDone()  
         }
-    }, [splash?.phrases])
+    }, [phrases])
 
     function handleValueChanged(fieldName, value) {
         switch (fieldName) {
@@ -98,7 +101,7 @@ export function LoginPage() {
             navigate(`/home`)
 
         } catch (error) {
-            setError(utilService.getPhrase("login_credentials_error", splash?.phrases))
+            setError(utilService.getPhrase("login_credentials_error", phrases))
         } finally {
             setSubmit({ 
                 ...submit, 
@@ -114,23 +117,27 @@ export function LoginPage() {
         submit: "submit" + ("Default"),
     }
     
-    const formClass = `login ${isLoadingState?'loading': ''}`
+    const formClass = `login form ${isLoadingState?'loading': ''}`
+    const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`
+    const articleClass = `fields ${isLoadingState || !phrases ? 'loading1' : ''}`
+    const footerClass = `footer ${isLoadingState || !phrases ? 'loading2' : ''}`
 
-    return (
+    return (<>
+        <Header />
         <form className={formClass}>
-            <article>
-                <h2>{utilService.getPhrase('login_header', splash?.phrases)}</h2>
+            <h2 className={titleClass}>{utilService.getPhrase('login_header', phrases)}</h2>
+            <article className={articleClass}>
                 <FormField type={"EMAIL"} key={keys.email} params={email} onChange={(value) => handleValueChanged('email', value)} />
                 <FormField type={"PASSWORD"} key={keys.password} params={password} onChange={(value) => handleValueChanged('password', value)} />
                 <div className='error'>{error}</div>
                 <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />
             </article>
-            <article>
-                <div><NavLink to='/signup' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("login_goto_signup", splash?.phrases) }}></NavLink></div>
-            </article>
-            <article>
-                <div><NavLink to='/forgot-password' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("forgot_password_header", splash?.phrases) }}></NavLink></div>
+            <article className={footerClass}>
+                <div><NavLink to='/signup' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("login_goto_signup", phrases) }}></NavLink></div>
+                <div><NavLink to='/forgot-password' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("forgot_password_header", phrases) }}></NavLink></div>
             </article>
         </form>
+        <Footer />
+    </>
     )
 }

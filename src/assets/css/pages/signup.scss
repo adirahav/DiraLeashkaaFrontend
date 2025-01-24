@@ -1,63 +1,49 @@
 .signup {
-    
-    height: max-content;
-    margin: 20px auto auto;
+    @include container;
+    width: 800px;
+    margin: 0 0 20px;
+    padding: 17px;
+    margin: 60px auto;
     display: grid;
-    grid-template-columns: 200px 550px;
-    grid-gap: 10px;
+
    
     .title {
-        border: 1px solid var(--signup-border);
-        background-color: var(--signup-background);
-        color: var(--signup-title-text);
-        font-family: gveret-levin;
-        font-size: 48px;
-        padding: 0;
-        background-repeat: no-repeat;
-        display: inline-block;
-        margin: 0;
-        grid-column: auto;
-        margin: 47px auto 36px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        grid-column: 1/-1;
-        width: 100%;
-        height: 92px;
-        margin: 0;
+        color: var(--text);
+        font-size: 30px;
+        font-weight: bold;
+        padding: 6px;
+        margin: 0;    
         text-align: center;
-        padding: 10px;
-
+        
         &.loading0 { animation: loading0-animation 3s infinite; * { display: none; } }
     }
     
-    .menu {
-        grid-column: 1;
-        border: 1px solid var(--signup-border);
-        background-color: var(--signup-background);
-        height: 100%;
+    .progress {
         margin: 0;
-        list-style: none;
-        padding: 0;
+        padding: 14px 0px 0 0;
 
         li {
-            padding: 10px;
-            color: var(--signup-menu-text);
-            background-color: var(--signup-menu-background);
-            display: flex;
+            background-color: var(--signup-progress-background);
             font-size: 16px;
-
-            svg {
-                margin-left: 5px;
+            height: 8px;
+            width: 33.3%;
+            display: inline-block;
+            border-radius: 8px;
+            
+            &.active {
+                background-color: var(--signup-progress-active-background);
             }
 
-            &.active {
-                color: var(--signup-menu-active-text);
-                background-color: var(--signup-menu-active-background);
-                font-size: 17px;
+            &.forward {
+                background: linear-gradient(to right, var(--signup-progress-background) 50%, var(--signup-progress-active-background) 50%);
+                background-size: 200% 100%;
+                animation: forward-background 2s forwards;
+            }
 
-                svg {
-                    transform: scale(105%);
-                }
+            &.backward {
+                background: linear-gradient(to right, var(--signup-progress-background) 50%, var(--signup-progress-active-background) 50%);
+                background-size: 200% 100%;
+                animation: backward-background 2s forwards;
             }
         }
 
@@ -65,19 +51,15 @@
     }
 
     .form {
-        grid-column: 2;
         display: block;
         position: relative;
-        border: 1px solid var(--signup-border);
-        background-color: var(--signup-background);
-        padding: 30px 0;
+        padding: 20px 0;
         box-sizing: content-box;
         justify-self: center;
-        height: 400px;
         width: 100%;
 
         & > div {
-            width: fit-content;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -95,22 +77,22 @@
 
         .buttons {
             display: flex;
-            margin: 10px auto;
+            margin: 36px auto 0;
             justify-content: space-evenly;
-            width: 300px;
-            height: 75px;
-            bottom: 0;
-            position: absolute;
-            right: calc((100% - 300px) / 2);
+            width: 230px;
+
+            .button {
+                margin: 0;
+            }
         }
 
         .html-area {
             .text {
                 @include scrollbar;
-                width: calc(100% - 40px);
+                width: 100%;
                 padding: 0 10px;
                 box-sizing: border-box;
-                margin: 0 20px;
+                margin: 0;
                 height: 250px;
                 overflow-y: auto;
                 overflow-x: hidden;
@@ -193,16 +175,10 @@
     }
 
     .footer {
-        grid-column: 1/-1;
-        border: 1px solid var(--signup-border);
-        background-color: var(--signup-background);
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
         text-align: center;
-        height: 65px;
-
+        
         div {
-            margin: 22px 0;
+            margin: 10px 0;
 
             a {
                 cursor: default;
@@ -210,7 +186,7 @@
                 u {
                     font-weight: bold;
                     text-decoration: none;
-                    color: var(--signup-link-text);
+                    color: var(--text-link);
                 }
 
                 &:hover {

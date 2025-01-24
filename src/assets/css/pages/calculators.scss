@@ -1,41 +1,73 @@
 .calculators {
     background-color: var(--background);
 
+    h1 {
+        color: var(--text);
+        padding: 0;
+        margin: 42px 0 20px;
+        font-size: 24px;
+        font-weight: bold;
+        height: 24px;
+    }
+
     section {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        margin: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(435px, 1fr));
+        grid-gap: 43px;
+        margin-bottom: 42px;
+        width: 100%;
+
         & > article {
-            background-color: var(--calculator-background);
-            margin: 0 6px 20px;
-            color: var(--text);
-            min-height: 180px;
+            @include container;
+            margin: 0;
+            padding: 20px;
+            height: 346px;
             justify-content: right;
             display: grid;
-            grid-template-rows: 20px 1fr 50px;
-            padding: 5px 10px;
+            grid-template-rows: 150px 60px 1fr;
             position: relative;
-            text-align: center;
             cursor: default;
+            justify-content: center;
             
             &.lock {
-                background-color: var(--calculator-overlay-background);
+                
             }
 
             &:not(.lock) {
-                padding-top: 25px;
+                
             }
 
-            h2 {
-                color: var(--calculator-title);
-                padding: 7px 0;
+            img {
+                margin: 0 auto;
             }
 
-            span {
+            div {
+                text-align: center;
+                margin: auto 0;
+                
+                h2 {
+                    color: var(--calculator-title);
+                    padding: 7px 0;
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+
+                &:nth-child(3) {
+                    display: grid;
+
+                    & > span {
+                        font-weight: bold;
+                        color: var(--text-disable)
+                    }
+                }  
+            }
+
+                      
+
+            .coming-soon {
                 color: var(--calculator-coming-soon);
                 font-family: "gveret-levin";
                 padding: 7px 0;
-                font-size: 20px;
             }
 
             svg {
@@ -43,75 +75,11 @@
                 margin: 0 2px 2px 0;
             }
             
-            &.loading0 { animation: loading0-animation 3s infinite }
-            &.loading1 { animation: loading1-animation 3s infinite }
-            &.loading2 { animation: loading2-animation 3s infinite }
-            &.loading3 { animation: loading3-animation 3s infinite }
-            &.loading4 { animation: loading4-animation 3s infinite }
-            &.loading5 { animation: loading5-animation 3s infinite; display: none; }
+            &.loading0 { animation: loading0-animation 3s infinite; * {  display: none; } }
+            &.loading1 { animation: loading1-animation 3s infinite; * {  display: none; } }
+            &.loading2 { animation: loading2-animation 3s infinite; * {  display: none; } }
+            &.loading3 { animation: loading3-animation 3s infinite; * {  display: none; }}
         }
-    }
-
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-
-        div {
-            background-color: brown;
-            margin: 10px;
-            height: 150px;
-        }
-    }
-
-    .best-yields {
-        h2 {
-            height: 24px;
-
-            &.loading0 { background-color: var(--loading-0); width: 240px;}
-        }
-
-        .no-data {
-            margin: 0 20px;
-        }
-
-        & > div {
-            display: grid;
-            grid-gap: 10px;
-
-            .data {
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-        
-                & > article {
-                    background-color: var(--home-best-yield-content-background);
-                    margin: 0 6px 20px;
-                    color: var(--text);
-                    min-height: 180px;
-                    text-align: center;
-                    display: grid;
-                    padding: 5px 10px;
-                    
-                    h3 {
-                        margin: auto;
-                    }
-
-                    img {
-                        margin: 0 auto 5px;
-                    }
-
-                    &.loading0 { animation: loading0-animation 3s infinite }
-                    &.loading1 { animation: loading1-animation 3s infinite }
-                    &.loading2 { animation: loading2-animation 3s infinite }
-                    &.loading3 { animation: loading3-animation 3s infinite }
-                }
-            }
-    
-            .chart {
-                margin-bottom: 20px;
-
-                &.loading4 { background-color: var(--loading-4); height: 474px; margin: 32px 6px 28px; }
-            }   
-        }        
     }
 
     @include tablet-layout {

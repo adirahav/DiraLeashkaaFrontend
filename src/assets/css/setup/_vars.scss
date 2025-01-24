@@ -1,223 +1,236 @@
 :root {
     /* palette */
     --palette1: #ffffff;
-    --palette2:#eeeeee;
-    --palette2_transparent:#55eeeeee;
-    --palette3:#dddddd;
-    --palette4:#b0b0c1;
-    --palette5:#717376;
-    --palette5_transparent:#71737633;
-    --palette6:#f6e0eb;
-    --palette7:#eb4a7c;
-    --palette8:#c9e6fa;
-    --palette9:#44d9e6fa;
-    --palette10:#ffcc00;
-    --palette11:#547421;
-    --palette12:#e2efd9;
+    --palette2:#E8E8E8;
+        --palette6:#c4c6e0;
+    --palette3:#999999;
+    --palette4:#545454;
+    --palette5:#030303;
+    --palette5_transparent:rgba(0, 0, 0, 0.12);
+    --palette5_overlay:rgba(0, 0, 0, 0.33);
+        
+    --palette7:#5664f5;
+    --palette8:#F0F1FF;
+    --palette9:#db1111;
+    --palette10:#4cd964;
+        --palette11:#547421;
+        --palette12:#e2efd9;
     
-    --background: var(--palette2);
-    --header-background: var(--palette7);
-    --footer-background: var(--palette7);
-
+    --background: var(--palette1);
+    
     --text: var(--palette5);
-    --text-error: var(--palette6);
-    --text-success: var(--palette5);
-    --text-message: var(--palette3);
-    --text-warning: var(--palette8);
-    --text-tooltip: var(--palette8);
+    --text-disable: var(--palette6);
+        --text-error: var(--palette6);
+        --text-success: var(--palette5);
+        --text-message: var(--palette3);
+        --text-warning: var(--palette8);
+        --text-tooltip: var(--palette8);
+        --text-link: var(--palette7);
 
-    --loading: var(--palette3);
+        --loading: var(--palette1);
+        
+        --scrollbar-thumb-background: var(--palette3);
+        --scrollbar-track-background: var(--palette2);
+        --scrollbar-track-background-hover: var(--palette8);
+        --scrollbar-track-border-hover: var(--palette8);
+
+        --alert-background: var(--palette1);
+        --alert-border: var(--palette3);
+        --alert-header-background: var(--palette7);
+        --alert-header-title: var(--palette1);
+        --alert-header-icon-warning: var(--palette1);
+        --alert-header-icon-close: var(--palette1);
+        
+        --toast-debug-background: var(--palette8);
+        --toast-debug-text: var(--palette5);
+        --toast-warning-background: var(--palette7);
+        --toast-warning-text: var(--palette1);
+        --toast-notify-background: var(--palette2);
+        --toast-notify-text: var(--palette7);
+        --toast-error-background: var(--palette7);
+        --toast-error-text: var(--palette1);
+
+        --button-default-background: var(--palette7);
+        --button-default-background-hover: var(--palette7);
+        --button-default-text: var(--palette1);
+        --button-default-text-hover: var(--palette6);
+        --button-negative-background: var(--palette6);
+        --button-negative-background-hover: var(--palette7);
+        --button-negative-text: var(--palette3);
+        --button-negative-text-hover: var(--palette1);
+        
+        --icon-medal: var(--palette10);
+        --icon-miss-content: var(--palette9);
+        --icon-color: var(--palette7);
+        --icon-disabled: var(--palette2);
+
+        --form-border: var(--palette5_transparent);
+
+        --container-border: var(--palette5_transparent);
     
-    --scrollbar-thumb-background: var(--palette3);
-    --scrollbar-track-background: var(--palette2);
-    --scrollbar-track-background-hover: var(--palette8);
-    --scrollbar-track-border-hover: var(--palette8);
+        --inside-container-background: var(--palette8);
 
-    --alert-background: var(--palette1);
-    --alert-border: var(--palette3);
-    --alert-header-background: var(--palette7);
-    --alert-header-title: var(--palette1);
-    --alert-header-icon-warning: var(--palette1);
-    --alert-header-icon-close: var(--palette1);
+        --modal-shadow: var(--palette5_overlay);
     
-    --toast-debug-background: var(--palette8);
-    --toast-debug-text: var(--palette5);
-    --toast-warning-background: var(--palette7);
-    --toast-warning-text: var(--palette1);
-    --toast-notify-background: var(--palette2);
-    --toast-notify-text: var(--palette7);
-    --toast-error-background: var(--palette7);
-    --toast-error-text: var(--palette1);
+        --login-border: var(--palette3);
+        --login-background: var(--palette1);
+        --login-title-text: var(--palette5);
+        --login-link-text: var(--palette7);
+        --login-error-text: var(--palette7);
 
-    --button-default-background: var(--palette7);
-    --button-default-background-hover: var(--palette7);
-    --button-default-text: var(--palette1);
-    --button-default-text-hover: var(--palette6);
-    --button-negative-background: var(--palette6);
-    --button-negative-background-hover: var(--palette7);
-    --button-negative-text: var(--palette3);
-    --button-negative-text-hover: var(--palette1);
-    
-    --icon-medal: var(--palette7);
-    --icon-miss-content: var(--palette5);
+        --signup-border: var(--palette3);
+        --signup-background: var(--palette1);
+    --signup-progress-background: var(--palette2);
+    --signup-progress-active-background: var(--palette7);
+        --signup-title-text: var(--palette7);
+        --signup-error-text: var(--palette7);
+        --signup-property-background: var(--palette2);
+        --signup-property-selected-text: var(--palette7);
 
-    --login-border: var(--palette3);
-    --login-background: var(--palette1);
-    --login-title-text: var(--palette7);
-    --login-link-text: var(--palette7);
-    --login-error-text: var(--palette7);
+        --home-add-button-background: var(--palette7);
+        --home-add-button-border: var(--palette2);
+        --home-add-button-text: var(--palette1);
+    --home-my-property-price-text: var(--palette4);
+        --home-my-property-content-background: var(--palette1);
+        --home-my-property-menu-background: var(--palette2);
+        --home-my-property-menu-border: var(--palette4);
+        --home-my-property-delete-overlay-background: var(--palette5_transparent);
+    --home-my-property-delete-overlay-text: var(--palette1);
+    --home-lets-start-title-text: var(--palette5);
+    --home-lets-start-divider: var(--palette2);
 
-    --signup-border: var(--palette3);
-    --signup-background: var(--palette1);
-    --signup-menu-text: var(--palette5);
-    --signup-menu-background: var(--palette1);
-    --signup-menu-active-text: var(--palette1);
-    --signup-menu-active-background: var(--palette7);
-    --signup-title-text: var(--palette7);
-    --signup-link-text: var(--palette7);
-    --signup-error-text: var(--palette7);
-    --signup-property-background: var(--palette2);
-    --signup-property-selected-text: var(--palette7);
-
-    --home-add-button-background: var(--palette7);
-    --home-add-button-border: var(--palette2);
-    --home-add-button-text: var(--palette1);
-    --home-section-title-background: var(--palette4);
-    --home-section-title-text: var(--palette1);
-    --home-section-title-border: var(--palette5);
-    --home-section-subtitle-background: var(--palette2);
-    --home-section-subtitle-text: var(--palette5);
-    --home-my-cites-border: var(--palette1);
-    --home-my-cites-border-selected: var(--palette7);
-    --home-my-cites-text-selected: var(--palette7);
-    --home-my-property-content-background: var(--palette1);
-    --home-my-property-menu-background: var(--palette2);
-    --home-my-property-menu-border: var(--palette4);
-    --home-my-property-delete-overlay-background: var(--palette5_transparent);
-    --home-my-property-delete-overlay-text: var(--palette7);
-    --home-best-yield-content-background: var(--palette1);
-
-    --nav-icon: var(--palette1);
-    --nav-text: var(--palette1);
+    --nav-header-background: var(--palette1);
+    --nav-header-icon: var(--palette5);
+    --nav-header-text: var(--palette5);
     --nav-header-color: var(--palette1);
+    --nav-header-border: var(--palette2);
 
-    --overlay-background: var(--palette5_transparent);
+    --nav-footer-background: var(--palette7);
+    --nav-footer-icon: var(--palette1);
+    --nav-footer-text: var(--palette1);
+    
+        --overlay-background: var(--palette5_transparent);
 
-    --property-form-background: var(--palette1);
-    --property-form-spinner-divider: var(--palette3);
-    --property-form-spinner-border: var(--palette3);
-    --property-form-spinner-background: var(--palette2);
-    --property-form-spinner-search-background: var(--palette1);
-    --property-form-spinner-search-text: var(--palette5);
-    --property-form-spinner-search-border: var(--palette2);
-    --property-form-icon-restore: var(--palette9);
-    --property-field-background: var(--palette2);
-    --property-field-calc-background: var(--palette3);
-    --property-field-autofill-background: var(--palette8);
-    --property-field-empty-background: var(--palette6);
-    --property-field-label: var(--palette5);
+        --property-form-background: var(--palette1);
+    --property-form-spinner-divider: var(--palette2);
+        --property-form-spinner-border: var(--palette3);
+        --property-form-spinner-background: var(--palette2);
+        --property-form-spinner-search-background: var(--palette1);
+        --property-form-spinner-search-text: var(--palette5);
+        --property-form-spinner-search-border: var(--palette2);
+        --property-form-icon-restore: var(--palette5);
+    --property-field-background: var(--palette1);
+    --property-field-hover-background: var(--palette8);
+        --property-field-calc-background: var(--palette3);
+    --property-field-autofill-background: var(--palette1);
+    --property-field-empty-border: var(--palette9);
+        --property-field-label: var(--palette5);
     --property-field-text: var(--palette5);
-    --property-field-hint: var(--palette5);
-    --property-field-warning-icon: var(--palette10);
-    --property-field-warning-text: var(--palette7);
-    
-    --calculator-background: var(--palette1);
-    --calculator-overlay-background: var(--palette5_transparent);
-    --calculator-title: var(--palette5);
-    --calculator-coming-soon: var(--palette7);
-    --calculator-header: var(--palette7);
-    
-    --form-field-border: var(--palette3);
-    --form-field-label: var(--palette5);
+    --property-field-input-disabled-text: var(--palette5);
+        --property-field-hint: var(--palette5);
+    --property-field-warning-icon: var(--palette9);
+        --property-field-warning-text: var(--palette7);
+        
+    --calculator-result-text: var(--palette7);
+        --calculator-background: var(--palette1);
+        --calculator-overlay-background: var(--palette5_transparent);
+        --calculator-title: var(--palette5);
+        --calculator-coming-soon: var(--palette7);
+        --calculator-header: var(--palette7);
+        
+        --form-field-border: var(--palette2); 
+        --form-field-label: var(--palette5);
     --form-field-input-text: var(--palette5);
     --form-field-input-disabled-text: var(--palette5);
-    --form-field-input-background: var(--palette2);
-    --form-field-error-border: var(--palette7);
-    --form-field-error-text: var(--palette7);
-    --form-field-message-text: var(--palette5);
-    --form-field-button-background: var(--palette7);
-    --form-field-button-text: var(--palette1);
+    --form-field-input-background: var(--palette1);
+    --form-field-input-border: var(--palette2);
+        --form-field-error-border: var(--palette9);
+        --form-field-error-text: var(--palette9);
+        --form-field-message-text: var(--palette5);
+        --form-field-button-background: var(--palette7);
+        --form-field-button-text: var(--palette1);
     --form-field-button-disabled-background: var(--palette2);
-    --form-field-button-disabled-text: var(--palette4);
-    --form-field-button-link-text: var(--palette5);
-    --form-field-tooltip-background: var(--palette7);
-    
-    --number-picker-icon: var(--palette4);
-    --number-picker-icon-light: var(--palette3);
+    --form-field-button-disabled-text: var(--palette3);
+        --form-field-button-link-text: var(--palette5);
+        --form-field-tooltip-background: var(--palette7);
+        
+        --number-picker-icon: var(--palette4);
+        --number-picker-icon-light: var(--palette3);
 
-    --mobile-divider: var(--palette2);
-    --mobile-divider-drawer: var(--palette3);
-    --mobile-header-background: var(--palette2);
-    --mobile-header-divider: var(--palette3);
-    --mobile-overlay-background: var(--palette5_transperent);
-    --mobile-nav-background: var(--palette2);
-    --mobile-nav-header-background: var(--palette7);
-    --mobile-nav-header-color: var(--palette7);
-    --mobile-nav-icon: var(--palette7);
-    --mobile-nav-text: var(--palette5);
-    --mobile-home-section-title-background: var(--palette3);
-    --mobile-home-section-title-text: var(--palette5);
-    --mobile-property-menu-background: var(--palette7);
-    --mobile-property-menu-zoom-in: var(--palette7);
-    --mobile-property-menu-zoom-out: var(--palette1);
-    --mobile-property-menu-text: var(--palette1);
-    --mobile-property-menu-text-selected: var(--palette10);
-    --mobile-table-cell-background: var(--palette2);
-    --mobile-form-spinner-border: var(--palette3);
-    --mobile-signup-menu-text: var(--palette5);
-    --mobile-signup-menu-background: var(--palette1);
-    --mobile-signup-menu-active-text: var(--palette7);
-    --mobile-signup-menu-active-background: var(--palette1);
-    --mobile-signup-menu-icon-background: var(--palette3);
-    --mobile-signup-menu-active-icon-background: var(--palette7);
-    --mobile-signup-menu-icon-color: var(--palette1);
-    --mobile-signup-menu-active-icon-color: var(--palette1);
+        --mobile-divider: var(--palette2);
+        --mobile-divider-drawer: var(--palette3);
+        --mobile-header-background: var(--palette2);
+        --mobile-header-divider: var(--palette3);
+        --mobile-overlay-background: var(--palette5_transperent);
+        --mobile-nav-background: var(--palette2);
+        --mobile-nav-header-background: var(--palette7);
+        --mobile-nav-header-color: var(--palette7);
+        --mobile-nav-icon: var(--palette7);
+        --mobile-nav-text: var(--palette5);
+        --mobile-home-section-title-background: var(--palette3);
+        --mobile-home-section-title-text: var(--palette5);
+        --mobile-property-menu-background: var(--palette7);
+        --mobile-property-menu-zoom-in: var(--palette7);
+        --mobile-property-menu-zoom-out: var(--palette1);
+        --mobile-property-menu-text: var(--palette1);
+        --mobile-property-menu-text-selected: var(--palette10);
+        --mobile-table-cell-background: var(--palette2);
+        --mobile-form-spinner-border: var(--palette3);
+        --mobile-signup-menu-text: var(--palette5);
+        --mobile-signup-menu-background: var(--palette1);
+        --mobile-signup-menu-active-text: var(--palette7);
+        --mobile-signup-menu-active-background: var(--palette1);
+        --mobile-signup-menu-icon-background: var(--palette3);
+        --mobile-signup-menu-active-icon-background: var(--palette7);
+        --mobile-signup-menu-icon-color: var(--palette1);
+        --mobile-signup-menu-active-icon-color: var(--palette1);
 
     --table-text: var(--palette5);
-    --table-head-background: var(--palette1);
-    --table-cell-background: var(--palette1);
-    --table-cell-negative-text: var(--palette7);
-    --table-border: var(--palette3); 
+    --table-head-background: var(--palette8);
+    --table-cell-background: var(--palette8);
+    --table-cell-negative-text: var(--palette9);
+    --table-border: var(--palette8); 
+    --table-scrollbar-thumb-background: var(--palette8);
     --table-scrollbar-track-background: var(--palette1);
     --table-scrollbar-track-background-hover: var(--palette1);
     --table-scrollbar-track-border-hover: var(--palette1);
 
-    --chart-background: var(--palette1);
+    --chart-background: var(--palette8);
 
-    --tabs-tab-text: var(--palette5);
-    --tabs-tab-text-selected: var(--palette5);
-    --tabs-tab-border-selected: var(--palette5);
+        --tabs-tab-text: var(--palette5);
+        --tabs-tab-text-selected: var(--palette5);
+        --tabs-tab-border-selected: var(--palette5);
 
-    --loading-0: #f3f3f3;
-    --loading-1: #f5f5f5;
-    --loading-2: #f7f7f7;
-    --loading-3: #fafafa;
-    --loading-4: #fbfbfb;
-    --loading-5: #fbfbfb;
-    --loading-6: #fbfbfb;
-    --loading-7: #fbfbfb;
-    --loading-8: #fbfbfb;
-    --loading-9: #fbfbfb;
+        --loading-0: #f3f3f3;
+        --loading-1: #f5f5f5;
+        --loading-2: #f7f7f7;
+        --loading-3: #fafafa;
+        --loading-4: #fbfbfb;
+        --loading-5: #fbfbfb;
+        --loading-6: #fbfbfb;
+        --loading-7: #fbfbfb;
+        --loading-8: #fbfbfb;
+        --loading-9: #fbfbfb;
 
-    --dialog_title: var(--palette7);
-    --dialog_text: var(--palette5);
-    --dialog_background_no_internet: rgba(17, 97, 182, 0.05);
-    --dialog_background_expired_registration: #118882EC;
-    --dialog_background_beta_version: #1162B6AA;
-    --dialog_background_data_error: #11EEEEEE;
-    --dialog_background_server_down: #11EEEEEE;
-    --dialog_background_blocked: #11eb4a7c;
-    --dialog_background_announcement: #119FFFE5;
-    --dialog_background_unsubscribe: #1162B6AA;
+        --dialog_title: var(--palette7);
+        --dialog_text: var(--palette5);
+        --dialog_background_no_internet: rgba(17, 97, 182, 0.05);
+        --dialog_background_expired_registration: #118882EC;
+        --dialog_background_beta_version: #1162B6AA;
+        --dialog_background_data_error: #11EEEEEE;
+        --dialog_background_server_down: #11EEEEEE;
+        --dialog_background_blocked: #11eb4a7c;
+        --dialog_background_announcement: #119FFFE5;
+        --dialog_background_unsubscribe: #1162B6AA;
 }
 
 $tmpl1: repeat(auto-fill, minmax(250px, 1fr));
 
 
-$header-height: 60px;
-$footer-height: 40px;
-$logo-width: 50px;
-$logo-height: 50px;
+$header-height: 72px;
+$footer-height: 72px;
+$logo-width: 109px;
+$logo-height: 40px;
 
 /* responsive layout */
 $layout-padding-mobile: 0;

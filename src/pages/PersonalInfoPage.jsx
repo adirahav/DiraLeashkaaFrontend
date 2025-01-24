@@ -8,6 +8,7 @@ import { FormField } from '../cmps/FormField'
 import { logService } from '../services/log.service'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSplash } from '../contexts/SplashContext.jsx'
+import { userService } from '../services/user.service.js'
 
 export function PersonalInfoPage() {
 
@@ -74,6 +75,7 @@ export function PersonalInfoPage() {
             })
 
             setSubmit({ ...submit, isDisabled: hasError })
+            setNote({  ...note, text: null })
         }
     }, [personalInfo])
 
@@ -114,14 +116,16 @@ export function PersonalInfoPage() {
         submit: "submitDefault",
     }
 
-    const formClass = `personal-info ${isLoadingState ? 'loading0' : ''}`
+    const formClass = `personal-info form ${isLoadingState ? 'loading0' : ''}`
+    const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`
     const noteClass = `note ${note.type}`
-
+    const articleClass = `fields ${isLoadingState || !phrases ? 'loading1' : ''}`
+    
     return (<>
         <Header />
         <form className={formClass}>
-            <article>
-                <h2>{utilService.getPhrase('user_personal_details', phrases)}</h2>
+            <h2 className={titleClass}>{utilService.getPhrase('user_personal_details', phrases)}</h2>
+            <article className={articleClass}>
                 <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} />
                 <div className={noteClass}>{note.text}</div>
                 <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />

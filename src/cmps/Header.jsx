@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { utilService } from "../services/util.service"
-import logo from '../assets/images/icon.png'
+import logoWeb from '../assets/images/icon_web.png'
+import logoTablet from '../assets/images/icon.png'
 import { NavLink, useNavigate } from "react-router-dom"
 import { useSelector } from 'react-redux'                   
 import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon, LogoutIcon, 
@@ -8,16 +9,10 @@ import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon
          BackIcon} from "../assets/icons"
 import { logout } from "../store/actions/user.actions"
 import { useSplash } from '../contexts/SplashContext'
+import { FormField } from "./FormField"
 const { PLATFORM } = utilService
 
 export function Header() {
-
-    const [navClass, setNavClass] = useState("hide") // hide | hiding | show | showing
-    const headerRef = useRef()
-    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)   
-    const [showAllHeader, setShowAllHeader] = useState(false)
-    const [showBack, setShowBack] = useState(false)
-    const [version, setVersion] = useState(null)
 
     const navigate = useNavigate()
 
@@ -27,10 +22,27 @@ export function Header() {
 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
 
+    const defultButtonState = (textKey) => {
+        return {
+            text: utilService.getPhrase(textKey, splash?.phrases), 
+            isDisabled: false,
+            isLoading: false
+        }
+    }
+
+    const [navClass, setNavClass] = useState("hide") // hide | hiding | show | showing
+    const headerRef = useRef()
+    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)   
+    const [showAllHeader, setShowAllHeader] = useState(false)
+    const [showBack, setShowBack] = useState(false)
+    const [version, setVersion] = useState(null)
+    const [addProperty, setAddProperty] = useState(defultButtonState("home_add_property"))
+
     useEffect(() => {
-        const hasAllHeader = 
-            !((window.location.toString().includes("terms-of-use") 
-            || window.location.toString().includes("contact-us")) && loggedinUser===null)
+        const hasAllHeader = loggedinUser && 
+        !window.location.toString().includes('signup')  
+           /* !((window.location.toString().includes("terms-of-use") 
+            || window.location.toString().includes("contact-us")) && loggedinUser===null)*/
         
         setShowAllHeader(hasAllHeader)
         
@@ -39,14 +51,20 @@ export function Header() {
     }, [])
 
     useEffect(() => {
+        if (splash?.phrases) {
+            setAddProperty({ ...addProperty, text: utilService.getPhrase("home_add_property", splash?.phrases)})
+        }
+    }, [splash?.phrases])
+
+    useEffect(() => {
         if (!isLoadingState && phrases && fixedParameters) {
             const version = utilService.getFixedParameter("version", fixedParameters)
-            const webUrl = version.find(entry => entry.key === "url").value
+            const webUrl = version?.find(entry => entry.key === "url").value
             const shareDescription = utilService.getPhrase("web_share_text", phrases)  
                 
             setVersion({
                 shareUrl: `whatsapp://send?text= ${shareDescription} ${webUrl}`,
-                versionNumber: version.find(entry => entry.key === "lastVersion").value
+                versionNumber: version?.find(entry => entry.key === "lastVersion").value
             })
         }
     }, [isLoadingState])
@@ -113,13 +131,18 @@ export function Header() {
         }
     }
 
+    const keys = {
+        addProperty: "addProperty"
+    }
+
     return (<>
         <header className='full' ref={headerRef}>
             <div className="logo">
                 {showAllHeader && <MenuIcon className="mobile" onClick={onToggleMenu} sx={ IconSizes.Medium } />}
                 {!showAllHeader && <div className="mobile" style={{width:55}}></div>}
                 <NavLink to="/">
-                    <img  className="tablet-or-desktop" src={logo} />
+                    <img  className="desktop" src={logoWeb} />
+                    <img  className="tablet" src={logoTablet} />
                     <h1 className="mobile">דירה להשקעה</h1>
                 </NavLink>  
                 {showBack && <BackIcon className="mobile" onClick={onPressBack} sx={ IconSizes.Medium } />}
@@ -134,7 +157,7 @@ export function Header() {
                     <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></NavLink></li>
                     <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
                     {false && <li><NavLink to="/registration-details"><RegistrationDetailsIcon sx={IconSizes.Small} /><span>פרטי מנוי</span></NavLink></li>}
-                    <li><NavLink to="/property"><AddPropertyIcon sx={IconSizes.Small} /><span><b>הוסף נכס</b></span></NavLink></li>
+                    <li><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addProperty} params={addProperty} /></NavLink></li>
                     <li className="mobile"><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li className="mobile"><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
                     <li className="mobile"><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>

@@ -43,11 +43,11 @@
   }
 
   @if $platform == 'tablet' {
-    grid-template-rows: 60px 1fr 40px;
+    grid-template-rows: $header-height 1fr $footer-height;
   }
 
   @if $platform == 'desktop' {
-    grid-template-rows: 60px 1fr 40px;
+    grid-template-rows: $header-height 1fr $footer-height;
   }
 }
 
@@ -75,7 +75,7 @@
   }
 
   @if $platform == 'desktop' {
-    grid-template-columns: minmax($layout-padding-desktop, 1fr) 70px minmax(auto, calc(#{$break-desktop} - 70px)) minmax($layout-padding-desktop, 1fr)
+    grid-template-columns: minmax($layout-padding-desktop, 1fr) 150px minmax(auto, calc(#{$break-desktop} - 150px)) minmax($layout-padding-desktop, 1fr)
   }
 }
 
@@ -91,7 +91,7 @@
 
   @if $type == 'default-hover' {
     background-color: var(--button-default-background-hover);
-    color: var(--button-default-text-hover);
+    /*color: var(--button-default-text-hover);*/
   }
 
   @if $type == 'negative' {
@@ -133,4 +133,23 @@
         width: 0px;
       }
     }
+}
+
+@mixin container {
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px var(--container-border);
+  color: var(--text);
+}
+
+@mixin inside-container {
+  background-color: var(--inside-container-background);
+  border-radius: 8px;
+  color: var(--text);
+}
+
+@mixin modal-container {
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 0 100vmax var(--modal-shadow);
+  box-shadow: 0 0 0 100vmax var(--modal-shadow);
+    color: var(--text);
 }

@@ -2,10 +2,27 @@ import React, { useEffect, useRef, useState } from 'react'
 import { utilService } from '../services/util.service'
 import iconLock from '../assets/images/icon_lock.svg'
 import { useSplash } from '../contexts/SplashContext'
+import { FormField } from './FormField'
 
 export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) {   
+    const [calculatorIcon, setCalculatorIcon] = useState(null)
+    const [enterButton, setEnterButton] = useState(
+        {
+            text: "חשב", 
+            isDisabled: false,
+            isLoading: false
+        }
+    )
+
     const { splash } = useSplash()
     const phrases = splash?.phrases
+
+    useEffect(() => {
+        (async () => {
+            const iconPath = await getCalculatorIcon(calculator)
+            setCalculatorIcon(iconPath)
+        })()
+    }, [calculator])
 
     const handleCalculatorPress = (ev, calculator) => {
         if (!calculator || calculator.isLock || calculator.isComingSoon) {
@@ -17,6 +34,16 @@ export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) 
         onCalculatorPress(ev, calculator)
     }
 
+    const getCalculatorIcon = async (calculator) => {
+        try {
+            const module = await import(`../assets/images/icon_calculator_${utilService.toSnakeCase(calculator?.type)}.png`)
+            return module.default
+        } catch (error) {
+            const module = await import(`../assets/images/icon_calculator_missing.png`)
+            return module.default
+        }
+    }
+
     const articleClass = (!calculator
                             ? `loading${index}`
                             : '')
@@ -26,10 +53,18 @@ export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) 
                       
 
     return (
-        <article className={articleClass} onClick={(ev) => handleCalculatorPress(ev, calculator)}>
-            {calculator?.isLock && <img src={iconLock} />}
-            <h2>{utilService.getPhrase(`calculator_title_${utilService.toSnakeCase(calculator?.type)}`, phrases)}</h2>
-            {calculator?.isComingSoon && <span>{utilService.getPhrase("calculator_coming_soon", phrases)}</span>}
+        <article className={articleClass}>
+            <img src={calculatorIcon} />
+            <div>
+                <h2>{utilService.getPhrase(`calculator_title_${utilService.toSnakeCase(calculator?.type)}`, phrases)}</h2>
+                <span>{utilService.getPhrase(`calculator_desc_${utilService.toSnakeCase(calculator?.type)}`, phrases)}</span>
+            </div>
+            <div>
+                {!calculator?.isLock && !calculator?.isComingSoon && <FormField type={"BUTTON_LONG"} params={enterButton} onPress={(ev) =>  handleCalculatorPress(ev, calculator)} />}
+                {calculator?.isLock && !calculator?.isComingSoon && <img src={iconLock} />}
+                {calculator?.isComingSoon && <span>{utilService.getPhrase("calculator_coming_soon", phrases)}</span>}
+            </div>
+            
         </article>
     )
 }

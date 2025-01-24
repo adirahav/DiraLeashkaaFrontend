@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { eventBusService } from "../services/eventBus.service"
 import { Button } from "@mui/material"
 import { IconSizes, SuccessIcon, ErrorIcon, WarningIcon, MessageIcon, CloseIcon, TooltipIcon} from '../assets/icons'
+import { FormField } from "./FormField"
 
 window.showSuccessAlert = showSuccessAlert
 window.showWarningAlert = showWarningAlert
@@ -98,6 +99,7 @@ export function Alert() {
         }
     }
 
+    
     return (
         <div ref={alertRef} className={"alert " + type}>
             <header>
@@ -108,8 +110,8 @@ export function Alert() {
                 <p dangerouslySetInnerHTML={{ __html: message }}></p>
             </section>
             <section className="buttons">
-                {positiveButton.show && <Button variant="contained" className='positive' onClick={() => handleButton(positiveButton)}>{positiveButton.text}</Button>}
-                {negativeButton.show && <Button variant="contained" className='negative' onClick={() => handleButton(negativeButton)}>{negativeButton.text}</Button>}
+                {positiveButton.show && <FormField type={"BUTTON_LONG"} params={positiveButton} onPress={() => handleButton(positiveButton)} />}
+                {negativeButton.show && <FormField type={"BUTTON_LONG"} params={negativeButton} onPress={() => handleButton(negativeButton)} />}
             </section>
         </div>
     )

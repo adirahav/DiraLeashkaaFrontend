@@ -1,10 +1,15 @@
 .form-field {
-  border: 1px solid var(--form-field-border);
+ 
   color: rgb(0, 0, 0);
-  border-radius: 3px;
   margin: 15px 0;
-  width: 268px;
+  width: 100%;
   position: relative;
+  border-radius: 8px;
+  border: 1px solid var(--form-field-input-border);
+  
+  &.tooltip {
+    width: calc(100% - 25px);
+  }
 
   label {
       display: flex;
@@ -23,6 +28,7 @@
 
       input {
           border: 0;
+          border-radius: 8px;
           flex: 1 0 auto;
           padding: 9px 8px 7px;
           background: var(--form-field-input-background);
@@ -56,9 +62,16 @@
   .tooltip {
     position: absolute;
     top: 8px;
-    right: -29px;
+    left: -28px;
     color: var(--form-field-tooltip-background);
   }
+  
+  /*&.number {
+    &.tooltip {
+      width: calc(100% - 20px);
+      margin-left: 20px;
+    }
+  }*/
 
   &.email {
     text-align: left;
@@ -83,8 +96,8 @@
     width: fit-content;
 
     button {
-      width: 75px;
-      height: 36px;
+      min-width: 75px;
+      height: 40px;
       border-radius: 8px;
       border: 0;
       padding: 10px 20px;
@@ -92,8 +105,14 @@
       background: var(--form-field-button-background);
       cursor: default;
 
-      span {
+      /*span {
         color: var(--form-field-button-text);
+      }*/
+
+      &:hover {
+        span {
+          transform: scale(105%);
+        }
       }
     }
 
@@ -103,6 +122,8 @@
         
         span {
           color: var(--form-field-button-disabled-text);
+          cursor: not-allowed;
+          opacity: 0.6;
         }
       }
     }
@@ -128,10 +149,22 @@
       button {
         background-color: transparent;
         width: auto;
+        box-shadow: none;
 
         span {
           color: var(--form-field-button-link-text);
         }
+      }
+    }
+
+    &.long {
+      width: 100%;
+
+      button {
+        width: 100%;
+        height: 47px;
+        font-size: 18px;
+        font-weight: bold;
       }
     }
   }
@@ -147,7 +180,7 @@
 
   &.checkbox {
     width: fit-content;
-    margin: 20px;
+    margin: 20px 8px 0;
     border: 0;
 
     label {
@@ -181,9 +214,9 @@
     & ~ .form-field-error {
       color: var(--form-field-error-text);
       font-size: 0.75rem;
-      top: -16px;
+      top: 10px;
       position: relative;
-      right: 23px;
+      right: 10px;
       text-align: right;
     }
   }
@@ -197,6 +230,7 @@
       display: block;
       direction: rtl;
       text-align: center;
+      margin-bottom: 10px;
     }
 
     input {
@@ -208,14 +242,7 @@
       font-weight: lighter;
       font-size: 20px;
       color: var(--form-field-label);
-
-      &:first-of-type {
-        margin-left: 0;
-      }
-
-      &:last-of-type {
-        margin-right: 0;
-      }
+      border-radius: 8px;
     }
 
     &.error {
@@ -229,11 +256,12 @@
     label {
       select {
         border: 0;
+        border-radius: 8px;
         flex: 1 0 auto;
         padding: 9px 8px 7px;
         background: var(--form-field-input-background);
         color: var(--form-field-input-text);
-
+        
         &:valid  {
             font-size: rem(12px);
             padding: 14px 8px 2px;
@@ -267,12 +295,13 @@
     label {
       textarea {
         border: 0;
+        border-radius: 8px;
         flex: 1 0 auto;
         padding: 9px 8px 7px;
         background: var(--form-field-input-background);
         color: var(--form-field-input-text);
-        height: 100px;
-
+        height: 99px;
+        
         &:invalid  {
             font-size: rem(12px);
             padding: 14px 8px 2px;

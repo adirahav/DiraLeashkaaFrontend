@@ -3,7 +3,6 @@ import { Resizable } from 'react-resizable'
 import Table from 'rc-table'
 import { utilService } from '../services/util.service'
 import 'react-resizable/css/styles.css'
-import iconAmortizationScheduleOn from '../assets/images/icon_amortization_schedule_on.png'
 import { useSplash } from '../contexts/SplashContext'
 
 export function PropertyAmortizationSchedule({data}) {   
@@ -52,12 +51,12 @@ export function PropertyAmortizationSchedule({data}) {
     })) : []
 
 
-      return (
+      return (<>
+        <h2 className="title">{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h2>  
         <section className="amortization-schedule">
-          <h2 className="title"><img src={iconAmortizationScheduleOn} />{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h2>  
           <Table sticky={true} components={{ header: { cell: ResizableTitle } }} columns={mergedColumns} data={formattedData} />
         </section>
-      )
+      </>)
     
 }
 

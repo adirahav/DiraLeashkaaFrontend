@@ -4,6 +4,7 @@ import { utilService } from '../services/util.service'
 import { LoadingIcon } from '../assets/icons'
 import { showTooltipAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
+import { Button as MaterialButton} from "@mui/material"
 
 export function FormField({type = "STRING", params, onChange, onPress }) {
     
@@ -13,7 +14,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
     //       EMAIL 
     //       PASSWORD 
     //       BIRTH_OF_YEAR
-    //       BUTTON | BUTTON_SUBMIT 
+    //       BUTTON | BUTTON_LONG | BUTTON_SUBMIT 
     //       CHECKBOX  
     //       ERROR
     //       CODE   
@@ -133,7 +134,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             })
         }
 
-        const fieldClass = `form-field number ${hasError ? ' error' : ''}`
+        const fieldClass = `form-field number ${hasError ? ' error' : ''} ${params.tooltip ? ' tooltip' : ''}`
 
         return  <><div className={fieldClass}>
                     <label>
@@ -313,17 +314,17 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
         }
 
         const fieldClass = `form-field checkbox ${hasError ? ' error' : ''}`
-
+        
         return  <><div className={fieldClass}>
                     <label>
-                        <input type='checkbox' value={valueToEdit?.toString()} onChange={handleValueChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75" name="email"></input>
+                        <input type='checkbox' value={valueToEdit?.toString()} onChange={handleValueChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" disabled={!params.enable} ></input>
                         <span>{params.label}</span>
                     </label>
                 </div>
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
 
-    function Button({params, onPress, type}) {
+    function Button_old({params, onPress, type}) {
         const fieldClass = `form-field button${params.isDisabled ? ' disabled': ''}${params.isLoading ? ' loading': ''}${params.isLinkView ? ' link': ''}`
         
         return  <div className={fieldClass}>
@@ -331,7 +332,18 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
                         {!params.isLoading && <span dangerouslySetInnerHTML={{ __html: params.text }}></span>}
                         {params.isLoading && <LoadingIcon />}
                     </button>
-                </div>
+                </div>               
+    }
+
+    function Button({params, onPress, type}) {
+        const fieldClass = `form-field button${params.isDisabled ? ' disabled': ''}${params.isLoading ? ' loading': ''}${params.isLinkView ? ' link': ''} ${type}`
+        
+        return  <div className={fieldClass}>
+                    <MaterialButton variant="contained" className='positive' onClick={onPress} disabled={params.isDisabled}>
+                        {!params.isLoading && <span dangerouslySetInnerHTML={{ __html: params.text }}></span>}
+                        {params.isLoading && <LoadingIcon />}
+                    </MaterialButton>
+                </div>               
     }
 
     function Error({params}) {
@@ -472,6 +484,10 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
 
             {type === "BUTTON" && Button({params, onPress, type: 'button'})}
 
+            {type === "BUTTON_LONG" && Button({params, onPress, type: 'long'})}
+
+            {type === "BUTTON_SUBMIT" && Button({params, onPress, type: 'submit'})}
+
             {type === "EMAIL" && Email({params, onChange})}
 
             {type === "PASSWORD" && Password({params, onChange})}
@@ -479,8 +495,6 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             {type === "BIRTH_OF_YEAR" && YearOfBirth({params, onChange})}
 
             {type === "CHECKBOX" && Checkbox({params, onChange})}
-
-            {type === "BUTTON_SUBMIT" && Button({params, onPress, type: 'submit'})}
 
             {type === "ERROR" && Error({params})}
 

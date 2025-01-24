@@ -7,7 +7,7 @@ export function HomeCities({ citiesNames, selectedCity, onCityPress }) {
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     const propertiesState = useSelector(storeState => storeState.userModule.home?.properties)
 
-    const LOADING_CITIES_COUNT = 9
+    const LOADING_CITIES_COUNT = 4
     
     const normalizedCities = propertiesState?.map(property => ({
         ...property,

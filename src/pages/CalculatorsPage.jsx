@@ -9,7 +9,7 @@ import { onLoadingDone, onLoadingStart } from '../store/actions/app.actions'
 
 export function CalculatorsPage() {
 
-    const LOADING_CALCULATORS_COUNT = 6
+    const LOADING_CALCULATORS_COUNT = 4
     
     const [showOverlay, setShowOverlay] = useState(false)
     
@@ -38,6 +38,7 @@ export function CalculatorsPage() {
     return (<>
         <Header />
         <main className="calculators container">
+            <h1>מחשבונים שימושיים</h1>
             <section>
                 {!isLoadingState && calculators?.map((calculator, index) => (    
                     <CalculatorsCalculator key={index} calculator={calculator} onCalculatorPress={onCalculatorPress} />

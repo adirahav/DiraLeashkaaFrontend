@@ -13,12 +13,21 @@ import { useSelector } from 'react-redux'
 import { IconSizes, AddPropertyIcon } from "../assets/icons"
 import { useSplash } from '../contexts/SplashContext.jsx'
 import imgArrowDown from '../assets/images/lottie_arrow_down.json'
+import imgLetsStart from '../assets/images/lets_start.png'
 import Lottie from 'lottie-react'
+import { FormField } from '../cmps/FormField.jsx'
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
     const [selectedCity, setSelectedCity] = useState(null)
     const [bestYield, setBestYield] = useState(null)
+    const [letsStartButton, setLetsStartButton] = useState(
+        {
+            text: "התחל", 
+            isDisabled: false,
+            isLoading: false
+        }
+    )
 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
@@ -68,13 +77,14 @@ export function HomePage() {
  
     // my cities
     function onCityPress(city) {
+        onAboutDeletingProperty(null)
         setSelectedCity(city)
     }
 
     const citiesTitle = isLoadingState ? '' : utilService.getPhrase("home_cities_title", phrases)
     const citiesClass = isLoadingState ? 'loading0' : '' 
 
-    const propertiesTitle = selectedCity 
+    const propertiesTitle = !isLoadingState && selectedCity 
                                 ? selectedCity === "else"
                                     ? utilService.getPhrase("home_properties_title_else", phrases)
                                     : utilService.getPhrase("home_properties_title", phrases)
@@ -84,8 +94,7 @@ export function HomePage() {
     
     // city properties
     function onPropertyPress(ev, property) {
-        
-        if ((ev.target.offsetParent.className === 'before-deleting' || ev.target.offsetParent.className === 'delete-overlay') && !homeState.isDeleting) {
+        if (property._id === homeState.aboutDeleteId && !homeState.isDeleting) {
             ev.preventDefault()
             ev.stopPropagation()
             onDeletingProperty(property)
@@ -94,7 +103,6 @@ export function HomePage() {
         } else {
             navigate(`/property?propertyId=${property._id}`)
         }
-        
     }
 
     async function onDeletingProperty(property) {
@@ -106,7 +114,7 @@ export function HomePage() {
 
         const deleteStartTime = new Date()
     
-        await onDeleteProperty(propertyId)
+        /*await onDeleteProperty(propertyId)
     
         const deleteEndTime = new Date()
     
@@ -125,7 +133,7 @@ export function HomePage() {
         }
         
         onAboutDeletingProperty(null)
-        onDeletingPropertyDone()
+        onDeletingPropertyDone()*/
     }
 
     // best yield
@@ -136,7 +144,7 @@ export function HomePage() {
                             : ''
                             
     const bestYieldClass = isLoadingState ? 'loading0' : ''
-
+ 
     // add property
     const addPropertyClass = isLoadingState ? 'hide' : 'add-button'
     
@@ -144,15 +152,14 @@ export function HomePage() {
         return (<>
             <Header />
             <main className="home container start">
-                <h2>{utilService.getPhrase("home_lets_start", phrases)}</h2>
-                <Lottie 
-                    animationData={imgArrowDown} 
-                    loop={true} 
-                    autoplay={true} 
-                    onClick={() =>  navigate(`/property`)}  />
-                <div>
-                    <NavLink to="/property" className={addPropertyClass}><AddPropertyIcon sx={IconSizes.Small} /></NavLink>
-                </div>
+                <img src={imgLetsStart} />
+                <section>
+                    <h2>דירה להשקעה</h2>
+                    <hr />
+                    <h3>מצא את הדירה בעלת הפוטנציאל לתשואה הגבוהה ביותר בקלות וביעילות!</h3>
+                    <hr />
+                    <FormField type={"BUTTON_LONG"} params={letsStartButton} onPress={() =>  navigate(`/property`)} />
+                </section>
             </main>
             <Footer />
         </>)

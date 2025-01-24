@@ -23,6 +23,7 @@ import animCalculating from '../assets/images/anim_calculating.json'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { authService } from '../services/auth.service'
 import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSelector } from 'react-redux'
 
 export function PropertyPage() {
     const location = useLocation()
@@ -41,6 +42,7 @@ export function PropertyPage() {
     const [isBlocked, setIsBlocked] = useState(false)
 
     const loggedinUser = authService.getLoggedinUser()
+    const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
     const { splash } = useSplash()
     const phrases = splash?.phrases
@@ -273,11 +275,19 @@ export function PropertyPage() {
     const chartLabelClass = `label-${fragment === 'chart' ? 'on' : 'off'}`
     const dataClass = `data /*${isFirstLoading ? 'loading3' : ''}*/`
     
+    const titleClass = isLoadingState ? 'loading0' : '' 
+
     return (<>
         {showMobileData === "" && <Header />}
         <main className={mainClass}>
             {(showOverlay || isFirstLoading) && <Overlay />}
+            <h1 className={titleClass}>הערכת עלויות ותשואה לרכישת נכס</h1>
             <PropertyForm property={property} user={loggedinUser} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyId={propertyId} />
+            {property?.showMortgagePrepayment && <>
+                <h2>ריביות ומדדים</h2>
+                <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />
+            </>}
+            {!isFirstLoading && !lockYields && <h1 className={titleClass}>תחזית פיננסית</h1>}
             <section className={dataClass}>
                 {!showInterestsContainer && <div className="unavailable-overlay">
                     <img src={iconMissingData} />
@@ -285,12 +295,12 @@ export function PropertyPage() {
                         חסרים נתונים לחישוב
                     </div>
                 </div>}
-                {property?.showMortgagePrepayment && <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />}
                 {!isFirstLoading && !lockYields && <PropertyYieldForecast data={property?.calcYieldForecast} />}
                 {!isFirstLoading && !lockYields && property?.showMortgagePrepayment && <PropertyAmortizationSchedule data={property?.calcAmortizationSchedule} />}
                 {!isFirstLoading && !lockYields && <PropertyChart data={property?.calcYieldForecast} />}
                 {lockYields && <section className='lock-yields'>
-                    <h3>{utilService.getPhrase('property_lock_yields_missing_data', phrases)}</h3>
+                    {/*<h3>{utilService.getPhrase('property_lock_yields_missing_data', phrases)}</h3>*/}
+                    <h3>אין מספיק נתונים כדי להציג תחזיות פיננסיות. אנא מלא את כל השדות הנדרשים.</h3>
                     <img src={iconMissingData} />
                 </section>}
                 {isFirstLoading && <section className='loading-calc-yields'>

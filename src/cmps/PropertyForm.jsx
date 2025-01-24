@@ -426,52 +426,62 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         {!isFirstLoading && <img className={cityLogoClass} src={cityLogoIcon} />}
         {isFirstLoading && <div className={cityLogoClass}><div /></div>}
         <section className={sectionClass}>
-            <PropertyField type={"SEARCHABLE_DROP_DOWN"} key={keys.city} params={city} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('city', value)} />
-            {city.selectedValue === "else" && <PropertyField type={"STRING"} key={keys.cityElse} params={cityElse} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('cityElse', value)} />}
-            <PropertyField type={"STRING"} key={keys.address} params={address} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('address', value)} />
-            <PropertyField type={"DROP_DOWN"} key={keys.apartmentType} params={apartmentType} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('apartmentType', value)} />
-            <PropertyField type={"NUMBER"} key={keys.price} params={price} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('price', value)} />
-            <PropertyField type={"AUTO_FILL"} key={keys.equity} params={equity} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('equity', value)} />
-            <PropertyField type={"CALC"} key={keys.equityCleaningExpenses} params={equityCleaningExpenses} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC"} key={keys.mortgageRequired} params={mortgageRequired} isFirstLoading={isFirstLoading} />
-            
+            <article>
+                <PropertyField type={"SEARCHABLE_DROP_DOWN"} key={keys.city} params={city} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('city', value)} />
+                {city.selectedValue === "else" && <PropertyField type={"STRING"} key={keys.cityElse} params={cityElse} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('cityElse', value)} />}
+                <PropertyField type={"STRING"} key={keys.address} params={address} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('address', value)} />
+                <PropertyField type={"DROP_DOWN"} key={keys.apartmentType} params={apartmentType} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('apartmentType', value)} />
+                <PropertyField type={"NUMBER"} key={keys.price} params={price} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('price', value)} />
+                <PropertyField type={"AUTO_FILL"} key={keys.equity} params={equity} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('equity', value)} />
+                <PropertyField type={"CALC"} key={keys.equityCleaningExpenses} params={equityCleaningExpenses} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC"} key={keys.mortgageRequired} params={mortgageRequired} isFirstLoading={isFirstLoading} />
+            </article>
+             
             <hr className={hrClass} />
 
-            <PropertyField type={"AUTO_FILL"} key={keys.incomes} params={incomes} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('incomes', value)} />    
-            <PropertyField type={"AUTO_FILL"} key={keys.commitments} params={commitments} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('commitments', value)} />   
-            <PropertyField type={"CALC"} key={keys.disposableIncome} params={disposableIncome} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC_EDITABLE"} key={keys.possibleMonthlyRepayment} params={possibleMonthlyRepayment} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('possibleMonthlyRepaymentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('possibleMonthlyRepaymentPercent', percent)} />    
-            
-            <hr className={hrClass} />
-
-            <PropertyField type={"CALC"} key={keys.maxPercentOfFinancing} params={maxPercentOfFinancing} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC"} key={keys.actualPercentOfFinancing} params={actualPercentOfFinancing} isFirstLoading={isFirstLoading} />
-            
-            <hr className={hrClass} />
-
-            <h3 className={h3Class}>{utilService.getPhrase("property_incidentals_title", phrases)}</h3>
-            <PropertyField type={"CALC"} key={keys.transferTax} params={transferTax} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC_EDITABLE"} key={keys.lawyer} params={lawyer} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lawyerCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('lawyerPercent', percent)} />    
-            <PropertyField type={"CALC_EDITABLE"} key={keys.realEstateAgent} params={realEstateAgent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('realEstateAgentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('realEstateAgentPercent', percent)} />    
-            <PropertyField type={"NUMBER"} key={keys.brokerMortgage} params={brokerMortgage} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('brokerMortgage', value)} />
-            <PropertyField type={"NUMBER"} key={keys.repairing} params={repairing} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('repairing', value)} />     
-            <PropertyField type={"CALC_TOTAL"} key={keys.incidentalsTotal} params={incidentalsTotal} isFirstLoading={isFirstLoading} />
+            <article>
+                <PropertyField type={"AUTO_FILL"} key={keys.incomes} params={incomes} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('incomes', value)} />    
+                <PropertyField type={"AUTO_FILL"} key={keys.commitments} params={commitments} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('commitments', value)} />   
+                <PropertyField type={"CALC"} key={keys.disposableIncome} params={disposableIncome} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC_EDITABLE"} key={keys.possibleMonthlyRepayment} params={possibleMonthlyRepayment} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('possibleMonthlyRepaymentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('possibleMonthlyRepaymentPercent', percent)} />    
+            </article>
 
             <hr className={hrClass} />
 
-            <PropertyField type={"CALC_EDITABLE"} key={keys.rent} params={rent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('rentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('rentPercent', percent)} />    
-            <PropertyField type={"NUMBER"} key={keys.lifeInsurance} params={lifeInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lifeInsurance', value)} />    
-            <PropertyField type={"NUMBER"} key={keys.structureInsurance} params={structureInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('structureInsurance', value)} />    
-            <PropertyField type={"CALC"} key={keys.rentCleaningExpenses} params={rentCleaningExpenses} isFirstLoading={isFirstLoading} />
-            
-            {property?.showMortgagePrepayment && <>
-                <hr className={hrClass} />
+            <article>
+                <PropertyField type={"CALC"} key={keys.maxPercentOfFinancing} params={maxPercentOfFinancing} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC"} key={keys.actualPercentOfFinancing} params={actualPercentOfFinancing} isFirstLoading={isFirstLoading} />
+            </article>
 
+            <hr className={hrClass} />
+
+            <article>
+                <h3 className={h3Class}>{utilService.getPhrase("property_incidentals_title", phrases)}</h3>
+                <PropertyField type={"CALC"} key={keys.transferTax} params={transferTax} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC_EDITABLE"} key={keys.lawyer} params={lawyer} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lawyerCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('lawyerPercent', percent)} />    
+                <PropertyField type={"CALC_EDITABLE"} key={keys.realEstateAgent} params={realEstateAgent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('realEstateAgentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('realEstateAgentPercent', percent)} />    
+                <PropertyField type={"NUMBER"} key={keys.brokerMortgage} params={brokerMortgage} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('brokerMortgage', value)} />
+                <PropertyField type={"NUMBER"} key={keys.repairing} params={repairing} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('repairing', value)} />     
+                <PropertyField type={"CALC_TOTAL"} key={keys.incidentalsTotal} params={incidentalsTotal} isFirstLoading={isFirstLoading} />
+            </article>
+
+            <hr className={hrClass} />
+
+            <article>
+                <PropertyField type={"CALC_EDITABLE"} key={keys.rent} params={rent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('rentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('rentPercent', percent)} />    
+                <PropertyField type={"NUMBER"} key={keys.lifeInsurance} params={lifeInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lifeInsurance', value)} />    
+                <PropertyField type={"NUMBER"} key={keys.structureInsurance} params={structureInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('structureInsurance', value)} />    
+                <PropertyField type={"CALC_TOTAL"} key={keys.rentCleaningExpenses} params={rentCleaningExpenses} isFirstLoading={isFirstLoading} />
+            </article>
+
+            <hr className={hrClass} />
+
+            {property?.showMortgagePrepayment && <article>
                 <h3 className={h3Class}>{utilService.getPhrase("property_mortgage_repayment_title", phrases)}</h3>
                 <PropertyField type={"DROP_DOWN"} key={keys.mortgagePeriod} params={mortgagePeriod} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('mortgagePeriod', value)} />
                 <PropertyField type={"CALC"} key={keys.mortgageMonthlyRepayment} params={mortgageMonthlyRepayment} isFirstLoading={isFirstLoading} />
                 <PropertyField type={"CALC"} key={keys.mortgageMonthlyYield} params={mortgageMonthlyYield} isFirstLoading={isFirstLoading} />
-            </>}
+            </article>}
             
         </section>    
     </>

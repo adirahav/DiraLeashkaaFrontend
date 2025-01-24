@@ -162,84 +162,17 @@ export function CalculatorMaxPrice() {
     }, [isLoadingState])
 
     useEffect(() => {
-        if (price?.value) {
-            //if (maxPrice === 0) {
-                setMaxPrice(price.value)
-            //} else {
-            //    updateMaxPrice(maxPrice, price.value)
-            //}
-        }
+        setMaxPrice(
+            price?.value 
+                ? price.value
+                : ""
+        )
     }, [price?.value])
-
-    function updateMaxPrice(currentPrice, targetPrice) {
-        const getIncrement = (difference) => {
-            if (difference <= 100) return 1
-            if (difference <= 1000) return 10
-            if (difference <= 10000) return 100
-            if (difference <= 100000) return 1000
-            if (difference <= 1000000) return 10000
-            return 10000
-        };
-
-        const getDelay = (difference) => {
-            if (difference <= 100) return 400
-            if (difference <= 1000) return 200
-            if (difference <= 10000) return 100
-            if (difference <= 100000) return 20
-            if (difference <= 1000000) return 10
-            return 10
-        };
-    
-        let difference = getIncrement(Math.abs(targetPrice - currentPrice))
-        let delay = getDelay(Math.abs(targetPrice - currentPrice))
-        let didOverTarget = false
-
-        const adjustPrice = () => {
-            setMaxPrice((current) => {
-                if (current < targetPrice) {
-                    const nextValue = current + difference
-                    
-                    if (nextValue > targetPrice) {
-                        didOverTarget = true
-                    }
-
-                    if (didOverTarget) {
-                        difference = getIncrement(Math.abs(targetPrice - nextValue))
-                        delay = getDelay(Math.abs(targetPrice - currentPrice))
-                    }
-    
-                    setTimeout(adjustPrice, delay)
-                    return nextValue
-                }
-    
-                if (current > targetPrice) {
-                    const nextValue = current - difference
-                    
-                    if (nextValue < targetPrice) {
-                        didOverTarget = true
-                    }
-
-                    if (didOverTarget) {
-                        difference = getIncrement(Math.abs(targetPrice - nextValue))
-                        delay = getDelay(Math.abs(targetPrice - currentPrice))
-                    }
-    
-                    setTimeout(adjustPrice, delay)
-                    return nextValue
-                }
-    
-                return targetPrice
-            })
-        }
-    
-        adjustPrice()
-    }
-    
 
     const loadProperty = () => {
         try {
             setApartmentType({...apartmentType, selectedValue: property.apartmentType})
-
+            
             setPrice({...price, value: property.price})
 
             if (property.updatedByField !== "equity") {
@@ -328,7 +261,7 @@ export function CalculatorMaxPrice() {
     }
 
     function onValueChanged(fieldName, fieldValue) {
-        updateCalculator(fieldName, fieldValue) 
+        updateCalculator(fieldName, fieldValue === "choose" ? null : fieldValue) 
     }
 
     function onPercentChanged(fieldName, customPercent) {
@@ -424,42 +357,55 @@ export function CalculatorMaxPrice() {
 
     return (<>
         {showOverlay && <Overlay />}
+        <h1>{utilService.getPhrase(`calculator_title_max_price`, phrases)}</h1>
         <section className="form">
-            <h3>מחיר דירה מקסימלי:</h3>
-            <h2>{utilService.formatNumber(maxPrice, true)} ש"ח</h2>
-            <PropertyField type={"DROP_DOWN"} key={keys.apartmentType} params={apartmentType} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('apartmentType', value)} />
-            <PropertyField type={"AUTO_FILL"} key={keys.equity} params={equity} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('equity', value)} />
-            <PropertyField type={"CALC"} key={keys.equityCleaningExpenses} params={equityCleaningExpenses} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC"} key={keys.mortgageRequired} params={mortgageRequired} isFirstLoading={isFirstLoading} />
+            <article>
+                <h3>מחיר דירה מקסימלי:</h3>
+                <h2>{maxPrice ? utilService.formatNumber(maxPrice, true) : "???"} ש"ח</h2>
+            </article>
+            <article>
+                <PropertyField type={"DROP_DOWN"} key={keys.apartmentType} params={apartmentType} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('apartmentType', value)} />
+                <PropertyField type={"AUTO_FILL"} key={keys.equity} params={equity} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('equity', value)} />
+                <PropertyField type={"CALC"} key={keys.equityCleaningExpenses} params={equityCleaningExpenses} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC"} key={keys.mortgageRequired} params={mortgageRequired} isFirstLoading={isFirstLoading} />
+            </article>
+
+            <hr className={hrClass} />
+
+            <article>
+                <PropertyField type={"AUTO_FILL"} key={keys.incomes} params={incomes} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('incomes', value)} />    
+                <PropertyField type={"AUTO_FILL"} key={keys.commitments} params={commitments} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('commitments', value)} />   
+                <PropertyField type={"CALC"} key={keys.disposableIncome} params={disposableIncome} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC_EDITABLE"} key={keys.possibleMonthlyRepayment} params={possibleMonthlyRepayment} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('possibleMonthlyRepaymentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('possibleMonthlyRepaymentPercent', percent)} />    
+            </article>
+
+            <hr className={hrClass} />
+
+            <article>
+                <PropertyField type={"CALC"} key={keys.maxPercentOfFinancing} params={maxPercentOfFinancing} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC"} key={keys.actualPercentOfFinancing} params={actualPercentOfFinancing} isFirstLoading={isFirstLoading} />
+            </article>
             
             <hr className={hrClass} />
 
-            <PropertyField type={"AUTO_FILL"} key={keys.incomes} params={incomes} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('incomes', value)} />    
-            <PropertyField type={"AUTO_FILL"} key={keys.commitments} params={commitments} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('commitments', value)} />   
-            <PropertyField type={"CALC"} key={keys.disposableIncome} params={disposableIncome} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC_EDITABLE"} key={keys.possibleMonthlyRepayment} params={possibleMonthlyRepayment} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('possibleMonthlyRepaymentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('possibleMonthlyRepaymentPercent', percent)} />    
-            
-            <hr className={hrClass} />
-
-            <PropertyField type={"CALC"} key={keys.maxPercentOfFinancing} params={maxPercentOfFinancing} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC"} key={keys.actualPercentOfFinancing} params={actualPercentOfFinancing} isFirstLoading={isFirstLoading} />
-            
-            <hr className={hrClass} />
-
-            <h3 className={h3Class}>{utilService.getPhrase("property_incidentals_title", phrases)}</h3>
-            <PropertyField type={"CALC"} key={keys.transferTax} params={transferTax} isFirstLoading={isFirstLoading} />
-            <PropertyField type={"CALC_EDITABLE"} key={keys.lawyer} params={lawyer} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lawyerCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('lawyerPercent', percent)} />    
-            <PropertyField type={"CALC_EDITABLE"} key={keys.realEstateAgent} params={realEstateAgent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('realEstateAgentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('realEstateAgentPercent', percent)} />    
-            <PropertyField type={"NUMBER"} key={keys.brokerMortgage} params={brokerMortgage} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('brokerMortgage', value)} />
-            <PropertyField type={"NUMBER"} key={keys.repairing} params={repairing} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('repairing', value)} />     
-            <PropertyField type={"CALC_TOTAL"} key={keys.incidentalsTotal} params={incidentalsTotal} isFirstLoading={isFirstLoading} />
+            <article>
+                <h3 className={h3Class}>{utilService.getPhrase("property_incidentals_title", phrases)}</h3>
+                <PropertyField type={"CALC"} key={keys.transferTax} params={transferTax} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"CALC_EDITABLE"} key={keys.lawyer} params={lawyer} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lawyerCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('lawyerPercent', percent)} />    
+                <PropertyField type={"CALC_EDITABLE"} key={keys.realEstateAgent} params={realEstateAgent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('realEstateAgentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('realEstateAgentPercent', percent)} />    
+                <PropertyField type={"NUMBER"} key={keys.brokerMortgage} params={brokerMortgage} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('brokerMortgage', value)} />
+                <PropertyField type={"NUMBER"} key={keys.repairing} params={repairing} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('repairing', value)} />     
+                <PropertyField type={"CALC_TOTAL"} key={keys.incidentalsTotal} params={incidentalsTotal} isFirstLoading={isFirstLoading} />
+            </article>
 
             <hr className={hrClass} />
 
-            <PropertyField type={"CALC_EDITABLE"} key={keys.rent} params={rent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('rentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('rentPercent', percent)} />    
-            <PropertyField type={"NUMBER"} key={keys.lifeInsurance} params={lifeInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lifeInsurance', value)} />    
-            <PropertyField type={"NUMBER"} key={keys.structureInsurance} params={structureInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('structureInsurance', value)} />    
-            <PropertyField type={"CALC"} key={keys.rentCleaningExpenses} params={rentCleaningExpenses} isFirstLoading={isFirstLoading} />            
+            <article>
+                <PropertyField type={"CALC_EDITABLE"} key={keys.rent} params={rent} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('rentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('rentPercent', percent)} />    
+                <PropertyField type={"NUMBER"} key={keys.lifeInsurance} params={lifeInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('lifeInsurance', value)} />    
+                <PropertyField type={"NUMBER"} key={keys.structureInsurance} params={structureInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('structureInsurance', value)} />    
+                <PropertyField type={"CALC"} key={keys.rentCleaningExpenses} params={rentCleaningExpenses} isFirstLoading={isFirstLoading} />            
+            </article>
         </section>    
     </>
     )

@@ -22,12 +22,12 @@ export function Footer() {
     useEffect(() => {
         if (!isLoadingState && phrases && fixedParameters) {
             const version = utilService.getFixedParameter("version", fixedParameters)
-            const webUrl = version.find(entry => entry.key === "url").value
+            const webUrl = version?.find(entry => entry.key === "url").value
             const shareDescription = utilService.getPhrase("web_share_text", phrases)  
                 
             setVersion({
                 shareUrl: `whatsapp://send?text= ${shareDescription} ${webUrl}`,
-                versionNumber: version.find(entry => entry.key === "lastVersion").value
+                versionNumber: version?.find(entry => entry.key === "lastVersion").value
             })
         }
     }, [isLoadingState])
@@ -45,7 +45,6 @@ export function Footer() {
                     </ul>
                 </nav>
             </div>
-            <div className="copyright">Icons made by itim2101 from www.flaticon.com</div>
         </footer>
     </>)
 }

@@ -6,12 +6,13 @@ import { FormField } from '../cmps/FormField.jsx'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { UserPersonalInfo } from '../cmps/UserPersonalInfo.jsx'
 import { UserFinancialDetails } from '../cmps/UserFinancialDetails.jsx'
-import { FinancialDetailsIcon, IconSizes, PersonalDetailsIcon, ProgramIcon, TermsOfUseIcon, WelcomeIcon } from '../assets/icons.jsx'
+import { FinancialDetailsIcon, IconSizes, PersonalDetailsIcon, ProgramIcon, TermsOfUseIcon } from '../assets/icons.jsx'
 import { UserTermsOfUse } from '../cmps/UserTermsOfUse.jsx'
-import { SignupWelcome } from '../cmps/SignupWelcome.jsx'
 import { logService } from '../services/log.service.js'
 import { useSplash } from '../contexts/SplashContext.jsx'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
+import { Footer } from '../cmps/Footer.jsx'
+import { Header } from '../cmps/Header.jsx'
 
 export function SignUpPage() {
     const TAG = 'SignUpPage'
@@ -20,13 +21,15 @@ export function SignUpPage() {
         PRESONAL_INFO: 1,
         FINANCIAL_DETAILS: 2,
         TERMS_OF_USE: 3,
-        //PROGRAMS: 4,
-        WELCOME: 4
+        COMPLETE: 4
     }
 
     const YEAR_OF_BIRTH_MAX_LENGTH = 4
 
-    const [step, setStep] = useState(null)
+    const [progress, setProgress] = useState({
+        step: null,
+        direction: null
+    })
     const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
     
     const navigate = useNavigate()
@@ -73,7 +76,8 @@ export function SignUpPage() {
             name,
             label: utilService.getPhrase(labelKey, phrases), 
             value: value || false,
-            error: utilService.getPhrase(errorKey, phrases)
+            error: utilService.getPhrase(errorKey, phrases),
+            enable: true
         }
     }
 
@@ -111,7 +115,10 @@ export function SignUpPage() {
             navigate("/home")
         }
         else {
-            setStep(loadStep)
+            setProgress({
+                step: loadStep,
+                direction: 'forward'
+            })
         }
     }, [])
 
@@ -158,7 +165,7 @@ export function SignUpPage() {
         } else if (!loggedinUser.equity || !loggedinUser.incomes || !loggedinUser.commitments) {
             return STEP.FINANCIAL_DETAILS
         } else if (!loggedinUser.termsOfUseAccept) {
-            return STEP.WELCOME
+            return STEP.TERMS_OF_USE
         } else {
             return null
         }
@@ -191,16 +198,6 @@ export function SignUpPage() {
                     return { ...prevTermsOfUse, [fieldName]: {...prevTermsOfUse[fieldName], value} }
                 })
                 break
-            
-            // STEP 4
-            /*case "selectedProgram":
-                setProgram((prevProgram) => {
-                    return { ...prevProgram, [fieldName]: {...prevProgram[fieldName], value, hasError} }
-                })
-                break*/
-
-            // STEP 4
-           
         }
 
         
@@ -208,15 +205,18 @@ export function SignUpPage() {
 
     function handleOnComplete() {
         setForceFetchSplash(true)
-        navigate("/home")
+
+        setTimeout(() => {
+            navigate("/home")
+        }, 1200)
     }
 
     useEffect(() => {
         handleEnableButton()
-    }, [step, personalInfo, financialDetails, termsOfUse, program])
+    }, [progress.step, personalInfo, financialDetails, termsOfUse, program])
     
     const handleEnableButton = () => {
-        if (!step) {
+        if (!progress.step) {
             return
         }
 
@@ -225,7 +225,7 @@ export function SignUpPage() {
         let isNextDisabled = true
         let hasError = false
           
-        switch (step) {
+        switch (progress.step) {
             case STEP.PRESONAL_INFO:
                 isBackDisabled = true
                 stepFields = personalInfo
@@ -238,13 +238,13 @@ export function SignUpPage() {
                 isBackDisabled = false
                 stepFields = termsOfUse
                 break
-            case STEP.PROGRAMS:
-                isBackDisabled = false
-                stepFields = program
-                break
-            case STEP.PROGRAMS:
+            case STEP.COMPLETE:
                 isBackDisabled = false
                 isNextDisabled = false
+                stepFields = {
+                    ...termsOfUse,
+                    accept: {...termsOfUse.accept, enable: false}
+                }
                 break
         }
 
@@ -258,7 +258,7 @@ export function SignUpPage() {
                 }
             })
 
-            isNextDisabled = !step || hasError
+            isNextDisabled = !progress.step || hasError
         }
         
         
@@ -293,18 +293,22 @@ export function SignUpPage() {
     }
     
     const handleNext = async (event) => {
-        switch (step) {
+        switch (progress.step) {
             case STEP.PRESONAL_INFO:
                 try {
                     setButtons((prevButtons) => ({
                         ...prevButtons,
+                        back: { ...prevButtons.back, isDisabled: true },
                         next: { ...prevButtons.next, isLoading: true },
                     }))
 
                     await saveUser(personalInfo)
 
-                    setStep((prevStep) => {
-                        return prevStep + 1 
+                    setProgress((prevProgress) => {
+                        return {
+                            step: prevProgress.step + 1 ,
+                            direction: 'forward'
+                        } 
                     })
                 } catch(e) {
                     if (e?.response?.status === 400 && e?.response?.data === "Failed to signup: Email already taken") {
@@ -338,8 +342,11 @@ export function SignUpPage() {
 
                     await saveUser(financialDetails)
                     
-                    setStep((prevStep) => {
-                        return prevStep + 1 
+                    setProgress((prevProgress) => {
+                        return {
+                            step: prevProgress.step + 1 ,
+                            direction: 'forward'
+                        } 
                     })
                 } catch(e) {
                     logService.error(TAG, e)
@@ -359,55 +366,35 @@ export function SignUpPage() {
 
                     await saveUser(termsOfUse)
                     
-                    setStep((prevStep) => {
-                        return prevStep + 1 
+                    setProgress((prevProgress) => {
+                        return {
+                            step: prevProgress.step + 1 ,
+                            direction: 'forward'
+                        } 
                     })
+
+                    handleOnComplete()
                 } catch(e) {
                     logService.error(TAG, e)
                 } finally {
                     setButtons((prevButtons) => ({
-                        ...prevButtons,
-                        next: { ...prevButtons.next, isLoading: false },
+                        back: { ...prevButtons.back, isLoading: false, isDisabled: true },
+                        next: { ...prevButtons.next, isLoading: false, isDisabled: true },
                     }))
                 }
-                break
-            case STEP.WELCOME:
                 break
 
         }
 
         event.preventDefault()
-
-        /*if (submit.isLoading || submit.isDisabled) {
-            return
-        }
-
-        try {
-            setError(null)
-            setSubmit({ 
-                ...submit, 
-                isLoading: true
-            })
-            const loggedinUser = await authService.login(email.value, password.value)
-            userService.saveLocalUser(loggedinUser)
-
-            await userService.splash()
-           
-            navigate(`/home`)
-        } catch (error) {
-            setError(utilService.getPhrase("login_credentials_error", phrases))
-        } finally {
-            setSubmit({ 
-                ...submit, 
-                isLoading: false
-            })
-        } */
-
     }
 
     const handleBack = async (event) => {
-        setStep((prevStep) => {
-            return prevStep - 1 
+        setProgress((prevProgress) => {
+            return {
+                step: prevProgress.step - 1 ,
+                direction: 'backward'
+            } 
         })
 
         event.preventDefault()
@@ -421,29 +408,48 @@ export function SignUpPage() {
 
     const programs = utilService.getFixedParameter("payPrograms", fixedParameters)
     
-    const formClass = `signup ${(Object.keys(STEP).find(key => STEP[key] === step) || Object.keys(STEP)[0]).toLowerCase()}`
+    const formClass = `signup ${(Object.keys(STEP).find(key => STEP[key] === progress.step) || Object.keys(STEP)[0]).toLowerCase()}`
     const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`
-    const menuClass = `menu ${isLoadingState || !phrases ? 'loading1' : ''}`
+    const progressClass = `progress ${isLoadingState || !phrases ? 'loading1' : ''}`
     const articleClass = `form ${isLoadingState || !phrases ? 'loading1' : ''}`
-    const footerClass = `footer ${isLoadingState || !phrases ? 'loading2' : ''}`
+    const footerClass = `footer ${isLoadingState || !phrases ? 'loading1' : ''}`
     
-    return (
+    const stepTitle = progress.step === STEP.PRESONAL_INFO ? "פרטים אישיים" :
+    progress.step === STEP.FINANCIAL_DETAILS ? "נתונים כלכליים" :
+                      progress.step === STEP.TERMS_OF_USE ? "תנאי שימוש" : ""
+
+    const setProgressClass = (currentStep) => {
+        if (progress.step === currentStep + 1 && progress.direction === "forward" || progress.step === currentStep && progress.direction === "backward") {
+            return progress.direction
+        } else if (progress.step === currentStep && progress.direction === "backward" || progress.step > currentStep) {
+            return 'active'
+        } else {
+            return ''
+        }
+    }
+
+    const progressLiClass = [
+        setProgressClass(STEP.PRESONAL_INFO),
+        setProgressClass(STEP.FINANCIAL_DETAILS),
+        setProgressClass(STEP.TERMS_OF_USE)
+    ]
+
+    return (<>
+        <Header />
         <form className={formClass}>
-            <h2 className={titleClass}>{!isLoadingState && utilService.getPhrase('login_header', phrases)}</h2>
-            <ul className={menuClass}>
-                <li className={step===STEP.PRESONAL_INFO?'active':''}><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></li>
-                <li className={step===STEP.FINANCIAL_DETAILS?'active':''}><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></li>
-                <li className={step===STEP.TERMS_OF_USE?'active':''}><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></li>
-                <li className={step===STEP.WELCOME?'active':''}><WelcomeIcon sx={IconSizes.Small} /><span>סיום</span></li>
+            <h2 className={titleClass}>{stepTitle}</h2>
+            <ul className={progressClass}>
+                <li className={progressLiClass[0]}></li>
+                <li className={progressLiClass[1]}></li>
+                <li className={progressLiClass[2]}></li>
             </ul>
             <article className={articleClass}>
-                {step === STEP.PRESONAL_INFO && <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} />}
-                {step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} />}
-                {step === STEP.TERMS_OF_USE && <UserTermsOfUse termsOfUse={termsOfUse} onChange={handleValueChanged} />}
-                {/*step === STEP.PROGRAMS && programs && programs.isAvailable && <UserPrograms programs={programs} onChange={handleValueChanged} />*/}
-                {step === STEP.WELCOME && <SignupWelcome onComplete={handleOnComplete} />}
+                {progress.step === STEP.PRESONAL_INFO && <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} />}
+                {progress.step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} />}
+                {progress.step === STEP.TERMS_OF_USE && <UserTermsOfUse termsOfUse={termsOfUse} onChange={handleValueChanged} />}
+                {progress.step === STEP.COMPLETE && <UserTermsOfUse termsOfUse={termsOfUse} />}
                 
-                {step !== STEP.WELCOME && <div className='buttons'>
+                {<div className='buttons'>
                     <FormField type={"BUTTON"} key={keys.back} params={buttons.back} onPress={handleBack} />
                     <FormField type={"BUTTON"} key={keys.next} params={buttons.next} onPress={handleNext} />
                 </div>}   
@@ -452,5 +458,6 @@ export function SignUpPage() {
                 <div><NavLink to='/login' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("signup_goto_login", phrases) }}></NavLink></div>
             </article>
         </form>
-    )
+        <Footer />
+    </>)
 }

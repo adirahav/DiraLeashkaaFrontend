@@ -7,6 +7,8 @@ import { forgotPasswordService } from '../services/forgotPassword.service.js'
 import { useSplash } from '../contexts/SplashContext.jsx'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSelector } from 'react-redux'
+import { Header } from '../cmps/Header.jsx'
+import { Footer } from '../cmps/Footer.jsx'
 
 export function ForgotPasswordPage() {
     const TAG = 'ForgotPasswordPage'
@@ -83,17 +85,21 @@ export function ForgotPasswordPage() {
     }, [phrases])
 
     useEffect(() => {
-        setSubmit({ 
-            ...submit, 
-            isDisabled: !utilService.REG_EXP.EMAIL.test(email.value)
-        })
+        if (step === STEP.GENERATE_CODE) {
+            setSubmit({ 
+                ...submit, 
+                isDisabled: !utilService.REG_EXP.EMAIL.test(email.value)
+            })
+        }
     }, [email])
 
     useEffect(() => {
-        setSubmit({ 
-            ...submit, 
-            isDisabled: !utilService.REG_EXP.PASSWORD.test(newPassword.value)
-        })
+        if (step === STEP.CHANGE_PASSWORD) {
+            setSubmit({ 
+                ...submit, 
+                isDisabled: !utilService.REG_EXP.PASSWORD.test(newPassword.value)
+            })
+        }
     }, [newPassword])
 
     useEffect(() => {
@@ -230,21 +236,26 @@ export function ForgotPasswordPage() {
 
     const noteClass = `note ${note.type}`
 
-    const formClass = `forgot-password ${isLoadingState?'loading': ''}`
+    const formClass = `forgot-password form ${isLoadingState?'loading': ''}`
+    const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`
+    const articleClass = `fields ${isLoadingState || !phrases ? 'loading1' : ''}`
+    const footerClass = `footer ${isLoadingState || !phrases ? 'loading2' : ''}`
 
-    return (
+    return (<>
+        <Header />
         <form className={formClass}>
-            <article>
-                <h2>{utilService.getPhrase('forgot_password_header', phrases)}</h2>
+            <h2 className={titleClass}>{utilService.getPhrase('forgot_password_header', phrases)}</h2>
+            <article className={articleClass}>
                 {step === STEP.GENERATE_CODE && <FormField type={"EMAIL"} key={keys.email} params={email} onChange={(value) => handleValueChanged('email', value)} />}
                 {step === STEP.VALIDATE_CODE && <FormField type={"CODE"} key={keys.code} params={code} onChange={(value) => handleValueChanged('code', value)} />}
                 {(step === STEP.CHANGE_PASSWORD || step === STEP.DONE) && <FormField type={"PASSWORD"} key={keys.newPassword} params={newPassword} onChange={(value) => handleValueChanged('newPassword', value)} />}
                 <div className={noteClass}>{note.text}</div>
                 {submit.isVisible && <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />}
             </article>
-           <article>
+           <article className={footerClass}>
                 <div><NavLink to='/login' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("forgot_password_goto_login", phrases) }}></NavLink></div>
             </article>
         </form>
-    )
+        <Footer />
+    </>)
 }

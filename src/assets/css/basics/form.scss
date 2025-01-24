@@ -1,0 +1,106 @@
+.form {
+    @include container;
+    width: 500px;
+    margin: 0 0 20px;
+    padding: 17px;
+    margin: 20px auto;
+    display: grid;
+    
+    .title {
+        color: var(--text);
+        font-size: 30px;
+        font-weight: bold;
+        padding: 6px;
+        margin: 0;    
+        text-align: center;
+        height: 57px;
+
+        &.loading0 { animation: loading0-animation 3s infinite; * { display: none; } }
+    }
+
+    .fields {
+        display: block;
+        position: relative;
+        padding: 29px 0 20px;
+        box-sizing: content-box;
+        justify-self: center;
+        width: 100%;
+        min-height: 325px;
+
+        & > div {
+            width: 100%;
+            margin: 0 auto;
+
+            &.form-field {
+                margin-bottom: 16px;
+            }
+
+            &.button {
+                margin-top: 29px;
+            }
+        }
+
+        .note {
+            height: 40px;
+            font-size: 0.75rem;
+            padding: 0;
+            
+            &.error {
+                color: var(--form-field-error-text);
+            }
+            
+            &.message {
+                color: var(--form-field-message-text);
+            }
+        }
+
+        .form-field-error {
+            width: 268px;
+        }
+
+        .error:not(.form-field) {
+            font-size: 16px;
+            padding: 4px 8px;
+            color: var(--form-field-error-text);
+        }
+
+        .buttons {
+            display: flex;
+            margin: 36px auto 0;
+            justify-content: space-evenly;
+            width: 300px;
+
+            .button {
+                margin: 0;
+            }
+        }
+
+        &.loading1 { animation: loading1-animation 3s infinite; * { display: none; } }
+    }
+
+    .footer {
+        text-align: center;
+        height: 69px;
+        
+        div {
+            margin: 10px 0;
+
+            a {
+                cursor: default;
+
+                u {
+                    font-weight: bold;
+                    text-decoration: none;
+                    color: var(--text-link);
+                }
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }  
+
+        &.loading2 { animation: loading2-animation 3s infinite; div { display: none; } }
+    }
+    
+}
