@@ -9,7 +9,7 @@ export function PropertyChart({data}) {
     const phrases = splash?.phrases
     
     return (<>
-        <h2 className="title">{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h2>  
+        <h2>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h2>  
         <section className="chart">
             <div>
                 {data && <YieldChart rawData={JSON.parse(data)} />}

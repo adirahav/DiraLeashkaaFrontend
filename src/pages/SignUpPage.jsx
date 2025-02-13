@@ -6,7 +6,6 @@ import { FormField } from '../cmps/FormField.jsx'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { UserPersonalInfo } from '../cmps/UserPersonalInfo.jsx'
 import { UserFinancialDetails } from '../cmps/UserFinancialDetails.jsx'
-import { FinancialDetailsIcon, IconSizes, PersonalDetailsIcon, ProgramIcon, TermsOfUseIcon } from '../assets/icons.jsx'
 import { UserTermsOfUse } from '../cmps/UserTermsOfUse.jsx'
 import { logService } from '../services/log.service.js'
 import { useSplash } from '../contexts/SplashContext.jsx'
@@ -278,7 +277,7 @@ export function SignUpPage() {
             "equity": details.equity ? details.equity.value : loggedinUser?.equity, 
             "incomes": details.incomes ? details.incomes.value : loggedinUser?.incomes,  
             "commitments": details.commitments ? details.commitments.value : loggedinUser?.commitments,   
-            "termsOfUseAccept": details.termsOfUseAccept ? details.termsOfUseAccept.value : loggedinUser?.termsOfUseAccept, 
+            "termsOfUseAccept": details.accept ? details.accept.value : loggedinUser?.termsOfUseAccept, 
             "webDeviceType": window.navigator.userAgent
         }
 
@@ -433,7 +432,7 @@ export function SignUpPage() {
         setProgressClass(STEP.FINANCIAL_DETAILS),
         setProgressClass(STEP.TERMS_OF_USE)
     ]
-
+    
     return (<>
         <Header />
         <form className={formClass}>
@@ -444,8 +443,8 @@ export function SignUpPage() {
                 <li className={progressLiClass[2]}></li>
             </ul>
             <article className={articleClass}>
-                {progress.step === STEP.PRESONAL_INFO && <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} />}
-                {progress.step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} />}
+                {progress.step === STEP.PRESONAL_INFO && <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} onSubmit={handleNext} />}
+                {progress.step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} onSubmit={handleNext} />}
                 {progress.step === STEP.TERMS_OF_USE && <UserTermsOfUse termsOfUse={termsOfUse} onChange={handleValueChanged} />}
                 {progress.step === STEP.COMPLETE && <UserTermsOfUse termsOfUse={termsOfUse} />}
                 

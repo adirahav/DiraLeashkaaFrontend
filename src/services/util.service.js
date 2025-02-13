@@ -13,9 +13,6 @@ const MEDIA_WIDTH = {
 const REG_EXP = {
     EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     PASSWORD: /^.{8,20}$/,
-
-    //phone:    "^[0][5]\\d{1}(\\-)\\d{7}$"
-    //age:    "^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$"        // 17-120: 1[7-9] covers numbers between 17 and 19 ; [2-9][0-9] covers numbers between 20 and 99 ; 1[01][0-9] covers numbers between 100 and 119 ; and 120 covers the number 120
 }
 
 export const utilService = {

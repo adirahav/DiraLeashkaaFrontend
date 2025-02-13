@@ -127,7 +127,7 @@ export function PropertyYieldForecast({data}) {
 
 
     return (<>
-        <h2 className="title">{utilService.getPhrase('property_yield_forecast_label', phrases)}</h2>  
+        <h2>{utilService.getPhrase('property_yield_forecast_label', phrases)}</h2>  
         <section className="yield-forecast">
           <Table sticky={true} components={{ header: { cell: ResizableTitle } }} columns={mergedColumns} data={formattedData} />
         </section>

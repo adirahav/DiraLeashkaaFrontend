@@ -37,32 +37,6 @@ export function CalculatorPage() {
         }
     }, [splash, calculatorId])
 
-    /*const updateProperty = async (fieldName, fieldValue) => {
-        try {
-            if (fieldName === "city") {
-                setProperty((prevProperty) => {
-                    return {
-                        ...prevProperty,
-                        city: fieldValue
-                    }
-                })                
-            }
-
-            const propertyToUpdate = { 
-                propertyId: property?._id,
-                fieldName,
-                fieldValue: fieldValue === '' || fieldValue === 'choose' ? null : fieldValue
-            }
-            
-            setShowOverlay(true)
-            const savedProperty = await propertyService.save(propertyToUpdate)
-            setProperty({...savedProperty, updatedByField: fieldName})
-            setShowOverlay(false) 
-        } catch (error) {
-            console.error(`Error update property ${propertyId}:`, error)
-        } 
-    }*/
- 
     const mainClass = `calculator ${utilService.toKebabCase(type)}`
 
     return (<>

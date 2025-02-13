@@ -101,13 +101,14 @@ export function ContactUsPage() {
         setContactUs((prevContactUs) => {
             return { ...prevContactUs, [fieldName]: {...prevContactUs[fieldName], value, hasError} }
         })
+        setNote({  ...note, text: null })
     }
 
     const handleSubmit = async (event) => {
         
         event?.preventDefault()
         
-        if (submit.isLoading) {
+        if (submit.isLoading || submit.isDisabled) {
             return
         }
 
@@ -160,7 +161,7 @@ export function ContactUsPage() {
             <h2 className={titleClass}>{utilService.getPhrase('actionbar_title_contact_us', phrases)}</h2>
             <article className={articleClass}>
                 <FormField type={"DROP_DOWN"} key={keys.subject} params={contactUs.subject} onChange={(value, hasError) => handleValueChanged('subject', value, hasError)} />
-                <FormField type={"TEXT_AREA"} key={keys.message} params={contactUs.message} onChange={(value, hasError) => handleValueChanged('message', value, hasError)} />
+                <FormField type={"TEXT_AREA"} key={keys.message} params={contactUs.message} onChange={(value, hasError) => handleValueChanged('message', value, hasError)} onEnter={handleSubmit} />
                 <div className={noteClass}>{note.text}</div>
                 <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />
             </article>

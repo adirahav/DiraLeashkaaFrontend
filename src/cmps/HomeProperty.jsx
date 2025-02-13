@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { utilService } from '../services/util.service'
 import { IconSizes, MedaltIcon, MissDataIcon, AddPropertyIcon, DeleteIcon, EditIcon } from '../assets/icons'
-import propertyImage from '../assets/images/property.jpg'
+import propertyImage from '../assets/images/property.png'
 import deletingIcon from '../assets/images/anim_delete.gif'
 import { useSelector } from 'react-redux'
 import { onAboutDeletingProperty, onLongPressProperty } from '../store/actions/user.actions'

@@ -11,6 +11,7 @@ export const authService = {
     signup,
     logout,
     getLoggedinUser,
+    getLoggedinUserCompleted,
     getLastLoggedinEmail
 }
 
@@ -44,6 +45,14 @@ async function logout() {
 function getLoggedinUser() {
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
+
+function getLoggedinUserCompleted() {
+    const loggedinUser = getLoggedinUser()
+    return (loggedinUser && loggedinUser.fullname && loggedinUser.email && loggedinUser.yearOfBirth && 
+        loggedinUser.equity && loggedinUser.incomes && loggedinUser.commitments && 
+        loggedinUser.termsOfUseAccept) 
+}
+
 
 function getLastLoggedinEmail() {
     return localStorage.getItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)

@@ -1,6 +1,4 @@
-
-
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { utilService } from '../services/util.service'
 import { PropertyField } from './PropertyField'
 import { ZoomIn } from '../assets/icons'

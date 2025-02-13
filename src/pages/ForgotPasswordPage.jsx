@@ -189,7 +189,7 @@ export function ForgotPasswordPage() {
     const handleSubmit = async (event) => {
         event?.preventDefault()
         
-        if (submit.isLoading || !submit.isVisible) {
+        if (submit.isLoading || !submit.isVisible || submit.isDisabled) {
             return
         }
 
@@ -246,9 +246,9 @@ export function ForgotPasswordPage() {
         <form className={formClass}>
             <h2 className={titleClass}>{utilService.getPhrase('forgot_password_header', phrases)}</h2>
             <article className={articleClass}>
-                {step === STEP.GENERATE_CODE && <FormField type={"EMAIL"} key={keys.email} params={email} onChange={(value) => handleValueChanged('email', value)} />}
+                {step === STEP.GENERATE_CODE && <FormField type={"EMAIL"} key={keys.email} params={email} onChange={(value) => handleValueChanged('email', value)} onEnter={handleSubmit} />}
                 {step === STEP.VALIDATE_CODE && <FormField type={"CODE"} key={keys.code} params={code} onChange={(value) => handleValueChanged('code', value)} />}
-                {(step === STEP.CHANGE_PASSWORD || step === STEP.DONE) && <FormField type={"PASSWORD"} key={keys.newPassword} params={newPassword} onChange={(value) => handleValueChanged('newPassword', value)} />}
+                {(step === STEP.CHANGE_PASSWORD || step === STEP.DONE) && <FormField type={"PASSWORD"} key={keys.newPassword} params={newPassword} onChange={(value) => handleValueChanged('newPassword', value)} onEnter={handleSubmit} />}
                 <div className={noteClass}>{note.text}</div>
                 {submit.isVisible && <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />}
             </article>

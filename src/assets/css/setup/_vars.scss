@@ -2,13 +2,12 @@
     /* palette */
     --palette1: #ffffff;
     --palette2:#E8E8E8;
-        --palette6:#c4c6e0;
     --palette3:#999999;
     --palette4:#545454;
     --palette5:#030303;
     --palette5_transparent:rgba(0, 0, 0, 0.12);
     --palette5_overlay:rgba(0, 0, 0, 0.33);
-        
+    --palette6:#c4c6e0;
     --palette7:#5664f5;
     --palette8:#F0F1FF;
     --palette9:#db1111;
@@ -157,23 +156,27 @@
         --number-picker-icon: var(--palette4);
         --number-picker-icon-light: var(--palette3);
 
+        --tablet-header-background: var(--palette8);
+
         --mobile-divider: var(--palette2);
         --mobile-divider-drawer: var(--palette3);
-        --mobile-header-background: var(--palette2);
+        --mobile-header-background: var(--palette8);
         --mobile-header-divider: var(--palette3);
         --mobile-overlay-background: var(--palette5_transperent);
         --mobile-nav-background: var(--palette2);
         --mobile-nav-header-background: var(--palette7);
         --mobile-nav-header-color: var(--palette7);
-        --mobile-nav-icon: var(--palette7);
+        --mobile-nav-icon: var(--palette5);
         --mobile-nav-text: var(--palette5);
         --mobile-home-section-title-background: var(--palette3);
         --mobile-home-section-title-text: var(--palette5);
-        --mobile-property-menu-background: var(--palette7);
-        --mobile-property-menu-zoom-in: var(--palette7);
-        --mobile-property-menu-zoom-out: var(--palette1);
-        --mobile-property-menu-text: var(--palette1);
-        --mobile-property-menu-text-selected: var(--palette10);
+    --mobile-property-menu-background: var(--palette8);
+    --mobile-property-menu-border: var(--palette2);
+    --mobile-property-menu-zoom-in: var(--palette7);
+    --mobile-property-menu-zoom-out: var(--palette5);
+    --mobile-property-menu-text: var(--palette5);
+    --mobile-property-menu-text-selected: var(--palette7);
+    --mobile-property-data-table-background: var(--palette8);
         --mobile-table-cell-background: var(--palette2);
         --mobile-form-spinner-border: var(--palette3);
         --mobile-signup-menu-text: var(--palette5);
@@ -191,7 +194,7 @@
     --table-cell-negative-text: var(--palette9);
     --table-border: var(--palette8); 
     --table-scrollbar-thumb-background: var(--palette8);
-    --table-scrollbar-track-background: var(--palette1);
+    --table-scrollbar-track-background: var(--palette8);
     --table-scrollbar-track-background-hover: var(--palette1);
     --table-scrollbar-track-border-hover: var(--palette1);
 

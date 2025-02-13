@@ -87,7 +87,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 2px 0 12px;
+        margin: 19px 2px 0 12px;
         padding: 25px;
 
         button {
@@ -114,12 +114,34 @@
         }
     }
 
+    @include tablet-layout {
+        & {
+            left: calc((100% - 64px) / 2);
+
+            header {
+                width: 100%;
+            }
+
+            .message {
+                margin-top: 48px;
+            }
+        }
+    }
+
     @include mobile-layout {
         width: calc(100% - 40px);
         min-height: 210px;
 
         .message {
             height: 100px;
+        }
+    }
+}
+
+@include tablet-layout {
+    .main-layout.wide, .main-layout.widing, .main-layout.narrowing {
+        .alert {
+            left: calc((100% - 155px) / 2);
         }
     }
 }

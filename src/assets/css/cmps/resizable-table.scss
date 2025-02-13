@@ -1,6 +1,7 @@
 .rc-table {
   @include scrollbar;
-  
+  @include scrollbar-horizontal;
+
   &::-webkit-scrollbar {
     width: 4px;
 
@@ -10,7 +11,19 @@
     }
   }
 
-  &::-webkit-scrollbar-track  {
+  &::-webkit-scrollbar {
+    &:horizontal {
+      height: 4px;
+    }
+    
+    &-thumb:horizontal {
+      background-color: var(--table-scrollbar-thumb-background);
+      border-radius: 0;
+    }
+  }
+
+  &::-webkit-scrollbar-track, 
+  &::-webkit-scrollbar-track:horizontal {
     background-color: var(--table-scrollbar-track-background);
 
     &:hover {
@@ -382,7 +395,15 @@
 
   @include tablet-layout {
     &-header {
-      border-top: 0;
+     // border-top: 0;
+    }
+  }
+
+  @include tablet-small-layout {
+    & {
+      th, td {
+      }
     }
   }
 }
+

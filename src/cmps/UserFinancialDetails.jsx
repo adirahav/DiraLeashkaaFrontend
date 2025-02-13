@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormField } from './FormField'
 
-export function UserFinancialDetails({ financialDetails, onChange }) {   
+export function UserFinancialDetails({ financialDetails, onChange, onSubmit }) {   
 
     const keys = {
         equity: "equity" + (financialDetails.equity ? financialDetails.equity : "Default"),
@@ -13,9 +13,13 @@ export function UserFinancialDetails({ financialDetails, onChange }) {
         onChange(key, value, hasError)
     }
 
+    const handleSubmit = () => {
+        onSubmit()
+    }
+
     return (<div>
-        <FormField type={"NUMBER"} key={keys.equity} params={financialDetails.equity} onChange={(value, hasError) => handleOnChange('equity', value, hasError)} />
-        <FormField type={"NUMBER"} key={keys.incomes} params={financialDetails.incomes} onChange={(value, hasError) => handleOnChange('incomes', value, hasError)} />
-        <FormField type={"NUMBER"} key={keys.commitments} params={financialDetails.commitments} onChange={(value, hasError) => handleOnChange('commitments', value, hasError)} />
+        <FormField type={"NUMBER"} key={keys.equity} params={financialDetails.equity} onChange={(value, hasError) => handleOnChange('equity', value, hasError)} onEnter={handleSubmit} />
+        <FormField type={"NUMBER"} key={keys.incomes} params={financialDetails.incomes} onChange={(value, hasError) => handleOnChange('incomes', value, hasError)} onEnter={handleSubmit} />
+        <FormField type={"NUMBER"} key={keys.commitments} params={financialDetails.commitments} onChange={(value, hasError) => handleOnChange('commitments', value, hasError)} onEnter={handleSubmit} />
     </div>)
 }

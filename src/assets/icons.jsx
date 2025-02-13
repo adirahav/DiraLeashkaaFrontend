@@ -10,7 +10,8 @@ import {
     PriorityHigh as AttentionIcon,
     Visibility as ShowPasswordIcon,
     VisibilityOff as HidePasswordIcon,
-    Redo as  RollbackIcons
+    Redo as  RollbackIcons,
+    AccountCircle as MissingAvatarIcon
 } from '@mui/icons-material'
 
 
@@ -49,7 +50,7 @@ export {
     HelpIcon,
     ShowPasswordIcon,
     HidePasswordIcon,
-
+    MissingAvatarIcon, 
     SuccessIcon,
     ErrorIcon,
     WarningIcon,

@@ -30,7 +30,7 @@ function RouteGuard({ children }) {
   const [isLoggedIn, setLoggedIn] = useState(true)
 
   const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
-
+  const isLoggedinUserCompleted = useSelector(storeState => storeState.userModule.isLoggedinUserCompleted)
   // internet connection
   /*useInternetStatus((isConnected) => {
     setIsOnline(isConnected)
@@ -56,7 +56,17 @@ function RouteGuard({ children }) {
     return <Navigate to={`${navigate}`} />
   }
 
-  
+  if (loggedinUser && 
+      !window.location.toString().includes("signup") && 
+      !window.location.toString().includes("login") && 
+      !window.location.toString().includes("forgot-password") && 
+      !window.location.toString().includes("terms-of-use") && 
+      !window.location.toString().includes("contact-us")
+    ) {
+    if (!isLoggedinUserCompleted) {
+          return <Navigate to='/signup' />
+    } 
+  }
 
   return children
 }
@@ -145,18 +155,22 @@ export default App
 + בהרשמה אין רווח למעלה
 
 + שתף
++ מחשבונים
++ form press enter
++ לעצב מחדש
 
 - לשים פרסומות
 ? עמוד הבית - מחיקה משובש
 
+
 - הרבה נכסים מעטים מאד את קצב העליה
-- מחשבונים
 - image upload
 - lazy load
 
 - לינק לאפליקציה
-- לעצב מחדש
 - micro services
-
+- Grpc - proto files
+- Graph api
+- cicd
 
 */

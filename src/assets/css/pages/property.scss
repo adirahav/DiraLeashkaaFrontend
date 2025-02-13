@@ -9,7 +9,7 @@
         font-weight: bold;
         height: 24px;
 
-        &.loading0 { background-color: var(--loading-0); width: 370px;}
+        &.loading0 { background-color: var(--loading-0); width: 370px; text-indent: -9999px; }
     }
 
     h2 {
@@ -207,7 +207,7 @@
                         display: flex;
                         flex-direction: column-reverse;
                         margin-top: 10px;
-                        margin-right: -12px;
+                        width: 52px;
 
                         .input {
                             input {
@@ -365,129 +365,63 @@
     }
 
     @include tablet-layout {
-
         & {
-            grid-template-columns: 1fr;
-        }
+            grid-column: 1 / -1;
+            margin-bottom: 10px;
+            height: fit-content;
 
-        .city-logo {
-            margin-right: 314px;
-        }
+            .form {
+                margin-top: 0;
 
-        .form {
-            width: 100%;
-            grid-template-columns: 1fr 1fr;
-            display: grid;
-            grid-auto-flow: column;
-            border-top-left-radius: 10px;
-            border-bottom-right-radius: 0;
-
-            &:not(.city-else) {
-                *:nth-child(n+0):nth-child(-n+5),
-                *:nth-child(7),
-                *:nth-child(n+13):nth-child(-n+16),
-                *:nth-child(n+17):nth-child(-n+23) {
-                    grid-column: 1;
-                }
-
-                *:nth-child(8) {
-                    display: none;
-                }
-
-                *:nth-child(n+5):nth-child(-n+6),
-                *:nth-child(n+9):nth-child(-n+12),
-                *:nth-child(n+24) {
-                    grid-column: 2;
+                article {
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
                 }
             }
 
-            h3 {
-                line-height: 44px;
-            }
-
-            hr {
-                height: 1px;
-                width: calc(100% - 40px);
-            }
-
-            &.city-else {
-                *:nth-child(n+0):nth-child(-n+6),
-                *:nth-child(8),
-                *:nth-child(n+14):nth-child(-n+17),
-                *:nth-child(n+18):nth-child(-n+24) {
-                    grid-column: 1;
-                }
-
-                *:nth-child(9) {
-                    display: none;
-                }
-
-                *:nth-child(n+6):nth-child(-n+7),
-                *:nth-child(n+10):nth-child(-n+13),
-                *:nth-child(n+25) {
-                    grid-column: 2;
-                    
-                    div {
-                        margin-right: 30px;
-                    }
-                }
-            }
-        }
-
-        .data {
-            grid-column: 1;
-            padding-right: 0;
-
-            & > section:not(.interests, .lock-yields, .loading-calc-yields) {
-                display: none;
-            }
-
-            section:not(.chart) {
-                margin-bottom: 0;
-            }
-
-            section.interests {
-                margin-top: 20px;
-                border-top-left-radius: 0;
-                
+            .interests {
                 .property-field {
                     &.percent {
-                        width: calc(20% - 14px);
-                    }
-                }
-            }
-    
-            section.lock-yields, section.loading-calc-yields {
-                margin-top: 20px;
-                border-bottom-right-radius: 10px;
-                height: auto;
-                
-                img {
-                    padding-bottom: 100px;
-                }
-            }
-
-            .react-tabs {
-                display: inline-block;
-                margin-top: 20px;
-                width: 100%;
-                
-                &__tab-panel {
-                    border-bottom-left-radius: 10px;
-                    border-bottom-right-radius: 10px;
-                    padding-bottom: 10px;
-                    background-color: var(--tabs-background);
-                }
-
-                section {
-                    .title {
-                        display: none;
+                        &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), 
+                        &:nth-child(6), &:nth-child(7), &:nth-child(8), &:nth-child(9) , &:nth-child(10) {
+                            width: 190px;
+                        }
                     }
                 }
             }
 
-            section.yield-forecast, section.amortization-schedule, section.chart {
-                border-bottom-right-radius: 10px;
+            .data {
+                & section {
+                    max-width: 100%;
+                    width: calc(100vw - 170px);
+                }
+            }
+        }
+        
+    }
+
+    @include tablet-small-layout {
+        & {
+            .form {
+                .property-field .custom-dropdown,
+                .property-field .custom-dropdown .dropdown-toggle,
+                .property-field div input {
+                    width: 170px;
+                }
+            }
+
+            .interests {
+                .property-field {
+                    &.percent {
+                        &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), 
+                        &:nth-child(6), &:nth-child(7), &:nth-child(8), &:nth-child(9) , &:nth-child(10) {
+                            width: 185px;
+                        }
+                    }
+                }
+            }
+
+            .data {
+                
             }
         }
         
@@ -495,25 +429,28 @@
 
     @include mobile-layout {
         & {
-            grid-template-columns: 1fr;
-        }
+            grid-column: 1 / -1;
+            margin: 20px;
 
-        .city-logo {
-            margin-right: calc(50% - 50px);
+            h1 {
+                font-size: 22px;
+                height: auto;
+                margin: 0 0 20px;
+
+                &.loading0 { width: calc(100% - 40px); }
+            }
         }
 
         .form {
-            width: 100%;
-            border-top-left-radius: 10px;
-            border-bottom-right-radius: 0;
-            padding-left: 0;
-            padding-right: 0;
-            margin-bottom: 60px;
+            box-shadow: unset;
+            max-width: unset;
+            padding: 0;
+            margin-bottom: 30px;
 
             .property-field {
-                margin: 7px 20px;
+                margin: 7px 0;
 
-                &.searchable-dropdown {
+                /*&.searchable-dropdown {
                     div {
                         position: static;
 
@@ -529,7 +466,7 @@
                     }
                 }
 
-                /*&.warning {
+                &.warning {
                     span {
                         margin-right: 0;
                         width: 126px;
@@ -545,11 +482,11 @@
             }
 
             hr {
-                margin: 20px 21px;
+                margin: 20px 0;
             }
 
             h3 {
-                margin: 0 10px;
+                margin: 0;
             }
 
             &:not(.city-else) {
@@ -574,108 +511,59 @@
         }
 
         .data {
-            grid-column: 1;
             position: absolute;
-            top: calc(50% - 43px);
-            right: 60px;
+            top: 0;
+            right: 86px;
+            box-shadow: unset;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+
+            &.form {
+                display: none;
+            }
 
             section {
                 display: none;
-                
-                .title {
-                    display: none;
-                }
 
-                .rc-table {
-                    height: 100vw;
+                &.yield-forecast, &.amortization-schedule, &.chart {
+                    border-radius: 0;
+                    height: 100vh;
+                    padding: 0; 
+                    background-color: var(--mobile-property-data-table-background);
 
-                    table {
-                        width: auto;
-                        height: calc(100% - 86px);
+                    .rc-table, .rc-table thead th, .rc-table tbody tr td {
+                        background-color: var(--mobile-property-data-table-background);
+                        border: 1px solid var(--mobile-property-data-table-background);
 
-                        td {
-                            word-break: normal;
-                        }
-
-                        th, td {
-                            word-break: normal;
-                            background-color: var(--mobile-table-cell-background);
-                        }
-                    }
-                }
-
-                &.chart {
-                    border-bottom-left-radius: 0;
-                    background-color: var(--chart-background);
-                }
-
-                &.interests.show:not(.form) {
-                    display: inline-table;
-                    position: absolute;
-                    z-index: 1;
-                    width: calc(100vh - 44px);
-                    background: white;
-                    margin: 6px 20px;
-                    right: calc(-50% - 54px);
-                    border-radius: 16px;
-                    padding: 15px 26px 15px 20px;
-
-                    .property-field.percent {
-                        margin: 2px;
-                        height: 65px;
+                        &::-webkit-scrollbar {
+                            width: 4px;
                         
-                        &:nth-child(6) {
-                            width: calc(22% - 4px);
-                        }
-
-                        &:nth-child(5), &:nth-child(10) {
-                            width: calc(21% - 4px);
-                        }
-
-                        &:nth-child(4), &:nth-child(9) {
-                            width: calc(22% - 4px);
-                        }
-
-                        &:nth-child(3), &:nth-child(8) {
-                            width: calc(21% - 4px);
-                        }
-
-                        &:nth-child(2), &:nth-child(7) {
-                            width: calc(14% - 4px);
-                        }
-                         
-                        span {
-                            margin-right: 30px;
-
-                            u { 
-                              text-decoration: underline; 
-                              display: inline; color:purple;
+                            &-thumb {
+                                background-color: var(--mobile-property-data-table-background);
+                                border-radius: 0;
                             }
 
-                            .input {
-                                background-color: red;
-                            }
-                            .actions {
-                                background-color: green;
-                            }
-    
-                            
-                        }
+                            &-track {
+                                background-color: var(--mobile-property-data-table-background);
+                                border-radius: 0;
 
-                        .rollback {
-                            width: 24px;
-                            height: 50px;
-                            position: absolute;
-                        }
+                                &:hover {
+                                    background-color: var(--mobile-property-data-table-background);
+                                }
+                            } 
+                          }
                     }
 
-                    .zoom-in {
-                        color: var(--mobile-property-menu-zoom-in);
-                        position: absolute;
-                        top: 6px;
-                        right: 10px;
-                        display: block;
+                    .rc-table {
+                        height: 100vw;
+                        width: calc(100vh - 86px);
                     }
+
+                    .rc-table-header {
+                        border: 1px solid var(--mobile-property-data-table-background);
+                    }
+
                 }
             }
         }
@@ -691,6 +579,7 @@
             bottom: 0;
             left: 0;
             height: 88px;
+            border-top: 1px solid var(--mobile-property-menu-border);
 
             &.no-mortgage {
                 grid-template-columns: 1fr 1fr;
@@ -737,6 +626,7 @@
                 right: calc(-50%);
                 bottom: -44px;
                 padding: 0 40px 0 20px;
+                border-left: 1px solid var(--property-form-spinner-divider);
 
                 article {
                     transform: rotate(90deg);
@@ -756,9 +646,85 @@
             }
         }
 
-        &.show-mobile-data {
-            .form {
+        &:not(.show-mobile-data) {
+            h2, .interests {
                 display: none;
+            }
+        }
+
+        &.show-mobile-data {
+            h1, h2, .form {
+                display: none;
+            }
+
+            .interests.show {
+                display: inline-table;
+                position: absolute;
+                z-index: 1;
+                width: calc(100vh - 39px);
+                background: white;
+                margin: 6px 20px;
+                right: 1px;
+                top: 0;
+                border-radius: 16px;
+                padding: 15px 26px 15px 20px;
+
+                .property-field.percent {
+                    margin: 2px;
+                    height: 65px;
+                    
+                    &:nth-child(6) {
+                        width: calc(22% - 4px);
+                    }
+
+                    &:nth-child(5), &:nth-child(10) {
+                        width: calc(21% - 4px);
+                    }
+
+                    &:nth-child(4), &:nth-child(9) {
+                        width: calc(22% - 4px);
+                    }
+
+                    &:nth-child(3), &:nth-child(8) {
+                        width: calc(21% - 4px);
+                    }
+
+                    &:nth-child(2), &:nth-child(7) {
+                        width: calc(14% - 4px);
+                    }
+                     
+                    span {
+                        margin-right: 30px;
+
+                        u { 
+                          text-decoration: underline; 
+                          display: inline; /*color:purple;*/
+                        }
+
+                        .input {
+                            /*background-color: red;*/
+                        }
+                        .actions {
+                            /*background-color: green;*/
+                        }
+
+                        
+                    }
+
+                    .rollback {
+                        width: 24px;
+                        height: 50px;
+                        position: absolute;
+                    }
+                }
+
+                .zoom-in {
+                    color: var(--mobile-property-menu-zoom-in);
+                    position: absolute;
+                    top: 6px;
+                    right: 10px;
+                    display: block;
+                }
             }
 
             &.yield-forecast .data .yield-forecast,
@@ -769,10 +735,10 @@
 
             &.chart .data .chart {
                 display: block;
-                width: calc(100vh - 90px);
+                width: calc(100vh - 86px);
                 height: 100vw;
                 position: relative;
-                right: 18px;
+                right: 0;
 
                 div {
                     top: 45px;
@@ -782,6 +748,98 @@
         }
     }
 }
+
+
+.main-layout.wide, .main-layout.widing, .main-layout.narrowing {
+    @include tablet-layout {
+        .property {
+            & > section {
+                margin: 0;
+            }
+
+            .form {
+                padding: 10px;
+
+                article {
+                    grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+
+                    .property-field .custom-dropdown,
+                    .property-field .custom-dropdown .dropdown-toggle,
+                    .property-field div input {
+                        width: 125px;
+                    }
+                    
+                    .property-field.dropdown.searchable .custom-dropdown .dropdown-menu {
+                        input {
+                            width: 113px;
+                            margin: 0 6px;
+                        }
+                       
+                        ul {
+                            padding-left: 0;
+
+                            li {
+                                padding: 6px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                direction: rtl;
+                            }
+                        }
+                        
+                    }
+
+                    .property-field span {
+                        width: 85px;
+                        font-size: 14px;
+                    }
+
+                    
+                }
+                
+            }
+
+            .data {
+                padding: 7px 15px 34px;
+
+                section.yield-forecast, 
+                section.amortization-schedule, 
+                section.chart {
+                    padding: 20px 4px;
+                    width: calc(100vw - 238px);
+                }
+            } 
+
+            .interests {
+                .property-field {
+                    &.percent {
+                        &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), 
+                        &:nth-child(6), &:nth-child(7), &:nth-child(8), &:nth-child(9) , &:nth-child(10) {
+                            width: 185px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include tablet-small-layout {
+        .property {
+            .interests {
+                gap: 0;
+
+                .property-field {
+                    &.percent {
+                        &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), 
+                        &:nth-child(6), &:nth-child(7), &:nth-child(8), &:nth-child(9) , &:nth-child(10) {
+                            width: 165px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+  
 
 .adsbygoogle {
     grid-column: 1!important;

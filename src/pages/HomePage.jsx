@@ -7,14 +7,12 @@ import { HomeBestYields } from '../cmps/HomeBestYields'
 import { Overlay } from '../cmps/Overlay'
 import { utilService } from '../services/util.service'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { getHome, onDeletingPropertyDone, onDeletingPropertyStart, onDeleteProperty, onAboutDeletingProperty } from '../store/actions/user.actions.js'
+import { getHome, onDeletingPropertyStart, onAboutDeletingProperty } from '../store/actions/user.actions.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSelector } from 'react-redux'
 import { IconSizes, AddPropertyIcon } from "../assets/icons"
 import { useSplash } from '../contexts/SplashContext.jsx'
-import imgArrowDown from '../assets/images/lottie_arrow_down.json'
 import imgLetsStart from '../assets/images/lets_start.png'
-import Lottie from 'lottie-react'
 import { FormField } from '../cmps/FormField.jsx'
 
 export function HomePage() {
@@ -152,10 +150,12 @@ export function HomePage() {
         return (<>
             <Header />
             <main className="home container start">
-                <img src={imgLetsStart} />
+                <img className='desktop' src={imgLetsStart} />
                 <section>
                     <h2>דירה להשקעה</h2>
                     <hr />
+                    <img className='tablet' src={imgLetsStart} />
+                    <img className='mobile' src={imgLetsStart} />
                     <h3>מצא את הדירה בעלת הפוטנציאל לתשואה הגבוהה ביותר בקלות וביעילות!</h3>
                     <hr />
                     <FormField type={"BUTTON_LONG"} params={letsStartButton} onPress={() =>  navigate(`/property`)} />

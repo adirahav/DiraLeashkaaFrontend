@@ -6,18 +6,51 @@
     @include mobile-layout {
         .tablet, .desktop { display: none }
         @include layout-grid-template-columns('mobile');
-
-        &:not(.logout) {
-            @include layout-grid-template-rows('mobile');
-        }
+        @include layout-grid-template-rows('mobile');
     }
 
 	@include tablet-layout {
         .mobile, .desktop { display: none }
-        @include layout-grid-template-columns('tablet');
 
+        &:not(.wide) {
+            @include layout-grid-template-columns('tablet');
+        }
+
+        &.wide, &.widing, &.narrowing {
+            @include layout-grid-template-columns('tablet-wide-menu');
+        }
+        
         &:not(.logout) {
             @include layout-grid-template-rows('tablet');
+        }
+
+        &.logout {
+            grid-template-columns: $layout-padding-desktop 1fr $layout-padding-desktop;
+        }
+
+        &.narrowing {
+            main {
+                transition: width 0.3s ease-in-out;  
+            }
+        }
+
+        &.widing {
+            main {
+                transition: width 0.3s ease-in-out;  
+            }
+        }
+
+        &.widing, &.wide {
+            main {/*background-color: red;
+                width: calc(100% - 20px - 84px);*/
+            }
+            
+        }
+
+        &.narrowing, &.narrow {
+            main {/*background-color: green;
+                width: calc(100% - 20px - 175px);*/
+            }
         }
     }
 

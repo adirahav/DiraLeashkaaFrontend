@@ -23,7 +23,8 @@ const initialState = {
         isDeleting: false,
         longPressedId: null
     },
-    loggedinUser: authService.getLoggedinUser()
+    loggedinUser: authService.getLoggedinUser(),
+    isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
 }
 
 export function userReducer(state = initialState, action = {}) {
@@ -32,7 +33,8 @@ export function userReducer(state = initialState, action = {}) {
         case LOGIN:
             return {
                 ...state,
-                loggedinUser: action.loggedinUser
+                loggedinUser: action.loggedinUser,
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
             }
         case GET_HOME:
             return {
@@ -82,7 +84,8 @@ export function userReducer(state = initialState, action = {}) {
             userService.saveLocalUser(action.savedUser)
             return {
                 ...state,
-                loggedinUser: action.savedUser
+                loggedinUser: action.savedUser,
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
             }
         
         case DELETE_USER:
@@ -95,13 +98,15 @@ export function userReducer(state = initialState, action = {}) {
             userService.saveLocalUser(action.signupUser)
             return {
                 ...state,
-                loggedinUser: action.signupUser
+                loggedinUser: action.signupUser,
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
             }
 
         case LOGOUT:
             return {
                 ...state,
-                loggedinUser: null
+                loggedinUser: null,
+                isLoggedinUserCompleted: false
             }    
 
         default:

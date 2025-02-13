@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { PropertyField } from './PropertyField.jsx'
 import { utilService } from '../services/util.service.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'

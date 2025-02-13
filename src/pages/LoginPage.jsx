@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { login } from '../store/actions/user.actions.js'
 import { authService } from '../services/auth.service.js'
@@ -19,6 +19,7 @@ export function LoginPage() {
     const navigate = useNavigate()
 
     const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
+    const isLoggedinUserCompleted = useSelector(storeState => storeState.userModule.isLoggedinUserCompleted)
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
     const defultInputState = (name, labelKey, value) => {
@@ -42,7 +43,7 @@ export function LoginPage() {
     const [submit, setSubmit] = useState(defultButtonState("login_submit"))
     
     useEffect(() => {
-        if (loggedinUser) {
+        if (loggedinUser && isLoggedinUserCompleted) {
             navigate(`/home`)
         }
 
@@ -128,7 +129,7 @@ export function LoginPage() {
             <h2 className={titleClass}>{utilService.getPhrase('login_header', phrases)}</h2>
             <article className={articleClass}>
                 <FormField type={"EMAIL"} key={keys.email} params={email} onChange={(value) => handleValueChanged('email', value)} />
-                <FormField type={"PASSWORD"} key={keys.password} params={password} onChange={(value) => handleValueChanged('password', value)} />
+                <FormField type={"PASSWORD"} key={keys.password} params={password} onChange={(value) => handleValueChanged('password', value)} onEnter={handleSubmit} />
                 <div className='error'>{error}</div>
                 <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />
             </article>

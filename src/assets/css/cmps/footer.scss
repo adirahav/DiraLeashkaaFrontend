@@ -82,23 +82,7 @@ footer {
     @include tablet-layout {
         @include footer-grid-template-columns($break-tablet);
 
-        div {
-            nav {
-                ul {    
-                    li {
-                        a {
-                            svg {
-                                display: none!important;
-                            }
-                        }
-
-                        &:nth-child(5), &:nth-child(6) {
-                            margin-top: 0;
-                        }
-                    }
-                }
-            }
-        }
+        display: none;
     }
 
     @include mobile-layout {

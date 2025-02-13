@@ -15,6 +15,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     
     const defultSearchableDropdownState = (labelKey, options, savedSuggested) => {
         return {
+            id: null,
             label: utilService.getPhrase(labelKey, phrases), 
             selectedValue: null, 
             options: utilService.getFixedParameter(options, fixedParameters), 
@@ -24,6 +25,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     const defultStringState = (labelKey, maxLength) => {
         return {
+            id: null,
             label: utilService.getPhrase(labelKey, phrases), 
             value: "", 
             maxLength
@@ -32,6 +34,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     const defultDropdownState = (labelKey, warningKey, options) => {
         return {
+            id: null,
             label: utilService.getPhrase(labelKey, phrases), 
             warning: warningKey ? utilService.getPhrase(warningKey, phrases) : "", 
             options: utilService.getFixedParameter(options, fixedParameters), 
@@ -41,15 +44,16 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     const defultNumberState = (labelKey, maxLength) => {
         return {
+            id: null,
             label: utilService.getPhrase(labelKey, phrases), 
             value: null, 
             maxLength
         }
     }
-
+   
     const defultAutoFillState = (labelKey, userKey, maxLength) => {
         return {
-            id: property?._id,
+            id: null,
             label: utilService.getPhrase(labelKey, phrases), 
             value: null, 
             defaultValue: null, 
@@ -59,6 +63,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     const defultCalcState = (labelKey, warningKey) => {
         return {
+            id: null,
             label: utilService.getPhrase(labelKey, phrases), 
             warning: warningKey ? utilService.getPhrase(warningKey, phrases) : "", 
             value: null
@@ -71,6 +76,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         delete numberPicker?.name
         
         return {
+            id: null,
             label: {withPercent: utilService.getPhrase(labelWithPercentKey, phrases), withCustomValue: utilService.getPhrase(labelWithCustomValueKey, phrases)},
             value: {calc: null, customValue: null, default: null}, 
             numberPicker: {...numberPicker, customPercent: null},
@@ -80,6 +86,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     
     const defultCalcTotalState = (labelKey) => {
         return {
+            id: null,
             label: utilService.getPhrase(labelKey, phrases), 
             value: null
         }
@@ -92,6 +99,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     const [apartmentType, setApartmentType] = useState(defultDropdownState("property_apartment_type_label", null, "apartmentTypes"))
     const [price, setPrice] = useState(defultNumberState("property_price_label", 9))
     const [equity, setEquity] = useState(defultAutoFillState("property_equity_label", 9))
+    
     const [equityCleaningExpenses, setEquityCleaningExpenses] = useState(defultCalcState("property_equity_cleaning_expenses_label", "property_equity_cleaning_expenses_warning")) 
     const [mortgageRequired, setMortgageRequired] = useState(defultCalcState("property_mortgage_required_label", "property_mortgage_required_warning"))
     
@@ -130,52 +138,51 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     useEffect(() => {
         if (!isLoadingState && !property && !queryPropertyId) {
-            setEquity({ ...equity, value: user?.equity, defaultValue: user?.equity})
-            setIncomes({ ...incomes, value: user?.incomes, defaultValue: user?.incomes})
-            setCommitments({ ...commitments, value: user?.commitments, defaultValue: user?.commitments})
+            setEquity({ ...equity, id: property?._id, value: user?.equity, defaultValue: user?.equity})
+            setIncomes({ ...incomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes})
+            setCommitments({ ...commitments, id: property?._id, value: user?.commitments, defaultValue: user?.commitments})
         }
     }, [isLoadingState])
 
-    /*useEffect(() => {
-        if (!phrases) {
-            setCity(defultSearchableDropdownState("property_city_label", "cities", "userCities"))
-            setCityElse(defultStringState("property_city_else_label", 20))
-            setAddress(defultStringState("property_address_label", 30))
-            setApartmentType(defultDropdownState("property_apartment_type_label", null, "apartmentTypes"))
-            setPrice(defultNumberState("property_price_label", 9))
-            setEquity(defultAutoFillState("property_equity_label", 9))
-            setEquityCleaningExpenses(defultCalcState("property_equity_cleaning_expenses_label", "property_equity_cleaning_expenses_warning"))
-            setMortgageRequired("property_mortgage_required_label", "property_mortgage_required_warning")
-        
-            setIncomes(defultAutoFillState("property_incomes_label", 7))  
-            setCommitments(defultAutoFillState("property_commitments_label", 6)) 
-            setDisposableIncome(defultCalcState("property_disposable_income_label")) 
-            setPossibleMonthlyRepayment(defultCalcEditableState("property_possible_monthly_payment_label", "", "possibleMonthlyRepaymentPercent"))
+    useEffect(() => {
+        if (phrases) {
+            setCity({...city, label: utilService.getPhrase("property_city_label", phrases)})
+            setCityElse({...cityElse, label: utilService.getPhrase("property_city_else_label", phrases)})
+            setAddress({...address, label: utilService.getPhrase("property_address_label", phrases)})
+            setApartmentType({...apartmentType, label: utilService.getPhrase("property_apartment_type_label", phrases)})
+            
+            setPrice({...price, label: utilService.getPhrase("property_price_label", phrases)})
+            setEquity({...equity, label: utilService.getPhrase("property_equity_label", phrases)})
+            setEquityCleaningExpenses({...equityCleaningExpenses, label: utilService.getPhrase("property_equity_cleaning_expenses_label", phrases), warning: utilService.getPhrase("property_equity_cleaning_expenses_warning", phrases)})
+            setMortgageRequired({...mortgageRequired, label: utilService.getPhrase("property_mortgage_required_label", phrases), warning: utilService.getPhrase("property_mortgage_required_warning", phrases)})
 
-            setMaxPercentOfFinancing(defultCalcState("property_max_percent_of_financing_label")) 
-            setActualPercentOfFinancing(defultCalcState("property_actual_percent_of_financing_label", "property_actual_percent_of_financing_warning")) 
+            setIncomes({...incomes, label: utilService.getPhrase("property_incomes_label", phrases)})
+            setCommitments({...commitments, label: utilService.getPhrase("property_commitments_label", phrases)})
+            setDisposableIncome({...disposableIncome, label: utilService.getPhrase("property_disposable_income_label", phrases)})
+            setPossibleMonthlyRepayment({...possibleMonthlyRepayment, label: {withPercent: utilService.getPhrase("property_possible_monthly_payment_label", phrases), withCustomValue: utilService.getPhrase("possibleMonthlyRepaymentPercent", phrases)}})
             
-            setTransferTax(defultCalcState("property_transfer_tax_label"))
-            setLawyer(defultCalcEditableState("property_lawyer_label", "property_lawyer_label_without_value", "lawyerPercent"))
-            setRealEstateAgent(defultCalcEditableState("property_real_estate_agent_label", "property_real_estate_agent_label_without_value", "realEstateAgentPercent"))
+            setMaxPercentOfFinancing({...maxPercentOfFinancing, label: utilService.getPhrase("property_max_percent_of_financing_label", phrases)})
+            setActualPercentOfFinancing({...actualPercentOfFinancing, label: utilService.getPhrase("property_actual_percent_of_financing_label", phrases), warning: utilService.getPhrase("property_actual_percent_of_financing_warning", phrases)})
+            setTransferTax({...transferTax, label: utilService.getPhrase("property_transfer_tax_label", phrases)})
             
-            setBrokerMortgage(defultNumberState("property_broker_mortgage_label", 5))
-            setRepairing(defultNumberState("property_repairing_label", 7))
-            setIncidentalsTotal(defultCalcTotalState("property_incidentals_total_label"))
+            setLawyer({...lawyer, label: {withPercent: utilService.getPhrase("property_lawyer_label", phrases), withCustomValue: utilService.getPhrase("property_lawyer_label_without_value", phrases)}})
+            setRealEstateAgent({...realEstateAgent, label: {withPercent: utilService.getPhrase("property_real_estate_agent_label", phrases), withCustomValue: utilService.getPhrase("property_real_estate_agent_label_without_value", phrases)}})
             
-            setRent(defultCalcEditableState("property_rent_label", "property_rent_label_without_value", "rentPercent"))  
-            setLifeInsurance(defultNumberState("property_life_insurance_label", 3))
-            setStructureInsurance(defultNumberState("property_structure_insurance_label", 3))
-            setRentCleaningExpenses(defultCalcState("property_rent_cleaning_expenses_label", ""))
+            setBrokerMortgage({...brokerMortgage, label: utilService.getPhrase("property_broker_mortgage_label", phrases)})
+            setRepairing({...repairing, label: utilService.getPhrase("property_repairing_label", phrases)})
+            setIncidentalsTotal({...incidentalsTotal, label: utilService.getPhrase("property_incidentals_total_label", phrases)})
             
-            setMortgagePeriod(defultDropdownState("property_mortgage_period_label", "property_mortgage_period_warning", "mortgagePeriods"))
-            setMortgageMonthlyRepayment(defultCalcState("property_mortgage_monthly_repayment_label", "property_mortgage_monthly_repayment_warning"))
-            setMortgageMonthlyYield(defultCalcState("property_mortgage_monthly_yield_label", "property_mortgage_monthly_yield_warning"))
-            
-            
+            setRent({...rent, label: {withPercent: utilService.getPhrase("property_rent_label", phrases), withCustomValue: utilService.getPhrase("property_rent_label_without_value", phrases)}})
+            setLifeInsurance({...lifeInsurance, label: utilService.getPhrase("property_life_insurance_label", phrases)})
+            setStructureInsurance({...structureInsurance, label: utilService.getPhrase("property_structure_insurance_label", phrases)})
+            setRentCleaningExpenses({...rentCleaningExpenses, label: utilService.getPhrase("property_rent_cleaning_expenses_label", phrases)})
+           
+            setMortgagePeriod({...mortgagePeriod, label: utilService.getPhrase("property_mortgage_period_label", phrases), warning: utilService.getPhrase("property_mortgage_period_warning", phrases)})
+            setMortgageMonthlyRepayment({...mortgageMonthlyRepayment, label: utilService.getPhrase("property_mortgage_monthly_repayment_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_repayment_warning", phrases)})
+            setMortgageMonthlyYield({...mortgageMonthlyYield, label: utilService.getPhrase("property_mortgage_monthly_yield_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_yield_warning", phrases)})
         }
 
-    }, [phrases])*/
+    }, [phrases])
 
 
     const loadProperty = () => {
@@ -197,7 +204,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             }
 
             if (property.updatedByField !== "equity") {
-                setEquity({...equity, value: property.calcEquity, defaultValue: property.defaultEquity})
+                setEquity({...equity, id: property?._id, value: property.calcEquity, defaultValue: property.defaultEquity})
             }
 
             setEquityCleaningExpenses({
@@ -212,11 +219,11 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             })
             
             if (property.updatedByField !== "incomes") {
-                setIncomes({...incomes, value: property.calcIncomes, defaultValue: property.defaultIncomes})
+                setIncomes({...incomes, id: property?._id, value: property.calcIncomes, defaultValue: property.defaultIncomes})
             }
 
             if (property.updatedByField !== "commitments") {
-                setCommitments({...commitments, value: property.calcCommitments, defaultValue: property.defaultCommitments})
+                setCommitments({...commitments, id: property?._id, value: property.calcCommitments, defaultValue: property.defaultCommitments})
             }
 
             setDisposableIncome({...disposableIncome, value: property.calcDisposableIncome})
@@ -227,7 +234,8 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             }) 
 
             setMaxPercentOfFinancing({...maxPercentOfFinancing, value: property.calcMaxPercentOfFinancing})
-            setActualPercentOfFinancing({...actualPercentOfFinancing, 
+            setActualPercentOfFinancing({
+                ...actualPercentOfFinancing, 
                 value: property.calcActualPercentOfFinancing,
                 hasWarning: property.calcActualPercentOfFinancing === null || property.calcMaxPercentOfFinancing === null
                                 ? false
@@ -236,12 +244,16 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
             setTransferTax({...transferTax, value: property.calcTransferTax})
             
-            setLawyer({...lawyer, 
+            setLawyer({
+                ...lawyer, 
+                id: property?._id, 
                 value: {calc: property.calcLawyer, customValue: property.lawyerCustomValue, default: property.defaultLawyer},
                 numberPicker: {...lawyer.numberPicker, customPercent: property.calcLawyerPercent},
                 isReadOnly: false
             })        
-            setRealEstateAgent({...realEstateAgent, 
+            setRealEstateAgent({
+                ...realEstateAgent, 
+                id: property?._id, 
                 value: {calc: property.calcRealEstateAgent, customValue: property.realEstateAgentCustomValue, default: property.defaultRealEstateAgent},
                 numberPicker: {...realEstateAgent.numberPicker, customPercent: property.calcRealEstateAgentPercent},
                 isReadOnly: false,

@@ -37,13 +37,13 @@
             &.forward {
                 background: linear-gradient(to right, var(--signup-progress-background) 50%, var(--signup-progress-active-background) 50%);
                 background-size: 200% 100%;
-                animation: forward-background 2s forwards;
+                animation: forward-background 1s forwards;
             }
 
             &.backward {
                 background: linear-gradient(to right, var(--signup-progress-background) 50%, var(--signup-progress-active-background) 50%);
                 background-size: 200% 100%;
-                animation: backward-background 2s forwards;
+                animation: backward-background 1s forwards;
             }
         }
 
@@ -57,6 +57,7 @@
         box-sizing: content-box;
         justify-self: center;
         width: 100%;
+        box-shadow: none;
 
         & > div {
             width: 100%;
@@ -223,71 +224,48 @@
     }
 
     @include tablet-layout {
-        grid-template-columns: 200px 520px;
+        & {
+            grid-column: 1 / -1!important;
+            width: calc(100% - 40px);
+            margin: 0 20px 40px;
+
+            .form {
+                margin: 20px auto;
+            }
+        }
+    }
+
+    @include tablet-small-layout {
+        .form {
+            
+        }
     }
     
     @include mobile-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: 55px 30px 1fr 50px;
         grid-gap: 0;
-        width: calc(100% - 40px);
-        margin: 20px;
+        width: calc(100% - 20px);
+        margin: 10px;
+        box-shadow: unset;
 
         .title {
-            height: 85px;
+            grid-row: 1;
         }
 
-        .menu {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            height: 90px;
-            border-bottom: 0;
-            background-color: var(--mobile-signup-background);
-            
-            li {
-                display: grid;
-                width: 25%;
-                color: var(--mobile-signup-menu-text);
-                background-color: var(--mobile-signup-menu-background);
-                
-                svg {
-                    margin: auto;
-                    text-align: center;
-                    border-radius: 50%;
-                    background-color: var(--mobile-signup-menu-icon-background);
-                    border: 5px solid var(--mobile-signup-menu-icon-background);
-                    fill: var(--mobile-signup-menu-icon-color);
-                    width: 30px;
-                    height: 30px;
-                }
-
-                span {
-                    margin: auto;
-                    text-align: center;
-                }
-
-                &.active {
-                    color: var(--mobile-signup-menu-active-text);
-                    background-color: var(--mobile-signup-menu-active-background);
-
-                    svg {
-                        background-color: var(--mobile-signup-menu-active-icon-background);
-                        border: 5px solid var(--mobile-signup-menu-active-icon-background);
-
-                        fill: var(--mobile-signup-menu-active-icon-color);
-                    }
-                }
-            }
+        .progress {
+            grid-row: 2;
+                padding: 7px 0;
         }
 
         .form {
-            grid-column: 1;
-            border-top: 0;
-            height: calc(100vh - 400px);
+            grid-row: 3;
+            padding: 0 0 10px;
+            margin: 0 auto;
         }
-
+        
         .footer {
-            margin-top: 10px;
+            grid-row: 4;
         }
     }
 }

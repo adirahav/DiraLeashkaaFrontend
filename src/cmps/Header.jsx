@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react"
 import { utilService } from "../services/util.service"
-import logoWeb from '../assets/images/icon_web.png'
+import logoDesktop from '../assets/images/icon_web.png'
 import logoTablet from '../assets/images/icon.png'
 import { NavLink, useNavigate } from "react-router-dom"
 import { useSelector } from 'react-redux'                   
 import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon, LogoutIcon, 
-         PersonalDetailsIcon, RegistrationDetailsIcon, AddPropertyIcon, ShareIcon, TermsOfUseIcon, 
-         BackIcon} from "../assets/icons"
+         PersonalDetailsIcon, ShareIcon, TermsOfUseIcon, 
+         MissingAvatarIcon,  BackIcon} from "../assets/icons"
 import { logout } from "../store/actions/user.actions"
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from "./FormField"
@@ -30,13 +30,19 @@ export function Header() {
         }
     }
 
-    const [navClass, setNavClass] = useState("hide") // hide | hiding | show | showing
-    const headerRef = useRef()
+    const [navClassTablet, setNavClassTablet] = useState("narrow")  // narrow | narrowing | wide | widing
+    const [navClassMobile, setNavClassMobile] = useState("hide")    // hide | hiding | show | showing
+    const headerTabletRef = useRef()
+    const headerMobileRef = useRef()
     const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)   
     const [showAllHeader, setShowAllHeader] = useState(false)
     const [showBack, setShowBack] = useState(false)
     const [version, setVersion] = useState(null)
-    const [addProperty, setAddProperty] = useState(defultButtonState("home_add_property"))
+    const [addPropertyWeb, setAddPropertyWeb] = useState(defultButtonState("home_add_property"))
+    const [addPropertyTablet, setAddPropertyTablet] = useState( {
+        isDisabled: false,
+        isLoading: false
+    })
 
     useEffect(() => {
         const hasAllHeader = loggedinUser && 
@@ -47,12 +53,11 @@ export function Header() {
         setShowAllHeader(hasAllHeader)
         
         setShowBack(!hasAllHeader || !(window.location.toString().includes("home")) && loggedinUser!==null)
-        
     }, [])
 
     useEffect(() => {
         if (splash?.phrases) {
-            setAddProperty({ ...addProperty, text: utilService.getPhrase("home_add_property", splash?.phrases)})
+            setAddPropertyWeb({ ...addPropertyWeb, text: utilService.getPhrase("home_add_property", splash?.phrases)})
         }
     }, [splash?.phrases])
 
@@ -70,7 +75,7 @@ export function Header() {
     }, [isLoadingState])
 
     useEffect(() => {
-        if (navClass) {
+        if (navClassMobile) {
             setTimeout(() => {
                 document.addEventListener('click', handleClickOutside)
             }, 0)
@@ -80,29 +85,77 @@ export function Header() {
             document.removeEventListener('click', handleClickOutside)
         }
 
-    }, [navClass])
+    }, [navClassMobile])
+
+    useEffect(() => {
+        if (navClassTablet) {
+            const headers = document.querySelectorAll('.main-layout')
+
+            if (headers && headers.length === 1) {
+                const header = headers[0]
+
+                header.classList.remove('wide')
+                header.classList.remove('narrow')
+                header.classList.remove('widing')
+                header.classList.remove('narrowing')
+                header.classList.add(navClassTablet)
+            }
+
+            setAddPropertyTablet((prevAddPropertyTablet) => {
+                return { 
+                    ...prevAddPropertyTablet,
+                    text: navClassTablet !== "wide" && navClassMobile === "hide" ? "+" : utilService.getPhrase("home_add_property", splash?.phrases)
+                }
+            })
+        }
+    }, [navClassTablet, navClassMobile])
 
     function handleClickOutside(ev) {
-        if (headerRef.current && !headerRef.current.contains(ev.target)) {
-            if (navClass === "show" || navClass === "showing") {
-                onToggleMenu(ev)
+        if (headerTabletRef.current) {
+            if (headerTabletRef.current.contains(ev.target)) {
+                if (navClassTablet === "wide" || navClassTablet === "widing") {
+                    onToggleTabletMenu(ev)
+                }
+            }
+            
+        }
+        
+        if (headerMobileRef.current && !headerMobileRef.current.contains(ev.target)) {
+            if (navClassMobile === "show" || navClassMobile === "showing") {
+                onToggleMobileMenu(ev)
             }
         }
     }
 
-    function onToggleMenu(ev) {  
+    function onToggleMobileMenu(ev) {  
         ev.preventDefault()
         ev.stopPropagation()
         
-        setNavClass((prevNavClass) => {
+        setNavClassMobile((prevNavClassMobile) => {
             if (utilService.getPlatform() === PLATFORM.MOBILE) {
                 
-                return prevNavClass === "show"
+                return prevNavClassMobile === "show"
                         ? "hiding"
                         : "showing"
             } else {
                 return ""
             } 
+        })
+    }
+
+    function onToggleTabletMenu(ev) {  
+        const whatsappShareItem = ev.target.closest('li > a[href^="whatsapp://send"]')
+    
+        if (whatsappShareItem) {
+            return
+        }
+
+        ev.preventDefault()
+        ev.stopPropagation()
+        setNavClassTablet((prevNavClassTablet) => {
+            return prevNavClassTablet === "wide"
+                        ? "narrowing"
+                        : "widing"
         })
     }
 
@@ -113,11 +166,19 @@ export function Header() {
         navigate("/home") 
     }
 
-    const handleAnimationEnd = () => {
-        setNavClass((prevNavClass) => {
-            return prevNavClass === "hiding"
+    const handleMobileAnimationEnd = () => {
+        setNavClassMobile((prevNavClassMobile) => {
+            return prevNavClassMobile === "hiding"
                     ? "hide"
                     : "show"
+        })
+    }
+
+    const handleTabletTransitionEnd = () => {
+        setNavClassTablet((prevNavClassTablet) => {
+            return prevNavClassTablet === "narrowing"
+                    ? "narrow"
+                    : "wide"
         })
     }
 
@@ -132,40 +193,87 @@ export function Header() {
     }
 
     const keys = {
-        addProperty: "addProperty"
+        addPropertyWeb: "addPropertyWeb",
+        addPropertyTablet: "addPropertyTablet"
+    }
+
+    if (!loggedinUser || 
+        window.location.toString().includes("signup") || 
+        window.location.toString().includes("login") || 
+        window.location.toString().includes("forgot-password")
+    ) {
+        return (<>
+            <header className='full logout'>
+                <div className="logo">
+                    <img  src={logoDesktop} />  
+                </div>
+            </header>
+        </>)
     }
 
     return (<>
-        <header className='full' ref={headerRef}>
+        <header className='full desktop'>
             <div className="logo">
-                {showAllHeader && <MenuIcon className="mobile" onClick={onToggleMenu} sx={ IconSizes.Medium } />}
-                {!showAllHeader && <div className="mobile" style={{width:55}}></div>}
-                <NavLink to="/">
-                    <img  className="desktop" src={logoWeb} />
-                    <img  className="tablet" src={logoTablet} />
-                    <h1 className="mobile">דירה להשקעה</h1>
-                </NavLink>  
-                {showBack && <BackIcon className="mobile" onClick={onPressBack} sx={ IconSizes.Medium } />}
-                {!showBack && <div className="mobile" style={{width:55}}></div>}
+                <NavLink to="/"><img  src={logoDesktop} /></NavLink>  
             </div>
-            {!showAllHeader &&<h1>דירה להשקעה</h1>}
-            <nav className={navClass} onAnimationEnd={handleAnimationEnd}>
-                {showAllHeader && <ul>
-                    <li className="welcome"><MenuIcon className="mobile" onClick={onToggleMenu} sx={ IconSizes.Medium } /><span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></li>
-                    <li className="mobile divider"></li>
+            <nav className={navClassMobile}>
+                <ul>
+                    <li className="welcome"><a><MissingAvatarIcon sx={IconSizes.Small} /> שלום {loggedinUser?.fullname ?? 'אורח'}</a></li>
                     <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>מחשבונים</span></NavLink></li>
                     <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></NavLink></li>
                     <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
-                    {false && <li><NavLink to="/registration-details"><RegistrationDetailsIcon sx={IconSizes.Small} /><span>פרטי מנוי</span></NavLink></li>}
-                    <li><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addProperty} params={addProperty} /></NavLink></li>
-                    <li className="mobile"><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
-                    <li className="mobile"><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
-                    <li className="mobile"><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
+                    <li><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyWeb} params={addPropertyWeb} /></NavLink></li>
                     <li className="logout"><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
-                    <li className="mobile divider"></li>
-                    <li className="mobile"><span>גירסה {parseFloat(version?.versionNumber).toFixed(1)}</span></li>
-                    <li className="mobile divider"></li>
-                    <li className="mobile"><span>Icons made by itim2101 from www.flaticon.com</span></li>
+                </ul>
+            </nav>
+        </header>
+        <header onTransitionEnd={handleTabletTransitionEnd} onClick={onToggleTabletMenu} className={'full tablet ' + navClassTablet} ref={headerTabletRef}>
+            <div className="logo">
+                {(navClassTablet === "narrow" || navClassTablet === "narrowing") && <NavLink to="/"><img src={logoTablet} /></NavLink>}  
+                {(navClassTablet === "wide" || navClassTablet === "widing") && <NavLink to="/"><img  src={logoDesktop} /></NavLink>}  
+            </div>
+            <nav>
+                <ul>
+                    <li className="welcome"><a><MissingAvatarIcon sx={IconSizes.Small} /> <span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></a></li>
+                    
+                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>מחשבונים</span></NavLink></li>
+                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></NavLink></li>
+                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
+                    <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
+                    <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
+                    <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
+                    <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
+                </ul>
+                <ul className="bottom">
+                    <li className="version"><span>v {parseFloat(version?.versionNumber).toFixed(1)}</span></li>
+                    <li><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
+                </ul>
+            </nav>
+        </header>
+        <header className='full mobile' ref={headerMobileRef}>
+            <div className="logo">
+                {showAllHeader && <MenuIcon className="menu" onClick={onToggleMobileMenu} sx={ IconSizes.Medium } />}
+                {showAllHeader && <NavLink to="/">
+                    <img src={logoDesktop} />
+                </NavLink>}
+                {!showAllHeader && <img src={logoDesktop} />}    
+                {showBack && <BackIcon className="back" onClick={onPressBack} sx={ IconSizes.Medium } />}
+            </div>
+            <nav className={navClassMobile} onAnimationEnd={handleMobileAnimationEnd}>
+                {showAllHeader && <ul>
+                    <li><MenuIcon onClick={onToggleMobileMenu} sx={ IconSizes.Medium } /></li>
+                    <li className="welcome"><MissingAvatarIcon sx={IconSizes.Small} /><span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></li>
+                    <li className="divider"></li>
+                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>מחשבונים</span></NavLink></li>
+                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></NavLink></li>
+                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
+                    <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
+                    <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
+                    <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
+                    <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
+               
+                    <li className="divider"></li>
+                    <li className="logout"><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
                 </ul>}
             </nav>
         </header>

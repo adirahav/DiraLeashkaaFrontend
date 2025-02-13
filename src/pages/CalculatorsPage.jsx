@@ -35,10 +35,12 @@ export function CalculatorsPage() {
         navigate(`/calculator?calculatorId=${calculator._id}`)
     }
 
+    const titleClass = isLoadingState ? 'loading0' : '' 
+
     return (<>
         <Header />
-        <main className="calculators container">
-            <h1>מחשבונים שימושיים</h1>
+        <main className="calculators narrow container">
+            <h1 className={titleClass}>מחשבונים שימושיים</h1>
             <section>
                 {!isLoadingState && calculators?.map((calculator, index) => (    
                     <CalculatorsCalculator key={index} calculator={calculator} onCalculatorPress={onCalculatorPress} />

@@ -325,4 +325,12 @@
       }
     }
   }
+
+  @include mobile-layout {
+    &.code {
+      input {
+        width: 40px;
+      }
+    }
+  }
 }

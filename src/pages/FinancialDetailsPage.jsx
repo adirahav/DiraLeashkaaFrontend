@@ -123,17 +123,19 @@ export function FinancialDetailsPage() {
     const formClass = `financial-details form ${isLoadingState ? 'loading0' : ''}`
     const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`
     const noteClass = `note ${note.type}`
-    const articleClass = `fields ${isLoadingState || !phrases ? 'loading1' : ''}`
-   
+    const fieldsClass = `fields ${isLoadingState || !phrases ? 'loading1' : ''}`
+    const footerClass = `footer ${isLoadingState || !phrases ? 'loading1' : ''}`
+    
     return (<>
         <Header />
         <form className={formClass}>
             <h2 className={titleClass}>{utilService.getPhrase('user_financial_details', phrases)}</h2>
-            <article className={articleClass}>
-                <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} />
+            <article className={fieldsClass}>
+                <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} onSubmit={handleSubmit} />
                 <div className={noteClass}>{note.text}</div>
                 <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />
             </article>
+            <article className={footerClass}></article>
         </form>
         <Footer />
     </>)

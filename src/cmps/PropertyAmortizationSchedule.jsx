@@ -52,7 +52,7 @@ export function PropertyAmortizationSchedule({data}) {
 
 
       return (<>
-        <h2 className="title">{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h2>  
+        <h2>{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h2>  
         <section className="amortization-schedule">
           <Table sticky={true} components={{ header: { cell: ResizableTitle } }} columns={mergedColumns} data={formattedData} />
         </section>

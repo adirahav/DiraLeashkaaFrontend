@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js'
+import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import '../services/util.service'
 import { useWindowSize } from '../hooks/useWindowSize'
@@ -72,7 +63,7 @@ export function YieldChart({rawData}) {
           {
             label: 'תשואה על ההון',
             data: yieldForecast.map(item => {
-                return item.returnOnEquity.fractionToFloatFormat(1)
+                return item.returnOnEquity?.fractionToFloatFormat(1)
             }),
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -80,7 +71,7 @@ export function YieldChart({rawData}) {
           {
             label: 'תשואה כוללת',
             data: yieldForecast.map(item => {
-                return item.totalReturn.fractionToFloatFormat(1)
+                return item.totalReturn?.fractionToFloatFormat(1)
             }),
             borderColor: 'rgb(53, 162, 235)',
             backgroundColor: 'rgba(53, 162, 235, 0.5)',

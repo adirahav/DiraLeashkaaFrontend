@@ -2,17 +2,3 @@
     
     
 }
-
-.main-layout {
-    @include mobile-layout {
-        @include layout-grid-template-rows('mobile');
-    }
-
-	@include tablet-layout {
-        @include layout-grid-template-rows('tablet');
-    }
-
-    @include desktop-layout {
-        @include layout-grid-template-rows('desktop');
-    }
-}

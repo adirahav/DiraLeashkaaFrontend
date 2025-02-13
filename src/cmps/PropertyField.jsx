@@ -108,7 +108,6 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                           valueToEdit.length === 0 
                                                             ? ' empty' 
                                                             : '')
-
         const showRollback = valueToEdit.replace(/,/g, '') !== params.defaultValue?.toString() && 
                              !isFirstLoading && 
                              params.defaultValue != undefined && 
@@ -220,7 +219,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
 
         useEffect(() => {
             setLabel(
-                params.value.customValue && params.value.customValue.toString() !== params.value.default.toString()
+                params.value.customValue && params.value.customValue.toString() !== params.value.default?.toString()
                     ? params.label.withCustomValue
                     : params.numberPicker.customPercent
                         ? params.label.withPercent.replace("%1$.1f&percnt;", `${params.numberPicker.customPercent}%`)  
@@ -344,14 +343,15 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                               valueToEdit.length === 0 
                                                 ? ' empty' 
                                                 : '')
-        const showRollback = true/*params.isReadOnly
-                                ? params.numberPicker.customPercent !== params.numberPicker.default && !isFirstLoading && params.id
-                                : (!params.value && Object.keys(params.value).length > 0)
-                                        && !(params.value.calc === null && params.value.default === null)
-                                        && valueToEdit?.toString().replace(/,/g, '') !== params.value.default?.toString()
-                                        && !(valueToEdit?.toString() === "" 
-                                        && params.value.default === undefined 
-                                        && !isFirstLoading && params.id)*/
+
+        
+        const showRollback = isFirstLoading || !valueToEdit 
+                                ? false 
+                                : params.isReadOnly
+                                    ? params.numberPicker.customPercent !== params.numberPicker.default && !isFirstLoading && params.id
+                                    : (!params.value && !params.value.default && params.value.calc != params.value.default) ||
+                                      (params.numberPicker.customPercent !== params.numberPicker.default) ||
+                                      (!valueToEdit && valueToEdit?.toString().replace(/,/g, '') !== params.value.default?.toString())
         
         return  <div className={`property-field ${fieldClass}`}>
                     {!showNumberPicker && <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel}></span>}
@@ -386,7 +386,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         const [valueToEdit, setValueToEdit] = useState(null)
         const [isChangedByUser, setIsChangedByUser] = useState(false)
         const [isOpen, setIsOpen] = useState(false)
-    
+        
         const dropdownRef = useRef()
 
         useEffect(() => {
@@ -489,197 +489,6 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         )
     }
 
-    function SearchableDropDown1({ params, onSetValue }) {
-        const allOptions = params.options ? [
-            ...params.options.filter(option => params.suggestedOptions.includes(option.key))
-                             .map(option => ({ ...option, suggested: true })),
-            ...params.options.filter(option => !params.suggestedOptions.includes(option.key))
-        ] : []
-        const [searchToEdit, setSearchToEdit] = useState("")
-        const [valueToEdit, setValueToEdit] = useState(params?.selectedValue ?? null)
-        const [filteredOptions, setFilteredOptions] = useState(allOptions)
-        const [isChangedByUser, setIsChangedByUser] = useState(false)
-        const [isOpen, setIsOpen] = useState(false)
-        const [lastVisible, setLastVisible] = useState(null)
-
-        const dropdownRef = useRef()
-        const ulRef = useRef()
-        const inputRef = useRef()
-        
-        useEffect(() => {
-            if (params.label || params.options || params.selectedValue) {
-                setTimeout(() => {
-                    document.addEventListener('click', handleClickOutside)
-                }, 0)
-            }
-    
-            return () => {
-                document.removeEventListener('click', handleClickOutside)
-            }
-        }, [params.label, params.options, params.selectedValue])
-
-        useEffect(() => {
-            setValueToEdit(params.selectedValue)
-        }, [params.selectedValue])
-    
-        useEffect(() => {
-            if (isOpen) {
-                const ul = ulRef.current
-                if (ul) {
-                    ul.addEventListener("scroll", updateLastVisibleIndex)
-                    updateLastVisibleIndex()
-                }
-            }
-    
-            return () => {
-                const ul = ulRef.current
-                if (ul) {
-                    ul.removeEventListener("scroll", updateLastVisibleIndex)
-                }
-            }
-        }, [isOpen, filteredOptions])
-
-        const debouncedOnValueChange = useCallback(
-            utilService.debounce((value) => {
-                onSetValue(value)
-            }, DEBOUNCE_AWAIT),
-            [onSetValue]
-        )
-    
-        const updateLastVisibleIndex = () => {
-            const ul = ulRef.current
-            if (!ul) {
-                return
-            }
-    
-            const ulRect = ul.getBoundingClientRect()
-            const listItems = Array.from(ul.children)
-            let lastIndex = null
-            let lastHeight = null
-    
-            listItems.forEach((item, index) => {
-                const rect = item.getBoundingClientRect()
-                if (rect.bottom >= ulRect.top && rect.top <= ulRect.bottom) {
-                    lastIndex = index
-
-                    const visibleHeight = Math.round(Math.min(rect.bottom, ulRect.bottom) - Math.max(rect.top, ulRect.top))
-                    //console.log(ulRect.bottom+" | "+rect.top)
-                    
-                    //console.log("visibleHeight="+visibleHeight)
-                    lastHeight = null// visibleHeight < 36 ? visibleHeight : ''
-                }
-            })
-    
-            setLastVisible({index: lastIndex, height: lastHeight})
-        }
-
-        useEffect(() => {
-            if (isChangedByUser) {
-                debouncedOnValueChange(valueToEdit)
-            }
-        }, [valueToEdit])
-    
-        const handleValueChange = (value) => {console.log("InputRef4:", inputRef.current);
-            setValueToEdit(value)
-            setIsChangedByUser(true)
-            setIsOpen(false)
-        }
-    
-        const handleShowWarningAlert = (ev) => {
-            ev.preventDefault()
-            ev.stopPropagation()
-    
-            showWarningAlert({
-                title: "Error",
-                message: params.warning,
-                closeButton: { show: true, autoClose: false },
-                positiveButton: {
-                    show: true,
-                    text: utilService.getPhrase("dialog_tooltip_button_ok", phrases),
-                    onPress: async () => {},
-                    closeAfterPress: true,
-                },
-                negativeButton: { show: false },
-            })
-        }
-
-        function handleClickOutside(ev) {
-            console.log("InputRef1:", inputRef.current);
-            if (dropdownRef.current && !dropdownRef.current.contains(ev.target) && inputRef.current !== document.activeElement) {
-                setIsOpen(false)
-            }
-        }
-
-        useEffect(() => {
-            console.log("InputRef1:", inputRef.current);
-        }, [inputRef.current])
-        useEffect(() => {
-            console.log("InputRef0:", inputRef.current);
-        }, [isOpen])
-        const handleSearchChange = (ev) => {
-            ev.preventDefault()
-            ev.stopPropagation()
-            
-            const { value } = ev.target
-
-            setSearchToEdit(value)
-            setFilteredOptions(allOptions.filter(option => option.value.includes(value)))
-        }
-
-        const handleOptionPress = (event) => {
-        
-            event.preventDefault()
-            console.log("InputRef3:", inputRef.current);
-            const { id } = event.target
-            setValueToEdit(id)
-            setIsOpen(false)
-            setIsChangedByUser(true)
-        }
-
-        const fieldClass =
-            "property-field searchable-dropdown" + (isFirstLoading
-                                            ? " loading5"
-                                            : valueToEdit === null ||
-                                              valueToEdit === undefined ||
-                                              valueToEdit.length === 0 ||
-                                              valueToEdit === "choose"
-                                                ? " empty"
-                                                : "") 
-                                      + (params.hasWarning ? " warning" : "")
-    
-        const toggleDropdown = () => setIsOpen(!isOpen)
-        
-        return (
-            <div className={fieldClass} ref={dropdownRef}>
-                <span>{params.label}</span>
-                {params.hasWarning && <AttentionIcon onClick={handleShowWarningAlert} />}
-                <div className={`custom-searchable-dropdown ${isOpen ? "open" : ""}`} onClick={toggleDropdown}>
-                    <button className="dropdown-toggle">
-                        {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || "בחר"}
-                        {!isOpen && <ArrowDownIcon />}
-                        {isOpen && <ArrowUpIcon />}
-                    </button>
-                    {isOpen && (<div className="dropdown-menu">
-                        <input ref={inputRef} placeholder={"חפש..."} value={searchToEdit} onChange={handleSearchChange} />
-                        <ul ref={ulRef}>
-                            {filteredOptions.map((option, index) => (
-                                <li 
-                                    key={index} 
-                                    id={option.key} 
-                                    className={`${
-                                        option.suggested ? "suggested" : ""
-                                    } ${index ===  lastVisible?.index ? "last-visible" : ""}`}
-                                    style={index ===  lastVisible?.index && lastVisible?.height ? { height: `${lastVisible?.height}px` } : {}}
-                                    onClick={handleOptionPress}>{option.value}</li>
-                            ))}
-
-                        </ul>
-                    </div>)}
-                </div>
-            </div>
-        )
-    }
-
     function SearchableDropDown({params, onSetValue}) {
         const allOptions = params.options ? [
             ...params.options.filter(option => params.suggestedOptions.includes(option.key))
@@ -754,7 +563,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
     
             const { id } = event.target
             setValueToEdit(id)
-            setSearchableDropDownOpen(false)
+            setIsOpen(false)
             setIsChangedByUser(true)
         }
 
@@ -829,7 +638,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         const fieldClass = 'property-field string' + (isFirstLoading
                                                     ? ' loading7' 
                                                     : valueToEdit === null || 
-                                                      valueToEdit.length === 0 
+                                                      valueToEdit?.length === 0 
                                                         ? ' empty' 
                                                         : '')
 
@@ -957,20 +766,26 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.stopPropagation()
         
             setIsChangedByUser(true)
+            setShowNumberPicker(false)
             
             if (params.numberPicker.customPercent) {
                 setPercentToEdit('')
             }
         }
 
-        const showRollback = utilService.formatFloat(percentToEdit?.toString().replace(/,/g, '')) !== utilService.formatFloat(params.numberPicker.default?.toString() && !isFirstLoading)
+        const formattedDefault = utilService.formatFloat(params.numberPicker.default?.toString())
+        const formattedPercentToEdit = utilService.formatFloat(percentToEdit?.toString().replace(/,/g, ''))
+        
+        const showRollback = isFirstLoading || !percentToEdit 
+                                ? false 
+                                : formattedPercentToEdit !== formattedDefault
         
         return  <div className={`property-field percent`}>
                     <div className='rollback'>
                         {showRollback && <RollbackIcons onClick={handleValueRollback} />}
                     </div>
                     {!showNumberPicker && <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel}></span>}
-                    {showNumberPicker && <NumberPicker ref={numberPickerRef} numberPicker={params.numberPicker} value={percentToEdit} onAccept={handleNumberPickerPercentAccept} onCancel={handleNumberPickerPercentCancle} onStepUp={handleStepUp} onStepDown={handleStepDown} onValueChange={handleNumberPickerPercentChange} /> }
+                    {showNumberPicker && <NumberPicker ref={numberPickerRef} numberPicker={params.numberPicker} value={formattedPercentToEdit} onAccept={handleNumberPickerPercentAccept} onCancel={handleNumberPickerPercentCancle} onStepUp={handleStepUp} onStepDown={handleStepDown} onValueChange={handleNumberPickerPercentChange} /> }
                 </div>
     }
 

@@ -8,6 +8,8 @@
         font-size: 24px;
         font-weight: bold;
         height: 24px;
+
+        &.loading0 { background-color: var(--loading-0); width: 370px; text-indent: -9999px; }
     }
 
     section {
@@ -83,252 +85,87 @@
     }
 
     @include tablet-layout {
-
-        & {
-            grid-column: 1 / -1!important;
-        }
-
-        .add-button {
-            right: 20px;
-            
-            span {
-                margin: 0 2px 2px 2px;
-                font-size: rem(18px);
-            }
-    
-            svg {
-                width: 25px;
-                height: 25px;
-            }
-        }
-
-        h1, h2 {
-            padding:  0 20px;
-        }
-        
-        .my-cities {
-            display: flex;
-            overflow-y: hidden;
-            overflow-x: scroll;
-            margin: 0 20px;
-
-            article {
-                height: 130px;
-                
-                & > div {
-                    width: 100px;
-                    height: 100px;
-                }
-
-                &.loading5 { display: grid; }
-                &.loading6 { display: grid; }
-                &.loading7 { display: grid; }
-                &.loading8 { display: grid; }
-            }
-        }
-
-        .my-properties {
-            display: flex;
-            overflow-y: hidden;
-            overflow-x: scroll;
-            margin: 0 20px;
-            max-width: calc(100% - 40px); 
-
-            article {
-                & > .container, & > .footer {
-                    width: 200px;
-
-                    svg {
-                        float: left;
-                        margin-left: 0;
-                    }
-                }
-            }
-        }
-
-        .best-yields {
-            & > div {
-                grid-template-columns: 1fr 1fr;
-                margin: 0 20px;
-
-                .data {
-                    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            
-                    & > article {
-                        min-height: 100px;
-                        display: grid;
-                        grid-template-columns: 2fr 5fr;
-            
-                        h3 {
-                            grid-column: 2;
-                            margin: auto;
-                            height: 50px;
-                            padding: 0;
-                        }
-    
-                        img {
-                            grid-column: 1;
-                            grid-row: 1 / -1;
-                            width: 40px;
-                            height: 40px;
-                        }
-    
-                        span {
-                            grid-column: 2;
-                            font-weight: bold;
-                        }
-    
-                    }
-                }    
-                
-                .chart {
-                    &.loading4 { height: 220px; margin: 0 6px; }
-                }
-                  
-            }        
+        section {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 20px;
+            margin-bottom: 20px;
         }
     }
 
-    @media (min-width: 807px) and (max-width: 850px) { // small tablet
-        .best-yields {
-            & > div {
-                
-                .data {
-                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-
-                    & > article {
-                        h3 {
-                            font-size: 1em;
-                        }
-
-                        img {
-                            width: 34px;
-                            height: 34px;
-                        }
-
-                        span {
-                            font-size: 15px;
-                        }
-                    }
-                }            
-            }        
+    @include tablet-small-layout {
+        section {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         }
     }
 
     @include mobile-layout {
         & {
-            grid-column: 1 / -1!important;
-        }
-
-        .add-button {
-            bottom: 10px;
-            left: 20px;
-            right: unset;
-            border-radius: 50%;
-            border: 3px solid var(--home-add-button-border);
+            grid-column: 1 / -1;
+            margin: 20px;
             
-            span {
-                display: none;
+            h1 {
+                font-size: 22px;
+                height: auto;
+                margin: 0 0 20px;
+
+                &.loading0 { width: calc(100% - 40px); }
             }
-        }
 
-        h1 {
-            background: var(--mobile-home-section-title-background);
-            color: var(--mobile-home-section-title-text);
-            border-top: 1px solid var(--home-section-title-border);
-            border-bottom: 1px solid var(--home-section-title-border);
-            border-left: 1px solid var(--home-section-title-border);
-            border-bottom-left-radius: 15px;
-            border-top-left-radius: 15px;
-            margin-left: 20px;
+            section {
+                display: block;
+                padding: 0 0 11px;
 
-            &.loading0 { 
-                border-top: 1px solid var(--loading-0);
-                border-bottom: 1px solid var(--loading-0);
-                border-left: 1px solid var(--loading-0);
-             }
-        }
-        
-        h1, h2 {
-            padding:  0 20px;
-        }
-        
-        .my-cities {
-            display: flex;
-            overflow-y: hidden;
-            overflow-x: scroll;
-            margin: 0 20px;
+                & > article {
+                    border-radius: 8px;
+                    box-shadow: 0px 4px 12px var(--container-border);
+                    color: var(--text);
+                    width: 100%;
+                    height: 110px;
+                    margin: 0 0 20px;
+                    padding: 17px;
+                    position: relative;
+                    padding: 10px;
+                    grid-template-columns: 100px 1fr;
+                    grid-template-rows: 1fr 44px;
 
-            article {
-                height: 100px;
-
-                & > div {
-                    width: 78px;
-                    height: 78px;
-                }
-
-                &.loading5 { display: grid; }
-                &.loading6 { display: grid; }
-                &.loading7 { display: grid; }
-                &.loading8 { display: grid; }
-            }
-        }
-
-        .my-properties {
-            display: flex;
-            overflow-y: hidden;
-            overflow-x: scroll;
-            margin: 0 20px;
-            max-width: calc(100% - 40px); 
-
-            article {
-                & > .container, & > .footer {
-                    width: 94px;
-                    font-size: 14px;
-                }
-
-                & > .container div {
-                    h2 {
-                        font-size: 14px;
-                        height: unset;
+                    img {
+                        grid-column: 1;
+                        grid-row: 1 / -1;
+                        width: 90px;
+                        height: 90px;
+                        margin-left: 10px;
                     }
 
-                    svg {
-                        width: 15px;
-                        height: 15px;
+                    div:nth-child(2) {
+                        grid-column: 2;
+                        grid-row: 1;
+                        text-align: right;
+
+                        h2 {
+                            font-size: 16px;
+                            padding: 0;
+                        }
+
+                        & > span {
+                            display: none;
+                        }
                     }
-                }
 
-                &.loading5 { display: grid; }
-            }
-        }
-
-        .best-yields {
-            & > div {
-                margin: 0 20px;
-
-                .data {
-                    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                }    
-                
-                .chart {
-                    &.loading4 {
-                        aspect-ratio: auto 715 / 357;
-                        height: auto;
-                        margin: 0 6px 19px;
+                    div:nth-child(3) {
+                        grid-column: 2;
+                        grid-row: 2;
+                        justify-content: right;
+                        
+                        .form-field.button.long button {
+                            width: auto;
+                            height: 40px;
+                            margin: 5px 0;
+                            font-size: 14px;
+                            font-weight: normal;
+                        }
                     }
-                    
-                }
-                
-            }        
-        }
-        
-        &.start {
-            div:last-child {
-                .add-button {
-                    bottom: 30px;
                 }
             }
         }
-    }       
+    }     
 }

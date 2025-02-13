@@ -437,8 +437,8 @@
   &.loading2 { input, span { animation: loading2-animation 3s infinite; } span { color: transparent; } }
   &.loading3 { input, span { animation: loading3-animation 3s infinite; } span { color: transparent; } }
   &.loading4 { input, span { animation: loading4-animation 3s infinite; } span { color: transparent; } }
-  &.loading5 { select, span { animation: loading5-animation 3s infinite; } span { color: transparent; } }
-  &.loading6 { input, span { animation: loading6-animation 3s infinite; } span { color: transparent; } }
+  &.loading5 { select, span, .custom-dropdown .dropdown-toggle { animation: loading5-animation 3s infinite; color: transparent; } }
+  &.loading6 { input, span, .custom-dropdown .dropdown-toggle { animation: loading6-animation 3s infinite; color: transparent; } }
   &.loading7 { input, span { animation: loading7-animation 3s infinite; } span { color: transparent; } }
   
   @include tablet-layout {
@@ -454,40 +454,7 @@
   }
 
   @include mobile-layout {
-    & {
-      span {
-        width: 126px;
-        margin-right: 0;
-
-      }
-
-      &.number, &.auto-fill, &.calc, &.calc-editable, &.calc-total, &.string, &.searchable-dropdown, &.dropdown {
-        div {
-          width: calc(100% - 14px);
-          
-          input, select {
-            width: calc(100% - 35px);
-          }
-        }
-      }  
-      
-      &.searchable-dropdown {
-        div {
-          ul {
-            
-            padding: 0 10px;
-            
-            li {
-              &:first-child {
-                padding: 10px 0;
-                height: 40px;
-              }  
-            }
-          }
-        }
-      }
-      
-    }
+    
   }
 }
 

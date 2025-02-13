@@ -6,7 +6,7 @@ import { showTooltipAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
 import { Button as MaterialButton} from "@mui/material"
 
-export function FormField({type = "STRING", params, onChange, onPress }) {
+export function FormField({type = "STRING", params, onChange, onPress, onEnter }) {
     
     // type: STRING 
     //       TEXT_AREA
@@ -25,7 +25,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
     const { splash } = useSplash()
     const phrases = splash?.phrases
 
-    function String({params, onChange}) {
+    function String({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState('')
         const [hasError, setHasError] = useState(false)
 
@@ -46,20 +46,30 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             const value = e.target.value
             setValueToEdit(value)
             debouncedOnChange(value)
+        }
+
+        const handleKeyDown = (e) => {
+            if (!onEnter) {
+                return
+            }
+
+            if (e.key === "Enter") {
+                onEnter(e)
+            }
         }
 
         const fieldClass = `form-field string ${hasError ? ' error' : ''}`
 
         return  <><div className={fieldClass}>
                     <label>
-                        <input type='text' value={valueToEdit?.toString()} onChange={handleValueChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75" name="email"></input>
+                        <input type='text' value={valueToEdit?.toString()} onChange={handleValueChanged} onKeyDown={handleKeyDown} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75" name="email"></input>
                         <span>{params.label}</span>
                     </label>
                 </div>
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
 
-    function TextArea({params, onChange}) {
+    function TextArea({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState('')
         const [hasError, setHasError] = useState(false)
 
@@ -82,18 +92,28 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             debouncedOnChange(value)
         }
 
+        const handleKeyDown = (e) => {
+            if (!onEnter) {
+                return
+            }
+
+            if (e.key === "Enter") {
+                onEnter(e)
+            }
+        }
+
         const fieldClass = `form-field textarea ${hasError ? ' error' : ''}`
 
         return  <><div className={fieldClass}>
                     <label>
-                        <textarea type='text' value={valueToEdit?.toString()} onChange={handleValueChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75" name="email"></textarea>
+                        <textarea type='text' value={valueToEdit?.toString()} onChange={handleValueChanged} onKeyDown={handleKeyDown} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75" name="email"></textarea>
                         <span>{params.label}</span>
                     </label>
                 </div>
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
 
-    function Number({params, onChange}) {
+    function Number({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState('')
         const [hasError, setHasError] = useState(false)
         
@@ -124,6 +144,16 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             debouncedOnChange(value)
         }
 
+        const handleKeyDown = (e) => {
+            if (!onEnter) {
+                return
+            }
+
+            if (e.key === "Enter") {
+                onEnter(e)
+            }
+        }
+
         const handleShowTooltip = (ev) => {
             showTooltipAlert({
                 title: "Tooltip",
@@ -143,6 +173,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
                             type='text' 
                             value={valueToEdit?.toString()} 
                             onChange={handleValueChange} 
+                            onKeyDown={handleKeyDown} 
                             {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})}
                             required autoCapitalize="off" autoCorrect="off" autoComplete="off"></input>
                         <span>{params.label}</span>
@@ -152,7 +183,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
 
-    function Email({params, onChange}) {
+    function Email({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState('')
         const [hasError, setHasError] = useState(false)
 
@@ -179,18 +210,28 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             debouncedOnChange(value)
         }
 
+        const handleKeyDown = (e) => {
+            if (!onEnter) {
+                return
+            }
+
+            if (e.key === "Enter") {
+                onEnter(e)
+            }
+        }
+
         const fieldClass = `form-field email ${hasError ? ' error' : ''}`
 
         return  <><div className={fieldClass}>
                     <label>
-                        <input name={params.name} type='text' value={valueToEdit?.toString()} onChange={handleValueChange} disabled={params.isDisabled} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75"></input>
+                        <input name={params.name} type='text' value={valueToEdit?.toString()} onChange={handleValueChange} onKeyDown={handleKeyDown} disabled={params.isDisabled} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75"></input>
                         <span>{params.label}</span>
                     </label>
                 </div>
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
 
-    function Password({params, onChange}) {
+    function Password({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState('')
         const [hasError, setHasError] = useState(false)
         const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -214,6 +255,16 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             debouncedOnChange(value)
         }
 
+        const handleKeyDown = (e) => {
+            if (!onEnter) {
+                return
+            }
+
+            if (e.key === "Enter") {
+                onEnter(e)
+            }
+        }
+
         const togglePasswordVisibility = () => {
             if (params.isDisabled) {
                 return
@@ -227,7 +278,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
 
         return  <><div className={fieldClass}>
                     <label>
-                        <input name={params.name} type={inputType} value={valueToEdit?.toString()} onChange={handleValueChange} disabled={params.isDisabled} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75"></input>
+                        <input name={params.name} type={inputType} value={valueToEdit?.toString()} onChange={handleValueChange} onKeyDown={handleKeyDown} disabled={params.isDisabled} required autoCapitalize="off" autoCorrect="off" autoComplete="off" maxLength="75"></input>
                         <span>{params.label}</span>
                         {isPasswordVisible && valueToEdit.toString() !== "" && <HidePasswordIcon sx={ IconSizes.Small } onClick={togglePasswordVisibility} />} 
                         {!isPasswordVisible && valueToEdit.toString() !== "" && <ShowPasswordIcon sx={ IconSizes.Small } onClick={togglePasswordVisibility} />}
@@ -236,7 +287,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
 
-    function YearOfBirth({params, onChange}) {
+    function YearOfBirth({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState('')
         const [hasError, setHasError] = useState(false)
         
@@ -268,6 +319,16 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             debouncedOnChange(value)
         }
 
+        const handleKeyDown = (e) => {
+            if (!onEnter) {
+                return
+            }
+
+            if (e.key === "Enter") {
+                onEnter(e)
+            }
+        }
+
         const handleShowTooltip = (ev) => {
             showTooltipAlert({
                 title: "Tooltip",
@@ -287,6 +348,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
                             type='text' 
                             value={valueToEdit?.toString()} 
                             onChange={handleValueChange} 
+                            onKeyDown={handleKeyDown} 
                             {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})}
                             required autoCapitalize="off" autoCorrect="off" autoComplete="off"></input>
                         <span>{params.label}</span>
@@ -350,7 +412,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
         return  <>{params.hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
 
-    function Code({params, onChange}) {
+    function Code({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState(params.value)
         const [hasError, setHasError] = useState(false)
 
@@ -396,6 +458,16 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
             })
         }
 
+        const handleKeyDown = (e) => {
+            if (!onEnter) {
+                return
+            }
+
+            if (e.key === "Enter") {
+                onEnter(e)
+            }
+        }
+
         const fieldClass = `form-field code ${hasError ? ' error' : ''}`
 
         return  <><div className={fieldClass}>
@@ -406,6 +478,7 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
                             type="text"
                             value={valueToEdit[index]?.toString()}
                             onChange={(e) => handleValueChanged(e, index)}
+                            onKeyDown={handleKeyDown} 
                             ref={(el) => (inputRefs.current[index] = el)}
                             required
                             autoCapitalize="off"
@@ -476,11 +549,11 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
 
     return (
         <>
-            {type === "STRING" && String({params, onChange})}
+            {type === "STRING" && String({params, onChange, onEnter})}
 
-            {type === "TEXT_AREA" && TextArea({params, onChange})}
+            {type === "TEXT_AREA" && TextArea({params, onChange, onEnter})}
 
-            {type === "NUMBER" && Number({params, onChange})}
+            {type === "NUMBER" && Number({params, onChange, onEnter})}
 
             {type === "BUTTON" && Button({params, onPress, type: 'button'})}
 
@@ -488,17 +561,17 @@ export function FormField({type = "STRING", params, onChange, onPress }) {
 
             {type === "BUTTON_SUBMIT" && Button({params, onPress, type: 'submit'})}
 
-            {type === "EMAIL" && Email({params, onChange})}
+            {type === "EMAIL" && Email({params, onChange, onEnter})}
 
-            {type === "PASSWORD" && Password({params, onChange})}
+            {type === "PASSWORD" && Password({params, onChange, onEnter})}
 
-            {type === "BIRTH_OF_YEAR" && YearOfBirth({params, onChange})}
+            {type === "BIRTH_OF_YEAR" && YearOfBirth({params, onChange, onEnter})}
 
             {type === "CHECKBOX" && Checkbox({params, onChange})}
 
             {type === "ERROR" && Error({params})}
 
-            {type === "CODE" && Code({params, onChange})}
+            {type === "CODE" && Code({params, onChange, onEnter})}
 
             {type === "DROP_DOWN" && DropDown({params, onChange})}
         </>

@@ -14,7 +14,8 @@ export function Footer() {
     const fixedParameters = splash?.fixedParameters
 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
-
+    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser) 
+    
     useEffect(() => {
         setShowAllFooter(!window.location.toString().includes("terms-of-use")) 
     }, [])
@@ -33,7 +34,7 @@ export function Footer() {
     }, [isLoadingState])
 
     return (<>
-        <footer className='full'>
+        {loggedinUser && <footer className='full'>
             <div>
                 <nav>
                     <ul>
@@ -45,6 +46,6 @@ export function Footer() {
                     </ul>
                 </nav>
             </div>
-        </footer>
+        </footer>}
     </>)
 }

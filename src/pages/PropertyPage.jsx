@@ -9,11 +9,7 @@ import { propertyService } from '../services/property.service'
 import { PropertyAmortizationSchedule } from '../cmps/PropertyAmortizationSchedule'
 import { PropertyChart } from '../cmps/PropertyChart'
 import iconMissingData from '../assets/images/missing_data.png'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
-import iconYieldForecastOn from '../assets/images/icon_yield_forecast_on.png'
-import iconAmortizationScheduleOn from '../assets/images/icon_amortization_schedule_on.png'
-import iconChartOn from '../assets/images/icon_chart_on.png'
 import iconLock from '../assets/images/icon_lock.svg'
 import { ZoomOut } from '../assets/icons'
 import { utilService } from '../services/util.service'
@@ -273,7 +269,7 @@ export function PropertyPage() {
     const yieldForecastLabelClass = `label-${fragment === 'yield-forecast' ? 'on' : 'off'}`
     const amortizationScheduleLabelClass = `label-${fragment === 'amortization-schedule' ? 'on' : 'off'}`
     const chartLabelClass = `label-${fragment === 'chart' ? 'on' : 'off'}`
-    const dataClass = `data /*${isFirstLoading ? 'loading3' : ''}*/`
+    const dataClass = `data ${fragment} /*${isFirstLoading ? 'loading3' : ''}*/`
     
     const titleClass = isLoadingState ? 'loading0' : '' 
 
@@ -307,31 +303,15 @@ export function PropertyPage() {
                     <h3>{utilService.getPhrase('property_calc_yields', phrases)}</h3>
                     <Lottie animationData={animCalculating} loop={true} />
                 </section>}
-                {!isFirstLoading && !lockYields && <Tabs>
-                    <TabList>
-                        <Tab><h2 className="title"><img src={iconYieldForecastOn} />{utilService.getPhrase('property_yield_forecast_label', phrases)}</h2></Tab>
-                        {property?.showMortgagePrepayment && <Tab><h2 className="title"><img src={iconAmortizationScheduleOn} />{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h2></Tab>}
-                        <Tab><h2 className="title"><img src={iconChartOn} />{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h2></Tab>
-                    </TabList>
-
-                    <TabPanel>
-                        <PropertyYieldForecast data={property?.calcYieldForecast} />
-                    </TabPanel>
-                    {property?.showMortgagePrepayment && <TabPanel>
-                        <PropertyAmortizationSchedule data={property?.calcAmortizationSchedule} />
-                    </TabPanel>}
-                    <TabPanel>
-                        <PropertyChart data={property?.calcYieldForecast} />
-                    </TabPanel>
-                </Tabs>}
-                <div className={menuClass}>
+                
+            </section>
+            <div className={menuClass}>
                     <ZoomOut className='zoom-out' onClick={handleDisplayInterests} />
                     <article onClick={onYieldForecastPress}><img src={iconYieldForecast} /><h3 className={yieldForecastLabelClass}>{utilService.getPhrase('property_yield_forecast_label', phrases)}</h3></article>
                     {property?.showMortgagePrepayment && <article onClick={onAmortizationSchedulePress}><img src={iconAmortizationSchedule} /><h3 className={amortizationScheduleLabelClass}>{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h3></article>}
                     <article onClick={onChartPress}><img src={iconChart} /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3></article>
                     {lockYields && <img src={iconLock} />}
                 </div>
-            </section>
         </main>
         {showMobileData === "" && <Footer />}
     </>)

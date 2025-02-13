@@ -21,7 +21,7 @@
     .fields {
         display: block;
         position: relative;
-        padding: 29px 0 20px;
+        padding: 30px 0 20px;
         box-sizing: content-box;
         justify-self: center;
         width: 100%;
@@ -55,7 +55,7 @@
         }
 
         .form-field-error {
-            width: 268px;
+            /*width: 268px;*/
         }
 
         .error:not(.form-field) {
@@ -100,7 +100,22 @@
             }
         }  
 
+        &.loading1 { animation: loading1-animation 3s infinite; div { display: none; } }
         &.loading2 { animation: loading2-animation 3s infinite; div { display: none; } }
     }
+
+    @include tablet-layout {
+        & {
+            height: fit-content;
+            margin: 40px auto 20px;
+        }
+    }
     
+    @include mobile-layout {
+        & {
+            box-shadow: unset;
+            width: 100%;
+            max-width: 300px;
+        }
+    }
 }
