@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { utilService } from '../services/util.service'

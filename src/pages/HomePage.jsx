@@ -7,7 +7,7 @@ import { HomeBestYields } from '../cmps/HomeBestYields'
 import { Overlay } from '../cmps/Overlay'
 import { utilService } from '../services/util.service'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { getHome, onDeletingPropertyStart, onAboutDeletingProperty } from '../store/actions/user.actions.js'
+import { getHome, onDeletingPropertyStart, onAboutDeletingProperty, saveHome } from '../store/actions/user.actions.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSelector } from 'react-redux'
 import { IconSizes, AddPropertyIcon } from "../assets/icons"
@@ -39,40 +39,67 @@ export function HomePage() {
     const calculators = splash?.calculators
 
     const [citiesNames, setCitiesNames] = useState()
-
-    const MIN_DELETE_PROPERTY_AWAIT_SEC = 3
-
+    const [worker, setWorker] = useState(null)
+    
     useEffect(() => {
         if (!phrases || !fixedParameters || !calculators) {
             onLoadingStart()  
         } else {
             onLoadingDone() 
             setCitiesNames(utilService.getFixedParameter("cities", fixedParameters))
-            fetchHome() 
+            fetchHomeData() 
         }
 
     }, [splash])
 
     useEffect(() => {
+        
         if (homeState && homeState.bestYields?.length > 0) {
             setBestYield(homeState.bestYields[0])
         }
     }, [homeState])
 
-    const fetchHome = async () => {
+    const fetchHomeData = async () => {
         try {
             onLoadingStart() 
             setShowOverlay(true)
-            await getHome()
+
+            const fetchInitialData = async () => {
+                await getHome(false)
+                setShowOverlay(false)
+                onLoadingDone() 
+
+                newWorker.postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString() })
+            }
+
+            fetchInitialData()
+
+            // get home full data in another thread
+            let newWorker = new Worker(
+                new URL('../workers/home.worker.js', import.meta.url), 
+                { type: 'module' }
+            )
+            setWorker(newWorker)
+
+            newWorker.onmessage = (event) => {
+                if (event.data.type === 'fullData') {
+                    saveHome(event.data.data)
+                } else if (event.data.type === 'error') {
+                    console.error('Worker error:', event.data.error)
+                }
+            }
+
+            return () => {
+                newWorker.terminate()
+            }
         } catch (error) {
             console.error(`Error fetching home data:`, error)
-        } 
-        finally {
             setShowOverlay(false)
             onLoadingDone() 
-        }
+        } 
+        
     }
- 
+
     // my cities
     function onCityPress(city) {
         onAboutDeletingProperty(null)
@@ -111,27 +138,6 @@ export function HomePage() {
         
 
         const deleteStartTime = new Date()
-    
-        /*await onDeleteProperty(propertyId)
-    
-        const deleteEndTime = new Date()
-    
-        const diffSeconds = (deleteEndTime.getTime() - deleteStartTime.getTime()) / 1000
-    
-        if (diffSeconds < MIN_DELETE_PROPERTY_AWAIT_SEC) {
-            await new Promise(resolve => setTimeout(resolve, (MIN_DELETE_PROPERTY_AWAIT_SEC - diffSeconds) * 1000))
-        }
-
-        const sameCityCount = city === "else" || !city
-                                ? homeState.properties?.filter(property => property.city === city || !property.city).length
-                                : homeState.properties?.filter(property => property.city === city).length
-        
-        if (sameCityCount === 1) {
-            setSelectedCity(null)
-        }
-        
-        onAboutDeletingProperty(null)
-        onDeletingPropertyDone()*/
     }
 
     // best yield
@@ -176,10 +182,11 @@ export function HomePage() {
             <HomeProperties 
                 selectedCity={selectedCity}
                 bestYield={bestYield} 
+                fullData={homeState?.fullData}
                 onPropertyPress={onPropertyPress} />
 
             <h1 className={bestYieldClass} dangerouslySetInnerHTML={{ __html: bestYieldTitle}}></h1>
-            <HomeBestYields properties={homeState?.bestYields} />
+            <HomeBestYields properties={homeState?.bestYields} fullData={homeState?.fullData} />
             <NavLink to="/property" className={addPropertyClass}><AddPropertyIcon sx={IconSizes.Small} /><span>הוסף נכס</span></NavLink>
         </main>
         <Footer />

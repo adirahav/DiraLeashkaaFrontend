@@ -34,9 +34,9 @@ async function splash() {
     }
 }
 
-async function home() {
+async function home(fullData) {
     try {
-        const home = await httpService.get(BASE_URL + "home")
+        const home = await httpService.get(BASE_URL + "home?fullData=" + fullData)
         return home
     } catch(err) {
         console.error("Had problems getting home")
@@ -56,7 +56,7 @@ async function getUsers() {
 
 async function getById(userId) {
     try {
-        const user= await httpService.get(BASE_URL + userId)
+        const user = await httpService.get(BASE_URL + userId)
         return user
     } catch(err) {
         console.error(`Had problems getting user $userId}`)

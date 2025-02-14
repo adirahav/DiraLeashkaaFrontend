@@ -4,11 +4,11 @@ import { IconSizes, MedaltIcon, MissDataIcon, AddPropertyIcon, DeleteIcon, EditI
 import propertyImage from '../assets/images/property.png'
 import deletingIcon from '../assets/images/anim_delete.gif'
 import { useSelector } from 'react-redux'
-import { onAboutDeletingProperty, onLongPressProperty } from '../store/actions/user.actions'
+import { onAboutDeletingProperty } from '../store/actions/user.actions'
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from './FormField'
 
-export function HomeProperty({ index, property, isBestYield, onPropertyPress }) {   
+export function HomeProperty({ index, property, isBestYield, fullData, onPropertyPress }) {   
     const defultButtonState = (textKey) => {
         return {
             text: utilService.getPhrase(textKey, phrases), 
@@ -34,11 +34,6 @@ export function HomeProperty({ index, property, isBestYield, onPropertyPress }) 
 
     const aboutDeleteIdState = useSelector(storeState => storeState.userModule.home.aboutDeleteId)
     const aboutDeleteIdRef = useRef(aboutDeleteIdState)
-
-    /*const [isLongPress, setIsLongPress] = useState(false)
-    const longPressedIdState = useSelector(storeState => storeState.userModule.home.longPressedId)
-    const longPressedIdRef = useRef(longPressedIdState)
-    let longPressTimeout*/
 
     useEffect(() => {
         isDeletingRef.current = isDeletingState
@@ -137,6 +132,9 @@ export function HomeProperty({ index, property, isBestYield, onPropertyPress }) 
         cancelDelete: "cancelDelete"
     }
 
+    const showMedaltIcon = property && isBestYield && fullData
+    const showMissDataIcon = property && !property?.calcYieldForecast && fullData
+    
     return (
         <article ref={propertyRef} className={articleClass}>
             <div className='container'>
@@ -148,8 +146,8 @@ export function HomeProperty({ index, property, isBestYield, onPropertyPress }) 
                 </div>
                 <div>
                     <div className='indications'>
-                        {property && isBestYield && <MedaltIcon sx={IconSizes.Small} titleAccess='התשואה הטובה ביותר' />}
-                        {property && !property?.calcYieldForecast && <MissDataIcon sx={IconSizes.Small} titleAccess='חסרים נתונים' />}
+                        {showMedaltIcon && <MedaltIcon sx={IconSizes.Small} titleAccess='התשואה הטובה ביותר' />}
+                        {showMissDataIcon && <MissDataIcon sx={IconSizes.Small} titleAccess='חסרים נתונים' />}
                     </div>
                     <div className={actionsClass}>
                         {property && property?._id && <DeleteIcon className='icon-delete' sx={IconSizes.Small} title='מחק' onClick={handleBeforeDelete} />}  

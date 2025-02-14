@@ -41,6 +41,7 @@ export function userReducer(state = initialState, action = {}) {
                 ...state,
                 home: {
                     ...state.home,
+                    fullData: action.home?.fullData,
                     properties: action.home?.properties,
                     bestYields: action.home?.bestYields,
                     isPropertiesNeedToRefresh: action.home?.isPropertiesNeedToRefresh,

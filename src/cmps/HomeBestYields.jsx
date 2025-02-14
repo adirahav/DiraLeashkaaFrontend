@@ -1,19 +1,27 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { HomeBestYield } from './HomeBestYield'
 import { useSelector } from 'react-redux'
-import { utilService } from '../services/util.service'
+import iconMissingData from '../assets/images/missing_data.png'
 import { useSplash } from '../contexts/SplashContext.jsx'
+import { LoadingIcon } from '../assets/icons.jsx'
 
-export function HomeBestYields({ properties }) { 
+export function HomeBestYields({ properties, fullData }) { 
     const { splash } = useSplash()
     const phrases = splash?.phrases
   
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
 
+    const hasBestYield = !isLoadingState && properties && properties?.length > 0 
+
     return (
         <section className="best-yields">
-            {isLoadingState || properties?.length > 0 && <HomeBestYield property={properties?properties[0]:null} />}
-            {!isLoadingState && properties?.length === 0 && <span className='no-data'>{utilService.getPhrase("home_best_yield_no_details", phrases)}</span>}
+            {hasBestYield && fullData && <HomeBestYield property={properties?properties[0]:null} />}
+            {!hasBestYield && fullData &&
+                <div className="no-yields">
+                    <h3>חסרים נתונים לחישוב</h3>
+                    <img src={iconMissingData} />
+                </div>}
+            {!isLoadingState && fullData === false && <div className='loading'><LoadingIcon /></div>}
         </section>
     )
 }

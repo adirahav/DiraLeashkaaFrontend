@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from 'react'
-import { IconSizes, ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, AttentionIcon, ShowPasswordIcon, HidePasswordIcon } from '../assets/icons'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, AttentionIcon, ShowPasswordIcon, HidePasswordIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
 import { showWarningAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'

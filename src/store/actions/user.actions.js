@@ -16,10 +16,10 @@ export function setLoggedinUser(loggedinUser) {
     }
 }
 
-export async function getHome() {
+export async function getHome(fullData) {
     try {
         store.dispatch({ type: LOADING_START })
-        const home = await userService.home()    
+        const home = await userService.home(fullData) 
         store.dispatch({type: GET_HOME, home})
     } catch(err) {
         console.error("Had issues loading home data")
@@ -27,6 +27,15 @@ export async function getHome() {
     } finally {
         store.dispatch({ type: LOADING_DONE })
     }
+}
+
+export function saveHome(home) {
+    try {
+        store.dispatch({type: GET_HOME, home})
+    } catch(err) {
+        console.error("Had issues save home data")
+        throw err
+    } 
 }
 
 export async function onDeleteProperty(propertyId) {

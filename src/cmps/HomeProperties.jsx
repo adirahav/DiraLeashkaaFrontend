@@ -2,7 +2,7 @@ import React from 'react'
 import { HomeProperty } from './HomeProperty'
 import { useSelector } from 'react-redux'
 
-export function HomeProperties({ selectedCity, bestYield, onPropertyPress }) {   
+export function HomeProperties({ selectedCity, bestYield, fullData, onPropertyPress }) {   
 
     const LOADING_PROPERTIES_COUNT = 6
     
@@ -20,7 +20,7 @@ export function HomeProperties({ selectedCity, bestYield, onPropertyPress }) {
     return (
         <section className="my-properties">
             {!isLoadingState && selectedCityProperties?.map((property, index) => (    
-                <HomeProperty key={index} property={property} isBestYield={bestYield?._id===property._id} onPropertyPress={onPropertyPress} />
+                <HomeProperty key={index} property={property} isBestYield={bestYield?._id===property._id} fullData={fullData} onPropertyPress={onPropertyPress} />
             ))}
             {/*!isLoadingState &&
                 <HomeProperty key={-1} index={-1} property={propertyToAdd} onPropertyPress={onPropertyPress} />
