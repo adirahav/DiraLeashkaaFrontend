@@ -136,7 +136,18 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
 
             let { value } = ev.target
 
+            if (value === "0") {
+                setValueToEdit(value)
+                debouncedOnChange(value)
+                return
+            }
+        
             value = value.replace(/[^0-9]/g, '').replace(/^0+/, '')
+
+            if (value === "") {
+                value = "0"
+            }
+
             value = utilService.formatNumber(value)
 
             setValueToEdit(value)
@@ -384,17 +395,6 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
                     </label>
                 </div>
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
-    }
-
-    function Button_old({params, onPress, type}) {
-        const fieldClass = `form-field button${params.isDisabled ? ' disabled': ''}${params.isLoading ? ' loading': ''}${params.isLinkView ? ' link': ''}`
-        
-        return  <div className={fieldClass}>
-                    <button type={type} onClick={onPress} disabled={params.isDisabled}>
-                        {!params.isLoading && <span dangerouslySetInnerHTML={{ __html: params.text }}></span>}
-                        {params.isLoading && <LoadingIcon />}
-                    </button>
-                </div>               
     }
 
     function Button({params, onPress, type}) {
