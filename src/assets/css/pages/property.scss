@@ -364,6 +364,83 @@
         display: none;
     }
 
+    .media-list {
+        @include container;
+        padding: 26px;
+
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 230px);
+        grid-gap: 17px;
+
+        .media {
+            position: relative;
+
+            svg {
+                color: var(--property-media-close-icon);
+                position: absolute;
+                right: 4px;
+                top: 4px;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+
+            &:hover {
+                svg {
+                    opacity: 1;
+                }
+            }
+        }
+
+        img {
+            width: 230px;
+            height: 175px; 
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .file-upload {
+            @include inside-container;
+            width: 230px;
+            height: 175px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+            
+            div {
+                display: flex;
+
+                span {
+                    font-weight: bold;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                }
+    
+                svg {
+                    font-size: 24px;
+                    margin-right: 10px;
+                    fill: var(--property-media-upload-icon);
+                }
+            }
+
+            .loading {
+                width: 20px;
+                height: 20px;
+                fill: var(--loading-dark);
+                animation-name: loading;
+                animation-duration: .8s;
+                animation-iteration-count: infinite;
+                animation-timing-function: steps(8,end);  
+                margin: 0;
+            }
+        }
+
+        input {
+            display: none;
+        }
+    }
+
     @include tablet-layout {
         & {
             grid-column: 1 / -1;
@@ -395,6 +472,20 @@
                     width: calc(100vw - 170px);
                 }
             }
+
+            .media-list {
+                grid-template-columns: repeat(auto-fill, 200px);
+                grid-gap: 20px;
+
+                .media, .file-upload {
+                    margin: 0 auto;
+                }
+
+                .file-upload, img {
+                    width: 200px;
+                    height: 152px;
+                }
+            }
         }
         
     }
@@ -420,6 +511,21 @@
                 }
             }
 
+            .media-list {
+                padding: 14px;
+                grid-template-columns: repeat(auto-fill, calc((100% - 28px) / 3));
+                grid-gap: 14px;
+
+                .media, .file-upload {
+                    margin: 0 auto;
+                }
+
+                .file-upload, img {
+                    max-width: 230px;
+                    max-height: 175px;
+                }
+            }
+
             .data {
                 
             }
@@ -432,13 +538,19 @@
             grid-column: 1 / -1;
             margin: 20px;
 
-            h1 {
+            h1:first-child {
                 font-size: 22px;
                 height: auto;
                 margin: 0 0 20px;
 
                 &.loading0 { width: calc(100% - 40px); }
             }
+
+            h1:nth-of-type(2) {
+                display: none;
+            }
+
+            
         }
 
         .form {
@@ -698,17 +810,8 @@
 
                         u { 
                           text-decoration: underline; 
-                          display: inline; /*color:purple;*/
+                          display: inline;
                         }
-
-                        .input {
-                            /*background-color: red;*/
-                        }
-                        .actions {
-                            /*background-color: green;*/
-                        }
-
-                        
                     }
 
                     .rollback {
@@ -747,6 +850,85 @@
             }
         }
     }
+
+    & {
+        @media (min-width: 600px) and (max-width: 807px)  {
+            .media-list {
+                margin-bottom: 70px;
+                padding: 14px;
+                grid-template-columns: repeat(auto-fill, calc((100% - 28px) / 3));
+                grid-gap: 14px;
+
+                
+                .file-upload, img {
+                    max-width: 170px;
+                    max-height: 130px;
+                    margin: 0 auto;
+                }
+            }
+        }
+
+        @media (min-width: 580px) and (max-width: 599.9px)  {
+            .media-list {
+                margin-bottom: 70px;
+                padding: 14px;
+                grid-template-columns: repeat(auto-fill, calc((100% - 28px) / 2));
+                padding: 14px;
+
+                .file-upload, img {
+                    max-width: 170px;
+                    max-height: 130px;
+                    margin: 0 auto;
+                }
+            }
+        }
+
+        @media (min-width: 490px) and (max-width: 579.9px)  {
+            .media-list {
+                margin-bottom: 70px;
+                padding: 10px;
+                grid-template-columns: repeat(auto-fill, calc((100% - 20px) / 2));
+                grid-gap: 10px;
+
+                .file-upload, img {
+                    margin: 0 auto;
+                    max-width: 200px;
+                    max-height: 152px;
+                }
+            }
+        }
+
+        @media (min-width: 414px) and (max-width: 489.9px)  {
+            .media-list {
+                margin-bottom: 70px;
+                padding: 10px;
+                grid-template-columns: repeat(auto-fill, calc((100% - 20px) / 2));
+                grid-gap: 10px;
+
+                .file-upload, img {
+                    max-width: 160px;
+                    max-height: 122px;
+                    margin: 0 auto;
+                }
+            }
+        }
+
+        @media (max-width: 413.9px)  {
+            .media-list {
+                margin-bottom: 70px;
+                padding: 10px;
+                grid-template-columns: repeat(auto-fill, calc((100% - 20px) / 2));
+                grid-gap: 10px;
+
+                .file-upload, img {
+                    max-width: 140px;
+                    max-height: 106px;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+    
 }
 
 

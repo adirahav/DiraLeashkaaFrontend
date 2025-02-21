@@ -20,6 +20,7 @@ import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { authService } from '../services/auth.service'
 import { useSplash } from '../contexts/SplashContext.jsx'
 import { useSelector } from 'react-redux'
+import { PropertyMedia } from '../cmps/PropertyMedia.jsx'
 
 export function PropertyPage() {
     const location = useLocation()
@@ -260,6 +261,20 @@ export function PropertyPage() {
         setShowInterestsContainer(!showInterestsContainer)
     } 
 
+    const handleMediaUpload = (media) => {
+        const mediaToUpload = !property.media 
+                                ? [media] 
+                                : [...property.media, media]
+        updateProperty("media", mediaToUpload)
+        
+    }
+
+    const handleMediaRemove = (mediaPublicId) => {
+        const mediaToUpload = property.media.filter(item => item.publicId !== mediaPublicId)
+        updateProperty("media", mediaToUpload)
+    }
+
+
     const mainClass = `property container ${!showInterestsContainer ? "lock" : ""} ${showMobileData}`
     const menuClass = `menu ${fragment === "form" ? 'bottom' : 'side'} ${property?.showMortgagePrepayment ? '' : 'no-mortgage'}`
     const iconYieldForecast = `/src/assets/images/icon_yield_forecast_${handleIconStatus('yield-forecast')}.png`
@@ -305,13 +320,15 @@ export function PropertyPage() {
                 </section>}
                 
             </section>
+            <h1 className={titleClass}>תמונות של הנכס</h1>
+            <PropertyMedia list={property?.media} onUpload={handleMediaUpload} onRemove={handleMediaRemove} />
             <div className={menuClass}>
-                    <ZoomOut className='zoom-out' onClick={handleDisplayInterests} />
-                    <article onClick={onYieldForecastPress}><img src={iconYieldForecast} /><h3 className={yieldForecastLabelClass}>{utilService.getPhrase('property_yield_forecast_label', phrases)}</h3></article>
-                    {property?.showMortgagePrepayment && <article onClick={onAmortizationSchedulePress}><img src={iconAmortizationSchedule} /><h3 className={amortizationScheduleLabelClass}>{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h3></article>}
-                    <article onClick={onChartPress}><img src={iconChart} /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3></article>
-                    {lockYields && <img src={iconLock} />}
-                </div>
+                <ZoomOut className='zoom-out' onClick={handleDisplayInterests} />
+                <article onClick={onYieldForecastPress}><img src={iconYieldForecast} /><h3 className={yieldForecastLabelClass}>{utilService.getPhrase('property_yield_forecast_label', phrases)}</h3></article>
+                {property?.showMortgagePrepayment && <article onClick={onAmortizationSchedulePress}><img src={iconAmortizationSchedule} /><h3 className={amortizationScheduleLabelClass}>{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h3></article>}
+                <article onClick={onChartPress}><img src={iconChart} /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3></article>
+                {lockYields && <img src={iconLock} />}
+            </div>
         </main>
         {showMobileData === "" && <Footer />}
     </>)

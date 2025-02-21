@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { utilService } from '../services/util.service'
 import { IconSizes, MedaltIcon, MissDataIcon, AddPropertyIcon, DeleteIcon, EditIcon } from '../assets/icons'
-import propertyImage from '../assets/images/property.png'
+import missingPictureImage from '../assets/images/missing_picture.png'
 import deletingIcon from '../assets/images/anim_delete.gif'
 import { useSelector } from 'react-redux'
 import { onAboutDeletingProperty } from '../store/actions/user.actions'
@@ -17,6 +17,10 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
         }
     }
     
+    const [picturesCounter, setPicturesCounter] = useState(1)
+    const [picturesClasses, setPicturesClasses] = useState(1)
+    const PICTURES_IMAGES_SIZE = (property?.media || []).length
+
     const { splash } = useSplash()
     const phrases = splash?.phrases
 
@@ -47,6 +51,14 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     }, [aboutDeleteIdState])
 
     useEffect(() => { 
+        if (property) {
+            const intervalId = setInterval(() => {
+                setPicturesCounter((prevPromoCounter) => prevPromoCounter == PICTURES_IMAGES_SIZE ? 1 : prevPromoCounter + 1)
+            }, 4000)
+        
+            return () => clearInterval(intervalId)
+        }
+        
         if (index || property) {
             setTimeout(() => {
                 document.addEventListener('click', handleClickOutside)
@@ -57,6 +69,16 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
             document.removeEventListener('click', handleClickOutside)
         }
     }, [index, property])
+
+    useEffect(() => {
+        setPicturesClasses(
+            (picturesClasses) => {
+                return Array.from({ length: PICTURES_IMAGES_SIZE }, (_, index) =>
+                    picturesCounter === index + 1 ? "show" : "hide"
+                )
+            }
+        )
+    }, [picturesCounter])
 
     const handleEdit = (ev) => {
         if (!isDeletingRef.current) {
@@ -138,13 +160,18 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     return (
         <article ref={propertyRef} className={articleClass}>
             <div className='container'>
-                {property && property._id && <img src={propertyImage} />}  
-                <div>
+                {property && property._id && 
+                    <div className='media'>
+                        {(property?.media || [{url:missingPictureImage}]).map((media, index) => (
+                            <img key={index} src={media.url} className={picturesClasses[index]} />
+                        ))}
+                </div>}  
+                <div className='details'>
                     <h2>{address}</h2>
                     {property && !property._id && <div><AddPropertyIcon sx={IconSizes.Small} /></div>}  
                     {property && <span className='price'>{property?.price ? utilService.priceFormat(property?.price) : ''}</span>}
                 </div>
-                <div>
+                <div className='actions'>
                     <div className='indications'>
                         {showMedaltIcon && <MedaltIcon sx={IconSizes.Small} titleAccess='התשואה הטובה ביותר' />}
                         {showMissDataIcon && <MissDataIcon sx={IconSizes.Small} titleAccess='חסרים נתונים' />}

@@ -86,7 +86,7 @@ function saveLocalUser(user) {
     }
 
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
-    localStorage.removeItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
+    localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
     return user
 }
 

@@ -11,7 +11,12 @@ import {
     Visibility as ShowPasswordIcon,
     VisibilityOff as HidePasswordIcon,
     Redo as  RollbackIcons,
-    AccountCircle as MissingAvatarIcon
+    AccountCircle as MissingAvatarIcon,
+    AddCircle as AddMediatIcon,
+    Slideshow as MovieIcon,
+    Photo as PictureIcon,
+    VolumeOff as MuteIcon,
+    VolumeUp as SoundIcon
 } from '@mui/icons-material'
 
 
@@ -62,6 +67,11 @@ export {
     DeleteIcon,
     EditIcon,
     BackIcon,
+    AddMediatIcon,
+    MovieIcon,
+    PictureIcon,
+    MuteIcon,
+    SoundIcon,
     LoadingIcon,
     CartIcon
 }

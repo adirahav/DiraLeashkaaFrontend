@@ -111,7 +111,7 @@
     
         --overlay-background: var(--palette5_transparent);
 
-        --property-form-background: var(--palette1);
+    --property-form-background: var(--palette1);
     --property-form-spinner-divider: var(--palette2);
         --property-form-spinner-border: var(--palette3);
         --property-form-spinner-background: var(--palette2);
@@ -130,7 +130,9 @@
         --property-field-hint: var(--palette5);
     --property-field-warning-icon: var(--palette9);
         --property-field-warning-text: var(--palette7);
-        
+    --property-media-upload-icon: var(--palette7);
+    --property-media-close-icon: var(--palette6);
+
     --calculator-result-text: var(--palette7);
         --calculator-background: var(--palette1);
         --calculator-overlay-background: var(--palette5_transparent);

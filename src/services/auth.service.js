@@ -36,9 +36,6 @@ async function signup(credentials) {
 }
 
 async function logout() {
-    if (getLoggedinUser()) {
-        localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, getLoggedinUser()?.email)
-    }
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
 }
 
