@@ -57,6 +57,7 @@ export function userReducer(state = initialState, action = {}) {
                 }
             }
         case DELETING_PROPERTY_START:
+            console.log("DELETING_PROPERTY_START isDeleting true")
             return {
                 ...state,
                 home: {
@@ -65,6 +66,7 @@ export function userReducer(state = initialState, action = {}) {
                 }
             }
         case DELETING_PROPERTY_DONE:
+            console.log("DELETING_PROPERTY_DONE isDeleting false")
             return {
                 ...state,
                 home: {

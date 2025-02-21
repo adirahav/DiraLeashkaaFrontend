@@ -98,7 +98,10 @@ export function PropertyMedia({ list, onUpload, onRemove }) {
 
     // delete
     async function deleteMedia(publicId) {
-        await mediaService.remove(publicId)
+        //await mediaService.remove(publicId)
+        setMediaList((prevMediaList) => {
+            return prevMediaList.filter(item => item.publicId !== publicId)
+        }) 
         onRemove(publicId)
     }
     
@@ -106,7 +109,7 @@ export function PropertyMedia({ list, onUpload, onRemove }) {
     return (
         <article className="media-list">
             {(mediaList || []).map((media, index) => (
-                <Media key={index} media={media} />
+                <Media key={index} media={media} onDelete={deleteMedia} />
             ))}
            {(mediaList?.length ?? 0) < MAX_MEDIA_COUNT && <div className='file-upload' onClick={onTriggerUploadMedia}>
                 {isUploading && <LoadingIcon />}

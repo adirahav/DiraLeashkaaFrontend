@@ -7,7 +7,7 @@ import { HomeBestYields } from '../cmps/HomeBestYields'
 import { Overlay } from '../cmps/Overlay'
 import { utilService } from '../services/util.service'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { getHome, onDeletingPropertyStart, onAboutDeletingProperty, saveHome } from '../store/actions/user.actions.js'
+import { getHome, onDeletingPropertyStart, onAboutDeletingProperty, saveHome, onDeletingPropertyDone, onDeleteProperty } from '../store/actions/user.actions.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSelector } from 'react-redux'
 import { IconSizes, AddPropertyIcon } from "../assets/icons"
@@ -40,6 +40,8 @@ export function HomePage() {
 
     const [citiesNames, setCitiesNames] = useState()
     const [worker, setWorker] = useState(null)
+    
+    const MIN_DELETE_PROPERTY_AWAIT_SEC = 3
     
     useEffect(() => {
         if (!phrases || !fixedParameters || !calculators) {
@@ -138,6 +140,28 @@ export function HomePage() {
         
 
         const deleteStartTime = new Date()
+    
+        await onDeleteProperty(propertyId)
+    
+        const deleteEndTime = new Date()
+    
+        const diffSeconds = (deleteEndTime.getTime() - deleteStartTime.getTime()) / 1000
+    
+        if (diffSeconds < MIN_DELETE_PROPERTY_AWAIT_SEC) {
+            await new Promise(resolve => setTimeout(resolve, (MIN_DELETE_PROPERTY_AWAIT_SEC - diffSeconds) * 1000))
+        }
+
+        const sameCityCount = city === "else" || !city
+                                ? homeState.properties?.filter(property => property.city === city || !property.city).length
+                                : homeState.properties?.filter(property => property.city === city).length
+        
+        if (sameCityCount === 1) {
+            setSelectedCity(null)
+        }
+        
+        onAboutDeletingProperty(null)
+        onDeletingPropertyDone()
+
     }
 
     // best yield

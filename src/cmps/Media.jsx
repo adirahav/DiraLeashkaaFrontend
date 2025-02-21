@@ -91,7 +91,7 @@ export function Media({media, isMediaPreview = false, aspectRatio = "square", on
     const playClass = (!isUserStoppedVideo ? "hide-content " : "") + "play"
     
     if (!media) return <></>
-console.log("media="+JSON.stringify(media))
+
     return (
         <div className="media round">
             {media.type === "image" && !isMediaPreview  && <LazyLoadMedia mediaUrl={media.url} mediaWidth={media.width} mediaHeight={media.height} mediaPublicId={media.publicId} isVideo={false} alt={media.alt} aspectRatio={aspectRatio} onDelete={onDelete} />}

@@ -159,13 +159,13 @@ export default App
 + form press enter
 + לעצב מחדש
 + הרבה נכסים מעטים מאד את קצב העליה
++ image upload
 
 - לשים פרסומות
 ? עמוד הבית - מחיקה משובש
 
-
-- image upload
 - lazy load
+- delete image from cloudinary
 
 - לינק לאפליקציה
 - micro services
