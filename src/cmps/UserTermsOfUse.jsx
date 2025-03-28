@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FormField } from './FormField'
 
 export function UserTermsOfUse({ termsOfUse, onChange }) {   
-
     const keys = {
-        accept: "acceptDefault",
+        accept: termsOfUse.accept.value.toString() + "acceptDefault",
     }
 
     const handleOnChange = (key, value, hasError) => {
-        onChange(key, value, hasError)
+        if (onChange) {
+            onChange(key, value, hasError)
+        }
     }
     
     return (<div className='html-area'>

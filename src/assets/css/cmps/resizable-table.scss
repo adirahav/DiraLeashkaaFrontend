@@ -405,5 +405,19 @@
       }
     }
   }
+
+  @include mobile-layout {
+    & {
+      font-size: rem(14px);
+      
+      th, td {
+        padding: 6px 4px;
+
+        &:nth-child(1) {
+          width: 50px;
+        }
+      }
+    }
+  }
 }
 

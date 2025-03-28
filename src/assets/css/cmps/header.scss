@@ -4,7 +4,6 @@ header {
     &.logout {
         height: $header-height;
         background-color: var(--tablet-header-background);
-        /*border-bottom: 1px solid var(--nav-header-border);*/
         display: grid;  
         align-items: center;
         position: sticky;
@@ -26,7 +25,7 @@ header {
 
     &:not(.logout) {
         height: $header-height;
-        background-color: var(--nav-header-background);
+        background-color: var(--nav-header-logout-background);
         border-bottom: 1px solid var(--nav-header-border);
         display: grid;  
         align-items: center;
@@ -54,13 +53,6 @@ header {
                 color: var(--nav-header-icon);
                 margin-left: 10px;
             }
-        }
-
-        & > h1 {
-            margin: 0 auto;
-            color: var(--nav-header-color);
-            font-family: "gveret-levin";
-            padding: 7px 0 7px 50px;
         }
 
         nav {
@@ -92,10 +84,6 @@ header {
                                 transform: scale(105%);
                             }
                         } 
-                        
-                        /*span {
-                            color: var(--nav-header-text)
-                        }*/
                         
                         svg {
                             margin-left: 5px;
@@ -250,12 +238,12 @@ header {
                             }
     
                             &.active {
-                                background-color: #5664f5;
+                                background-color: var(--tablet-nav-header-icon-background);
                                 border-radius: 15px;
                                 font-weight: normal;
     
                                 svg {
-                                    color: white;
+                                    color: var(--tablet-nav-header-icon);
                                 }
                             }
                         }
@@ -305,14 +293,14 @@ header {
                             width: 100%;
     
                             &.active {
-                                background-color: #5664f5;
-                                color: white;
+                                background-color: var(--tablet-nav-header-icon-background);
+                                color: var(--tablet-nav-header-icon);
                                 border-top-left-radius: 8px;
                                 border-bottom-left-radius: 8px;
                                 font-weight: normal;
                                 
                                 svg {
-                                    color: white;
+                                    color: var(--tablet-nav-header-icon);
                                 }
                             }
     
@@ -392,18 +380,22 @@ header {
         .tablet, .desktop, .tablet-or-desktop { display: none }
         @include header-grid-template-columns('mobile');
     
-        /*border-bottom: 1px solid var(--mobile-header-divider);*/
         height: 50px;
 
         &.logout {
-            background-color: var(--mobile-header-background);
+            background-color: var(--nav-header-logout-background);
             .logo {
                 margin: auto;
+
+                img {
+                    height: 60px;
+                }
             }
         }
 
         &:not(.logout) {
-            background-color: var(--mobile-header-background);
+            background-color: var(--mobile-nav-header-background);
+
             .logo {
                 display: grid;
                 grid-template-columns: 60px 1fr 60px;
@@ -412,16 +404,19 @@ header {
                 .menu {
                     grid-column: 1;
                     margin: auto;
+                    font-size: 30px;
                 }
 
-                a, img {
+                a, a img {
                     grid-column: 2;
                     margin: auto;
+                    height: 60px;
                 }
 
                 .back {
                     grid-column: 3;
                     margin: auto;
+                    font-size: 30px;
                 }
             }
 
@@ -473,10 +468,14 @@ header {
                         &.welcome {
                             svg {
                                 margin-left: 5px;
+                                width: 1.25em;
+                                height: 1.25em;
+                                margin-left: 8px;
                             }
     
                             span {
                                 color: var(--mobile-nav-text);
+                                font-size: 20px;
                             }
                         }
                         
@@ -488,10 +487,14 @@ header {
                             a {
                                 span {
                                     color: var(--mobile-nav-text);
+                                    font-size: 20px;
                                 }
         
                                 svg {
                                     color: var(--mobile-nav-icon);
+                                    width: 1.25em;
+                                    height: 1.25em;
+                                    margin-left: 8px;
                                 }
                             }    
                         }
@@ -508,7 +511,7 @@ header {
                         }
     
                         &.divider {
-                            border: 1px solid var(--mobile-divider-drawer);
+                            border: 1px solid var(--mobile-nav-divider-drawer);
                         }
                     }
                 }

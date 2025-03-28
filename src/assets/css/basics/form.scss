@@ -116,6 +116,18 @@
             box-shadow: unset;
             width: 100%;
             max-width: 300px;
+
+            .title {
+                font-size: 40px;
+            }
+
+            .footer {
+                div {
+                    a {
+                        font-size: rem(18px);
+                    }
+                }
+            }   
         }
     }
 }

@@ -1,37 +1,6 @@
 .home {
     background-color: var(--background);
 
-    .add-button {display:none;
-        bottom: 0;
-        position: absolute;
-        right: 45px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        border-top: 3px solid var(--home-add-button-border);
-        border-left: 3px solid var(--home-add-button-border);
-        border-right: 3px solid var(--home-add-button-border);
-        background: var(--home-add-button-background);
-        color: var(--home-add-button-text);
-        padding: 10px 10px;
-        cursor: default;
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        span {
-            align-self: center;
-            margin: 0 4px 2px 2px;
-            font-size: rem(20px);
-            font-weight: bold;
-        }
-
-        svg {
-            width: 30px;
-            height: 30px;
-        }
-    }
- 
     h1 {
         color: var(--text);
         padding: 0;
@@ -80,13 +49,13 @@
             margin: 0 0 15px;
             padding: 15px;
 
-            span:hover {
+            div:hover {
                 transform: scale(105%);
                 cursor: default;
             }
 
             &.selected {
-                span {
+                div {
                     font-weight: bold;
 
                     &:hover {
@@ -96,17 +65,23 @@
                 }
             }
 
-            &.loading0 { animation: loading0-animation 3s infinite }
-            &.loading1 { animation: loading1-animation 3s infinite }
-            &.loading2 { animation: loading2-animation 3s infinite }
-            &.loading3 { animation: loading3-animation 3s infinite }
+            &.loading0 { animation: loading0-animation 3s infinite ; span { display: none; }}
+            &.loading1 { animation: loading1-animation 3s infinite ; span { display: none; }}
+            &.loading2 { animation: loading2-animation 3s infinite ; span { display: none; }}
+            &.loading3 { animation: loading3-animation 3s infinite ; span { display: none; }}
             
             img {
                 width: 25px;
                 height: auto;
             } 
-            span {
+
+            div {
                 margin-right: 7px;
+
+                span {
+                    margin-right: 7px;
+                    font-size: 14px;
+                }
             }
         }
     }
@@ -193,6 +168,12 @@
                 }
             }
 
+            &.before-deleting {
+                .container {
+                    opacity: 0.3;
+                }
+            }
+
             & > .delete-overlay {
                 background-color: var(--home-my-property-delete-overlay-background);
                 position: absolute;
@@ -236,48 +217,12 @@
                 }
             } 
 
-            &.add-new {
-                img {
-                    margin: 20px;
-                    max-width: calc(100% - 40px);
-                }
-
-                .container {
-                    div:not(:first-child) {
-                        background: var(--home-add-button-background);
-                        border-radius: 50%;
-                        width: 54px;
-                        height: 54px;
-                        margin: 20px auto;
-                        display: flex;
-
-                        svg {
-                            color: var(--home-add-button-text);
-                            width: 35px;
-                            height: 35px;
-                            margin: auto;
-                        }
-                    }
-                }
-            }
-
             &.loading0 { animation: loading0-animation 3s infinite }
             &.loading1 { animation: loading1-animation 3s infinite }
             &.loading2 { animation: loading2-animation 3s infinite }
             &.loading3 { animation: loading3-animation 3s infinite }
             &.loading4 { animation: loading4-animation 3s infinite }
             &.loading5 { animation: loading5-animation 3s infinite; display: none; }
-        }
-    }
-
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-
-        div {
-            background-color: brown;
-            margin: 10px;
-            height: 150px;
         }
     }
 
@@ -318,21 +263,22 @@
                     margin: 0 6px 20px;
 
                     img {
-                        grid-template-rows: 1;
+                        grid-row: 1;
                         margin: 0 auto;
                     }
 
                     h3 {
-                        grid-template-rows: 2;
+                        grid-row: 2;
                         margin: 0 auto;
                         font-size: 13px;
                         font-weight: normal;
                     }
 
                     span {
-                        grid-template-rows: 3;
+                        grid-row: 3;
                         font-size: 20px;
                         font-weight: bold;
+                        margin: 6px auto 0;
                     }
 
                     
@@ -408,7 +354,6 @@
             width: 555px;
             
             h2 {
-                color: var(--login-title-text);
                 font-size: 64px;
                 font-weight: bold;
                 padding: 0;
@@ -457,7 +402,7 @@
             overflow-x: scroll;
             
             article {
-                span {
+                div {
                     width: 150px;
                 }
             }
@@ -590,16 +535,16 @@
             
             & > article {
                 display: inline-grid;
-                width: 100px;
-                height: 100px;
+                width: 120px;
+                height: 110px;
                 padding: 10px;
-                box-sizing: content-box;
 
                 & > img {
                     margin: 0 auto 4px;
+                    width: 35px;
                 }
 
-                & > span {
+                & > div {
                     margin: 0 auto;
                     text-align: center;
                     width: 90px;
@@ -615,7 +560,7 @@
                 height: 100px;
 
                 & > .container {
-                    grid-template-columns: 130px 1fr 45px;
+                    grid-template-columns: 130px 1fr 55px;
 
                     .media {
                         img {
@@ -629,6 +574,46 @@
                             height: auto;
                         }
                     }
+
+                    .details {
+                        h2 {
+                            font-size: rem(18px);
+                            height: 24px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+                        .price {
+                            font-size: rem(16px);
+                        }
+                    }
+
+                    .indications {
+                        svg {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+                    .actions {
+                        .actions svg {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+                }
+
+                & > .delete-overlay {
+                    height: 100px;
+                    
+                    & > div {
+                        height: 100px;
+
+                        h2 {
+                            margin-bottom: 0;
+                            margin-top: 8px;
+                        }
+                    }
+                   
                 }
             }
         }
@@ -637,11 +622,13 @@
             & {
                 box-shadow: unset;
                 padding: 0 20px;
-                margin: 0;
+                margin: 0 0 50px 0;
+                position: relative;
             }
 
             & > h2 {
                 margin: 20px 0 10px;
+                font-size: 18px;
             }
 
             & > div {
@@ -650,6 +637,14 @@
 
                     article {
                         margin: 0 6px 15px;
+                        grid-template-rows: 1fr 1fr 1fr;
+                        width: calc((100% - 28px) / 2);
+                        height: calc((100% - 28px) / 2);
+                    
+                        h3 {
+                            margin: auto 18px;
+                            font-size: 15px;
+                        }
                     }
                 }
 

@@ -163,7 +163,12 @@ export function Header() {
         ev.preventDefault()
         ev.stopPropagation()
         
-        navigate("/home") 
+        const pathname = new URL(window.location.href).pathname
+        if (pathname === "/calculator") {
+            navigate("/calculators")
+        } else {
+            navigate("/home")
+        }
     }
 
     const handleMobileAnimationEnd = () => {

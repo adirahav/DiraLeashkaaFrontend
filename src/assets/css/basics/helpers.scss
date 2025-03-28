@@ -3,6 +3,34 @@
 }
 
 .container {
-    /*min-height: calc(100vh - $header-height - $footer-height);
-    height: max-content;*/
+    &.swiping {
+        overflow-y: hidden;
+    }
+
+    .swiping-to-refresh {
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin: 20px auto 0px;
+        display: flex;
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: fade-in-down 0.2s ease-out forwards;
+        
+        svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--loading-dark);
+            
+        }
+
+        &.refreshing {
+            svg {
+                animation-name: loading;
+                animation-duration: .8s;
+                animation-iteration-count: infinite;
+                animation-timing-function: steps(8,end);  
+            }
+        }
+    }
 }

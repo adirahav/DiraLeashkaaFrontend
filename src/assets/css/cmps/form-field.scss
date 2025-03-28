@@ -39,7 +39,9 @@
               padding: 14px 8px 2px;
           
               & + span {
-                  transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+                  transform: scale(calc(10 / 12)) translateY(-10px) translateX(40px);
+                  width: 200px;
+                  text-align: right;
               }
           }
 
@@ -53,7 +55,9 @@
             opacity: 0.6;     
             
             & + span {
-              transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+              transform: scale(calc(10 / 12)) translateY(-10px) translateX(40px);
+              width: 200px;
+              text-align: right;
           }
         }
       }
@@ -65,13 +69,6 @@
     left: -28px;
     color: var(--form-field-tooltip-background);
   }
-  
-  /*&.number {
-    &.tooltip {
-      width: calc(100% - 20px);
-      margin-left: 20px;
-    }
-  }*/
 
   &.email {
     text-align: left;
@@ -104,10 +101,6 @@
       margin: 5px;
       background: var(--form-field-button-background);
       cursor: default;
-
-      /*span {
-        color: var(--form-field-button-text);
-      }*/
 
       &:hover {
         span {
@@ -200,9 +193,12 @@
         width: 20px;
         height: 20px;
 
-        &:valid {
-          
-        }
+        &:valid  {
+          & + span {
+            margin-right: 23px;          
+              
+          }
+      }
 
         &:checked {
           
@@ -267,7 +263,9 @@
             padding: 14px 8px 2px;
         
             & + span {
-                transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+                transform: scale(calc(10 / 12)) translateY(-10px) translateX(40px);
+                width: 200px;
+                text-align: right;
             }
         }
 
@@ -307,7 +305,9 @@
             padding: 14px 8px 2px;
         
             & + span {
-                transform: scale(calc(10 / 12)) translateY(-10px) translateX(5px);
+              transform: scale(calc(10 / 12)) translateY(-10px) translateX(40px);
+              width: 200px;
+              text-align: right;
             }
         }
 
@@ -327,9 +327,81 @@
   }
 
   @include mobile-layout {
-    &.code {
-      input {
-        width: 40px;
+    & {
+      label {
+          height: 40px;
+              
+          span {
+              font-size: rem(16px);
+              line-height: 40px;
+          }
+
+          input {
+              &:valid  {
+                  font-size: rem(16px);
+              }
+          }
+      }
+      
+      &.button {
+        &.link {
+          button {
+            font-size: rem(18px);
+          }
+        }
+
+        button {
+          height: 48px;
+          min-width: 100px;
+
+          span {
+            font-size: rem(16px);
+          }
+        }
+      }
+
+      &-error {
+        font-size: rem(16px);
+      }
+
+      &.checkbox {
+        margin-left: 0;
+        margin-right: 0;
+
+        label {
+          span {
+            font-size: rem(16px);
+          }
+        }
+      }
+    
+      &.code {
+        span {
+          font-size: rem(18px);
+        }
+        input {
+          width: 40px;
+          font-size: rem(22px);
+        }
+      }
+
+      &.dropdown {
+        label {
+          select {
+            &:valid {
+              font-size: rem(16px);
+            }
+          }
+        }
+      }
+
+      &.textarea {
+        label {
+          textarea {
+            font-size: rem(16px);
+            height: 98px;
+          }
+        }
       }
     }
   }

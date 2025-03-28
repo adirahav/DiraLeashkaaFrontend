@@ -74,7 +74,7 @@ export function SignUpPage() {
         return {
             name,
             label: utilService.getPhrase(labelKey, phrases), 
-            value: value || false,
+            value: value !== null && value !== undefined,
             error: utilService.getPhrase(errorKey, phrases),
             enable: true
         }
@@ -85,7 +85,7 @@ export function SignUpPage() {
         name: defultInputState("name", "signup_fullname_label", loggedinUser?.fullname, "signup_fullname_error"),
         email: defultInputState("email", "signup_email_label", loggedinUser?.email, "signup_email_error"),
         password: defultInputState("password", "signup_password_label", loggedinUser ? "********" : "", "signup_password_error"),
-        yearOfBirth: defultInputState("yearOfBirth", "signup_year_of_birth_hint", loggedinUser?.yearOfBirth, "signup_year_of_birth_error", null, YEAR_OF_BIRTH_MAX_LENGTH)
+        yearOfBirth: defultInputState("yearOfBirth", "signup_year_of_birth_hint", loggedinUser?.yearOfBirth, "signup_year_of_birth_error", "signup_year_of_birth_tooltip", YEAR_OF_BIRTH_MAX_LENGTH)
     })
 
     const [financialDetails, setFinancialDetails ] = useState({
@@ -127,7 +127,7 @@ export function SignUpPage() {
                 name: defultInputState("name", "signup_fullname_label", loggedinUser?.fullname, "signup_fullname_error"),
                 email: defultInputState("email", "signup_email_label", loggedinUser?.email, "signup_email_error"),
                 password: defultInputState("password", "signup_password_label", loggedinUser ? "********" : "", "signup_password_error"),
-                yearOfBirth: defultInputState("yearOfBirth", "signup_year_of_birth_hint", loggedinUser?.yearOfBirth, "signup_year_of_birth_error", null, YEAR_OF_BIRTH_MAX_LENGTH)
+                yearOfBirth: defultInputState("yearOfBirth", "signup_year_of_birth_hint", loggedinUser?.yearOfBirth, "signup_year_of_birth_error", "signup_year_of_birth_tooltip", YEAR_OF_BIRTH_MAX_LENGTH)
             })
         
             setFinancialDetails({
@@ -156,7 +156,7 @@ export function SignUpPage() {
         } else {
             onLoadingDone()  
         }
-    }, [phrases])
+    }, [splash])
 
     function jumpToStep() {
         if (!loggedinUser || !loggedinUser.fullname || !loggedinUser.email || !loggedinUser.yearOfBirth) {
@@ -238,12 +238,12 @@ export function SignUpPage() {
                 stepFields = termsOfUse
                 break
             case STEP.COMPLETE:
-                isBackDisabled = false
-                isNextDisabled = false
+                /*isBackDisabled = true
+                isNextDisabled = true
                 stepFields = {
                     ...termsOfUse,
                     accept: {...termsOfUse.accept, enable: false}
-                }
+                }*/
                 break
         }
 
@@ -360,7 +360,8 @@ export function SignUpPage() {
                 try {
                     setButtons((prevButtons) => ({
                         ...prevButtons,
-                        next: { ...prevButtons.next, isLoading: true },
+                        back: { ...prevButtons.back, isDisabled: true },
+                        next: { ...prevButtons.next, isLoading: true, isDisabled: true },
                     }))
 
                     await saveUser(termsOfUse)
@@ -375,12 +376,11 @@ export function SignUpPage() {
                     handleOnComplete()
                 } catch(e) {
                     logService.error(TAG, e)
-                } finally {
                     setButtons((prevButtons) => ({
                         back: { ...prevButtons.back, isLoading: false, isDisabled: true },
                         next: { ...prevButtons.next, isLoading: false, isDisabled: true },
                     }))
-                }
+                } 
                 break
 
         }
@@ -408,7 +408,7 @@ export function SignUpPage() {
     const programs = utilService.getFixedParameter("payPrograms", fixedParameters)
     
     const formClass = `signup ${(Object.keys(STEP).find(key => STEP[key] === progress.step) || Object.keys(STEP)[0]).toLowerCase()}`
-    const titleClass = `title ${isLoadingState || !phrases ? 'loading0' : ''}`
+    const titleClass = `title ${isLoadingState || !phrases ? 'loading1' : ''}`
     const progressClass = `progress ${isLoadingState || !phrases ? 'loading1' : ''}`
     const articleClass = `form ${isLoadingState || !phrases ? 'loading1' : ''}`
     const footerClass = `footer ${isLoadingState || !phrases ? 'loading1' : ''}`

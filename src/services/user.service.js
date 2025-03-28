@@ -16,7 +16,7 @@ export const userService = {
 
 async function splash() {
     try {
-        const splash = await httpService.get(BASE_URL + "splash?platform=web")
+        const splash = await httpService.get(BASE_URL + "splash")
         
         delete splash.fixedParameters.vatPercent
         delete splash.fixedParameters.sms

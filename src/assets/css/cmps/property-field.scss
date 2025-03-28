@@ -20,6 +20,7 @@
       display: contents;
       background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
       text-decoration: underline;
+
       &::after {
         border-bottom: 10px solid red;
       }
@@ -63,6 +64,7 @@
           background: transparent;
           margin: 0;
           font-size: 14px;
+          border: 0;
 
           &:focus-visible {
             outline: 0;
@@ -90,18 +92,19 @@
       }
       
       .actions {
-          svg {
-            color: var(--number-picker-icon);
-            margin: 0;
+        margin-left: 5px;
+        svg {
+          color: var(--number-picker-icon);
+          margin: 0;
 
-            &[data-testid=DoneIcon], &[data-testid=CloseIcon] {
-              font-size: 15px;
-              font-weight: bold;
-            }
-            &[data-testid=CloseIcon] {
-              color: var(--number-picker-icon-light);
-            }
+          &[data-testid=DoneIcon], &[data-testid=CloseIcon] {
+            font-size: 15px;
+            font-weight: bold;
           }
+          &[data-testid=CloseIcon] {
+            color: var(--number-picker-icon-light);
+          }
+        }
       }
   }
 
@@ -169,13 +172,20 @@
       }
 
       svg  {
-        margin: 5px;
+        margin: auto 0;
         user-select: none;
         width: 1em;
         height: 1em;
         font-size: 20px;
       }
+      
+    }
 
+    & > div {
+      & > svg {
+        margin: 3px 6px 3px 0;
+      }
+      
     }
   }
 
@@ -199,66 +209,6 @@
 
   &.dropdown {
     
-    /*div {
-      position: relative;
-
-      select {
-        border: 1px solid var(--form-field-input-border);
-        border-radius: 8px;
-        flex: 1 0 auto;
-        padding: 9px 8px 7px;
-        background: var(--property-field-background);
-        color: var(--property-field-text);
-        width: 180px;
-        height: 30px;
-        margin: 0 10px;
-        padding: 0 8px;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        
-        &::placeholder {
-          color: var(--property-field-hint);
-        }
-  
-        &:focus-visible {
-          outline: -webkit-focus-ring-color auto 0;
-        }
-        
-        option {
-          list-style: none;
-          border-bottom: 1px solid var(--property-form-spinner-divider);
-          height: 33px;
-          line-height: 33px;
-  
-          &:last-child {
-            
-          }
-        }
-      
-      }
-
-      &::after {
-        content: "▼";
-        position: absolute;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 12px;
-        pointer-events: none; 
-      }
-
-      select:focus + &::after {
-        content: "▲";
-      }
-  
-      select:focus-within {
-        border: 1px solid red;
-      }
-
-      
-    }*/
-
     position: relative;
     
     .custom-dropdown {
@@ -410,19 +360,9 @@
 
     div {
       display: flex;
-      /*left: 9px;
-      position: relative;
-
-      input, select {
-        margin-right: 0;
-        color: var(--property-field-warning-text);
-      }*/
 
       & > svg {
         color: var(--property-field-warning-icon);
-        /*position: relative;
-        top: 3px;
-        left: 4px;*/
         margin: 5px -10px 5px 0;
         user-select: none;
         width: 1em;
@@ -454,7 +394,76 @@
   }
 
   @include mobile-layout {
+    & {
+      span {
+        font-size: rem(17px);
+        width: 110px;
+      }
+      
+      /*input {
+        font-size: rem(17px);
+      }*/
     
+      .number-picker {
+          /*width: 125px;
+          .input {
+            input {
+              font-size: 14px;
+            }  
+          }*/
+          
+          .actions {
+              svg {
+                &[data-testid=DoneIcon], &[data-testid=CloseIcon] {
+                  font-size: rem(18px);
+                }
+              }
+          }
+      }
+    
+      &.auto-fill, &.calc-editable, &.percent {
+        & > div {
+          svg  {
+            /*font-size: 24px;
+            margin: 1px 6px 1px 0;*/
+          }
+    
+        }
+      }
+    
+      &.dropdown {
+        
+        .custom-dropdown {
+
+            .dropdown-toggle {
+              font-size: rem(16px);
+            }
+            .dropdown-menu {
+                font-size: rem(16px);
+
+                input {
+                  font-size: rem(16px);
+                }
+
+                li {
+                  padding: 8px;
+                }
+            }
+    
+            /*& > svg {
+              font-size: 20px;
+            }*/
+        }
+      }
+    
+      /*&.warning {
+        div {
+          & > svg {
+            font-size: 20px;
+          }
+        }
+      }*/
+    }
   }
 }
 

@@ -350,7 +350,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
             })
         }
 
-        const fieldClass = `form-field number ${hasError ? ' error' : ''}`
+        const fieldClass = `form-field number ${hasError ? ' error' : ''} ${params.tooltip ? ' tooltip' : ''}`
 
         return  <><div className={fieldClass}>
                     <label>
@@ -390,7 +390,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
         
         return  <><div className={fieldClass}>
                     <label>
-                        <input type='checkbox' value={valueToEdit?.toString()} onChange={handleValueChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" disabled={!params.enable} ></input>
+                        <input type='checkbox' checked={!!valueToEdit} onChange={handleValueChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" disabled={!params.enable} ></input>
                         <span>{params.label}</span>
                     </label>
                 </div>

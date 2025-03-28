@@ -5,7 +5,6 @@
     padding: 17px;
     margin: 60px auto;
     display: grid;
-
    
     .title {
         color: var(--text);
@@ -15,7 +14,7 @@
         margin: 0;    
         text-align: center;
         
-        &.loading0 { animation: loading0-animation 3s infinite; * { display: none; } }
+        &.loading1 { animation: loading1-animation 3s infinite; color: transparent; * { display: none; } }
     }
     
     .progress {
@@ -88,6 +87,11 @@
         }
 
         .html-area {
+            h1, h3 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
             .text {
                 @include scrollbar;
                 width: 100%;
@@ -121,25 +125,6 @@
                 margin: 0 auto 10px;
                 width: 150px;
     
-                .duration {
-                    
-                    h2 {
-                        margin: 10px;
-                        padding: 0;
-                        background: transparent;
-                        font-size: 16px;
-                        font-family: gveret-levin;
-                    }
-    
-                    img {
-                        margin-top: 5px;
-                    }
-                }
-    
-                .price {
-                    font-family: gveret-levin;
-                }
-    
                 &:not(.before-deleting, .deleting) {
                     .delete-overlay {
                         display: none;
@@ -172,7 +157,7 @@
             }
         }
 
-        &.loading1 { animation: loading1-animation 3s infinite; * { display: none; } }
+        &.loading1 { animation: loading1-animation 3s infinite; * { display: none; } ; max-width: unset; border-radius: 0; }
     }
 
     .footer {
@@ -196,12 +181,14 @@
             }
         }  
 
-        &.loading2 { animation: loading2-animation 3s infinite; div { display: none; } }
+        &.loading1 { animation: loading1-animation 3s infinite; div { display: none; } }
     }
 
     &.presonal_info {
         .form {
             .form-field {
+                width: calc(100% - 25px);
+
                 &:last-of-type {
                     label input:valid + span {
                         right: 3px;
@@ -243,14 +230,15 @@
     
     @include mobile-layout {
         grid-template-columns: 1fr;
-        grid-template-rows: 55px 30px 1fr 50px;
+        grid-template-rows: 68px 46px 1fr 115px;
         grid-gap: 0;
         width: calc(100% - 20px);
-        margin: 10px;
+        margin: 0 10px;
         box-shadow: unset;
 
         .title {
             grid-row: 1;
+            margin-top: 10px;
         }
 
         .progress {
@@ -260,8 +248,14 @@
 
         .form {
             grid-row: 3;
-            padding: 0 0 10px;
+            padding: 0;
             margin: 0 auto;
+
+            .html-area {
+                .text {
+                    padding: 0;
+                }
+            }
         }
         
         .footer {

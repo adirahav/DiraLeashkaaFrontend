@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
@@ -11,7 +11,17 @@ import { PropertyChart } from '../cmps/PropertyChart'
 import iconMissingData from '../assets/images/missing_data.png'
 import 'react-tabs/style/react-tabs.css'
 import iconLock from '../assets/images/icon_lock.svg'
-import { ZoomOut } from '../assets/icons'
+
+import iconYieldForecastOff from '../assets/images/icon_yield_forecast_off.png'
+import iconYieldForecastOn from '../assets/images/icon_yield_forecast_on.png'
+import iconYieldForecastDisable from '../assets/images/icon_yield_forecast_disable.png'
+import iconAmortizationScheduleOff from '../assets/images/icon_amortization_schedule_off.png'
+import iconAmortizationScheduleOn from '../assets/images/icon_amortization_schedule_on.png'
+import iconAmortizationScheduleDisable from '../assets/images/icon_amortization_schedule_disable.png'
+import iconChartOff from '../assets/images/icon_chart_off.png'
+import iconChartOn from '../assets/images/icon_chart_on.png'
+import iconChartDisable from '../assets/images/icon_chart_disable.png'
+import { IconSizes, ZoomOut, DoubleArrowDownIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
 import { Overlay } from '../cmps/Overlay'
 import Lottie from "lottie-react"
@@ -37,7 +47,9 @@ export function PropertyPage() {
     const [fragment, setFragment] = useState("form")
     const [preventUpdateServer, setPreventUpdateServer] = useState(city !== null)
     const [isBlocked, setIsBlocked] = useState(false)
-
+    const [showGoToResults, setShowGoToResults] = useState(false)
+    const [isDataVisible, setIsDataVisible] = useState(false)
+    
     const loggedinUser = authService.getLoggedinUser()
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
@@ -47,6 +59,27 @@ export function PropertyPage() {
     const calculators = splash?.calculators
 
     const navigate = useNavigate()
+
+    const dataRef = useRef(null)
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            setIsDataVisible(entry.isIntersecting)
+          },
+          { threshold: 0.1 } 
+        )
+    
+        if (dataRef.current) {
+          observer.observe(dataRef.current);
+        }
+    
+        return () => {
+          if (dataRef.current) {
+            observer.unobserve(dataRef.current)
+          }
+        }
+      }, [])
 
     useEffect(() => {
         if (!phrases || !fixedParameters || !calculators) {
@@ -131,6 +164,10 @@ export function PropertyPage() {
                 break
         }
     }, [fragment])
+
+    useEffect(() => {
+        setShowGoToResults(!lockYields && !isLoadingState && !isFirstLoading && !isDataVisible)
+    }, [lockYields, isLoadingState, isFirstLoading, isDataVisible])
 
     const hasOnlyCity = (property) => {
         return Object.keys(property).length === 1 && property.hasOwnProperty('city')
@@ -249,14 +286,6 @@ export function PropertyPage() {
         }
     }
 
-    const handleIconStatus = (fragmentName) => {
-        return showInterestsContainer 
-                ? fragment === fragmentName
-                    ? 'on'
-                    : 'off' 
-                : 'disable'
-    } 
-
     const handleDisplayInterests = async () => {
         setShowInterestsContainer(!showInterestsContainer)
     } 
@@ -274,19 +303,34 @@ export function PropertyPage() {
         updateProperty("media", mediaToUpload)
     }
 
+    const handleGotoResults = () => {
+        dataRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
 
     const mainClass = `property container ${!showInterestsContainer ? "lock" : ""} ${showMobileData}`
     const menuClass = `menu ${fragment === "form" ? 'bottom' : 'side'} ${property?.showMortgagePrepayment ? '' : 'no-mortgage'}`
-    const iconYieldForecast = `/src/assets/images/icon_yield_forecast_${handleIconStatus('yield-forecast')}.png`
-    const iconAmortizationSchedule = `/src/assets/images/icon_amortization_schedule_${handleIconStatus('amortization-schedule')}.png`
-    const iconChart = `/src/assets/images/icon_chart_${handleIconStatus('chart')}.png`
-    
     const yieldForecastLabelClass = `label-${fragment === 'yield-forecast' ? 'on' : 'off'}`
     const amortizationScheduleLabelClass = `label-${fragment === 'amortization-schedule' ? 'on' : 'off'}`
     const chartLabelClass = `label-${fragment === 'chart' ? 'on' : 'off'}`
     const dataClass = `data ${fragment} /*${isFirstLoading ? 'loading3' : ''}*/`
     
     const titleClass = isLoadingState ? 'loading0' : '' 
+    
+    const iconYieldForecast = !lockYields && !isLoadingState && property
+                    ? fragment === 'yield-forecast' 
+                        ? iconYieldForecastOn 
+                        : iconYieldForecastOff
+                    : iconYieldForecastDisable
+    const iconAmortizationSchedule = !lockYields && !isLoadingState && property
+                    ? fragment === 'amortization-schedule' 
+                        ? iconAmortizationScheduleOn 
+                        : iconAmortizationScheduleOff
+                    : iconAmortizationScheduleDisable
+    const iconChart = !lockYields && !isLoadingState && property
+                    ? fragment === 'chart' 
+                        ? iconChartOn 
+                        : iconChartOff
+                    : iconChartDisable
 
     return (<>
         {showMobileData === "" && <Header />}
@@ -299,7 +343,7 @@ export function PropertyPage() {
                 <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />
             </>}
             {!isFirstLoading && !lockYields && <h1 className={titleClass}>תחזית פיננסית</h1>}
-            <section className={dataClass}>
+            <section className={dataClass} ref={dataRef}>
                 {!showInterestsContainer && <div className="unavailable-overlay">
                     <img src={iconMissingData} />
                     <div>
@@ -329,6 +373,7 @@ export function PropertyPage() {
                 <article onClick={onChartPress}><img src={iconChart} /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3></article>
                 {lockYields && <img src={iconLock} />}
             </div>
+            {showGoToResults && <DoubleArrowDownIcon className='goto-results' onClick={handleGotoResults} />}
         </main>
         {showMobileData === "" && <Footer />}
     </>)

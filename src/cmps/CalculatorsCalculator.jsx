@@ -5,17 +5,17 @@ import { useSplash } from '../contexts/SplashContext'
 import { FormField } from './FormField'
 
 export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) {   
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
+
     const [calculatorIcon, setCalculatorIcon] = useState(null)
     const [enterButton, setEnterButton] = useState(
         {
-            text: "חשב", 
+            text: utilService.getPhrase("calculator_calculate_button", phrases), 
             isDisabled: false,
             isLoading: false
         }
     )
-
-    const { splash } = useSplash()
-    const phrases = splash?.phrases
 
     useEffect(() => {
         (async () => {

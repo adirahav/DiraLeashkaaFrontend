@@ -94,6 +94,10 @@ select {
     font-family: rubik-regular;
 }
 
+textarea {
+    font-family: rubik-regular;
+}
+
 /* MAC like scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
@@ -113,85 +117,6 @@ select {
         -webkit-border-radius: 100px;
     }
 }
-/*
-.main-app {
-    display: grid;
-    grid-template-columns: 1fr;		
-    grid-template-rows: auto 1fr auto;
-    gap: 0;
-    grid-template-areas:
-        "h"
-        "m"
-        "f";
-
-    header {
-        grid-area: h;
-    }   
-    
-    &.aside {
-        grid-area: a;
-        width: 256px
-    } 
-
-    &.has-aside {
-        grid-template-columns: 256px 1fr;		
-        grid-template-areas:
-            "t t"
-            "a m";
-
-        header {
-            grid-area: t;
-        }
-
-        &.thin-aside {
-            grid-template-columns: 72px 1fr;		
-        }
-
-        & > header {
-            background-color: transparent;
-        
-            .logo {
-                width: 256;
-            }
-        }
-    }
-
-    main {
-        grid-area: m;
-    }
-
-    footer {
-        grid-area: f;
-    }
-
-    @media screen and (max-width: 991px) {
-        display: grid;
-        grid-template-columns: 1fr;		
-        grid-template-rows: auto 1fr auto;
-        gap: 0;
-        grid-template-areas:
-            "h"
-            "m"
-            "f";
-
-        main {
-            padding: 10px;
-        }
-        
-        &.has-aside {
-            grid-template-columns: 1fr;		
-            grid-template-rows: auto 1fr;
-            grid-template-areas:
-                "t"
-                "m"
-        }
-
-        header {
-            height: auto;
-        }
-    }
-}*/
-
 
 
 

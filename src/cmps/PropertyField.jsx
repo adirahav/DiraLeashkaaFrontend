@@ -64,7 +64,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
     function AutoFill({params, onSetValue}) {
         const [valueToEdit, setValueToEdit] = useState(utilService.formatNumber(params.value?.toString()))
         const [isChangedByUser, setIsChangedByUser] = useState(false)
-
+        
         useEffect(() => {
             if (isChangedByUser) {
                 debouncedOnValueChange(valueToEdit)
@@ -83,9 +83,10 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.stopPropagation()
 
             let { value } = ev.target
-            value = value.replace(/[^0-9]/g, '').replace(/^0+/, '')
+            if (value === "0") {
+                value.replace(/[^0-9]/g, '').replace(/^0+/, '')
+            }
             value = utilService.formatNumber(value)
-
             setValueToEdit(value)
             setIsChangedByUser(true)
         }
@@ -108,11 +109,17 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                           valueToEdit.length === 0 
                                                             ? ' empty' 
                                                             : '')
-        const showRollback = valueToEdit.replace(/,/g, '') !== params.defaultValue?.toString() && 
+
+        const showRollback1 = valueToEdit.replace(/,/g, '') !== params.defaultValue?.toString() && 
                              !isFirstLoading && 
                              params.defaultValue != undefined && 
                              params.id 
 
+        const showRollback = isFirstLoading || !valueToEdit 
+                             ? false 
+                             : (!params.value && !params.defaultValue) ||
+                               (valueToEdit?.toString().replace(/,/g, '') !== params.defaultValue?.toString())
+     
         return  <div className={fieldClass}>
                     <span>{params.label}</span>
                     <div>
@@ -344,7 +351,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                 ? ' empty' 
                                                 : '')
 
-        
+            
         const showRollback = isFirstLoading || !valueToEdit 
                                 ? false 
                                 : params.isReadOnly
@@ -750,8 +757,8 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         const handleNumberPickerPercentAccept = (ev) => {
             setOrgPercent(percentToEdit)
             setLabel(params.label
-                .replace("<u>", "<span>")
-                .replace("</u>", "</span>")
+                //.replace("<u>", "<span>")
+                //.replace("</u>", "</span>")
                 .replace("%1$.1f&percnt;", `${percentToEdit}%`) 
             )
             setShowNumberPicker(false)
@@ -780,11 +787,13 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                 ? false 
                                 : formattedPercentToEdit !== formattedDefault
         
-        return  <div className={`property-field percent`}>
+        const divClass = `property-field percent ${showNumberPicker ? 'number-picker' : ''}`
+
+        return  <div className={divClass}>
                     <div className='rollback'>
                         {showRollback && <RollbackIcons onClick={handleValueRollback} />}
                     </div>
-                    {!showNumberPicker && <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel}></span>}
+                    <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel}></span>
                     {showNumberPicker && <NumberPicker ref={numberPickerRef} numberPicker={params.numberPicker} value={formattedPercentToEdit} onAccept={handleNumberPickerPercentAccept} onCancel={handleNumberPickerPercentCancle} onStepUp={handleStepUp} onStepDown={handleStepDown} onValueChange={handleNumberPickerPercentChange} /> }
                 </div>
     }

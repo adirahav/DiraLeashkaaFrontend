@@ -135,7 +135,7 @@ export function LoginPage() {
             </article>
             <article className={footerClass}>
                 <div><NavLink to='/signup' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("login_goto_signup", phrases) }}></NavLink></div>
-                <div><NavLink to='/forgot-password' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("forgot_password_header", phrases) }}></NavLink></div>
+                <div><NavLink to='/forgot-password' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("forgot_password_link", phrases) }}></NavLink></div>
             </article>
         </form>
         <Footer />

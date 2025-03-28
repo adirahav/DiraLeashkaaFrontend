@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {   
+export function HomeCity({ index, city, citiesNames, propertiesCount, selected, onCityPress }) {   
 
     const [cityIcon, setCityIcon] = useState(null)
 
@@ -49,7 +49,11 @@ export function HomeCity({ index, city, citiesNames, selected, onCityPress }) {
     return (
         <article className={divClass} onClick={() => handleCityPress(this)}>
             {cityIcon && <img src={cityIcon} />}
-            <span>{cityLabel}</span>
+            <div>
+                {cityLabel} 
+                <span className='desktop'>({propertiesCount === 1 ? "נכס אחד" : `${propertiesCount} נכסים`})</span>
+                <span className='tablet'>({propertiesCount})</span>
+            </div>
         </article>
     )
 }

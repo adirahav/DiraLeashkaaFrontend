@@ -33,7 +33,7 @@ export function HomeCities({ citiesNames, selectedCity, onCityPress }) {
     return (
         <section className="my-cities">
             {!isLoadingState && uniqueCities?.map((city, index) => (
-                <HomeCity key={index} city={city} citiesNames={citiesNames} selected={selectedCity===city} onCityPress={onCityPress} />
+                <HomeCity key={index} city={city} citiesNames={citiesNames} propertiesCount={normalizedCities.filter(item => item.city === city).length} selected={selectedCity===city} onCityPress={onCityPress} />
             ))}
             {isLoadingState && 
                 <>

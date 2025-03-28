@@ -50,7 +50,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         }
     }
    
-    const defultAutoFillState = (labelKey, userKey, maxLength) => {
+    const defultAutoFillState = (labelKey, maxLength) => {
         return {
             id: null,
             label: utilService.getPhrase(labelKey, phrases), 
@@ -136,15 +136,13 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     }, [property])
 
     useEffect(() => {
-        if (!isLoadingState && !property && !queryPropertyId) {
+        if (!isLoadingState && !property && !queryPropertyId && phrases) {
             setEquity({ ...equity, id: property?._id, value: user?.equity, defaultValue: user?.equity})
+            setIncomes({ ...incomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes})
             setIncomes({ ...incomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes})
             setCommitments({ ...commitments, id: property?._id, value: user?.commitments, defaultValue: user?.commitments})
         }
-    }, [isLoadingState])
-
-    useEffect(() => {
-        if (phrases) {
+        else if (phrases) {
             setCity({...city, label: utilService.getPhrase("property_city_label", phrases)})
             setCityElse({...cityElse, label: utilService.getPhrase("property_city_else_label", phrases)})
             setAddress({...address, label: utilService.getPhrase("property_address_label", phrases)})
@@ -154,7 +152,6 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             setEquity({...equity, label: utilService.getPhrase("property_equity_label", phrases)})
             setEquityCleaningExpenses({...equityCleaningExpenses, label: utilService.getPhrase("property_equity_cleaning_expenses_label", phrases), warning: utilService.getPhrase("property_equity_cleaning_expenses_warning", phrases)})
             setMortgageRequired({...mortgageRequired, label: utilService.getPhrase("property_mortgage_required_label", phrases), warning: utilService.getPhrase("property_mortgage_required_warning", phrases)})
-
             setIncomes({...incomes, label: utilService.getPhrase("property_incomes_label", phrases)})
             setCommitments({...commitments, label: utilService.getPhrase("property_commitments_label", phrases)})
             setDisposableIncome({...disposableIncome, label: utilService.getPhrase("property_disposable_income_label", phrases)})
@@ -181,7 +178,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             setMortgageMonthlyYield({...mortgageMonthlyYield, label: utilService.getPhrase("property_mortgage_monthly_yield_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_yield_warning", phrases)})
         }
 
-    }, [phrases])
+    }, [phrases, isLoadingState])
 
 
     const loadProperty = () => {
@@ -375,35 +372,35 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         cityElse: "cityElse" + (cityElse.value ? cityElse.value : "Default"),
         address: "address" + (address.value ? address.value : "Default"),
         apartmentType: "apartmentType" + (apartmentType.selectedValue ? apartmentType.selectedValue : "Default"),
-        price: "price" + (price.value ? price.value : "Default"),
-        equity: "equity" + (equity.value ? equity.value : "Default"),
-        equityCleaningExpenses: "equityCleaningExpenses" + (equityCleaningExpenses.value ? equityCleaningExpenses.value : "Default"),
+        price: "price" + (price.value !== null ? price.value : "Default"),
+        equity: "equity" + (equity.value !== null ? equity.value : "Default"),
+        equityCleaningExpenses: "equityCleaningExpenses" + (equityCleaningExpenses.value !== null ? equityCleaningExpenses.value : "Default"),
         mortgageRequired: "mortgageRequired" + (mortgageRequired.value ? mortgageRequired.value : "Default"),
         
-        incomes: "incomes" + (incomes.value ? incomes.value : "Default"),
-        commitments: "commitments" + (commitments.value ? commitments.value : "Default"),
+        incomes: "incomes" + (incomes.value !== null ? incomes.value : "Default"),
+        commitments: "commitments" + (commitments.value !== null ? commitments.value : "Default"),
         disposableIncome: "disposableIncome" + (disposableIncome.value ? disposableIncome.value : "Default"),
         possibleMonthlyRepayment: "possibleMonthlyRepayment" + (possibleMonthlyRepayment.value ? possibleMonthlyRepayment.value : "Default"),
 
         maxPercentOfFinancing: "maxPercentOfFinancing" + (maxPercentOfFinancing.value ? maxPercentOfFinancing.value : "Default"),
         actualPercentOfFinancing: "actualPercentOfFinancing" + (actualPercentOfFinancing.value ? actualPercentOfFinancing.value : "Default"),
         
-        transferTax: "transferTax" + (transferTax.value ? transferTax.value : "Default"),
-        lawyer: "lawyer" + (lawyer.value ? lawyer.value : "Default"),
-        realEstateAgent: "realEstateAgent" + (realEstateAgent.value ? realEstateAgent.value : "Default"),
+        transferTax: "transferTax" + (transferTax.value !== null ? transferTax.value : "Default"),
+        lawyer: "lawyer" + (lawyer.value !== null ? lawyer.value : "Default"),
+        realEstateAgent: "realEstateAgent" + (realEstateAgent.value !== null ? realEstateAgent.value : "Default"),
         
-        brokerMortgage: "brokerMortgage" + (brokerMortgage.value ? brokerMortgage.value : "Default"),
-        repairing: "repairing" + (repairing.value ? repairing.value : "Default"),
-        incidentalsTotal: "incidentalsTotal" + (incidentalsTotal.value ? incidentalsTotal.value : "Default"),
+        brokerMortgage: "brokerMortgage" + (brokerMortgage.value !== null ? brokerMortgage.value : "Default"),
+        repairing: "repairing" + (repairing.value !== null ? repairing.value : "Default"),
+        incidentalsTotal: "incidentalsTotal" + (incidentalsTotal.value !== null ? incidentalsTotal.value : "Default"),
         
-        rent: "rent" + (rent.value ? rent.value : "Default"),
-        lifeInsurance: "lifeInsurance" + (lifeInsurance.value ? lifeInsurance.value : "Default"),
-        structureInsurance: "structureInsurance" + (structureInsurance.value ? structureInsurance.value : "Default"),
+        rent: "rent" + (rent.value !== null ? rent.value : "Default"),
+        lifeInsurance: "lifeInsurance" + (lifeInsurance.value !== null ? lifeInsurance.value : "Default"),
+        structureInsurance: "structureInsurance" + (structureInsurance.value !== null ? structureInsurance.value : "Default"),
         rentCleaningExpenses: "rentCleaningExpenses" + (rentCleaningExpenses.value ? rentCleaningExpenses.value : "Default"),
         
-        mortgagePeriod: "mortgagePeriod" + (mortgagePeriod.value ? mortgagePeriod.value : "Default"),
-        mortgageMonthlyRepayment: "mortgageMonthlyRepayment" + (mortgageMonthlyRepayment.value ? mortgageMonthlyRepayment.value : "Default"),
-        mortgageMonthlyYield: "mortgageMonthlyYield" + (mortgageMonthlyYield.value ? mortgageMonthlyYield.value : "Default"),
+        mortgagePeriod: "mortgagePeriod" + (mortgagePeriod.value !== null ? mortgagePeriod.value : "Default"),
+        mortgageMonthlyRepayment: "mortgageMonthlyRepayment" + (mortgageMonthlyRepayment.value !== null ? mortgageMonthlyRepayment.value : "Default"),
+        mortgageMonthlyYield: "mortgageMonthlyYield" + (mortgageMonthlyYield.value !== null ? mortgageMonthlyYield.value : "Default"),
     }
 
     const [cityLogoIcon, setCityLogoIcon] = useState(null)

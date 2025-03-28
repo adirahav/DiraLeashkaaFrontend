@@ -38,11 +38,11 @@ export function Footer() {
             <div>
                 <nav>
                     <ul>
-                        <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
-                        {showAllFooter && <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>}
-                        {showAllFooter && <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>}
+                        <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_terms_of_use", phrases)}</span></NavLink></li>
+                        {showAllFooter && <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_contact_us", phrases)}</span></NavLink></li>}
+                        {showAllFooter && <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_share", phrases)}</span></NavLink></li>}
                         {showAllFooter && <li><span>|</span></li>}
-                        {showAllFooter && <li><span>גירסה {parseFloat(version?.versionNumber).toFixed(1)}</span></li>}
+                        {showAllFooter && <li><span>{utilService.getPhrase("drawer_version", phrases).replace("%1$s", parseFloat(version?.versionNumber).toFixed(1))}</span></li>}
                     </ul>
                 </nav>
             </div>

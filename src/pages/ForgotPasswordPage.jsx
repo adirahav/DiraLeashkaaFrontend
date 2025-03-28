@@ -115,7 +115,7 @@ export function ForgotPasswordPage() {
 
         try {
             setNote({ ...note, text: null })
-            const result = await forgotPasswordService.validateCode(email.value, code.value.join(''))
+            await forgotPasswordService.validateCode(email.value, code.value.join(''))
             handleNext()
         }
         catch(e) {
@@ -198,7 +198,7 @@ export function ForgotPasswordPage() {
                 try {
                     setNote({  ...note, text: null })
                     setSubmit({ ...submit, isLoading: true})
-                    const result = await forgotPasswordService.generateCode(email.value)
+                    await forgotPasswordService.generateCode(email.value)
                     handleNext()
                 } catch (error) {
                     setNote({  ...note, text: utilService.getPhrase("forgot_password_credentials_error", phrases) })
@@ -213,7 +213,7 @@ export function ForgotPasswordPage() {
             case STEP.CHANGE_PASSWORD: 
                 setNote({  ...note, text: null })
                 setSubmit({ ...submit, isLoading: true})
-                const result = await forgotPasswordService.changePassword(newPassword.value)
+                await forgotPasswordService.changePassword(newPassword.value)
                 setNewPassword({ ...newPassword, isDisabled: true })
                 setNote({  ...note, text: utilService.getPhrase("forgot_password_email_done_body", phrases), type: "message" })
                 handleNext()

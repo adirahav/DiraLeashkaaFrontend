@@ -20,10 +20,10 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage.jsx'
 import { ErrorPage } from './pages/ErrorPage.jsx'
 
 import { Alert } from './cmps/Alert'
-import { Toast } from './cmps/Toast.jsx'
 import { Dialog, } from './cmps/Dialog.jsx'
-import { CopyrightPage } from './pages/CopyrightPage.jsx'
 import { CalculatorPage } from './pages/CalculatorPage.jsx'
+
+import { SplashScreen } from '@capacitor/splash-screen'
 
 function RouteGuard({ children }) {
   const [isOnline, setIsOnline] = useState(true)
@@ -43,6 +43,9 @@ function RouteGuard({ children }) {
     }
   } 
 
+  useEffect(() => {
+    SplashScreen.hide()
+  }, [])
   // logged in
   useEffect(() => {
     setLoggedIn(loggedinUser !== null)
@@ -119,7 +122,6 @@ function App() {
               </Routes>
               
               <Alert />
-              <Toast />
               <Dialog />
           </section>
       </Provider>
@@ -128,6 +130,30 @@ function App() {
 }
 
 export default App
+
+/*
+
+- sign up loading when no phrases not looks good - desktop / tablet
+- sign up not show title after complete and before move on
+- home page - when no items the image show slow
+- PHONE DELETE - IMPLEMENT SWIPE
+
+- לשים פרסומות
+- lazy load
+- סדר במונחים - continue from header
+
+- camera upload not work
+- max price - missing years
+
+- delete image from cloudinary
+- לינק לאפליקציה
+- micro services
+- Grpc - proto files
+- Graph api
+- cicd
+- compile to android app
+
+*/
 
 /*
 + פרטים אישיים
@@ -160,17 +186,14 @@ export default App
 + לעצב מחדש
 + הרבה נכסים מעטים מאד את קצב העליה
 + image upload
++ עמוד הבית - מחיקה משובש
 
-- לשים פרסומות
-? עמוד הבית - מחיקה משובש
-
-- lazy load
-- delete image from cloudinary
-
-- לינק לאפליקציה
-- micro services
-- Grpc - proto files
-- Graph api
-- cicd
-
++ swipe to refresh
++ properties - scroll down to data
++ YARIV - הון עצמי לא נשמר
++ YARIV - התחייבויות אי אפשר 0
++ YARIV - מחשבון נעול
++ max price mobile - back to home
++ sign up - last stage - missing checked on
++ last login
 */

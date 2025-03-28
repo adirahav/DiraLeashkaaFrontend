@@ -1,0 +1,10 @@
+{
+  "appId": "com.adirahav.diraleashkaa",
+  "appName": "diraleashkaa",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}

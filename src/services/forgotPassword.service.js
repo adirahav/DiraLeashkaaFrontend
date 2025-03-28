@@ -21,19 +21,11 @@ async function validateCode(email, code) {
     
     const result = await httpService.post(BASE_URL + 'validateCode', params)
     
-    if (result && result.verified) {
-        localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, email)
-    }
     return result
 }
 
 
 async function changePassword(newPassword) {
     const params = { newPassword }
-    
-    const user = await httpService.put(BASE_URL + 'changePassword', params)
-    if (user) {
-        userService.saveLocalUser(user)
-    }
-    return user
+    await httpService.put(BASE_URL + 'changePassword', params)
 }

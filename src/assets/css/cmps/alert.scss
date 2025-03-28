@@ -129,11 +129,25 @@
     }
 
     @include mobile-layout {
-        width: calc(100% - 40px);
-        min-height: 210px;
+        & {
+            width: calc(100% - 40px);
+            min-height: 210px;
 
-        .message {
-            height: 100px;
+            header {
+                div {
+                    h2 {
+                        font-size: rem(18px);
+                        padding-top: 1px;
+                    }
+                }
+            }
+            
+            .message {
+                height: 100px;
+                font-size: rem(18px);
+            }
+            
+            
         }
     }
 }

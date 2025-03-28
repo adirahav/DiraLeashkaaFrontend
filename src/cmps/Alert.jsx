@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react"
 import { eventBusService } from "../services/eventBus.service"
 import { IconSizes, SuccessIcon, ErrorIcon, WarningIcon, MessageIcon, CloseIcon, TooltipIcon} from '../assets/icons'
 import { FormField } from "./FormField"
+import { utilService } from "../services/util.service"
+import { useSplash } from "../contexts/SplashContext"
 
 window.showSuccessAlert = showSuccessAlert
 window.showWarningAlert = showWarningAlert
@@ -17,6 +19,9 @@ export function Alert() {
     const [negativeButton, setNegativeButton] = useState({show: true, text: "", onPress: null, closeAfterPress: true})
     const [closeButton, setCloseButton] = useState({show: true, autoClose: true, autoCloseSeconds: 3})
     const alertRef = useRef()
+
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
 
     useEffect(() => {
         const unsubscribe = eventBusService.on('show-alert', (data) => {
@@ -89,11 +94,11 @@ export function Alert() {
 
     function getHeader() {  
         switch (type) {
-            case "error":     return <><div><ErrorIcon sx={ IconSizes.Medium } /><h2>שגיאה</h2></div></>
-            case "warning":   return <><div><WarningIcon sx={ IconSizes.Medium } /><h2>אזהרה</h2></div></>
-            case "success":   return <><div><SuccessIcon sx={ IconSizes.Medium } /><h2>הצלחה</h2></div></>
-            case "message":   return <><div><MessageIcon sx={ IconSizes.Medium } /><h2>הודעה</h2></div></>
-            case "tooltip":   return <><div><TooltipIcon sx={ IconSizes.Medium } /><h2>הסבר</h2></div></>
+            case "error":     return <><div><ErrorIcon sx={ IconSizes.Medium } /><h2>{utilService.getPhrase("alert_title_error", phrases)}</h2></div></>
+            case "warning":   return <><div><WarningIcon sx={ IconSizes.Medium } /><h2>{utilService.getPhrase("alert_title_warning", phrases)}</h2></div></>
+            case "success":   return <><div><SuccessIcon sx={ IconSizes.Medium } /><h2>{utilService.getPhrase("alert_title_success", phrases)}</h2></div></>
+            case "message":   return <><div><MessageIcon sx={ IconSizes.Medium } /><h2>{utilService.getPhrase("alert_title_message", phrases)}</h2></div></>
+            case "tooltip":   return <><div><TooltipIcon sx={ IconSizes.Medium } /><h2>{utilService.getPhrase("alert_title_tooltip", phrases)}</h2></div></>
             default: <></>
         }
     }

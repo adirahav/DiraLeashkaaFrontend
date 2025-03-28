@@ -10,13 +10,14 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { getHome, onDeletingPropertyStart, onAboutDeletingProperty, saveHome, onDeletingPropertyDone, onDeleteProperty } from '../store/actions/user.actions.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSelector } from 'react-redux'
-import { IconSizes, AddPropertyIcon } from "../assets/icons"
+import { IconSizes, AddPropertyIcon, LoadingIcon, DoubleArrowDownIcon } from "../assets/icons"
 import { useSplash } from '../contexts/SplashContext.jsx'
 import imgLetsStart from '../assets/images/lets_start.png'
 import { FormField } from '../cmps/FormField.jsx'
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
+    const [swipingToRefresh, setSwipeToRefresh] = useState('')
     const [selectedCity, setSelectedCity] = useState(null)
     const [bestYield, setBestYield] = useState(null)
     const [letsStartButton, setLetsStartButton] = useState(
@@ -44,6 +45,11 @@ export function HomePage() {
     const MIN_DELETE_PROPERTY_AWAIT_SEC = 3
     
     useEffect(() => {
+        document.addEventListener('touchstart', handleTouchStart, { passive: true })
+        return () => document.removeEventListener('touchstart', handleTouchStart)
+    }, [])
+
+    useEffect(() => {
         if (!phrases || !fixedParameters || !calculators) {
             onLoadingStart()  
         } else {
@@ -68,9 +74,10 @@ export function HomePage() {
 
             const fetchInitialData = async () => {
                 await getHome(false)
+                setSwipeToRefresh('')
                 setShowOverlay(false)
                 onLoadingDone() 
-
+                
                 newWorker.postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString() })
             }
 
@@ -173,13 +180,29 @@ export function HomePage() {
                             
     const bestYieldClass = isLoadingState ? 'loading0' : ''
  
-    // add property
-    const addPropertyClass = isLoadingState ? 'hide' : 'add-button'
-    
+    // swipe to refresh
+    const handleTouchStart = (event) => {
+        const startY = event.touches[0].clientY
+        if (window.scrollY === 0 && startY < 100) {
+            setSwipeToRefresh('swiping')
+        } 
+    }
+
+    const handleTouchEnd = () => {
+        if (swipingToRefresh === "swiping") {
+            setSwipeToRefresh('refreshing')
+            fetchHomeData()
+        }
+    }
+
+    const mainClass = `home container ${!isLoadingState && homeState.properties?.length === 0 ? 'start' : ''}`
+    const swipeToRefreshClass = `swiping-to-refresh ${swipingToRefresh}`
+
     if (!isLoadingState && homeState.properties?.length === 0) {
         return (<>
             <Header />
-            <main className="home container start">
+            <main className="home container start" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+                {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
                 <img className='desktop' src={imgLetsStart} />
                 <section>
                     <h2>דירה להשקעה</h2>
@@ -197,7 +220,8 @@ export function HomePage() {
 
     return (<>
         <Header />
-        <main className="home container">
+        <main className={mainClass} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+            {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
             {showOverlay && <Overlay />}
             <h1 className={citiesClass}>{citiesTitle}</h1>
             <HomeCities citiesNames={citiesNames} selectedCity={selectedCity} onCityPress={onCityPress} />
@@ -211,7 +235,6 @@ export function HomePage() {
 
             <h1 className={bestYieldClass} dangerouslySetInnerHTML={{ __html: bestYieldTitle}}></h1>
             <HomeBestYields properties={homeState?.bestYields} fullData={homeState?.fullData} />
-            <NavLink to="/property" className={addPropertyClass}><AddPropertyIcon sx={IconSizes.Small} /><span>הוסף נכס</span></NavLink>
         </main>
         <Footer />
     </>)

@@ -265,60 +265,6 @@ export function CalculatorMaxPrice() {
     }
 
     function onPercentChanged(fieldName, customPercent) {
-        /*switch (fieldName) {
-            case "lawyer":
-                setLawyer((prevLawyer) => {
-                    const calc = !customPercent || customPercent.toString() === prevLawyer.numberPicker.default.toString() ? prevLawyer.value.default : 7200 // TO DELETE
-                    return {
-                        ...prevLawyer, 
-                        value: {
-                            ...prevLawyer.value, 
-                            calc,
-                            customValue: null
-                        },
-                        numberPicker: {
-                            ...prevLawyer.numberPicker, 
-                            customPercent: null, 
-                        }
-                    }
-                })
-                break
-            case "realEstateAgentPercent":
-                    setRealEstateAgent((prevRealEstateAgent) => {
-                        const calc = !customPercent || customPercent.toString() === prevRealEstateAgent.numberPicker.default.toString() ? prevRealEstateAgent.value.default : 18000 // TO DELETE
-                        return {
-                            ...prevRealEstateAgent, 
-                            value: {
-                                ...prevRealEstateAgent.value, 
-                                calc,
-                                customValue: null
-                            },
-                            numberPicker: {
-                                ...prevRealEstateAgent.numberPicker, 
-                                customPercent: null, 
-                            }
-                        }
-                    })
-                    break
-                case "rent":
-                    setRent((prevRent) => {
-                        const calc = !customPercent || customPercent.toString() === prevRent.numberPicker.default.toString() ? prevRent.value.default : 3000 // TO DELETE
-                        return {
-                            ...prevRent, 
-                            value: {
-                                ...prevRent.value, 
-                                calc,
-                                customValue: null
-                            },
-                            numberPicker: {
-                                ...prevRent.numberPicker, 
-                                customPercent: null, 
-                            }
-                        }
-                    })
-                    break
-        }  */
-        
         updateCalculator(fieldName, customPercent) 
     }
 
@@ -360,8 +306,8 @@ export function CalculatorMaxPrice() {
         <h1>{utilService.getPhrase(`calculator_title_max_price`, phrases)}</h1>
         <section className="form">
             <article>
-                <h3>מחיר דירה מקסימלי:</h3>
-                <h2>{maxPrice ? utilService.formatNumber(maxPrice, true) : "???"} ש"ח</h2>
+                <h3>{utilService.getPhrase(`calculator_maxprice_price_label`, phrases)}</h3>
+                <h2>{utilService.getPhrase(`calculator_maxprice_price_nis`, phrases).replace("%1$s", maxPrice ? utilService.formatNumber(maxPrice, true) : "???")}</h2>
             </article>
             <article>
                 <PropertyField type={"DROP_DOWN"} key={keys.apartmentType} params={apartmentType} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('apartmentType', value)} />

@@ -39,19 +39,6 @@
                 transition: width 0.3s ease-in-out;  
             }
         }
-
-        &.widing, &.wide {
-            main {/*background-color: red;
-                width: calc(100% - 20px - 84px);*/
-            }
-            
-        }
-
-        &.narrowing, &.narrow {
-            main {/*background-color: green;
-                width: calc(100% - 20px - 175px);*/
-            }
-        }
     }
 
     @include desktop-layout {

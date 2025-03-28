@@ -37,6 +37,7 @@ async function signup(credentials) {
 
 async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
+    await httpService.post(BASE_URL + 'logout')
 }
 
 function getLoggedinUser() {

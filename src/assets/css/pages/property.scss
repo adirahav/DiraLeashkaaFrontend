@@ -157,86 +157,72 @@
     }
 
     .interests {
-        /*background-color: var(--property-form-background);
-        border-top-left-radius: 10px;
-        height: 160px;
-        width: auto;
-        padding-top: 5px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        grid-gap: 10px;*/
-        display: flex;	
-        flex-wrap: wrap;
-        align-content: start;
-        gap: 10px;
+        display: grid;	
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
         margin-bottom: 35px;
 
         .zoom-in {
             display: none;
         }
 
-        .property-field {
-            &.percent {
-                margin: 7px;
-                width: 100%;
-                display: inline-flex;
-                height: 65px;
+        article {
+            height: fit-content;
 
-                &:nth-child(6) {
-                    width: 190px;
-                }
-
-                &:nth-child(5), &:nth-child(10) {
-                    width: 195px;
-                }
-
-                &:nth-child(4), &:nth-child(9) {
-                    width: 175px;
-                }
-
-                &:nth-child(3), &:nth-child(8) {
-                    width: 175px;
-                }
-
-                &:nth-child(2), &:nth-child(7) {
-                    width: 135px;
-                }
-
-                span {
-                    &.number-picker {
-                        display: flex;
-                        flex-direction: column-reverse;
-                        margin-top: 10px;
-                        width: 52px;
-
-                        .input {
-                            input {
-                                width: 20px;
-                            }
-
-                            svg {
-                                margin: 3px 0;
-                            }
-                        }
-
-                        .actions {
-                            
-                        }
-                    }
+            .property-field {
+                &.percent {
+                    margin: 5px 0;
+                    width: 100%;
                     
-                    margin-right: 0;
-                    width: 150px;
+                    span {
+                        &.number-picker {
+                            display: flex;
+                            justify-content: end;
+                            align-items: start;
+                            height: 20px;
 
-                    u {
-                      text-decoration: underline; 
-                      display: inline; 
+                            .input {
+                                input {
+                                    height: auto;
+                                }
+    
+                                svg {
+                                    margin: 0;
+                                }
+                            }
+    
+                            .actions {
+                                height: 20px;
+                                margin-top: 2px;
+                            }
+                        }
+                        
+                        margin-right: 0;
+                        width: 100%;
+    
+                        u {
+                          text-decoration: underline; 
+                          display: inline; 
+                          float: left;
+                          width: 40px;
+                        }
+                    }
+    
+                    .rollback {
+                        svg {
+                            margin: 0 0 0 5px;
+                        }
                     }
                 }
 
-                .rollback {
-                    min-width: 30px;
-                    height: 25px;
-                    position: static;
+                &.number-picker {
+                    &.percent {
+                        span {
+                            u {
+                                display: none;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -350,7 +336,7 @@
             section {
                 filter: blur(10px);
                 overflow: hidden;
-            }
+            } 
         }
 
         &.loading3 { .loading-calc-yields {animation: loading3-animation 3s infinite } }
@@ -441,6 +427,29 @@
         }
     }
 
+    .goto-results {
+        @include container;
+        position: absolute;
+        bottom: 15px;
+        background-color: var(--property-goto-results-background);
+        color: var(--property-goto-results-icon);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+
+        &:hover {
+            background-color: var(--property-goto-results-hover-background);
+        }
+    }
+
+    &.lock {
+        .interests {
+            display: none;
+        }
+    }
+
     @include tablet-layout {
         & {
             grid-column: 1 / -1;
@@ -455,7 +464,7 @@
                 }
             }
 
-            .interests {
+            /*.interests {
                 .property-field {
                     &.percent {
                         &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), 
@@ -464,7 +473,7 @@
                         }
                     }
                 }
-            }
+            }*/
 
             .data {
                 & section {
@@ -486,6 +495,10 @@
                     height: 152px;
                 }
             }
+
+            .goto-results {
+                left: 65px;
+            }
         }
         
     }
@@ -495,12 +508,12 @@
             .form {
                 .property-field .custom-dropdown,
                 .property-field .custom-dropdown .dropdown-toggle,
-                .property-field div input {
+                .property-field > div > input {
                     width: 170px;
                 }
             }
 
-            .interests {
+            /*.interests {
                 .property-field {
                     &.percent {
                         &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), 
@@ -509,7 +522,7 @@
                         }
                     }
                 }
-            }
+            }*/
 
             .media-list {
                 padding: 14px;
@@ -538,7 +551,7 @@
             grid-column: 1 / -1;
             margin: 20px;
 
-            h1:first-child {
+            h1:first-of-type {
                 font-size: 22px;
                 height: auto;
                 margin: 0 0 20px;
@@ -549,8 +562,6 @@
             h1:nth-of-type(2) {
                 display: none;
             }
-
-            
         }
 
         .form {
@@ -559,38 +570,12 @@
             padding: 0;
             margin-bottom: 30px;
 
+            article {
+                grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            }
+
             .property-field {
                 margin: 7px 0;
-
-                /*&.searchable-dropdown {
-                    div {
-                        position: static;
-
-                        ul {
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            border: 1px solid var(--mobile-form-spinner-border);
-                            width: calc(100% - 80px);
-                            height: 200px;
-                            border-radius: 4px;
-                        }
-                    }
-                }
-
-                &.warning {
-                    span {
-                        margin-right: 0;
-                        width: 126px;
-                    }
-
-                    div {
-                        input {
-                            margin-right: 1px;
-                            width: calc(100% - 17px);
-                        }
-                    }
-                }*/
             }
 
             hr {
@@ -599,6 +584,8 @@
 
             h3 {
                 margin: 0;
+                padding: 0;
+                font-size: rem(17px);
             }
 
             &:not(.city-else) {
@@ -625,7 +612,7 @@
         .data {
             position: absolute;
             top: 0;
-            right: 86px;
+            right: 140px;
             box-shadow: unset;
             width: 100%;
             height: 100%;
@@ -669,7 +656,7 @@
 
                     .rc-table {
                         height: 100vw;
-                        width: calc(100vh - 86px);
+                        width: calc(100vh - 140px);
                     }
 
                     .rc-table-header {
@@ -735,8 +722,8 @@
                 width: 100vw;
                 height: 88px;
                 overflow: hidden;
-                right: calc(-50%);
-                bottom: -44px;
+                left: calc(100vh - 88px - 10px);
+                top: calc(100vw - 43px);
                 padding: 0 40px 0 20px;
                 border-left: 1px solid var(--property-form-spinner-divider);
 
@@ -758,6 +745,10 @@
             }
         }
 
+        .goto-results {
+            display: none;
+        }
+
         &:not(.show-mobile-data) {
             h2, .interests {
                 display: none;
@@ -765,23 +756,22 @@
         }
 
         &.show-mobile-data {
-            h1, h2, .form {
+            h1, h2, .form, .media-list {
                 display: none;
             }
 
             .interests.show {
-                display: inline-table;
                 position: absolute;
                 z-index: 1;
-                width: calc(100vh - 39px);
+                width: calc(100vh - 99px);
                 background: white;
                 margin: 6px 20px;
-                right: 1px;
+                right: 57px;
                 top: 0;
                 border-radius: 16px;
-                padding: 15px 26px 15px 20px;
+                padding: 15px 40px 15px 20px;
 
-                .property-field.percent {
+                /*.property-field.percent {
                     margin: 2px;
                     height: 65px;
                     
@@ -793,16 +783,20 @@
                         width: calc(21% - 4px);
                     }
 
-                    &:nth-child(4), &:nth-child(9) {
-                        width: calc(22% - 4px);
+                    &:nth-child(2), &:nth-child(6), &:nth-child(10) {
+                        width: calc(25% - 4px);
+                    }
+                    
+                    &:nth-child(3), &:nth-child(7) {
+                        width: calc(25% - 4px);
                     }
 
-                    &:nth-child(3), &:nth-child(8) {
-                        width: calc(21% - 4px);
+                    &:nth-child(4), &:nth-child(8) {
+                        width: calc(25% - 4px);
                     }
 
-                    &:nth-child(2), &:nth-child(7) {
-                        width: calc(14% - 4px);
+                    &:nth-child(5), &:nth-child(9) {
+                        width: calc(25% - 4px);
                     }
                      
                     span {
@@ -819,7 +813,7 @@
                         height: 50px;
                         position: absolute;
                     }
-                }
+                }*/
 
                 .zoom-in {
                     color: var(--mobile-property-menu-zoom-in);
@@ -838,14 +832,16 @@
 
             &.chart .data .chart {
                 display: block;
-                width: calc(100vh - 86px);
+                width: calc(100vh - 140px);
                 height: 100vw;
                 position: relative;
                 right: 0;
 
                 div {
-                    top: 45px;
-                    position: absolute;
+                    display: grid;
+                    place-items: center; 
+                    width: 100%;
+                    height: 100%;
                 }
             }
         }
@@ -854,7 +850,7 @@
     & {
         @media (min-width: 600px) and (max-width: 807px)  {
             .media-list {
-                margin-bottom: 70px;
+                margin-bottom: 120px;
                 padding: 14px;
                 grid-template-columns: repeat(auto-fill, calc((100% - 28px) / 3));
                 grid-gap: 14px;
@@ -870,7 +866,7 @@
 
         @media (min-width: 580px) and (max-width: 599.9px)  {
             .media-list {
-                margin-bottom: 70px;
+                margin-bottom: 120px;
                 padding: 14px;
                 grid-template-columns: repeat(auto-fill, calc((100% - 28px) / 2));
                 padding: 14px;
@@ -885,7 +881,7 @@
 
         @media (min-width: 490px) and (max-width: 579.9px)  {
             .media-list {
-                margin-bottom: 70px;
+                margin-bottom: 120px;
                 padding: 10px;
                 grid-template-columns: repeat(auto-fill, calc((100% - 20px) / 2));
                 grid-gap: 10px;
@@ -900,7 +896,7 @@
 
         @media (min-width: 414px) and (max-width: 489.9px)  {
             .media-list {
-                margin-bottom: 70px;
+                margin-bottom: 120px;
                 padding: 10px;
                 grid-template-columns: repeat(auto-fill, calc((100% - 20px) / 2));
                 grid-gap: 10px;
@@ -915,7 +911,7 @@
 
         @media (max-width: 413.9px)  {
             .media-list {
-                margin-bottom: 70px;
+                margin-bottom: 120px;
                 padding: 10px;
                 grid-template-columns: repeat(auto-fill, calc((100% - 20px) / 2));
                 grid-gap: 10px;
@@ -947,7 +943,7 @@
 
                     .property-field .custom-dropdown,
                     .property-field .custom-dropdown .dropdown-toggle,
-                    .property-field div input {
+                    .property-field > div > input {
                         width: 125px;
                     }
                     
@@ -971,7 +967,6 @@
                     }
 
                     .property-field span {
-                        width: 85px;
                         font-size: 14px;
                     }
 
@@ -991,7 +986,7 @@
                 }
             } 
 
-            .interests {
+            /*.interests {
                 .property-field {
                     &.percent {
                         &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), 
@@ -1000,13 +995,13 @@
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 
     @include tablet-small-layout {
         .property {
-            .interests {
+            /*.interests {
                 gap: 0;
 
                 .property-field {
@@ -1017,7 +1012,7 @@
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }

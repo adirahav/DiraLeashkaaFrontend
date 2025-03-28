@@ -16,7 +16,7 @@ export function PropertyInterests({property, display, fragment, onUpdate, onClos
         delete numberPicker.name
         
         return {
-            label: utilService.getPhrase(labelKey, phrases),
+            label: utilService.getPhrase(labelKey, phrases).replace("<br />", " "),
             numberPicker: {...numberPicker, customPercent: null},
         }
     }
@@ -111,16 +111,19 @@ export function PropertyInterests({property, display, fragment, onUpdate, onClos
     return (
         <section className={mainClass}>
             <ZoomIn className='zoom-in' onClick={onCloseInterests} />
-            <PropertyField type={"PERCENT"} key={keys.interest} params={interest} onPercentChanged={(percent) => onPercentChanged('interestPercent', percent)} />    
-            <PropertyField type={"PERCENT"} key={keys.interestIn5Years} params={interestIn5Years} onPercentChanged={(percent) => onPercentChanged('interestIn5YearsPercent', percent)} />    
-            <PropertyField type={"PERCENT"} key={keys.interestIn10Years} params={interestIn10Years} onPercentChanged={(percent) => onPercentChanged('interestIn10YearsPercent', percent)} /> 
-            <PropertyField type={"PERCENT"} key={keys.averageInterestAtTaking} params={averageInterestAtTaking} onPercentChanged={(percent) => onPercentChanged('averageInterestAtTakingPercent', percent)} />    
-            <PropertyField type={"PERCENT"} key={keys.averageInterestAtMaturity} params={averageInterestAtMaturity} onPercentChanged={(percent) => onPercentChanged('averageInterestAtMaturityPercent', percent)} />    
-            
-            <PropertyField type={"PERCENT"} key={keys.index} params={index} onPercentChanged={(percent) => onPercentChanged('indexPercent', percent)} />    
-            <PropertyField type={"PERCENT"} key={keys.forecastAnnualPriceIncrease} params={forecastAnnualPriceIncrease} onPercentChanged={(percent) => onPercentChanged('forecastAnnualPriceIncreasePercent', percent)} />    
-            <PropertyField type={"PERCENT"} key={keys.salesCosts} params={salesCosts} onPercentChanged={(percent) => onPercentChanged('salesCostsPercent', percent)} />    
-            <PropertyField type={"PERCENT"} key={keys.depreciationForTaxPurposes} params={depreciationForTaxPurposes} onPercentChanged={(percent) => onPercentChanged('depreciationForTaxPurposesPercent', percent)} />    
+            <article>
+                <PropertyField type={"PERCENT"} key={keys.interest} params={interest} onPercentChanged={(percent) => onPercentChanged('interestPercent', percent)} />    
+                <PropertyField type={"PERCENT"} key={keys.interestIn5Years} params={interestIn5Years} onPercentChanged={(percent) => onPercentChanged('interestIn5YearsPercent', percent)} />    
+                <PropertyField type={"PERCENT"} key={keys.interestIn10Years} params={interestIn10Years} onPercentChanged={(percent) => onPercentChanged('interestIn10YearsPercent', percent)} /> 
+                <PropertyField type={"PERCENT"} key={keys.averageInterestAtTaking} params={averageInterestAtTaking} onPercentChanged={(percent) => onPercentChanged('averageInterestAtTakingPercent', percent)} />    
+                <PropertyField type={"PERCENT"} key={keys.averageInterestAtMaturity} params={averageInterestAtMaturity} onPercentChanged={(percent) => onPercentChanged('averageInterestAtMaturityPercent', percent)} />    
+            </article>
+            <article>
+                <PropertyField type={"PERCENT"} key={keys.index} params={index} onPercentChanged={(percent) => onPercentChanged('indexPercent', percent)} />    
+                <PropertyField type={"PERCENT"} key={keys.forecastAnnualPriceIncrease} params={forecastAnnualPriceIncrease} onPercentChanged={(percent) => onPercentChanged('forecastAnnualPriceIncreasePercent', percent)} />    
+                <PropertyField type={"PERCENT"} key={keys.salesCosts} params={salesCosts} onPercentChanged={(percent) => onPercentChanged('salesCostsPercent', percent)} />    
+                <PropertyField type={"PERCENT"} key={keys.depreciationForTaxPurposes} params={depreciationForTaxPurposes} onPercentChanged={(percent) => onPercentChanged('depreciationForTaxPurposesPercent', percent)} />            
+            </article>
         </section>
     )
 }
