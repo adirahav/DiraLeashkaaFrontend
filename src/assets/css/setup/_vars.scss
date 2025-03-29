@@ -53,7 +53,9 @@
     --icon-miss-content: var(--palette9);
     --icon-color: var(--palette7);
     --icon-disabled: var(--palette2);
-
+    --mobile-icon-color: var(--palette2);
+    --mobile-icon-label: var(--palette2);
+    
     --container-border: var(--palette5_transparent);
     --inside-container-background: var(--palette8);
     --modal-shadow: var(--palette5_overlay);
@@ -65,6 +67,7 @@
 
     --home-my-property-price-text: var(--palette4);
     --home-my-property-delete-overlay-background: var(--palette5_transparent);
+    --home-my-property-actions-overlay-background: var(--palette9);
     --home-lets-start-title-text: var(--palette5);
     --home-lets-start-divider: var(--palette2);
 

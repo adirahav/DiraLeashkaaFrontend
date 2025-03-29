@@ -1,7 +1,10 @@
 import { authService } from "../../services/auth.service.js"
 import { userService } from "../../services/user.service.js"
 import { LOGGEDIN_USER, 
-    GET_HOME, ABOUT_DELETE_PROPERTY, DELETING_PROPERTY_START, DELETING_PROPERTY_DONE, LONG_PRESSED_PROPERTY,
+    GET_HOME, 
+    ABOUT_DELETE_PROPERTY, DELETING_PROPERTY_START, DELETING_PROPERTY_DONE, 
+    ABOUT_ACTION_PROPERTY, ACTING_PROPERTY_START, ACTING_PROPERTY_DONE,
+    LONG_PRESSED_PROPERTY,
     UPDATE_USER, DELETE_USER, SIGNUP, LOGIN, LOGOUT } from "../reducers/user.reducer.js"
 import { LOADING_DONE, LOADING_START } from "../reducers/app.reducer.js"
 import { store } from "../store.js"
@@ -71,6 +74,44 @@ export function onDeletingPropertyDone() {
         store.dispatch({ type: DELETING_PROPERTY_DONE })
     } catch(err) {
         console.error("Had issues done deleting property")
+        throw err
+    }
+}
+
+/**/
+export async function onActionProperty(propertyId) {
+    try {
+        const home = await propertyService.archive(propertyId)
+        store.dispatch({type: GET_HOME, home})
+    } catch(err) {
+        console.error("Had issues action property")
+        throw err
+    }
+}
+
+export function onAboutActingProperty(propertyId) {
+    try {
+        store.dispatch({ type: ABOUT_ACTION_PROPERTY, propertyId })
+    } catch(err) {
+        console.error("Had issues start acting property")
+        throw err
+    }
+}
+
+export function onActingPropertyStart() {
+    try {
+        store.dispatch({ type: ACTING_PROPERTY_START })
+    } catch(err) {
+        console.error("Had issues start acting property")
+        throw err
+    }
+}
+
+export function onActingPropertyDone() {
+    try {
+        store.dispatch({ type: ACTING_PROPERTY_DONE })
+    } catch(err) {
+        console.error("Had issues done acting property")
         throw err
     }
 }

@@ -30,6 +30,24 @@
     to { transform: scale(1); }
 }
 
+@keyframes reveal-overlay {
+    from { width: 0; }
+    to { width: 80px; }
+}
+
+@keyframes conceal-overlay {
+    from {
+        width: 80px;
+        opacity: 1;
+        visibility: visible;
+    }
+    to {
+        width: 0;
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
 @keyframes slide-from-left {
     from { transform: translateX(-100%); }
     to { transform: translateX(0); }

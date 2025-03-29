@@ -180,7 +180,7 @@ export function HomePage() {
                             
     const bestYieldClass = isLoadingState ? 'loading0' : ''
  
-    // swipe to refresh
+    // swipe to refresh (mobile)
     const handleTouchStart = (event) => {
         const startY = event.touches[0].clientY
         if (window.scrollY === 0 && startY < 100) {

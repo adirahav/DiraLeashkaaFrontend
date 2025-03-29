@@ -6,6 +6,9 @@ export const GET_HOME = "GET_HOME"
 export const ABOUT_DELETE_PROPERTY = "ABOUT_DELETE_PROPERTY"
 export const DELETING_PROPERTY_START = "DELETING_PROPERTY_START"
 export const DELETING_PROPERTY_DONE = "DELETING_PROPERTY_DONE"
+export const ABOUT_ACTION_PROPERTY = "ABOUT_ACTION_PROPERTY"
+export const ACTING_PROPERTY_START = "ACTING_PROPERTY_START"
+export const ACTING_PROPERTY_DONE = "ACTING_PROPERTY_DONE"
 export const LONG_PRESSED_PROPERTY = "LONG_PRESSED_PROPERTY"
 export const UPDATE_USER = 'UPDATE_USER'
 export const DELETE_USER = 'DELETE_USER'
@@ -21,7 +24,9 @@ const initialState = {
         isBestYieldsNeedToRefresh: true,
         aboutDeleteId: null,
         isDeleting: false,
-        longPressedId: null
+        longPressedId: null,
+        aboutActionId: null,
+        isActing: false
     },
     loggedinUser: authService.getLoggedinUser(),
     isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
@@ -70,6 +75,30 @@ export function userReducer(state = initialState, action = {}) {
                 home: {
                     ...state.home,
                     isDeleting: false
+                }
+            }
+        case ABOUT_ACTION_PROPERTY:
+            return {
+                ...state,
+                home: {
+                    ...state.home,
+                    aboutActionId: action.propertyId
+                }
+            }
+        case ACTING_PROPERTY_START:
+            return {
+                ...state,
+                home: {
+                    ...state.home,
+                    isActing: true
+                }
+            }
+        case ACTING_PROPERTY_DONE:
+            return {
+                ...state,
+                home: {
+                    ...state.home,
+                    isActing: false
                 }
             }
         case LONG_PRESSED_PROPERTY:
