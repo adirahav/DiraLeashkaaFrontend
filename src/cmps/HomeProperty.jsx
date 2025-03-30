@@ -232,6 +232,8 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     const showMedaltIcon = property && isBestYield && fullData
     const showMissDataIcon = property && !property?.calcYieldForecast && fullData
     
+    const note = property?.note?.replace(/\n/g, "<br />")
+
     return (
         <article ref={propertyRef} className={articleClass} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
             <div className='container'>
@@ -242,9 +244,13 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
                         ))}
                 </div>}  
                 <div className='details'>
-                    <h2>{address}</h2>
-                    {property && !property._id && <div><AddPropertyIcon sx={IconSizes.Small} /></div>}  
-                    {property && <span className='price'>{property?.price ? utilService.priceFormat(property?.price) : ''}</span>}
+                    <div>
+                        <h2>{address}</h2>
+                        {property && <div className='price'>{property?.price ? utilService.priceFormat(property?.price) : ''}</div>}
+                    </div>
+                    {property && note && <div>
+                        <div className='note' dangerouslySetInnerHTML={{ __html: note }}></div>
+                    </div>}
                 </div>
                 <div className='actions'>
                     <div className='indications'>

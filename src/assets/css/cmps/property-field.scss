@@ -143,6 +143,32 @@
     }
   }
 
+  &.textarea {
+    div {
+      textarea {
+        direction: rtl;
+        border: 0;
+        border-radius: 8px;
+        flex: 1 0 auto;
+        border: 1px solid var(--form-field-input-border);
+        background: var(--property-field-background);
+        color: var(--property-field-text);
+        color: var(--form-field-input-text);
+        width: 180px;
+        max-width: 180px;
+        min-height: 30px;
+        height: 30px;
+        margin: 0 10px;
+        padding: 7px 8px;
+        overflow: hidden;
+
+        &:focus-visible {
+          outline: 0;
+        }
+      }
+    }
+  }
+
   &.calc {
     div {
       input {
@@ -380,6 +406,7 @@
   &.loading5 { select, span, .custom-dropdown .dropdown-toggle { animation: loading5-animation 3s infinite; color: transparent; } }
   &.loading6 { input, span, .custom-dropdown .dropdown-toggle { animation: loading6-animation 3s infinite; color: transparent; } }
   &.loading7 { input, span { animation: loading7-animation 3s infinite; } span { color: transparent; } }
+  &.loading8 { textarea, span { animation: loading8-animation 3s infinite; resize: none; } span { color: transparent; } }
   
   @include tablet-layout {
     & {

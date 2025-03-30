@@ -101,6 +101,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     
     const [equityCleaningExpenses, setEquityCleaningExpenses] = useState(defultCalcState("property_equity_cleaning_expenses_label", "property_equity_cleaning_expenses_warning")) 
     const [mortgageRequired, setMortgageRequired] = useState(defultCalcState("property_mortgage_required_label", "property_mortgage_required_warning"))
+    const [note, setNote] = useState(defultStringState("property_note_label"))
     
     const [incomes, setIncomes] = useState(defultAutoFillState("property_incomes_label", 7))  
     const [commitments, setCommitments] = useState(defultAutoFillState("property_commitments_label", 6)) 
@@ -139,7 +140,6 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         if (!isLoadingState && !property && !queryPropertyId && phrases) {
             setEquity({ ...equity, id: property?._id, value: user?.equity, defaultValue: user?.equity})
             setIncomes({ ...incomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes})
-            setIncomes({ ...incomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes})
             setCommitments({ ...commitments, id: property?._id, value: user?.commitments, defaultValue: user?.commitments})
         }
         else if (phrases) {
@@ -152,6 +152,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             setEquity({...equity, label: utilService.getPhrase("property_equity_label", phrases)})
             setEquityCleaningExpenses({...equityCleaningExpenses, label: utilService.getPhrase("property_equity_cleaning_expenses_label", phrases), warning: utilService.getPhrase("property_equity_cleaning_expenses_warning", phrases)})
             setMortgageRequired({...mortgageRequired, label: utilService.getPhrase("property_mortgage_required_label", phrases), warning: utilService.getPhrase("property_mortgage_required_warning", phrases)})
+            setNote({...note, label: utilService.getPhrase("property_note_label", phrases)})
             setIncomes({...incomes, label: utilService.getPhrase("property_incomes_label", phrases)})
             setCommitments({...commitments, label: utilService.getPhrase("property_commitments_label", phrases)})
             setDisposableIncome({...disposableIncome, label: utilService.getPhrase("property_disposable_income_label", phrases)})
@@ -213,7 +214,11 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                 value: property.calcMortgageRequired,
                 hasWarning: !user.calcCanTakeMortgage && property.calcMortgageRequired > 0
             })
-            
+
+            if (property.updatedByField !== "note") {
+                setNote({...note, value: property.note})
+            }
+
             if (property.updatedByField !== "incomes") {
                 setIncomes({...incomes, id: property?._id, value: property.calcIncomes, defaultValue: property.defaultIncomes})
             }
@@ -376,6 +381,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         equity: "equity" + (equity.value !== null ? equity.value : "Default"),
         equityCleaningExpenses: "equityCleaningExpenses" + (equityCleaningExpenses.value !== null ? equityCleaningExpenses.value : "Default"),
         mortgageRequired: "mortgageRequired" + (mortgageRequired.value ? mortgageRequired.value : "Default"),
+        note: "note" + (note.value ? note.value : "Default"),
         
         incomes: "incomes" + (incomes.value !== null ? incomes.value : "Default"),
         commitments: "commitments" + (commitments.value !== null ? commitments.value : "Default"),
@@ -443,6 +449,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                 <PropertyField type={"AUTO_FILL"} key={keys.equity} params={equity} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('equity', value)} />
                 <PropertyField type={"CALC"} key={keys.equityCleaningExpenses} params={equityCleaningExpenses} isFirstLoading={isFirstLoading} />
                 <PropertyField type={"CALC"} key={keys.mortgageRequired} params={mortgageRequired} isFirstLoading={isFirstLoading} />
+                <PropertyField type={"TEXT_AREA"} key={keys.note} params={note} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('note', value)} />
             </article>
              
             <hr className={hrClass} />

@@ -133,10 +133,18 @@ export default App
 
 /*
 
+- mobile delete - cancel delete the property
+- החזר חודשי גבוה מדי - אין התראה
+- propery - add desciption
+- new calculatore - compare properties
+- layer and real estate agent - cant insert 0 
+- כשנמצאים בנכס ולוחצים הוסף נכס - השדות לא נמחקים
+
+
 - sign up loading when no phrases not looks good - desktop / tablet
 - sign up not show title after complete and before move on
 - home page - when no items the image show slow
-- PHONE DELETE - IMPLEMENT SWIPE
+
 
 - לשים פרסומות
 - lazy load
@@ -196,4 +204,6 @@ export default App
 + max price mobile - back to home
 + sign up - last stage - missing checked on
 + last login
+
++ mobile delete - implement swip
 */

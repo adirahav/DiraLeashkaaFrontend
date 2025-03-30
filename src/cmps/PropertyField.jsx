@@ -5,7 +5,7 @@ import { showWarningAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
 
 export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueChanged, onPercentChanged }) {
-    // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | STRING | PERCENT
+    // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | STRING | TEXT_AREA | PERCENT
 
     const DEBOUNCE_AWAIT = 500
     
@@ -659,6 +659,56 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                 </div>
     }
 
+    function TextArea({params, onSetValue}) {
+        const [valueToEdit, setValueToEdit] = useState(params.value)
+        const [isChangedByUser, setIsChangedByUser] = useState(false)
+        const inputRef = useRef()
+
+        useEffect(() => {
+            if (isChangedByUser) {
+                debouncedOnValueChange(valueToEdit)
+            }
+        }, [valueToEdit])
+        
+        const debouncedOnValueChange = useCallback(
+            utilService.debounce((value) => {
+                onSetValue(value)
+            }, DEBOUNCE_AWAIT),
+            [onSetValue]
+        )
+
+        const handleValueChange = (ev) => {
+            ev.preventDefault()
+            ev.stopPropagation()
+    
+            const { value } = ev.target
+    
+            setValueToEdit(value)
+            setIsChangedByUser(true)
+        }
+        
+        if (params.isFocus && inputRef.current) {
+            inputRef.current.focus()
+        }
+
+        const fieldClass = 'property-field textarea' + (isFirstLoading
+                                                    ? ' loading8' 
+                                                    : valueToEdit === null || 
+                                                      valueToEdit?.length === 0 
+                                                        ? ' empty' 
+                                                        : '')
+
+        return  <div className={fieldClass}>
+                    <span>{params.label}</span>
+                    <div className='textarea'>
+                        <textarea type='text' value={valueToEdit?.toString()} 
+                            onChange={handleValueChange} 
+                            {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})} required autoCapitalize="off" autoCorrect="off" autoComplete="off"></textarea>
+                    </div>
+                </div>
+    }
+    
+
     function Percent({params, onSetPercent}) {
         const [isChangedByUser, setIsChangedByUser] = useState(false)
 
@@ -860,6 +910,8 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             {type === "SEARCHABLE_DROP_DOWN" && SearchableDropDown({params, onSetValue: onValueChanged})}
 
             {type === "STRING" && String({params, onSetValue: onValueChanged})}
+
+            {type === "TEXT_AREA" && TextArea({params, onSetValue: onValueChanged})}
 
             {type === "PERCENT" && Percent({params, onSetPercent: onPercentChanged})}           
         </>  

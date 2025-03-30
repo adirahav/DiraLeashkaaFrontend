@@ -508,7 +508,8 @@
             .form {
                 .property-field .custom-dropdown,
                 .property-field .custom-dropdown .dropdown-toggle,
-                .property-field > div > input {
+                .property-field > div > input,
+                .property-field > div > textarea {
                     width: 170px;
                 }
             }
