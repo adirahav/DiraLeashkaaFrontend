@@ -24,8 +24,11 @@ import { Dialog, } from './cmps/Dialog.jsx'
 import { CalculatorPage } from './pages/CalculatorPage.jsx'
 
 import { SplashScreen } from '@capacitor/splash-screen'
+import { Capacitor } from '@capacitor/core'
 
-function RouteGuard({ children }) {
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+async function RouteGuard({ children }) {
   const [isOnline, setIsOnline] = useState(true)
   const [isLoggedIn, setLoggedIn] = useState(true)
 
@@ -52,7 +55,7 @@ function RouteGuard({ children }) {
   }, [loggedinUser])
 
   if (loggedinUser === null && !allowAnonymous()) {
-    const navigate = localStorage.getItem("email")
+    const navigate = await AsyncStorage.getItem("email")
                         ? '/login'
                         : '/signup' 
 
@@ -99,7 +102,7 @@ function allowAnonymous() {
 
 function App() {
   const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
-  const mainLayoutClass = `main-layout ${allowAnonymous() && !loggedinUser ? 'logout' : ''}`
+  const mainLayoutClass = `main-layout ${allowAnonymous() && !loggedinUser ? 'logout' : ''} ${Capacitor.getPlatform()}`
 
   return (    
     <SplashProvider>
@@ -134,17 +137,21 @@ export default App
 /*
 
 - mobile delete - cancel delete the property
-- החזר חודשי גבוה מדי - אין התראה
-- propery - add desciption
-- new calculatore - compare properties
-- layer and real estate agent - cant insert 0 
-- כשנמצאים בנכס ולוחצים הוסף נכס - השדות לא נמחקים
++ החזר חודשי גבוה מדי - אין התראה
++ כשנמצאים בנכס ולוחצים הוסף נכס - השדות לא נמחקים
+- הוצאות נלוות נוספות
 
+- במעבר ל-HOME תמיד יש קפיצה כפולה
 
 - sign up loading when no phrases not looks good - desktop / tablet
 - sign up not show title after complete and before move on
 - home page - when no items the image show slow
+- calculators - transparent cities icons
 
++ app - למנוע LANDSCAPE
+- app - לתקן CSS
+- app - לעשות אייקונים
+- app - learn native lifesycle
 
 - לשים פרסומות
 - lazy load
@@ -159,7 +166,7 @@ export default App
 - Grpc - proto files
 - Graph api
 - cicd
-- compile to android app
++ compile to android app
 
 */
 
@@ -206,4 +213,8 @@ export default App
 + last login
 
 + mobile delete - implement swip
++ propery - add desciption
++ new calculatore - compare properties
++ layer and real estate agent - cant insert 0 
+
 */

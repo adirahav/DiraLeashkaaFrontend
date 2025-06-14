@@ -24,7 +24,7 @@ export function FinancialDetailsPage() {
         return {
             name,
             label: utilService.getPhrase(labelKey, phrases), 
-            value: utilService.formatNumber(value),
+            value,
             error: utilService.getPhrase(errorKey, phrases), 
             tooltip: utilService.getPhrase(tooltipKey, phrases), 
             maxLength,
@@ -67,7 +67,7 @@ export function FinancialDetailsPage() {
                 if (fieldValue.value === undefined && fieldValue.hasError === undefined) {
                     return
                 }
-                if (!fieldValue.value || fieldValue.hasError) {
+                if (fieldValue.value === null || fieldValue.value === undefined || fieldValue.value === "" || fieldValue.hasError) {
                     hasError = true
                 }
             })
@@ -76,11 +76,11 @@ export function FinancialDetailsPage() {
         }
     }, [financialDetails])
 
-    function handleValueChanged(fieldName, value, hasError) {
+    /*function handleValueChanged(fieldName, value, hasError) {
         setFinancialDetails((prevFinancialDetails) => {
             return { ...prevFinancialDetails, [fieldName]: {...prevFinancialDetails[fieldName], value, hasError} }
         })
-    }
+    }*/
 
     function handleValueChanged(fieldName, value, hasError) {
         setFinancialDetails((prevFinancialDetails) => {

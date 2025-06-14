@@ -8,9 +8,9 @@ export const propertyService = {
     archive
 }
 
-async function getById(propertyId) {
+async function getById(propertyId, calcYields = false) {
     try {
-        const property = await httpService.get(BASE_URL + propertyId)
+        const property = await httpService.get(BASE_URL + propertyId + "?calcYields=" + calcYields)
         return property
     } catch(err) {
         console.error(`Had problems getting property ${propertyId}`)

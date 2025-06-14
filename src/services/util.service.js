@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 const PLATFORM = {
     MOBILE: "MOBILE",
     TABLET: "TABLET",
@@ -29,6 +31,7 @@ export const utilService = {
     saveToStorage,
     loadFromStorage,
     getPlatform,
+    getShareMenu,
     debounce,
     throttle,
     priceFormat,
@@ -57,9 +60,9 @@ function getFixedParameter(key, fixedParameters) {
     return null
 }
 
-function getLocalStorage(type, key) {
-    if (localStorage.getItem(key)) {
-        return localStorage.getItem(key)
+async function getLocalStorage(type, key) {
+    if (await AsyncStorage.getItem(key)) {
+        return await AsyncStorage.getItem(key)
     } else {
         if (type === "array") {
             return []
@@ -101,12 +104,12 @@ function makeId(length = 5) {
     return text
 }
 
-function saveToStorage(key, value) {
-    localStorage[key] = JSON.stringify(value)
+async function saveToStorage(key, value) {
+    await AsyncStorage[key] = JSON.stringify(value)
 }
 
-function loadFromStorage(key, defaultValue = null) {
-    const value = localStorage[key] || defaultValue
+async function loadFromStorage(key, defaultValue = null) {
+    const value = await AsyncStorage[key] || defaultValue
     return JSON.parse(value)
 }
 
@@ -116,6 +119,32 @@ function getPlatform() {
                 : window.innerWidth >= MEDIA_WIDTH.DESKTOP
                     ? PLATFORM.DESKTOP
                     : PLATFORM.TABLET
+}
+
+function getShareMenu(phrases, fixedParameters) {
+    const appVersion = this.getFixedParameter("appVersion", fixedParameters)
+    const webVersion = this.getFixedParameter("webVersion", fixedParameters)
+     
+    const isNative = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android'
+
+    return {
+        versionNumber: isNative
+                    ? appVersion?.find(entry => entry.key === "lastVersion").value
+                    : webVersion?.find(entry => entry.key === "lastVersion").value,
+        url: isNative
+                    ? `whatsapp://send?text= ${this.getPhrase("android_share_text", phrases)} ${appVersion?.find(entry => entry.key === "url").value}`
+                    : `whatsapp://send?text= ${this.getPhrase("web_share_text", phrases)} ${webVersion?.find(entry => entry.key === "url").value}`,
+        text: this.getPhrase("drawer_share", phrases) ,
+        moreUrl: isNative
+                    ? `${webVersion?.find(entry => entry.key === "url").value}`
+                    : `${appVersion?.find(entry => entry.key === "url").value}`,
+        moreIcon: isNative 
+                    ? "web" 
+                    : "android",
+        moreText: isNative 
+                    ? this.getPhrase("drawer_share_web", phrases) 
+                    : this.getPhrase("drawer_share_android", phrases)
+    }
 }
 
 // debounce calls a function when a user has not carried

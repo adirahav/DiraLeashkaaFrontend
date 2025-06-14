@@ -1,8 +1,12 @@
+import { Capacitor } from '@capacitor/core'
 import Axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const BASE_URL = process.env.NODE_ENV === 'production'
-    ? '/api/'
-    : 'http://localhost:3032/api/'
+const BASE_URL = Capacitor.isNativePlatform()
+    ? 'https://diraleashkaabackend.onrender.com/api/'
+    : process.env.NODE_ENV === 'production'
+        ? '/api/'
+        : 'http://localhost:3032/api/'
 
 var axios = Axios.create({
     withCredentials: true
@@ -30,6 +34,7 @@ async function ajax(endpoint, method = 'GET', data = null) {
     }
 
     try {
+        console.log(`url=${BASE_URL}${endpoint}`)
         const res = await axios({
             url: `${BASE_URL}${endpoint}`,
             method,
@@ -41,7 +46,7 @@ async function ajax(endpoint, method = 'GET', data = null) {
         console.error(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(err)
         if (err.response && err.response.status === 401) {
-            sessionStorage.clear()
+            await AsyncStorage.clear()
             window.location.assign('/')
         }
         throw err

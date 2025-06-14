@@ -6,10 +6,13 @@ import { NavLink, useNavigate } from "react-router-dom"
 import { useSelector } from 'react-redux'                   
 import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon, LogoutIcon, 
          PersonalDetailsIcon, ShareIcon, TermsOfUseIcon, 
-         MissingAvatarIcon,  BackIcon} from "../assets/icons"
+         MissingAvatarIcon,  BackIcon,
+         WebIcon,
+         AndroidIcon} from "../assets/icons"
 import { logout } from "../store/actions/user.actions"
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from "./FormField"
+import { Capacitor } from "@capacitor/core"
 const { PLATFORM } = utilService
 
 export function Header() {
@@ -37,7 +40,7 @@ export function Header() {
     const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)   
     const [showAllHeader, setShowAllHeader] = useState(false)
     const [showBack, setShowBack] = useState(false)
-    const [version, setVersion] = useState(null)
+    const [share, setShare] = useState(null)
     const [addPropertyWeb, setAddPropertyWeb] = useState(defultButtonState("home_add_property"))
     const [addPropertyTablet, setAddPropertyTablet] = useState( {
         isDisabled: false,
@@ -63,14 +66,7 @@ export function Header() {
 
     useEffect(() => {
         if (!isLoadingState && phrases && fixedParameters) {
-            const version = utilService.getFixedParameter("version", fixedParameters)
-            const webUrl = version?.find(entry => entry.key === "url").value
-            const shareDescription = utilService.getPhrase("web_share_text", phrases)  
-                
-            setVersion({
-                shareUrl: `whatsapp://send?text= ${shareDescription} ${webUrl}`,
-                versionNumber: version?.find(entry => entry.key === "lastVersion").value
-            })
+            setShare(utilService.getShareMenu(phrases, fixedParameters))
         }
     }, [isLoadingState])
 
@@ -246,11 +242,12 @@ export function Header() {
                     <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
                     <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
-                    <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
+                    <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
+                    <li><NavLink to={share?.moreUrl} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                 </ul>
                 <ul className="bottom">
-                    <li className="version"><span>v {parseFloat(version?.versionNumber).toFixed(1)}</span></li>
+                    <li className="version"><span>v {parseFloat(share?.versionNumber).toFixed(1)}</span></li>
                     <li><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
                 </ul>
             </nav>
@@ -274,7 +271,8 @@ export function Header() {
                     <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
                     <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
-                    <li><NavLink to={version?.shareUrl} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>שתף</span></NavLink></li>
+                    <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
+                    <li><NavLink to={share?.moreUrl} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                
                     <li className="divider"></li>

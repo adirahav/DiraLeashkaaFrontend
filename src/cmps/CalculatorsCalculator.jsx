@@ -35,7 +35,7 @@ export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) 
     }
 
     const getCalculatorIcon = async (calculator) => {
-        try {
+        try {console.log(`icon_calculator_${utilService.toSnakeCase(calculator?.type)}`)
             const module = await import(`../assets/images/icon_calculator_${utilService.toSnakeCase(calculator?.type)}.png`)
             return module.default
         } catch (error) {
@@ -51,7 +51,7 @@ export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) 
                                 ? ` lock`
                                 : '')
                       
-
+                        
     return (
         <article className={articleClass}>
             <img src={calculatorIcon} />

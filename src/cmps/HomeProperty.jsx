@@ -46,6 +46,8 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     const aboutActionIdState = useSelector(storeState => storeState.userModule.home.aboutActionId)
     const aboutActionIdRef = useRef(aboutActionIdState)
 
+    const startTouchX = useRef(null)
+
     const [awaitOnLoading, setAwaitOnLoading] = useState(true)
 
     useEffect(() => {
@@ -108,7 +110,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
 
     // edit
     const handleEdit = (ev) => {
-        if (!isDeletingRef.current) {
+        if (!isDeletingRef.current && !aboutDeleteIdRef.current) {
             onPropertyPress(ev, property)
         }
     }
@@ -135,7 +137,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
                     cancel: { ...prevDeleteButtons.cancel, isDisabled: true }
                 }
             })
-
+            
             onPropertyPress(ev, property)
         }
 
@@ -149,45 +151,44 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     }
 
     function handleClickOutside(ev) {
-         if (property._id === aboutDeleteIdRef.current && 
+        if (property?._id === aboutDeleteIdRef.current && 
             !isDeletingRef.current &&
             !ev.target.closest('.delete-overlay') && 
             !ev.target.parentElement.className.baseVal?.includes("icon-delete") &&
             !ev.target.parentElement.className.baseVal?.includes("icon-edit")) {
-            //console.log("outside deleing") 
             handleCancleDelete(ev)
         }
 
-        if (property._id === aboutActionIdRef.current && 
+        if (property?._id === aboutActionIdRef.current && 
             !isActingRef.current &&
             !ev.target.closest('.actions-overlay') && 
             !ev.target.parentElement.className.baseVal?.includes("icon-delete") &&
             !ev.target.parentElement.className.baseVal?.includes("label-delete")) {
-            //console.log("outside actions") 
             handleCancleAction(ev)
         }
     }
 
     // swipe actions (mobile)
     const handleTouchStart = (event) => {
-        const startX = event.touches[0].clientX
-        if (window.scrollX === 0 && startX < 50) {
+        startTouchX.current = event.touches[0].clientX
+    }
+
+    const handleTouchEnd = (event) => {
+        const startX = startTouchX.current
+        const endX = event.changedTouches[0].clientX
+        
+        if (startX === endX && actionStatus === '') {
+            handleEdit(event)
+        } else if (window.scrollX === 0 && startX < 80 && actionStatus === '') {
             if (!isActingRef.current) {
                 setDeleteStatus('')
                 onAboutDeletingProperty(null)
                 setActionStatus('before-acting')
                 onAboutActingProperty(property._id) 
             }   
-        } else {
-            handleEdit(event)
-        }
-    }
-
-    const handleTouchEnd = () => {
-        /*if (swipingToRefresh === "swiping") {
-            setSwipeToRefresh('refreshing')
-            fetchHomeData()
-        }*/
+        } else if (startX >= 80 && actionStatus === 'before-acting') {
+            handleCancleDelete(event)
+        } 
     }
 
     const handleCancleAction = () => {

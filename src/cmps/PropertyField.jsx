@@ -3,9 +3,10 @@ import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, Attentio
 import { utilService } from '../services/util.service'
 import { showWarningAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
+import { CheckBox } from '@mui/icons-material'
 
 export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueChanged, onPercentChanged }) {
-    // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | STRING | TEXT_AREA | PERCENT
+    // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | VISUAL_DROP_DOWN | MULTIPLE_DROP_DOWN | STRING | TEXT_AREA | PERCENT
 
     const DEBOUNCE_AWAIT = 500
     
@@ -96,8 +97,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.stopPropagation()
 
             setIsChangedByUser(true)
-
-            let value = params.defaultValue.toString().replace(/[^0-9]/g, '').replace(/^0+/, '')
+            let value = params.defaultValue === 0 ? "0" : params.defaultValue.toString().replace(/[^0-9]/g, '').replace(/^0+/, '')
             value = utilService.formatNumber(value)
 
             setValueToEdit(value)
@@ -114,10 +114,11 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                              !isFirstLoading && 
                              params.defaultValue != undefined && 
                              params.id 
-
+            
         const showRollback = isFirstLoading || !valueToEdit 
                              ? false 
-                             : (!params.value && !params.defaultValue) ||
+                             //: (!params.value && !params.defaultValue) ||
+                             : (!(typeof params.value === 'number') && !(typeof params.defaultValue === 'number')) ||
                                (valueToEdit?.toString().replace(/,/g, '') !== params.defaultValue?.toString())
      
         return  <div className={fieldClass}>
@@ -172,7 +173,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         // value
         // -------------
         const [valueToEdit, setValueToEdit] = useState(
-            params.value.customValue 
+            params.value.customValue || params.value.customValue === 0
                 ? utilService.formatNumber(params.value.customValue.toString())
                 : params.value.calc
                     ? utilService.formatNumber(params.value.calc.toString())
@@ -193,7 +194,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
 
         useEffect(() => {
             setValueToEdit(
-                params.value.customValue 
+                params.value.customValue || params.value.customValue === 0 
                     ? utilService.formatNumber(params.value.customValue.toString())
                     : params.value.calc
                         ? utilService.formatNumber(params.value.calc.toString())
@@ -205,7 +206,10 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.stopPropagation()
             
             let { value } = ev.target
-            value = value.replace(/[^0-9]/g, '').replace(/^0+/, '')
+            if (value !== "0") {
+                value = value.replace(/[^0-9]/g, '').replace(/^0+/, '')
+                if (value === "") value = "0"
+            }
             value = utilService.formatNumber(value)
             
             setValueToEdit(value)
@@ -226,7 +230,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
 
         useEffect(() => {
             setLabel(
-                params.value.customValue && params.value.customValue.toString() !== params.value.default?.toString()
+                params.value.customValue !== null && params.value.customValue?.toString() !== params.value.default?.toString()
                     ? params.label.withCustomValue
                     : params.numberPicker.customPercent
                         ? params.label.withPercent.replace("%1$.1f&percnt;", `${params.numberPicker.customPercent}%`)  
@@ -336,10 +340,10 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.stopPropagation()
             
             setIsChangedByUser(true)
-            
-            if (params.value.customValue) {
+           
+            if (params.value.customValue !== null) {
                 setValueToEdit('')
-            } else if (params.numberPicker.customPercent) {
+            } else if (params.numberPicker.customPercent !== null) {
                 setPercentToEdit('')
             }
         }
@@ -352,11 +356,12 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                 : '')
 
             
-        const showRollback = isFirstLoading || !valueToEdit 
+        const showRollback = isFirstLoading || valueToEdit === null || valueToEdit === ''
                                 ? false 
                                 : params.isReadOnly
                                     ? params.numberPicker.customPercent !== params.numberPicker.default && !isFirstLoading && params.id
-                                    : (!params.value && !params.value.default && params.value.calc != params.value.default) ||
+                                    : (!params.value && !params.value.default && params.value.calc !== params.value.default) ||
+                                      (params.value.customValue !== null && params.value.customValue !== params.value.default) ||
                                       (params.numberPicker.customPercent !== params.numberPicker.default) ||
                                       (!valueToEdit && valueToEdit?.toString().replace(/,/g, '') !== params.value.default?.toString())
         
@@ -378,12 +383,19 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         const fieldClass = 'calc-total' + (isFirstLoading
                                             ? ' loading4' 
                                             : '')
+        
+        const value = params.value 
+                        ? (params.leftSign ?? "") + params.value?.toLocaleString(undefined, {
+                            minimumFractionDigits: params.decimalPlaces ?? 0,
+                            maximumFractionDigits: params.decimalPlaces ?? 0,
+                          }) + (params.rightSign ?? "")
+                        : ""
 
         return  <div className={`property-field ${fieldClass}`}>
                     <span dangerouslySetInnerHTML={{ __html: params.label }} ></span>
                     <div>
                         <input 
-                            value={params.value?.toLocaleString()}  
+                            value={value}  
                             readOnly={true} />
                     </div>
                 </div>
@@ -602,6 +614,197 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                             <ul>
                                 {filteredOptions.map((option, index) => (
                                     <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress}>{option.value}</li>
+                                ))}
+                            </ul>
+                        </div>}
+                        
+                    </div>
+                </div>
+    }
+    
+    function VisualDropDownn({params, onSetValue}) {
+        const [valueToEdit, setValueToEdit] = useState(params?.selectedValue ?? null)
+        const [isOpen, setIsOpen] = useState(false)
+        const [filteredOptions, setFilteredOptions] = useState(params.options)
+        const [isChangedByUser, setIsChangedByUser] = useState(false)
+
+        const fieldRef = useRef()
+        const dropdownRef = useRef()
+
+        const debouncedOnValueChange = useCallback(
+            utilService.debounce((value) => {
+                onSetValue(value)
+            }, DEBOUNCE_AWAIT),
+            [onSetValue]
+        )
+
+        useEffect(() => {
+            if (params.label || params.options || params.selectedValue) {
+                setTimeout(() => {
+                    document.addEventListener('click', handleClickOutside)
+                }, 0)
+            }
+    
+            return () => {
+                document.removeEventListener('click', handleClickOutside)
+            }
+        }, [params.label, params.options, params.selectedValue])
+
+        useEffect(() => {
+            if (isChangedByUser) {
+                debouncedOnValueChange(valueToEdit)
+            }
+        }, [valueToEdit])
+
+        useEffect(() => {
+            if (params) {
+                setTimeout(() => {
+                    document.addEventListener('click', handleClickOutside)
+                }, 0)
+            }
+    
+            return () => {
+                document.removeEventListener('click', handleClickOutside)
+            }
+    
+        }, [params])
+
+        const toggleDropdown = (event) => {  
+            event.preventDefault()
+            setIsOpen(true)
+        } 
+
+        const handleOptionPress = (event) => {
+            event.preventDefault()
+    
+            const { id } = event.currentTarget
+            
+            setValueToEdit(id)
+            setIsOpen(false)
+            setIsChangedByUser(true)
+        }
+
+        function handleClickOutside(ev) {
+            if (dropdownRef.current && !dropdownRef.current.contains(ev.target)/* && inputRef.current !== document.activeElement*/) {
+                setIsOpen(false)
+            }
+        }
+        
+        const fieldClass = `property-field dropdown visual` + (isFirstLoading
+                                                                    ? ' loading6' 
+                                                                    : valueToEdit === null || 
+                                                                      valueToEdit === undefined || 
+                                                                      valueToEdit.length === 0 || 
+                                                                      valueToEdit === 'choose' 
+                                                                        ? ' empty' 
+                                                                        : '')
+
+        return  <div className={fieldClass} ref={dropdownRef}>
+                    <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`}>
+                        <button className="dropdown-toggle" onClick={toggleDropdown}>
+                            {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || "בחר"}
+                            {!isOpen && <ArrowDownIcon />}
+                            {isOpen && <ArrowUpIcon />}
+                        </button>
+                        {isOpen && <div className="dropdown-menu">
+                            <ul>
+                                {filteredOptions.map((option, index) => (
+                                    <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress}>
+                                        {option.image && <img src={option.image} alt={option.value} />}
+                                        <div>
+                                            <span>{option.value}</span>
+                                            {option.info && <span>{option.info}</span>}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>}
+                        
+                    </div>
+                </div>
+    }
+
+    function MultipleDropDownn({params, onSetValue}) {
+        const [isOpen, setIsOpen] = useState(false)
+        const [filteredOptions, setFilteredOptions] = useState()
+        const [choosenText, setChoosenText] = useState()
+
+        const fieldRef = useRef()
+        const dropdownRef = useRef()
+
+        useEffect(() => {
+            if (params.label || params.options || params.selectedValue) {
+                setTimeout(() => {
+                    document.addEventListener('click', handleClickOutside)
+                }, 0)
+            }
+    
+            return () => {
+                document.removeEventListener('click', handleClickOutside)
+            }
+        }, [params.label, params.options, params.selectedValue])
+
+        useEffect(() => {
+            setFilteredOptions(params.options)
+        }, [params.options])
+
+        useEffect(() => {
+            setChoosenText( 
+                params?.selectedValue?.length > 1 
+                    ? params?.texts.many.replace('%1$s', params?.selectedValue?.length)
+                    : params?.selectedValue?.length === 1
+                        ? params?.texts.one
+                        : params?.texts.any
+            )
+        }, [params?.selectedValue?.length])
+
+        const toggleDropdown = (event) => {  
+            event.preventDefault()
+            setIsOpen(true)
+        } 
+
+        const handleCheckboxChanged = (event) => {
+            event.stopPropagation()  
+            
+            const checked = event.target.checked
+            const { id } = event.target
+            onSetValue(checked, id)
+        }
+
+        function handleClickOutside(ev) {
+            if (dropdownRef.current && !dropdownRef.current.contains(ev.target)/* && inputRef.current !== document.activeElement*/) {
+                setIsOpen(false)
+            }
+        }
+        
+        const fieldClass = `property-field dropdown multiple ` 
+                                + (isFirstLoading
+                                    ? ' loading6' 
+                                    : params?.selectedValue === null || 
+                                      params?.selectedValue === undefined || 
+                                      params?.selectedValue.length === 0 || 
+                                      params?.selectedValue === 'choose' 
+                                        ? ' empty' 
+                                        : '')
+                                                                        
+        return  <div className={fieldClass} ref={dropdownRef}>
+                    <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`}>
+                        <button className="dropdown-toggle" onClick={toggleDropdown}>
+                            {choosenText}
+                            {!isOpen && <ArrowDownIcon />}
+                            {isOpen && <ArrowUpIcon />}
+                        </button>
+                        {isOpen && <div className="dropdown-menu">
+                            <ul>
+                                {filteredOptions.map((option, index) => (
+                                    <li key={index}>
+                                        <input type='checkbox' id={option.key} checked={option.checked} onChange={handleCheckboxChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" disabled={!option.enable} ></input>
+                                        {option.image && <img src={option.image} alt={option.value} />}
+                                        <div>
+                                            <span>{option.value}</span>
+                                            {option.info && <span>{option.info}</span>}
+                                        </div>
+                                    </li>
                                 ))}
                             </ul>
                         </div>}
@@ -908,7 +1111,11 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             {type === "DROP_DOWN" && DropDown({params, onSetValue: onValueChanged})}
 
             {type === "SEARCHABLE_DROP_DOWN" && SearchableDropDown({params, onSetValue: onValueChanged})}
-
+            
+            {type === "VISUAL_DROP_DOWN" && VisualDropDownn({params, onSetValue: onValueChanged})}
+            
+            {type === "MULTIPLE_DROP_DOWN" && MultipleDropDownn({params, onSetValue: onValueChanged})}
+            
             {type === "STRING" && String({params, onSetValue: onValueChanged})}
 
             {type === "TEXT_AREA" && TextArea({params, onSetValue: onValueChanged})}

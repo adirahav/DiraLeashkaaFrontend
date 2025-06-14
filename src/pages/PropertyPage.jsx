@@ -8,20 +8,6 @@ import { PropertyYieldForecast } from '../cmps/PropertyYieldForecast'
 import { propertyService } from '../services/property.service'
 import { PropertyAmortizationSchedule } from '../cmps/PropertyAmortizationSchedule'
 import { PropertyChart } from '../cmps/PropertyChart'
-import iconMissingData from '../assets/images/missing_data.png'
-import 'react-tabs/style/react-tabs.css'
-import iconLock from '../assets/images/icon_lock.svg'
-
-import iconYieldForecastOff from '../assets/images/icon_yield_forecast_off.png'
-import iconYieldForecastOn from '../assets/images/icon_yield_forecast_on.png'
-import iconYieldForecastDisable from '../assets/images/icon_yield_forecast_disable.png'
-import iconAmortizationScheduleOff from '../assets/images/icon_amortization_schedule_off.png'
-import iconAmortizationScheduleOn from '../assets/images/icon_amortization_schedule_on.png'
-import iconAmortizationScheduleDisable from '../assets/images/icon_amortization_schedule_disable.png'
-import iconChartOff from '../assets/images/icon_chart_off.png'
-import iconChartOn from '../assets/images/icon_chart_on.png'
-import iconChartDisable from '../assets/images/icon_chart_disable.png'
-import { IconSizes, ZoomOut, DoubleArrowDownIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
 import { Overlay } from '../cmps/Overlay'
 import Lottie from "lottie-react"
@@ -31,6 +17,22 @@ import { authService } from '../services/auth.service'
 import { useSplash } from '../contexts/SplashContext.jsx'
 import { useSelector } from 'react-redux'
 import { PropertyMedia } from '../cmps/PropertyMedia.jsx'
+import { useNativeBackButton } from '../hooks/useNativeBackButton.jsx'
+
+import iconMissingData from '../assets/images/missing_data.png'
+import iconLock from '../assets/images/icon_lock.svg'
+import iconYieldForecastOff from '../assets/images/icon_yield_forecast_off.png'
+import iconYieldForecastOn from '../assets/images/icon_yield_forecast_on.png'
+import iconYieldForecastDisable from '../assets/images/icon_yield_forecast_disable.png'
+import iconAmortizationScheduleOff from '../assets/images/icon_amortization_schedule_off.png'
+import iconAmortizationScheduleOn from '../assets/images/icon_amortization_schedule_on.png'
+import iconAmortizationScheduleDisable from '../assets/images/icon_amortization_schedule_disable.png'
+import iconChartOff from '../assets/images/icon_chart_off.png'
+import iconChartOn from '../assets/images/icon_chart_on.png'
+import iconChartDisable from '../assets/images/icon_chart_disable.png'
+import { ZoomOut, DoubleArrowDownIcon } from '../assets/icons'
+import { Capacitor } from '@capacitor/core'
+
 
 export function PropertyPage() {
     const location = useLocation()
@@ -74,22 +76,49 @@ export function PropertyPage() {
           observer.observe(dataRef.current);
         }
     
+        // native andoid app
+        //console.log("ADITEST init")
+        //if (Capacitor.isNativePlatform()) {
+        /*const nativeApp = App.addListener('backButton', (event) => {
+            console.log("ADITEST fragment="+fragment)
+            if (fragment !== "form") {
+                console.log("ADITEST 1") 
+                event.preventDefault()   
+                console.log("ADITEST 2")               
+                setFragment("form")
+                console.log("ADITEST 3") 
+            }
+        })
+        //}*/
+
         return () => {
           if (dataRef.current) {
             observer.unobserve(dataRef.current)
           }
+
+          //nativeApp.remove()
         }
       }, [])
+
+    useNativeBackButton(() => {
+        console.log("ADITEST fragment=", fragment)
+        if (fragment !== "form") {
+          setFragment("form")
+        } /*else {
+          App.exitApp()
+        }*/
+    })
 
     useEffect(() => {
         if (!phrases || !fixedParameters || !calculators) {
             onLoadingStart()  
         } else {
             onLoadingDone()  
-
+            
             if (propertyId) {
                 fetchProperty() 
             } else {
+                setProperty(null)
                 setIsFirstLoading(false)
                 setShowInterestsContainer(true) 
                 setLockYields(true)
@@ -155,11 +184,15 @@ export function PropertyPage() {
                     document.body.classList.add("landscape")
                 }
 
-                window.onpopstate = function() {
-                    setFragment('form')
-                    setShowMobileData('')
-                } 
-                history.pushState({}, '')
+                if (Capacitor.getPlatform() !== 'android') {
+                    console.log("ADITEST not native")
+                    window.onpopstate = function() {
+                        console.log("ADITEST window.onpopstate")
+                        setFragment('form')
+                        setShowMobileData('')
+                    } 
+                    history.pushState({}, '')
+                }
                 
                 break
         }

@@ -2,6 +2,7 @@ import { authService } from "../../services/auth.service.js"
 import { userService } from "../../services/user.service.js"
 import { LOGGEDIN_USER, 
     GET_HOME, 
+    GET_COMPARE, SAVE_COMPARE,
     ABOUT_DELETE_PROPERTY, DELETING_PROPERTY_START, DELETING_PROPERTY_DONE, 
     ABOUT_ACTION_PROPERTY, ACTING_PROPERTY_START, ACTING_PROPERTY_DONE,
     LONG_PRESSED_PROPERTY,
@@ -9,6 +10,7 @@ import { LOGGEDIN_USER,
 import { LOADING_DONE, LOADING_START } from "../reducers/app.reducer.js"
 import { store } from "../store.js"
 import { propertyService } from "../../services/property.service.js"
+import { calculatorService } from "../../services/calculator.service.js"
 
 export function setLoggedinUser(loggedinUser) {
     try {
@@ -39,6 +41,51 @@ export function saveHome(home) {
         console.error("Had issues save home data")
         throw err
     } 
+}
+
+export async function getCompare() {
+    try {
+        store.dispatch({ type: LOADING_START })
+        const compare = await calculatorService.getCompare() 
+        store.dispatch({type: GET_COMPARE, compare})
+    } catch(err) {
+        console.error("Had issues loading compare data")
+        throw err
+    } finally {
+        store.dispatch({ type: LOADING_DONE })
+    }
+}
+
+export async function saveCompare(checked, propertyId) {
+    try {
+        store.dispatch({ type: LOADING_START })
+        
+        const state = store.getState()
+        const currentComparedPropertyIds = state.userModule.compare?.comparedPropertyIds || []
+
+        const updatedComparedPropertyIds = await calculatorService.saveCompare(currentComparedPropertyIds, checked, propertyId) 
+        store.dispatch({type: SAVE_COMPARE, updatedComparedPropertyIds})
+
+    } catch(err) {
+        console.error("Had issues saving compare data")
+        throw err
+    } finally {
+        store.dispatch({ type: LOADING_DONE })
+    }
+}
+
+export async function resetCompare() {
+    try {
+        store.dispatch({ type: LOADING_START })
+        const updatedComparedPropertyIds = await calculatorService.resetCompare() 
+        store.dispatch({type: SAVE_COMPARE, updatedComparedPropertyIds})
+
+    } catch(err) {
+        console.error("Had issues reseting compare data")
+        throw err
+    } finally {
+        store.dispatch({ type: LOADING_DONE })
+    }
 }
 
 export async function onDeleteProperty(propertyId) {

@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { userService } from '../services/user.service'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SplashContext = createContext()
 
 export const SplashProvider = ({ children }) => {
-    const [splash, setSplash] = useState(() => {
-        const phrases = localStorage.getItem("phrases")
-        const fixedParameters = localStorage.getItem("fixedParameters")
-        const calculators = localStorage.getItem("calculators")
+    const [splash, setSplash] = useState(async () => {
+        const phrases = await AsyncStorage.getItem("phrases")
+        const fixedParameters = await AsyncStorage.getItem("fixedParameters")
+        const calculators = await AsyncStorage.getItem("calculators")
 
         return {
             phrases: phrases ? JSON.parse(phrases) : null,
@@ -19,13 +20,17 @@ export const SplashProvider = ({ children }) => {
     const [forceFetchSplash, setForceFetchSplash] = useState(false)
 
     useEffect(() => {
-        if (forceFetchSplash || !splash || !splash.phrases || !splash.fixedParameters || !splash.calculators) {
-            fetchSplash()
-        } else {
-            localStorage.setItem("phrases", JSON.stringify(splash.phrases))
-            localStorage.setItem("fixedParameters", JSON.stringify(splash.fixedParameters))
-            localStorage.setItem("calculators", JSON.stringify(splash.calculators))
+        async function fetchSplashIfNeeded() {
+            if (forceFetchSplash || !splash || !splash.phrases || !splash.fixedParameters || !splash.calculators) {
+                fetchSplash()
+            } else {
+                await AsyncStorage.setItem("phrases", JSON.stringify(splash.phrases))
+                await AsyncStorage.setItem("fixedParameters", JSON.stringify(splash.fixedParameters))
+                await AsyncStorage.setItem("calculators", JSON.stringify(splash.calculators))
+            }
         }
+
+        fetchSplashIfNeeded()
     }, [splash, forceFetchSplash])
 
     const fetchSplash = async () => {

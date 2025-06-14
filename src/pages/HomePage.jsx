@@ -14,6 +14,7 @@ import { IconSizes, AddPropertyIcon, LoadingIcon, DoubleArrowDownIcon } from "..
 import { useSplash } from '../contexts/SplashContext.jsx'
 import imgLetsStart from '../assets/images/lets_start.png'
 import { FormField } from '../cmps/FormField.jsx'
+import { useHomeWorker } from '../hooks/useHomeWorker'
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -40,7 +41,7 @@ export function HomePage() {
     const calculators = splash?.calculators
 
     const [citiesNames, setCitiesNames] = useState()
-    const [worker, setWorker] = useState(null)
+    const { postMessage } = useHomeWorker(true)
     
     const MIN_DELETE_PROPERTY_AWAIT_SEC = 3
     
@@ -61,7 +62,6 @@ export function HomePage() {
     }, [splash])
 
     useEffect(() => {
-        
         if (homeState && homeState.bestYields?.length > 0) {
             setBestYield(homeState.bestYields[0])
         }
@@ -78,35 +78,19 @@ export function HomePage() {
                 setShowOverlay(false)
                 onLoadingDone() 
                 
-                newWorker.postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString() })
+                fetchFullHomeData()
             }
 
             fetchInitialData()
-
-            // get home full data in another thread
-            let newWorker = new Worker(
-                new URL('../workers/home.worker.js', import.meta.url), 
-                { type: 'module' }
-            )
-            setWorker(newWorker)
-
-            newWorker.onmessage = (event) => {
-                if (event.data.type === 'fullData') {
-                    saveHome(event.data.data)
-                } else if (event.data.type === 'error') {
-                    console.error('Worker error:', event.data.error)
-                }
-            }
-
-            return () => {
-                newWorker.terminate()
-            }
         } catch (error) {
             console.error(`Error fetching home data:`, error)
             setShowOverlay(false)
             onLoadingDone() 
         } 
-        
+    }
+
+    const fetchFullHomeData = () => {
+        postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString() })
     }
 
     // my cities
@@ -169,6 +153,7 @@ export function HomePage() {
         onAboutDeletingProperty(null)
         onDeletingPropertyDone()
 
+        fetchFullHomeData()
     }
 
     // best yield

@@ -162,6 +162,865 @@
             }
         } 
     }
+
+    &.compare {
+
+        .filter {
+            @include inside-container;
+            padding: 17px;
+            
+            .header {
+                h2 {
+                    color: var(--text);
+                    padding: 0;
+                    margin: 0;
+                    font-size: 15px;
+                    font-weight: bold;
+                }
+
+                .form-field {
+                    &.button {
+                        display: none;
+                    }
+                }
+            }
+
+            .elements {
+                display: grid;
+                grid-template-columns: 1fr 2fr auto;
+                gap: 10px;
+            
+                .property-field {
+                    margin: 7px 0;
+                    
+                    & > span {
+                        display: none;
+                    }
+    
+                    &.dropdown {
+                        .custom-dropdown {
+                            margin: 0;
+                        }
+
+                        &.visual {
+                            grid-column: 1;
+                            
+                            .custom-dropdown {
+                                width: 100%;
+                            }
+                        }
+
+                        &.multiple {
+                            grid-column: 2;
+                            
+                            .custom-dropdown {
+                                width: 100%;
+                            }
+                        }
+                    }
+    
+                    &.empty .custom-dropdown .dropdown-toggle {
+                        border-color: var(--form-field-input-border);
+                    }
+                }
+
+                .form-field.button {
+                    margin: 2px 0;
+
+                    button {
+                        height: 48px;
+                    }
+                }
+            }
+
+            .apartments {
+                margin-top: 14px;
+                white-space: nowrap; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                & > div {
+                    border: 1px solid var(--form-field-input-border);
+                    border-radius: 8px;
+                    background: var(--property-field-background);
+                    color: var(--property-field-text);
+                    width: 100%;
+                    height: 30px;
+                    line-height: 30px;
+                    margin: 4px 0;
+                    padding: 0 7px;
+                    text-align: right;
+
+                    span {
+                        padding-left: 10px;
+                        margin-top: 5px;
+                        display: ruby-text;
+                       
+                        &:not(:first-child) {
+                            padding-right: 10px;
+                        
+                            border-right: 1px solid var(--home-my-property-separator);
+                        }
+                        
+                    }
+                }
+            }
+        }
+
+        .view-buttons {
+            display: none;
+        }
+
+        .scroll-buttons {
+            display: none;
+        }
+
+        .main-content {
+            display: flex;
+            grid-gap: 25px;
+            width: fit-content;
+
+            .form {
+                width: 325px;
+                display: flex;
+                flex-direction: column;
+
+                article {
+                    .property-field .custom-dropdown,
+                    .property-field .custom-dropdown .dropdown-toggle,
+                    .property-field > div > input,
+                    .property-field > div > textarea {
+                        width: 150px;
+                    }
+
+                    .property-field > div > textarea {
+                        max-width: 150px;
+                    }
+
+                    .property-field.dropdown.searchable .custom-dropdown .dropdown-menu {
+                        input {
+                            width: 135px;
+                            margin: 0 6px;
+                        }
+                    }
+
+                    .property-field {
+                        span {
+                            line-height: 30px;
+                        }
+                    }
+                }
+
+                .yields {
+                    list-style: none;
+                    padding: 0 10px;
+                    
+                    li {
+                        align-items: center;
+                        display: inline-flex;
+                        width: 100%;
+                        position: relative;
+                        
+                        img {
+                            width: 20px;
+                        }
+
+                        .property-field {
+                            width: 100%;
+                            margin: 0 5px 0 0px;
+                            border: 0;
+
+                            span {
+                                width: auto;
+                                margin-top: 0;
+                                display: flex;
+                            }
+
+                            div {
+                                left: 0;
+                                position: absolute;
+                                width: auto;
+
+                                input {
+                                    border: 0;
+                                    width: auto;
+                                    margin-top: 0;
+                                    padding-left: 0;
+                                    text-align: left;
+                                }
+                            }
+                        }
+
+                        & > b {
+                            margin: 0 10px;
+                            font-size: 15px;
+                            font-weight: normal;
+                        }
+
+                        & > span {
+                            left: 0;
+                            position: absolute;
+                        }
+                    }  
+                }
+
+                &:not(.city-else) {
+                    article {
+                        &:nth-child(1) {
+                            *:nth-child(6), *:nth-child(7) { 
+                                &.property-field {
+                                    span {
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+    
+                        &:nth-child(3) {
+                            *:nth-child(2), *:nth-child(4) {
+                                &.property-field {
+                                    span {
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+            
+                        &:nth-child(5) {
+                            *:nth-child(1), *:nth-child(2) {
+                                &.property-field {
+                                    span {
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+            
+                        &:nth-child(9) {
+                            *:nth-child(1), *:nth-child(4) {
+                                &.property-field {
+                                    span {
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+            
+                        &:nth-child(11) {
+                            *:nth-child(4) {
+                                &.property-field {
+                                    span {
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.city-else {
+                    article {
+                        &:nth-child(1) {
+                            *:nth-child(7), *:nth-child(8) { 
+                                &.property-field {
+                                    span {
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+                    }            
+                }
+                
+                /*&.city-else article:nth-child(1) *:nth-child(7).property-field span,
+                &.city-else article:nth-child(1) *:nth-child(8).property-field span,*/
+                &.city-else article:nth-child(3) *:nth-child(3).property-field span,
+                &.city-else article:nth-child(9) *:nth-child(2).property-field span {
+                    line-height: 30px;
+                }
+
+                &.city-else article:nth-child(3) *:nth-child(2).property-field span,
+                &.city-else article:nth-child(3) *:nth-child(4).property-field span,
+                &.city-else article:nth-child(5) *:nth-child(1).property-field span,
+                &.city-else article:nth-child(5) *:nth-child(2).property-field span,
+                &.city-else article:nth-child(9) *:nth-child(1).property-field span,
+                &.city-else article:nth-child(9) *:nth-child(4).property-field span,
+                &.city-else article:nth-child(11) *:nth-child(4).property-field span {
+                    line-height: 16px;
+                }
+
+            }
+
+            &.no-compared-properties {
+                display: grid;
+                width: 100%;
+
+                h3 {
+                    margin: 40px auto 0;
+                    font-size: 24px;
+                    font-weight: bold;
+                }
+
+                img {
+                    margin: auto;
+                    width: 400px;
+                }
+            }
+        }
+
+        @include tablet-layout {  
+            position: relative;
+
+            .scroll-buttons.count2, .scroll-buttons.count3 {
+                display: flex;
+                overflow-x: auto;
+                overflow-y: auto;
+                height: 40px;
+                width: 58px;
+                position: absolute;
+                top: 167px;
+                left: 0;
+                justify-content: space-between;
+                align-items: center;
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    display: inline;
+                    color: var(--mobile-icon-disabled);
+                }
+
+                &.scroll-right {
+                    svg:first-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+
+                &.scroll-left {
+                    svg:last-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+            }
+
+            .scroll-buttons.count2 {
+                display: none;
+            }
+
+            .main-content {
+                width: calc(100vw - 116px);
+                overflow-y: auto;
+                overflow-x: auto;
+                grid-gap: 20px;
+
+                .form {
+                    margin: 40px 4px 20px;
+                    width: 310px;
+                    padding: 10px 4px;
+                    height: unset;
+                }
+            }
+        }
+
+        @include tablet-small-layout {background-color: green; 
+            .filter {
+                .elements {
+                    grid-template-columns: 1fr 1fr auto;
+                    
+                    .property-field {
+                        &.dropdown {
+                            &.multiple {
+                                .custom-dropdown {
+                                    ul li > img {
+                                        display: none;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mobile-layout {
+            margin: 20px;
+            position: relative;
+
+            .filter {
+                padding: 10px;
+
+                .header {
+                    display: grid;
+                    grid-template-columns: 1fr auto;
+                    height: 20px;
+
+                    h2 {
+                        display: inline;
+                        font-size: 16px;
+                    }
+    
+                    .form-field {
+                        display: inline;
+                        text-align: left;
+                        width: 28px;
+                        height: 20px;
+                        padding: 0;
+                        margin: 0;
+
+                        &.button {
+                            display: inline;
+
+                            button {
+                                min-width: unset;
+                                height: 20px;
+                                padding: 0;
+                                margin: 0;
+                                
+                                span {
+                                    line-height: 20px;
+                                    font-size: 16px;
+                                    margin-bottom: 3px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .elements {
+                    grid-template-columns: 122px 1fr;
+                    
+                    .property-field {
+                        &.dropdown {
+                            &.multiple {
+                                .custom-dropdown {
+                                    height: 40px;
+
+                                    .dropdown-toggle {
+                                        font-size: 16px;
+                                    }
+
+                                    ul {
+                                        height: 180px;
+
+                                        li {
+                                            margin: 4px;
+                                            width: calc(100% - 8px);
+                                            height: 40px;
+    
+                                            & > img {
+                                                display: none;
+                                            }
+    
+                                            & div {
+                                                width: calc(100% - 20px);
+                                                display: block;
+                                                margin: 0 5px 0 0;
+                                                padding: 0;
+    
+                                                span {
+                                                    height: 20px;
+                                                    line-height: 20px;
+                                                    font-size: 16px;
+                                                    display: block;
+                                                    margin: 0;
+                                                    padding: 0;
+                                                    white-space: normal;
+        
+                                                    &:not(:first-child) {
+                                                        display: none;
+                                                    }
+                                                }
+                                            }
+                                            
+                                        }
+                                    } 
+                                    
+                                }
+                            }
+
+                            &.visual {
+                                .custom-dropdown {
+                                    height: 40px;
+                                    
+                                    .dropdown-toggle {
+                                        font-size: 16px;
+                                    }
+
+                                    ul {
+                                        height: 180px;
+
+                                        li {
+                                            margin: 4px;
+                                            width: calc(100% - 8px);
+                                            height: 40px;
+    
+                                            & > img {
+                                                display: none;
+                                            }
+    
+                                            & div span {
+                                                height: 20px;
+                                                line-height: 20px;
+                                                font-size: 16px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .form-field {
+                        &.button {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            .view-buttons.count2, .view-buttons.count3 {
+                display: block;
+                overflow-x: auto;
+                overflow-y: auto;
+                height: 40px;
+                width: 106px;
+                position: absolute;
+                justify-content: space-between;
+                display: flex;
+                align-items: center;
+
+                h2 {
+                    display: inline;
+                    font-size: 16px;
+                }
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    display: inline;
+                    color: var(--mobile-icon-disabled);
+                }
+
+                &.comfy {
+                    svg:first-of-type {
+                        color: var(--icon-color);
+                    }
+
+                    svg:last-of-type {
+                        color: var(--mobile-icon-disabled);
+                    }
+                }
+
+                &.compact {
+                    svg:first-of-type {
+                        color: var(--mobile-icon-disabled);
+                    }
+
+                    svg:last-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+            }
+
+            .scroll-buttons.count2, .scroll-buttons.count3 {
+                display: block;
+                overflow-x: auto;
+                overflow-y: auto;
+                height: 40px;
+                width: 58px;
+                position: absolute;
+                left: 0;
+                justify-content: space-between;
+                display: flex;
+                align-items: center;
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    display: inline;
+                    color: var(--mobile-icon-disabled);
+                }
+
+                &.scroll-right {
+                    svg:first-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+
+                &.scroll-left {
+                    svg:last-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+            }
+
+            .main-content {
+                width: calc(100vw - 41px);
+                overflow-y: auto;
+                overflow-x: auto;
+                grid-gap: 20px;
+
+                .form {
+                    margin: 38px 0 20px;
+                    width: 293px;
+                    max-width: 293px;
+                    padding: 10px 0;
+
+                    article {
+                        h3 {
+                            padding: 0;
+                        }
+
+                        .property-field {
+                            margin: 7px 0;
+
+                            span {
+                                margin-right: 0;
+                                width: 100px;
+                            }
+                        }
+                    }
+
+                    hr {
+                        margin: 20px 0;
+                        height: 1.6px;
+                    }
+
+                    &:not(:first-child) {
+                        border-right: 1px solid var(--property-form-spinner-divider);
+                        border-radius: 0;
+                        padding-right: 20px;
+                    }
+
+                    ul.yields {
+                        width: 240px;
+                    }
+                }
+
+                &.no-compared-properties {
+                    h3 {
+                        font-size: 20px;
+                    }
+                }
+
+                &.compact {
+                    grid-gap: 10px;
+
+                    .form {
+                        width: auto;
+                        max-width: unset;
+                        
+                        &:not(.city-else) article:nth-child(3) *:nth-child(4).property-field span {
+                            line-height: 30px;
+                        }
+
+                        &.city-else {
+                            article {
+                                .property-field.dropdown.searchable {
+                                    &:first-child {
+                                        display: none;
+                                    }
+                                }
+                            } 
+                        }
+
+                        article {
+                            .property-field {
+                                div, .custom-dropdown {
+                                    pointer-events: none;
+                                    cursor: not-allowed;
+                                    margin: 0;
+                                    width: auto;
+
+                                    svg {
+                                        display: none;
+                                    }
+                                    
+                                    input, button, textarea, button.dropdown-toggle {
+                                        color: var(--property-field-input-disabled-text);
+                                        opacity: 0.6;
+                                        border: 0;
+                                        margin: 0;
+                                        width: 130px;
+                                        font-size: 16px;
+                                    }
+
+                                    textarea {
+                                        resize: none;
+                                    }
+                                }
+
+                                &.calc-total {
+                                    span {
+                                        margin-top: 0;
+                                    }
+                                }
+
+                                &.dropdown.empty {
+                                    button.dropdown-toggle { 
+                                        color: transparent;
+                                    }
+                                }
+                            }
+                        }
+
+                        ul.yields {
+                            padding: 0;
+                                
+                            li {
+                                img {
+                                    display: none;
+                                }
+                            }
+                        }
+
+                        &:first-child {
+                            article {
+                                .property-field {
+                                    span {
+                                        width: 90px;
+                                        margin-left: 10px;
+                                        font-size: 15px;
+
+                                        u {
+                                            display: none;
+                                        }
+                                    }
+                                }
+                            }
+
+                            & > h3 {
+                                padding: 0;
+                            }
+
+                            ul.yields {   
+                                width: 230px;
+
+                                li {
+                                    .property-field {
+                                        margin: 0;
+
+                                        span {
+                                            margin-right: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &:not(:first-child) {
+                            width: 145px;
+                            max-width: 145px;
+                            padding-right: 10px;
+
+                            article {
+                                h3 {
+                                    color: transparent;
+                                }
+
+                                .property-field {
+                                    span {
+                                        display: inline-block; 
+                                        width: 0;
+                                        overflow: hidden;
+                                        white-space: nowrap;
+                                    }
+                                }
+                            }
+
+                            & > h3 {
+                                color: transparent;
+                                white-space: nowrap;
+
+                                & > b > font {
+                                    color: transparent;
+                                }
+                            }
+
+                            ul.yields {   
+                                width: 120px;
+                                padding: 0;
+                                        
+                                li {
+                                    display: block;
+  
+                                    .property-field {
+                                        max-width: 145px;
+                                        height: 30px;
+                                        
+                                        span {
+                                            display: none;
+                                        }
+
+                                        div {
+                                            left: unset;
+                                            
+                                            input {
+                                                max-width: 115px;
+                                                text-align: right;
+                                                margin: 0;
+                                                padding: 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.comfy {
+                    .form {
+                       &:not(:first-child) {
+                            article {
+                                .property-field {
+                                    span {
+                                        width: 100px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.compacting {
+                    .form {
+                        &:not(:first-child) {
+                            article {
+                                .property-field {
+                                    span {
+                                        width: 0;
+                                        transition: width 0.3s ease-in-out;  
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        
+                &.comfying {
+                    .form {
+                        &:not(:first-child) {
+                            article {
+                                .property-field {
+                                    span {
+                                        width: 100px;
+                                        transition: width 0.3s ease-in-out;  
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.loading.compact {
+                    .form article .property-field.dropdown .custom-dropdown .dropdown-toggle {
+                        color: transparent;
+                    }
+                }
+            }
+        }
+    }
     
 }
 
@@ -184,6 +1043,12 @@
                     }
                 }
             }
+
+            &.compare {
+                .main-content {
+                    width: calc(100vw - 207px);
+                }
+            }
         }
     }
 
@@ -202,6 +1067,12 @@
                             width: 115px;
                         }
                     }
+                }
+            }
+
+            &.compare {
+                .scroll-buttons.count2 {
+                    display: flex;
                 }
             }
         }

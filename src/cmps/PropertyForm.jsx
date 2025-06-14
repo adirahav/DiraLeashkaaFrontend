@@ -3,6 +3,12 @@ import { PropertyField } from './PropertyField'
 import { utilService } from '../services/util.service'
 import { useSplash } from '../contexts/SplashContext.jsx'
 import { useSelector } from 'react-redux'
+import averageReturnImage from '../assets/images/icon_best_average_return.png'
+import averageReturnOnEquityImage from '../assets/images/icon_best_yield_average_return_on_equity.png'
+import totalProfitImage from '../assets/images/icon_best_yield_total_profit.png'
+import npvImage from '../assets/images/icon_best_yield_npv.png'
+import { YieldChart } from './YieldChart.jsx'
+
 
 export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPropertyId}) { 
 
@@ -68,6 +74,36 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             value: null
         }
     }
+
+    const defultYieldsState = () => {
+        return {
+            title: "תשואה צפויה לאחר 10 שנים",
+            averageReturn: {
+                label: utilService.getPhrase("home_best_yield_average_return", phrases),
+                value: null,
+                rightSign: '%',
+                decimalPlaces: 1
+            },
+            averageReturnOnEquity: {
+                label: utilService.getPhrase("home_best_yield_average_return_on_equity", phrases),
+                value: null,
+                rightSign: '%',
+                decimalPlaces: 1
+            },
+            profit: {
+                label: utilService.getPhrase("home_best_yield_total_profit", phrases),
+                value: null,
+                leftSign: '₪',
+                decimalPlaces: 0
+            }, 
+            profitNpv: {
+                label: utilService.getPhrase("home_best_yield_total_profit_npv", phrases), 
+                value: null,
+                leftSign: '₪',
+                decimalPlaces: 0
+            }
+        }
+    }
     
     const defultCalcEditableState = (labelWithPercentKey, labelWithCustomValueKey, numberPickerProperties) => {
         const propertyInputs = utilService.getFixedParameter("propertyInputs", fixedParameters)
@@ -91,7 +127,6 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         }
     }
 
-    const [cityIcon, setCityIcon] = useState(null)
     const [city, setCity] = useState(defultSearchableDropdownState("property_city_label", "cities", "userCities"))
     const [cityElse, setCityElse] = useState(defultStringState("property_city_else_label", 20))
     const [address, setAddress] = useState(defultStringState("property_address_label", 30))
@@ -128,13 +163,17 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     const [mortgageMonthlyRepayment, setMortgageMonthlyRepayment] = useState(defultCalcState("property_mortgage_monthly_repayment_label", "property_mortgage_monthly_repayment_warning"))
     const [mortgageMonthlyYield, setMortgageMonthlyYield] = useState(defultCalcState("property_mortgage_monthly_yield_label", "property_mortgage_monthly_yield_warning"))
     
+    const [yields, setYields] = useState(defultYieldsState("property_price_label", 9))
+    
     const [showMortgagePrepayment, setShowMortgagePrepayment] = useState(true)
     
     useEffect(() => {
-        if (property) {
-            loadProperty()
+        if (property || !queryPropertyId) {
+            setTimeout(() => {
+                loadProperty()
+            }, [0])      
         } 
-    }, [property])
+    }, [queryPropertyId, property])
 
     useEffect(() => {
         if (!isLoadingState && !property && !queryPropertyId && phrases) {
@@ -177,6 +216,14 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             setMortgagePeriod({...mortgagePeriod, label: utilService.getPhrase("property_mortgage_period_label", phrases), warning: utilService.getPhrase("property_mortgage_period_warning", phrases)})
             setMortgageMonthlyRepayment({...mortgageMonthlyRepayment, label: utilService.getPhrase("property_mortgage_monthly_repayment_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_repayment_warning", phrases)})
             setMortgageMonthlyYield({...mortgageMonthlyYield, label: utilService.getPhrase("property_mortgage_monthly_yield_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_yield_warning", phrases)})
+        
+            setYields({
+                ...yields,
+                profit: {...yields.profit, label: utilService.getPhrase("home_best_yield_total_profit", phrases)},
+                profitNpv: {...yields.profitNpv, label: utilService.getPhrase("home_best_yield_total_profit_npv", phrases)},
+                averageReturn: {...yields.averageReturn, label: utilService.getPhrase("home_best_yield_average_return", phrases)},
+                averageReturnOnEquity: {...yields.averageReturnOnEquity, label: utilService.getPhrase("home_best_yield_average_return_on_equity", phrases)},
+            })
         }
 
     }, [phrases, isLoadingState])
@@ -184,129 +231,161 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     const loadProperty = () => {
         try {
-            setCity({...city, selectedValue: property.city})
+        
+            setCity({...city, selectedValue: property?.city})
 
-            if (property.updatedByField !== "cityElse") {
-                setCityElse({...cityElse, value: property.cityElse})
+            if (property?.updatedByField !== "cityElse") {
+                setCityElse({...cityElse, value: property?.cityElse})
             }
             
-            if (property.updatedByField !== "address") {
-                setAddress({...address, value: property.address})
+            if (property?.updatedByField !== "address") {
+                setAddress({...address, value: property?.address})
             }
             
-            setApartmentType({...apartmentType, selectedValue: property.apartmentType})
+            setApartmentType({...apartmentType, selectedValue: property?.apartmentType})
 
-            if (property.updatedByField !== "price") {
-                setPrice({...price, value: property.price})
+            if (property?.updatedByField !== "price") {
+                setPrice({...price, value: property?.price})
             }
-
-            if (property.updatedByField !== "equity") {
-                setEquity({...equity, id: property?._id, value: property.calcEquity, defaultValue: property.defaultEquity})
+            
+            if (property?.updatedByField !== "equity" || !queryPropertyId) {
+                setEquity({
+                    ...equity, 
+                    id: property?._id, 
+                    value: queryPropertyId ? property?.calcEquity : user?.equity, 
+                    defaultValue: queryPropertyId ? property?.defaultEquity : user?.equity
+                })
             }
 
             setEquityCleaningExpenses({
                 ...equityCleaningExpenses, 
-                value: property.calcEquityCleaningExpenses,
-                hasWarning: property.calcEquityCleaningExpenses < 0
+                value: property?.calcEquityCleaningExpenses,
+                hasWarning: property?.calcEquityCleaningExpenses < 0
             })
             setMortgageRequired({
                 ...mortgageRequired, 
-                value: property.calcMortgageRequired,
-                hasWarning: !user.calcCanTakeMortgage && property.calcMortgageRequired > 0
+                value: property?.calcMortgageRequired,
+                hasWarning: !user.calcCanTakeMortgage && property?.calcMortgageRequired > 0
             })
 
-            if (property.updatedByField !== "note") {
-                setNote({...note, value: property.note})
+            if (property?.updatedByField !== "note") {
+                setNote({...note, value: property?.note})
             }
 
-            if (property.updatedByField !== "incomes") {
-                setIncomes({...incomes, id: property?._id, value: property.calcIncomes, defaultValue: property.defaultIncomes})
+            if (property?.updatedByField !== "incomes" || !queryPropertyId) {
+                setIncomes({
+                    ...incomes, 
+                    id: property?._id, 
+                    value: queryPropertyId ? property?.calcIncomes : user?.incomes, 
+                    defaultValue: queryPropertyId ? property?.defaultIncomes : user?.incomes
+                })
             }
 
-            if (property.updatedByField !== "commitments") {
-                setCommitments({...commitments, id: property?._id, value: property.calcCommitments, defaultValue: property.defaultCommitments})
+            if (property?.updatedByField !== "commitments" || !queryPropertyId) {
+                setCommitments({
+                    ...commitments, 
+                    id: property?._id, 
+                    value: queryPropertyId ? property?.calcCommitments : user?.commitments, 
+                    defaultValue: queryPropertyId ? property?.defaultCommitments : user?.commitments
+                })
             }
 
-            setDisposableIncome({...disposableIncome, value: property.calcDisposableIncome})
+            setDisposableIncome({...disposableIncome, value: property?.calcDisposableIncome})
+
             setPossibleMonthlyRepayment({...possibleMonthlyRepayment, 
-                value: {calc: property.calcPossibleMonthlyRepayment, customValue: property.possibleMonthlyRepaymentCustomValue, default: property.defaultPossibleMonthlyRepayment},
-                numberPicker: {...possibleMonthlyRepayment.numberPicker, customPercent: property.calcPossibleMonthlyRepaymentPercent},
+                value: {calc: property?.calcPossibleMonthlyRepayment, customValue: property?.possibleMonthlyRepaymentCustomValue, default: property?.defaultPossibleMonthlyRepayment},
+                numberPicker: {...possibleMonthlyRepayment.numberPicker, customPercent: property?.calcPossibleMonthlyRepaymentPercent},
                 isReadOnly: true
             }) 
 
-            setMaxPercentOfFinancing({...maxPercentOfFinancing, value: property.calcMaxPercentOfFinancing})
+            setMaxPercentOfFinancing({...maxPercentOfFinancing, value: property?.calcMaxPercentOfFinancing})
+
             setActualPercentOfFinancing({
                 ...actualPercentOfFinancing, 
-                value: property.calcActualPercentOfFinancing,
-                hasWarning: property.calcActualPercentOfFinancing === null || property.calcMaxPercentOfFinancing === null
+                value: property?.calcActualPercentOfFinancing,
+                hasWarning: property?.calcActualPercentOfFinancing === null || property?.calcMaxPercentOfFinancing === null
                                 ? false
-                                : property.calcActualPercentOfFinancing > property.calcMaxPercentOfFinancing
+                                : property?.calcActualPercentOfFinancing > property?.calcMaxPercentOfFinancing
             })
 
-            setTransferTax({...transferTax, value: property.calcTransferTax})
+            setTransferTax({...transferTax, value: property?.calcTransferTax})
             
             setLawyer({
                 ...lawyer, 
                 id: property?._id, 
-                value: {calc: property.calcLawyer, customValue: property.lawyerCustomValue, default: property.defaultLawyer},
-                numberPicker: {...lawyer.numberPicker, customPercent: property.calcLawyerPercent},
+                value: {calc: property?.calcLawyer, customValue: property?.lawyerCustomValue, default: property?.defaultLawyer},
+                numberPicker: {...lawyer.numberPicker, customPercent: property?.calcLawyerPercent},
                 isReadOnly: false
             })        
             setRealEstateAgent({
                 ...realEstateAgent, 
                 id: property?._id, 
-                value: {calc: property.calcRealEstateAgent, customValue: property.realEstateAgentCustomValue, default: property.defaultRealEstateAgent},
-                numberPicker: {...realEstateAgent.numberPicker, customPercent: property.calcRealEstateAgentPercent},
+                value: {calc: property?.calcRealEstateAgent, customValue: property?.realEstateAgentCustomValue, default: property?.defaultRealEstateAgent},
+                numberPicker: {...realEstateAgent.numberPicker, customPercent: property?.calcRealEstateAgentPercent},
                 isReadOnly: false,
             })    
             
-            if (property.updatedByField !== "brokerMortgage") {
-                setBrokerMortgage({...brokerMortgage, value: property.calcBrokerMortgage})
+            if (property?.updatedByField !== "brokerMortgage") {
+                setBrokerMortgage({...brokerMortgage, value: property?.calcBrokerMortgage})
             }
 
-            if (property.updatedByField !== "repairing") {
-                setRepairing({...repairing, value: property.calcRepairing})
+            if (property?.updatedByField !== "repairing") {
+                setRepairing({...repairing, value: property?.calcRepairing})
             }
 
-            setIncidentalsTotal({...incidentalsTotal, value: property.calcIncidentalsTotal})
+            setIncidentalsTotal({...incidentalsTotal, value: property?.calcIncidentalsTotal})
 
             setRent({...rent, 
-                value: {calc: property.calcRent, customValue: property.rentCustomValue, default: property.defaultRent},
-                numberPicker: {...rent.numberPicker, customPercent: property.calcRentPercent},
+                value: {calc: property?.calcRent, customValue: property?.rentCustomValue, default: property?.defaultRent},
+                numberPicker: {...rent.numberPicker, customPercent: property?.calcRentPercent},
                 isReadOnly: false
             })        
 
-            if (property.updatedByField !== "lifeInsurance") {
-                setLifeInsurance({...lifeInsurance, value: property.calcLifeInsurance})
+            if (property?.updatedByField !== "lifeInsurance") {
+                setLifeInsurance({...lifeInsurance, value: property?.calcLifeInsurance})
             }
 
-            if (property.updatedByField !== "structureInsurance") {
-                setStructureInsurance({...structureInsurance, value: property.calcStructureInsurance})
+            if (property?.updatedByField !== "structureInsurance") {
+                setStructureInsurance({...structureInsurance, value: property?.calcStructureInsurance})
             }
 
             setRentCleaningExpenses({
                 ...rentCleaningExpenses, 
-                value: property.calcRentCleaningExpenses
+                value: property?.calcRentCleaningExpenses
             })
 
             setMortgagePeriod({
                 ...mortgagePeriod, 
-                selectedValue: property.calcMortgagePeriod,
-                hasWarning: property.calcMortgagePeriod !== null 
+                selectedValue: property?.calcMortgagePeriod,
+                hasWarning: property?.calcMortgagePeriod !== null 
                          && user.calcAge !== null 
                          && utilService.getFixedParameter("mortgageMaxAge", fixedParameters) != null
-                         && property.calcMortgagePeriod + user.calcAge > utilService.getFixedParameter("mortgageMaxAge", fixedParameters)
+                         && property?.calcMortgagePeriod + user.calcAge > utilService.getFixedParameter("mortgageMaxAge", fixedParameters)
             })
-            setMortgageMonthlyRepayment({...mortgageMonthlyRepayment, value: property.calcMortgageMonthlyRepayment})
+            setMortgageMonthlyRepayment({
+                ...mortgageMonthlyRepayment, 
+                value: property?.calcMortgageMonthlyRepayment,
+                hasWarning: property?.calcMortgageMonthlyRepayment !== null && property?.calcMortgageMonthlyRepayment > property?.calcPossibleMonthlyRepayment
+            })
             setMortgageMonthlyYield({
                 ...mortgageMonthlyYield, 
-                value: property.calcMortgageMonthlyYield,
-                hasWarning: property.calcMortgageMonthlyYield !== null && property.calcMortgageMonthlyYield < 0
+                value: property?.calcMortgageMonthlyYield,
+                hasWarning: property?.calcMortgageMonthlyYield !== null && property?.calcMortgageMonthlyYield < 0
             })
             
             setShowMortgagePrepayment(property?.showMortgagePrepayment)
+
+            setYields({
+                ...yields,
+                profit: {...yields.profit, value: property?.yields?.profit},
+                profitNpv: {...yields.profitNpv, value: property?.yields?.profitNpv},
+                averageReturn: {...yields.averageReturn, value: property?.yields?.averageReturn},
+                averageReturnOnEquity: {...yields.averageReturnOnEquity, value: property?.yields?.averageReturnOnEquity},
+            })
+
+            
         } catch (error) {
-            console.error(`Error load property ${property._id}:`, error)
+            console.error(`Error load property ${property?._id || queryPropertyId}:`, error)
         } 
     }
 
@@ -407,6 +486,11 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         mortgagePeriod: "mortgagePeriod" + (mortgagePeriod.value !== null ? mortgagePeriod.value : "Default"),
         mortgageMonthlyRepayment: "mortgageMonthlyRepayment" + (mortgageMonthlyRepayment.value !== null ? mortgageMonthlyRepayment.value : "Default"),
         mortgageMonthlyYield: "mortgageMonthlyYield" + (mortgageMonthlyYield.value !== null ? mortgageMonthlyYield.value : "Default"),
+    
+        yieldProfit: "yieldProfit" + (yields.profit.value !== null ? yields.profit.value : "Default"),
+        yieldProfitNpv: "yieldProfitNpv" + (yields.profitNpv.value !== null ? yields.profitNpv.value : "Default"),
+        yieldAverageReturn: "yieldAverageReturn" + (yields.averageReturn.value !== null ? yields.averageReturn.value : "Default"),
+        yieldAverageReturnOnEquity: "yieldAverageReturnOnEquity" + (yields.averageReturnOnEquity.value !== null ? yields.averageReturnOnEquity.value : "Default"),
     }
 
     const [cityLogoIcon, setCityLogoIcon] = useState(null)
@@ -430,15 +514,19 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         }
     }
     
+    // best yield
+    const bestYieldTitle = !isLoadingState && phrases && fixedParameters
+                            ? utilService.getPhrase("calculator_compare_best_yield_title", phrases)
+                                         .replace("%1$d", utilService.getFixedParameter("bestYield", fixedParameters)
+                                                                     .find(item => item.key === "yearsPeriod").value)
+                            : ''
+     
     const sectionClass = `form ${city.selectedValue === "else" ? "city-else" : ""}`
-    const cityLogoClass = 'city-logo' + (isFirstLoading 
-                                            ? ' loading1' : '')
+    const cityLogoClass = (isFirstLoading ? ' loading1' : '')
     const h3Class = isFirstLoading ? 'loading0' : ''
     const hrClass = isFirstLoading ? 'loading9' : ''
 
     return (<>
-        {!isFirstLoading && <img className={cityLogoClass} src={cityLogoIcon} />}
-        {isFirstLoading && <div className={cityLogoClass}><div /></div>}
         <section className={sectionClass}>
             <article>
                 <PropertyField type={"SEARCHABLE_DROP_DOWN"} key={keys.city} params={city} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('city', value)} />
@@ -497,6 +585,32 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                 <PropertyField type={"CALC"} key={keys.mortgageMonthlyRepayment} params={mortgageMonthlyRepayment} isFirstLoading={isFirstLoading} />
                 <PropertyField type={"CALC"} key={keys.mortgageMonthlyYield} params={mortgageMonthlyYield} isFirstLoading={isFirstLoading} />
             </article>}
+
+            {property?.yields && <>
+                <hr className={hrClass} />
+                <h3 className={h3Class} dangerouslySetInnerHTML={{ __html: bestYieldTitle}}></h3>
+                <ul className='yields'>
+                    <li>
+                        <img src={averageReturnImage} />
+                        <PropertyField type={"CALC_TOTAL"} key={keys.yieldAverageReturn} params={yields.averageReturn} isFirstLoading={isFirstLoading} />
+                    </li>
+                    <li>
+                        <img src={averageReturnOnEquityImage} />
+                        <PropertyField type={"CALC_TOTAL"} key={keys.yieldAverageReturnOnEquity} params={yields.averageReturnOnEquity} isFirstLoading={isFirstLoading} />
+                    </li>
+                    <li>
+                        <img src={totalProfitImage} />
+                        <PropertyField type={"CALC_TOTAL"} key={keys.yieldProfit} params={yields.profit} isFirstLoading={isFirstLoading} />
+                    </li>
+                    <li>
+                        <img src={npvImage} />
+                        <PropertyField type={"CALC_TOTAL"} key={keys.yieldProfitNpv} params={yields.profitNpv} isFirstLoading={isFirstLoading} />
+                    </li>
+                </ul>
+                {/*<div className='chart'>
+                    <YieldChart rawData={JSON.parse(property?.calcYieldForecast)} />
+                </div>*/}
+            </>}
             
         </section>    
     </>

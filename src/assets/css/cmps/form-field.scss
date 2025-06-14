@@ -339,6 +339,10 @@
           input {
               &:valid  {
                   font-size: rem(16px);
+
+                  & + span {
+                    transform: scale(0.8333333333) translateY(-12px) translateX(40px);
+                  }
               }
           }
       }
@@ -350,7 +354,21 @@
           }
         }
 
+        &.disabled {
+          svg {
+            color: red;
+          }
+        }
+
         button {
+          &.tablet-or-desktop { 
+            display: none 
+          }
+
+          .mobile {
+            display: inline-block;
+          }
+
           height: 48px;
           min-width: 100px;
 
@@ -401,6 +419,23 @@
             font-size: rem(16px);
             height: 98px;
           }
+        }
+      }
+    }
+  }
+}
+
+
+.android {
+  .form-field {
+    @include mobile-layout {
+      label {
+        input {
+            &:valid  {
+                & + span {
+                  transform: scale(0.8333333333) translateY(-14px) translateX(40px);
+                }
+            }
         }
       }
     }

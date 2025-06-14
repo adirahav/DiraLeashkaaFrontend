@@ -1,5 +1,6 @@
 import { STORAGE_KEY_LAST_LOGGEDIN_EMAIL, STORAGE_KEY_LOGGEDIN_USER } from "./auth.service"
 import { httpService } from "./http.service"
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const BASE_URL = 'user/'
 
@@ -24,7 +25,6 @@ async function splash() {
         delete splash.fixedParameters.onError
         delete splash.fixedParameters.trialPeriod
         delete splash.fixedParameters.expirationAlert
-        delete splash.fixedParameters.appVersion
         delete splash.calculators?._id
 
         return splash
@@ -70,7 +70,7 @@ async function remove(userId) {
     // await fetch({method: 'DELETE', url})
 }
 
-function saveLocalUser(user) {
+async function saveLocalUser(user) {
     user = { 
         email: user.email, 
         fullname: user.fullname, 
@@ -85,14 +85,14 @@ function saveLocalUser(user) {
         registrationExpiredTime: user.registrationExpiredTime,
     }
 
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
-    localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
+    await AsyncStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
+    await AsyncStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
     return user
 }
 
 async function save(userToSave) {
     const savedUser = await httpService.put(BASE_URL, userToSave)
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
+    await AsyncStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
     return savedUser
 }
 

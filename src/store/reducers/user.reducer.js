@@ -3,6 +3,8 @@ import { userService } from "../../services/user.service.js"
 
 export const LOGGEDIN_USER = 'LOGGEDIN_USER'
 export const GET_HOME = "GET_HOME"
+export const GET_COMPARE = "GET_COMPARE"
+export const SAVE_COMPARE = "SAVE_COMPARE"
 export const ABOUT_DELETE_PROPERTY = "ABOUT_DELETE_PROPERTY"
 export const DELETING_PROPERTY_START = "DELETING_PROPERTY_START"
 export const DELETING_PROPERTY_DONE = "DELETING_PROPERTY_DONE"
@@ -28,6 +30,10 @@ const initialState = {
         aboutActionId: null,
         isActing: false
     },
+    compare: {
+        allProperties: null,
+        comparedPropertyIds: null
+    },
     loggedinUser: authService.getLoggedinUser(),
     isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
 }
@@ -51,6 +57,23 @@ export function userReducer(state = initialState, action = {}) {
                     bestYields: action.home?.bestYields,
                     isPropertiesNeedToRefresh: action.home?.isPropertiesNeedToRefresh,
                     isBestYieldsNeedToRefresh: action.home?.isBestYieldsNeedToRefresh,
+                }
+            }
+        case GET_COMPARE:
+            return {
+                ...state,
+                compare: {
+                    ...state.compare,
+                    allProperties: action.compare?.allProperties,
+                    comparedPropertyIds: action.compare?.comparedPropertyIds
+                }
+            }
+        case SAVE_COMPARE:
+            return {
+                ...state,
+                compare: {
+                    ...state.compare,
+                    comparedPropertyIds: action.updatedComparedPropertyIds
                 }
             }
         case ABOUT_DELETE_PROPERTY:
@@ -109,7 +132,6 @@ export function userReducer(state = initialState, action = {}) {
                     longPressed: action.propertyId
                 }
             }
-
         case UPDATE_USER:
             userService.saveLocalUser(action.savedUser)
             return {
@@ -117,13 +139,11 @@ export function userReducer(state = initialState, action = {}) {
                 loggedinUser: action.savedUser,
                 isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
             }
-        
         case DELETE_USER:
             return {
                 ...state,
                 users: state.users.filter(user => user._id !== action.userId),
             }
-
         case SIGNUP:
             userService.saveLocalUser(action.signupUser)
             return {
@@ -131,14 +151,12 @@ export function userReducer(state = initialState, action = {}) {
                 loggedinUser: action.signupUser,
                 isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
             }
-
         case LOGOUT:
             return {
                 ...state,
                 loggedinUser: null,
                 isLoggedinUserCompleted: false
             }    
-
         default:
             return state
     }

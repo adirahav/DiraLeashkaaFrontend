@@ -1,6 +1,8 @@
 import { httpService } from './http.service'
 import { userService } from './user.service.js'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 export const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 export const STORAGE_KEY_LAST_LOGGEDIN_EMAIL = "email"
 
@@ -36,22 +38,28 @@ async function signup(credentials) {
 }
 
 async function logout() {
-    sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
+    await AsyncStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
     await httpService.post(BASE_URL + 'logout')
 }
 
-function getLoggedinUser() {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
+async function getLoggedinUser() {
+    return JSON.parse(await AsyncStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
 function getLoggedinUserCompleted() {
     const loggedinUser = getLoggedinUser()
-    return (loggedinUser && loggedinUser.fullname && loggedinUser.email && loggedinUser.yearOfBirth && 
-        loggedinUser.equity && loggedinUser.incomes && loggedinUser.commitments && 
-        loggedinUser.termsOfUseAccept) 
+    return (
+        loggedinUser && 
+        loggedinUser.fullname && 
+        loggedinUser.email && 
+        loggedinUser.yearOfBirth && 
+        typeof loggedinUser.equity === 'number' && loggedinUser.equity >= 0 && 
+        typeof loggedinUser.incomes === 'number' && loggedinUser.incomes >= 0  && 
+        typeof loggedinUser.commitments === 'number' && loggedinUser.commitments >= 0  && 
+        !!loggedinUser.termsOfUseAccept) 
 }
 
 
-function getLastLoggedinEmail() {
-    return localStorage.getItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
+async function getLastLoggedinEmail() {
+    return await AsyncStorage.getItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
 }

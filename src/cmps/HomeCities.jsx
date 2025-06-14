@@ -1,28 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { HomeCity } from './HomeCity'
 import { useSelector } from 'react-redux'
 
 export function HomeCities({ citiesNames, selectedCity, onCityPress }) {   
-
+    const [normalizedCities, setNormalizedCities] = useState()
+    const [uniqueCities, setUniqueCities] = useState()
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     const propertiesState = useSelector(storeState => storeState.userModule.home?.properties)
 
     const LOADING_CITIES_COUNT = 4
     
-    const normalizedCities = propertiesState?.map(property => ({
-        ...property,
-        city: property.city || 'else' 
-      }))
+    useEffect(() => {
+        setNormalizedCities(
+            propertiesState?.map(property => ({
+                ...property,
+                city: property.city || 'else' 
+            }))
+        )
+    }, [propertiesState])
 
-    const uniqueCities = normalizedCities 
-                            ? [...new Set(normalizedCities?.map(cityObj => cityObj.city))] 
-                            : null
+    useEffect(() => {
+        const uniqueCities = normalizedCities 
+            ? [...new Set(normalizedCities?.map(cityObj => cityObj.city))] 
+            : null
 
-    uniqueCities?.sort((a, b) => {
-        if (a === 'else') return 1
-        if (b === 'else') return -1
-        return a.localeCompare(b)
-    })
+        setUniqueCities(
+            uniqueCities?.sort((a, b) => {
+                if (a === 'else') return 1
+                if (b === 'else') return -1
+                return a.localeCompare(b)
+            })
+        )
+    }, [normalizedCities])
 
     if (uniqueCities && uniqueCities.length > 0 && !selectedCity) {
         setTimeout(() => {

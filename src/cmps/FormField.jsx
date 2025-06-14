@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { IconSizes, ShowPasswordIcon, HidePasswordIcon, HelpIcon } from '../assets/icons'
+import { IconSizes, ShowPasswordIcon, HidePasswordIcon, HelpIcon, RestartIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
 import { LoadingIcon } from '../assets/icons'
 import { showTooltipAlert } from './Alert'
@@ -14,7 +14,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
     //       EMAIL 
     //       PASSWORD 
     //       BIRTH_OF_YEAR
-    //       BUTTON | BUTTON_LONG | BUTTON_SUBMIT 
+    //       BUTTON | BUTTON_LONG | BUTTON_SUBMIT
     //       CHECKBOX  
     //       ERROR
     //       CODE   
@@ -127,7 +127,8 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
         )
 
         useEffect(() => {
-            setValueToEdit(params.value || '')
+            //setValueToEdit(params.value || '')
+            setValueToEdit(params.value >= 0 ? params.value : '')
         }, [params.value])
         
         const handleValueChange = (ev) => {
