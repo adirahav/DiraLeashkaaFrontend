@@ -1,6 +1,5 @@
 import { STORAGE_KEY_LAST_LOGGEDIN_EMAIL, STORAGE_KEY_LOGGEDIN_USER } from "./auth.service"
 import { httpService } from "./http.service"
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const BASE_URL = 'user/'
 
@@ -70,7 +69,7 @@ async function remove(userId) {
     // await fetch({method: 'DELETE', url})
 }
 
-async function saveLocalUser(user) {
+function saveLocalUser(user) {
     user = { 
         email: user.email, 
         fullname: user.fullname, 
@@ -85,17 +84,16 @@ async function saveLocalUser(user) {
         registrationExpiredTime: user.registrationExpiredTime,
     }
 
-    await AsyncStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
-    await AsyncStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
+    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
+    localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
     return user
 }
 
 async function save(userToSave) {
     const savedUser = await httpService.put(BASE_URL, userToSave)
-    await AsyncStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
+    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
     return savedUser
 }
-
 
 function getEmptyUser() {
     return {

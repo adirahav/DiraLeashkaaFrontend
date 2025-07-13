@@ -1,8 +1,6 @@
 import { httpService } from './http.service'
 import { userService } from './user.service.js'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
 export const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 export const STORAGE_KEY_LAST_LOGGEDIN_EMAIL = "email"
 
@@ -38,12 +36,12 @@ async function signup(credentials) {
 }
 
 async function logout() {
-    await AsyncStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
+    sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
     await httpService.post(BASE_URL + 'logout')
 }
 
-async function getLoggedinUser() {
-    return JSON.parse(await AsyncStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
+function getLoggedinUser() {
+    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
 function getLoggedinUserCompleted() {
@@ -59,7 +57,6 @@ function getLoggedinUserCompleted() {
         !!loggedinUser.termsOfUseAccept) 
 }
 
-
-async function getLastLoggedinEmail() {
-    return await AsyncStorage.getItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
+function getLastLoggedinEmail() {
+    return localStorage.getItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
 }

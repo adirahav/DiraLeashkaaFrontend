@@ -1,5 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
 const PLATFORM = {
     MOBILE: "MOBILE",
     TABLET: "TABLET",
@@ -60,9 +58,9 @@ function getFixedParameter(key, fixedParameters) {
     return null
 }
 
-async function getLocalStorage(type, key) {
-    if (await AsyncStorage.getItem(key)) {
-        return await AsyncStorage.getItem(key)
+function getLocalStorage(type, key) {
+    if (localStorage.getItem(key)) {
+        return localStorage.getItem(key)
     } else {
         if (type === "array") {
             return []
@@ -104,12 +102,12 @@ function makeId(length = 5) {
     return text
 }
 
-async function saveToStorage(key, value) {
-    await AsyncStorage[key] = JSON.stringify(value)
+function saveToStorage(key, value) {
+    localStorage[key] = JSON.stringify(value)
 }
 
-async function loadFromStorage(key, defaultValue = null) {
-    const value = await AsyncStorage[key] || defaultValue
+function loadFromStorage(key, defaultValue = null) {
+    const value = localStorage[key] || defaultValue
     return JSON.parse(value)
 }
 

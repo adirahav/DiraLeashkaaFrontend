@@ -26,9 +26,7 @@ import { CalculatorPage } from './pages/CalculatorPage.jsx'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { Capacitor } from '@capacitor/core'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
-async function RouteGuard({ children }) {
+function RouteGuard({ children }) {
   const [isOnline, setIsOnline] = useState(true)
   const [isLoggedIn, setLoggedIn] = useState(true)
 
@@ -55,7 +53,7 @@ async function RouteGuard({ children }) {
   }, [loggedinUser])
 
   if (loggedinUser === null && !allowAnonymous()) {
-    const navigate = await AsyncStorage.getItem("email")
+    const navigate = localStorage.getItem("email")
                         ? '/login'
                         : '/signup' 
 
