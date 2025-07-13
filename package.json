@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build-android-old": "vite build --outDir ./dist",
-    "build-android": "vite build && cp -r dist ../../NodeProjects/diraleashkaa-backend/public",
+    "build-android-old": "vite build && cp -r dist ../../NodeProjects/diraleashkaa-backend/public",
+    "build-android": "vite build --mode production && xcopy dist \"..\\..\\NodeProjects\\diraleashkaa-backend\\public\" /E /I /Y",
     "postbuild": "node scripts/preserveAdsTxt.js",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
