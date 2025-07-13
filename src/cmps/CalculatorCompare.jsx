@@ -439,12 +439,12 @@ export function CalculatorCompare({ }) {
             ))}
         </div>}
         {!isLoadingState && properties && properties.length > 0 && <>
-            <div className={`view-buttons ${viewState} count${properties?.length ?? 0}`}>
+            <div className={`view-buttons ${viewState} ('count' + properties?.length) ?? 0}`}>
                 <h2>תצוגה:</h2>
                 <ViewComfyIcon className='comfy' onClick={() => changeViewState('comfy')} />
                 <ViewCompactIcon className='compact' onClick={() => changeViewState('compact')} />
             </div>
-            <div className={`scroll-buttons ${canScrollRight ? 'scroll-right' : ''} ${canScrollLeft ? 'scroll-left' : ''} ${'count' + properties?.length ?? 0}`}>
+            <div className={`scroll-buttons ${canScrollRight ? 'scroll-right' : ''} ${canScrollLeft ? 'scroll-left' : ''} count${properties?.length ?? 0}`}>
                 <ScrollArrowRightIcon onClick={scrollRight} />
                 <ScrollArrowLeftIcon onClick={scrollLeft} />
             </div>

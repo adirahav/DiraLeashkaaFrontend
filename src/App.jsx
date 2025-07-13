@@ -23,6 +23,8 @@ import { Alert } from './cmps/Alert'
 import { Dialog, } from './cmps/Dialog.jsx'
 import { CalculatorPage } from './pages/CalculatorPage.jsx'
 
+import { NativeBackHandler } from './cmps/NativeBackHandler'
+
 import { SplashScreen } from '@capacitor/splash-screen'
 import { Capacitor } from '@capacitor/core'
 
@@ -106,6 +108,7 @@ function App() {
     <SplashProvider>
       <Provider store={store}>    
           <section className={mainLayoutClass}>
+              {/*<NativeBackHandler />*/}
               <Routes>
                   <Route path="/" element={<RouteGuard><HomePage /></RouteGuard>} />
                   <Route path="/error" element={<RouteGuard><ErrorPage /></RouteGuard>} />

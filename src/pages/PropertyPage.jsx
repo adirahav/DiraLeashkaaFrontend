@@ -100,14 +100,14 @@ export function PropertyPage() {
         }
       }, [])
 
-    useNativeBackButton(() => {
+    /*useNativeBackButton(() => {
         console.log("ADITEST fragment=", fragment)
         if (fragment !== "form") {
           setFragment("form")
-        } /*else {
-          App.exitApp()
-        }*/
-    })
+        } //else {
+          //App.exitApp()
+        //}
+    })*/
 
     useEffect(() => {
         if (!phrases || !fixedParameters || !calculators) {

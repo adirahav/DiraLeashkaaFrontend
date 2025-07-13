@@ -95,15 +95,15 @@ export function PropertyInterests({property, display, fragment, onUpdate, onClos
 
     const keys = {
         interest: "interest" + (interest.interestPercent ? interest.interestPercent : "Default"),
-        interest: "interestIn5Years" + (interestIn5Years.interestIn5YearsPercent ? interestIn5Years.interestIn5YearsPercent : "Default"),
-        interest: "interestIn10Years" + (interestIn10Years.interestIn10YearsPercent ? interestIn10Years.interestIn10YearsPercent : "Default"),
-        interest: "averageInterestAtTaking" + (averageInterestAtTaking.averageInterestAtTakingPercent ? averageInterestAtTaking.averageInterestAtTakingPercent : "Default"),
-        interest: "averageInterestAtMaturity" + (averageInterestAtMaturity.averageInterestAtMaturityPercent ? averageInterestAtMaturity.averageInterestAtMaturityPercent : "Default"),
+        interestIn5Years: "interestIn5Years" + (interestIn5Years.interestIn5YearsPercent ? interestIn5Years.interestIn5YearsPercent : "Default"),
+        interestIn10Years: "interestIn10Years" + (interestIn10Years.interestIn10YearsPercent ? interestIn10Years.interestIn10YearsPercent : "Default"),
+        averageInterestAtTaking: "averageInterestAtTaking" + (averageInterestAtTaking.averageInterestAtTakingPercent ? averageInterestAtTaking.averageInterestAtTakingPercent : "Default"),
+        averageInterestAtMaturity: "averageInterestAtMaturity" + (averageInterestAtMaturity.averageInterestAtMaturityPercent ? averageInterestAtMaturity.averageInterestAtMaturityPercent : "Default"),
         
-        interest: "index" + (index.indexPercent ? index.indexPercent : "Default"),
-        interest: "forecastAnnualPriceIncrease" + (forecastAnnualPriceIncrease.forecastAnnualPriceIncreasePercent ? forecastAnnualPriceIncrease.forecastAnnualPriceIncreasePercent : "Default"),
-        interest: "salesCosts" + (salesCosts.salesCostsPercent ? salesCosts.salesCostsPercent : "Default"),
-        interest: "depreciationForTaxPurposes" + (depreciationForTaxPurposes.depreciationForTaxPurposesPercent ? depreciationForTaxPurposes.depreciationForTaxPurposesPercent : "Default"),    
+        index: "index" + (index.indexPercent ? index.indexPercent : "Default"),
+        forecastAnnualPriceIncrease: "forecastAnnualPriceIncrease" + (forecastAnnualPriceIncrease.forecastAnnualPriceIncreasePercent ? forecastAnnualPriceIncrease.forecastAnnualPriceIncreasePercent : "Default"),
+        salesCosts: "salesCosts" + (salesCosts.salesCostsPercent ? salesCosts.salesCostsPercent : "Default"),
+        depreciationForTaxPurposes: "depreciationForTaxPurposes" + (depreciationForTaxPurposes.depreciationForTaxPurposesPercent ? depreciationForTaxPurposes.depreciationForTaxPurposesPercent : "Default"),    
     }
 
     const mainClass = `interests ${fragment} ${display ? "show" : ""}`
