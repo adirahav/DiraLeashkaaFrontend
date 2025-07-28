@@ -21,6 +21,7 @@ export function PersonalInfoPage() {
     const { splash } = useSplash()
     const phrases = splash?.phrases
 
+
     const defultInputState = (name, labelKey, value, errorKey, tooltipKey, maxLength) => {
         return {
             name,

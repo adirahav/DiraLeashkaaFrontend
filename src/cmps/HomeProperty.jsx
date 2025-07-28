@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { onAboutDeletingProperty, onAboutActingProperty } from '../store/actions/user.actions'
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from './FormField'
+const { PLATFORM } = utilService
 
 export function HomeProperty({ index, property, isBestYield, fullData, onPropertyPress }) {   
     const defultButtonState = (textKey) => {
@@ -189,6 +190,14 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
         } else if (startX >= 80 && actionStatus === 'before-acting') {
             handleCancleDelete(event)
         } 
+    }
+
+    const handleMobileEdit = (event) => {
+        if (utilService.getPlatform() === PLATFORM.MOBILE) {
+            if (deleteStatus !== 'before-deleting') {
+                handleEdit(event)
+            }
+        }
     }
 
     const handleCancleAction = () => {

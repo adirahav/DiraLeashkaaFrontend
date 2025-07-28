@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { utilService } from '../services/util.service'
 import { PropertyField } from './PropertyField'
-import { ZoomIn } from '../assets/icons'
+import { ZoomInIcon } from '../assets/icons'
 import { useSplash } from '../contexts/SplashContext'
 
 export function PropertyInterests({property, display, fragment, onUpdate, onCloseInterests}) {   
@@ -110,7 +110,7 @@ export function PropertyInterests({property, display, fragment, onUpdate, onClos
     
     return (
         <section className={mainClass}>
-            <ZoomIn className='zoom-in' onClick={onCloseInterests} />
+            <ZoomInIcon className='zoom-in' onClick={onCloseInterests} />
             <article>
                 <PropertyField type={"PERCENT"} key={keys.interest} params={interest} onPercentChanged={(percent) => onPercentChanged('interestPercent', percent)} />    
                 <PropertyField type={"PERCENT"} key={keys.interestIn5Years} params={interestIn5Years} onPercentChanged={(percent) => onPercentChanged('interestIn5YearsPercent', percent)} />    

@@ -15,6 +15,8 @@ import { useSplash } from '../contexts/SplashContext.jsx'
 import imgLetsStart from '../assets/images/lets_start.png'
 import { FormField } from '../cmps/FormField.jsx'
 import { useHomeWorker } from '../hooks/useHomeWorker'
+import { AdMob } from '@capacitor-community/admob'
+import { config } from '../config.js'
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -46,6 +48,21 @@ export function HomePage() {
     const MIN_DELETE_PROPERTY_AWAIT_SEC = 3
     
     useEffect(() => {
+    
+        // app ads
+        const loadAd = async () => {
+            await AdMob.initialize()
+            await AdMob.prepareInterstitial({
+                adId: config.ADMOB_INTERSTITIAL_ID, 
+                isTesting: config.ADMOB_IS_TESTING, 
+            })
+    
+            await AdMob.showInterstitial()
+        }
+    
+        loadAd()
+
+        // app touch event
         document.addEventListener('touchstart', handleTouchStart, { passive: true })
         return () => document.removeEventListener('touchstart', handleTouchStart)
     }, [])

@@ -30,7 +30,7 @@ import iconAmortizationScheduleDisable from '../assets/images/icon_amortization_
 import iconChartOff from '../assets/images/icon_chart_off.png'
 import iconChartOn from '../assets/images/icon_chart_on.png'
 import iconChartDisable from '../assets/images/icon_chart_disable.png'
-import { ZoomOut, DoubleArrowDownIcon } from '../assets/icons'
+import { ZoomOutIcon, DoubleArrowDownIcon, ClosePropertyMenuIcon } from '../assets/icons'
 import { Capacitor } from '@capacitor/core'
 
 
@@ -76,38 +76,21 @@ export function PropertyPage() {
           observer.observe(dataRef.current);
         }
     
-        // native andoid app
-        //console.log("ADITEST init")
-        //if (Capacitor.isNativePlatform()) {
-        /*const nativeApp = App.addListener('backButton', (event) => {
-            console.log("ADITEST fragment="+fragment)
-            if (fragment !== "form") {
-                console.log("ADITEST 1") 
-                event.preventDefault()   
-                console.log("ADITEST 2")               
-                setFragment("form")
-                console.log("ADITEST 3") 
-            }
-        })
-        //}*/
-
         return () => {
           if (dataRef.current) {
             observer.unobserve(dataRef.current)
           }
-
-          //nativeApp.remove()
         }
       }, [])
 
-    /*useNativeBackButton(() => {
-        console.log("ADITEST fragment=", fragment)
+    useNativeBackButton((superBack) => {
         if (fragment !== "form") {
           setFragment("form")
-        } //else {
-          //App.exitApp()
-        //}
-    })*/
+          setShowMobileData('')
+        } else {
+          superBack()
+        }
+    })
 
     useEffect(() => {
         if (!phrases || !fixedParameters || !calculators) {
@@ -185,9 +168,7 @@ export function PropertyPage() {
                 }
 
                 if (Capacitor.getPlatform() !== 'android') {
-                    console.log("ADITEST not native")
                     window.onpopstate = function() {
-                        console.log("ADITEST window.onpopstate")
                         setFragment('form')
                         setShowMobileData('')
                     } 
@@ -323,6 +304,11 @@ export function PropertyPage() {
         setShowInterestsContainer(!showInterestsContainer)
     } 
 
+    const handleBackToForm = () => {
+        setFragment('form')
+        setShowMobileData('')
+    }
+
     const handleMediaUpload = (media) => {
         const mediaToUpload = !property.media 
                                 ? [media] 
@@ -400,7 +386,7 @@ export function PropertyPage() {
             <h1 className={titleClass}>תמונות של הנכס</h1>
             <PropertyMedia list={property?.media} onUpload={handleMediaUpload} onRemove={handleMediaRemove} />
             <div className={menuClass}>
-                <ZoomOut className='zoom-out' onClick={handleDisplayInterests} />
+                <ZoomOutIcon className='zoom-out' onClick={handleDisplayInterests} />
                 <article onClick={onYieldForecastPress}><img src={iconYieldForecast} /><h3 className={yieldForecastLabelClass}>{utilService.getPhrase('property_yield_forecast_label', phrases)}</h3></article>
                 {property?.showMortgagePrepayment && <article onClick={onAmortizationSchedulePress}><img src={iconAmortizationSchedule} /><h3 className={amortizationScheduleLabelClass}>{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h3></article>}
                 <article onClick={onChartPress}><img src={iconChart} /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3></article>

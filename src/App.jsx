@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Provider, useSelector } from 'react-redux'     
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
 import { SplashProvider } from './contexts/SplashContext.jsx'
 
 import { store } from './store/store.js'   
 import { useInternetStatus } from './hooks/useInternetStatus.jsx'
+import { useNativeBackButton } from './hooks/useNativeBackButton.jsx'
+import { App as CapacitorApp } from '@capacitor/app'
 
 import { HomePage } from './pages/HomePage'
 import { CalculatorsPage } from './pages/CalculatorsPage.jsx'
@@ -22,8 +24,6 @@ import { ErrorPage } from './pages/ErrorPage.jsx'
 import { Alert } from './cmps/Alert'
 import { Dialog, } from './cmps/Dialog.jsx'
 import { CalculatorPage } from './pages/CalculatorPage.jsx'
-
-import { NativeBackHandler } from './cmps/NativeBackHandler'
 
 import { SplashScreen } from '@capacitor/splash-screen'
 import { Capacitor } from '@capacitor/core'
@@ -49,7 +49,8 @@ function RouteGuard({ children }) {
   useEffect(() => {
     SplashScreen.hide()
   }, [])
-  // logged in
+
+  
   useEffect(() => {
     setLoggedIn(loggedinUser !== null)
   }, [loggedinUser])
@@ -103,12 +104,21 @@ function allowAnonymous() {
 function App() {
   const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
   const mainLayoutClass = `main-layout ${allowAnonymous() && !loggedinUser ? 'logout' : ''} ${Capacitor.getPlatform()}`
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  useNativeBackButton(() => {
+    if (location.pathname === '/home' || location.pathname === '/login') {
+      CapacitorApp.exitApp()
+    } else {
+      navigate(-1)
+    }
+  })
 
   return (    
     <SplashProvider>
       <Provider store={store}>    
           <section className={mainLayoutClass}>
-              {/*<NativeBackHandler />*/}
               <Routes>
                   <Route path="/" element={<RouteGuard><HomePage /></RouteGuard>} />
                   <Route path="/error" element={<RouteGuard><ErrorPage /></RouteGuard>} />
@@ -149,10 +159,20 @@ export default App
 - home page - when no items the image show slow
 - calculators - transparent cities icons
 
-+ app - למנוע LANDSCAPE
-- app - לתקן CSS
-- app - לעשות אייקונים
++ app - splash icon
++ app - back button - terms of use
++ app - terms of use
++ app - fix CSS
++ app - calculators fix icons text
++ app - back button - check all backs
++ app - back button - try using history -1
++ app - back button - try move to one place
++ app - prevent LANDSCAPE
++ app - max-price cant show 0
++ app - create icons
+
 - app - learn native lifesycle
+
 
 - לשים פרסומות
 - lazy load
@@ -168,54 +188,5 @@ export default App
 - Graph api
 - cicd
 + compile to android app
-
-*/
-
-/*
-+ פרטים אישיים
-+ נתונים כלכליים
-+ שלום אורח
-+ לנקות את הקוד
-+ חזור במובייל
-
-+ לתקן לוגין שמוביל לרישום
-+ במובייל לסדר את התפרטי העליון
-+ תנאי שימוש מובייל
-+ זכויות יוצרים 
-+ phrases - event bus
-
-+ ה-DEBOUND משובש
-+ צור קשר
-+ עמוד הבית כשאין נכסים
-+ ה-PROERTY לגמרי משובש
-+ brokerMortgage 0 לא עובד
-
-+ תמיד מופיע ROLLBACK
-+ כשמייצרים נכס חדש ומרפרשים, אז נוצר עוד אחד
-+ כשלוחצים על HOME יש שגיאה
-+ שגיאה בשרת בגלל נכס לא קיים מורידה אותו
-+ בהרשמה אין רווח למעלה
-
-+ שתף
-+ מחשבונים
-+ form press enter
-+ לעצב מחדש
-+ הרבה נכסים מעטים מאד את קצב העליה
-+ image upload
-+ עמוד הבית - מחיקה משובש
-
-+ swipe to refresh
-+ properties - scroll down to data
-+ YARIV - הון עצמי לא נשמר
-+ YARIV - התחייבויות אי אפשר 0
-+ YARIV - מחשבון נעול
-+ max price mobile - back to home
-+ sign up - last stage - missing checked on
-+ last login
-
-+ mobile delete - implement swip
-+ propery - add desciption
-+ new calculatore - compare properties
-+ layer and real estate agent - cant insert 0 
 
 */

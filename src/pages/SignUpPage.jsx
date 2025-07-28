@@ -80,7 +80,6 @@ export function SignUpPage() {
         }
     }
 
-
     const [personalInfo, setPersonalInfo] = useState({
         name: defultInputState("name", "signup_fullname_label", loggedinUser?.fullname, "signup_fullname_error"),
         email: defultInputState("email", "signup_email_label", loggedinUser?.email, "signup_email_error"),

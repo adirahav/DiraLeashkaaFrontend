@@ -154,7 +154,7 @@ export function CalculatorMaxPrice() {
     }, [property])
 
     useEffect(() => {
-        if (!isLoadingState && !property) {
+       if (!isLoadingState  && !isFirstLoading && !property) {
             setEquity({ ...equity, value: loggedinUser?.equity, defaultValue: loggedinUser?.equity})
             setIncomes({ ...incomes, value: loggedinUser?.incomes, defaultValue: loggedinUser?.incomes})
             setCommitments({ ...commitments, value: loggedinUser?.commitments, defaultValue: loggedinUser?.commitments})
@@ -271,29 +271,29 @@ export function CalculatorMaxPrice() {
     const keys = {
         maxPrice: "maxPrice" + (maxPrice ? maxPrice : "Default"),
         apartmentType: "apartmentType" + (apartmentType.selectedValue ? apartmentType.selectedValue : "Default"),
-        equity: "equity" + (equity.value ? equity.value : "Default"),
+        equity: "equity" + (equity.value !== null ? equity.value : "Default"),
         equityCleaningExpenses: "equityCleaningExpenses" + (equityCleaningExpenses.value ? equityCleaningExpenses.value : "Default"),
         mortgageRequired: "mortgageRequired" + (mortgageRequired.value ? mortgageRequired.value : "Default"),
         
-        incomes: "incomes" + (incomes.value ? incomes.value : "Default"),
-        commitments: "commitments" + (commitments.value ? commitments.value : "Default"),
+        incomes: "incomes" + (incomes.value !== null ? incomes.value : "Default"),
+        commitments: "commitments" + (commitments.value !== null ? commitments.value : "Default"),
         disposableIncome: "disposableIncome" + (disposableIncome.value ? disposableIncome.value : "Default"),
         possibleMonthlyRepayment: "possibleMonthlyRepayment" + (possibleMonthlyRepayment.value ? possibleMonthlyRepayment.value : "Default"),
 
         maxPercentOfFinancing: "maxPercentOfFinancing" + (maxPercentOfFinancing.value ? maxPercentOfFinancing.value : "Default"),
         actualPercentOfFinancing: "actualPercentOfFinancing" + (actualPercentOfFinancing.value ? actualPercentOfFinancing.value : "Default"),
         
-        transferTax: "transferTax" + (transferTax.value ? transferTax.value : "Default"),
-        lawyer: "lawyer" + (lawyer.value ? lawyer.value : "Default"),
-        realEstateAgent: "realEstateAgent" + (realEstateAgent.value ? realEstateAgent.value : "Default"),
+        transferTax: "transferTax" + (transferTax.value !== null ? transferTax.value : "Default"),
+        lawyer: "lawyer" + (lawyer.value !== null ? lawyer.value : "Default"),
+        realEstateAgent: "realEstateAgent" + (realEstateAgent.value !== null ? realEstateAgent.value : "Default"),
         
-        brokerMortgage: "brokerMortgage" + (brokerMortgage.value ? brokerMortgage.value : "Default"),
-        repairing: "repairing" + (repairing.value ? repairing.value : "Default"),
-        incidentalsTotal: "incidentalsTotal" + (incidentalsTotal.value ? incidentalsTotal.value : "Default"),
+        brokerMortgage: "brokerMortgage" + (brokerMortgage.value !== null ? brokerMortgage.value : "Default"),
+        repairing: "repairing" + (repairing.value ? repairing.value !== null : "Default"),
+        incidentalsTotal: "incidentalsTotal" + (incidentalsTotal.value !== null ? incidentalsTotal.value : "Default"),
         
-        rent: "rent" + (rent.value ? rent.value : "Default"),
-        lifeInsurance: "lifeInsurance" + (lifeInsurance.value ? lifeInsurance.value : "Default"),
-        structureInsurance: "structureInsurance" + (structureInsurance.value ? structureInsurance.value : "Default"),
+        rent: "rent" + (rent.value !== null ? rent.value : "Default"),
+        lifeInsurance: "lifeInsurance" + (lifeInsurance.value !== null ? lifeInsurance.value : "Default"),
+        structureInsurance: "structureInsurance" + (structureInsurance.value !== null ? structureInsurance.value : "Default"),
         rentCleaningExpenses: "rentCleaningExpenses" + (rentCleaningExpenses.value ? rentCleaningExpenses.value : "Default"),
         
     }
