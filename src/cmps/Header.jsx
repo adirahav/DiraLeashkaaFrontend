@@ -13,6 +13,8 @@ import { logout } from "../store/actions/user.actions"
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from "./FormField"
 import { Capacitor } from "@capacitor/core"
+import { Browser } from '@capacitor/browser'
+
 const { PLATFORM } = utilService
 
 export function Header() {
@@ -50,11 +52,7 @@ export function Header() {
     useEffect(() => {
         const hasAllHeader = loggedinUser && 
         !window.location.toString().includes('signup')  
-           /* !((window.location.toString().includes("terms-of-use") 
-            || window.location.toString().includes("contact-us")) && loggedinUser===null)*/
-        
         setShowAllHeader(hasAllHeader)
-        
         setShowBack(!hasAllHeader || !(window.location.toString().includes("home")) && loggedinUser!==null)
     }, [])
 
@@ -193,6 +191,17 @@ export function Header() {
         }
     }
 
+    const openWebBrowser = async (e) => {
+        if (Capacitor.isNativePlatform() && share?.moreIcon === "web" && share?.moreUrl) {
+            e.preventDefault()
+            try {
+              await Browser.open({ url: share.moreUrl });
+            } catch (err) {
+              console.error("Failed to open external browser:", err);
+            }
+        }
+    }
+
     const keys = {
         addPropertyWeb: "addPropertyWeb",
         addPropertyTablet: "addPropertyTablet"
@@ -243,7 +252,7 @@ export function Header() {
                     <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
-                    <li><NavLink to={share?.moreUrl} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
+                    <li><NavLink onClick={openWebBrowser} to={share?.moreUrl || "#"} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                 </ul>
                 <ul className="bottom">
@@ -272,7 +281,7 @@ export function Header() {
                     <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
-                    <li><NavLink to={share?.moreUrl} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
+                    <li><NavLink onClick={openWebBrowser} to={share?.moreUrl || "#"} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                
                     <li className="divider"></li>

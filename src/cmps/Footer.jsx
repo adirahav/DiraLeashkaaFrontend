@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useSplash } from '../contexts/SplashContext'
 import { utilService } from "../services/util.service"
 import { Capacitor } from "@capacitor/core"
+import { Browser } from '@capacitor/browser'
 
 export function Footer() {
     const [showAllFooter, setShowAllFooter] = useState(false)
@@ -27,6 +28,17 @@ export function Footer() {
         }
     }, [isLoadingState])
 
+    const openWebBrowser = async (e) => {
+        if (Capacitor.isNativePlatform() && share?.moreIcon === "web" && share?.moreUrl) {
+            e.preventDefault()
+            try {
+              await Browser.open({ url: share.moreUrl });
+            } catch (err) {
+              console.error("Failed to open external browser:", err);
+            }
+        }
+    }
+
     return (<>
         {loggedinUser && <footer className='full'>
             <div>
@@ -35,7 +47,7 @@ export function Footer() {
                         <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_terms_of_use", phrases)}</span></NavLink></li>
                         {showAllFooter && <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_contact_us", phrases)}</span></NavLink></li>}
                         {showAllFooter && <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>}
-                        {showAllFooter && <li><NavLink to={share?.moreUrl} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>}
+                        {showAllFooter && <li><NavLink onClick={openWebBrowser} to={share?.moreUrl || "#"} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>}
                         {showAllFooter && <li><span>|</span></li>}
                         {showAllFooter && <li><span>{utilService.getPhrase("drawer_version", phrases).replace("%1$s", parseFloat(share?.versionNumber).toFixed(1))}</span></li>}
                     </ul>
