@@ -2,16 +2,15 @@ import { useEffect } from "react"
 
 function AdBanner() {
   const isTesting = import.meta.env.VITE_IS_TESTING === "true"
-
   const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID
   const slotId = import.meta.env.VITE_ADSENSE_SLOT_ID
 
   useEffect(() => {
-    if (!isTesting) {
+    if (!isTesting && window.adsbygoogle) {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       } catch (e) {
-        console.error(e)
+        console.error("AdSense error", e)
       }
     }
   }, [isTesting])
@@ -31,27 +30,20 @@ function AdBanner() {
           fontSize: 14,
         }}
       >
+        AdSense placeholder (testing mode)
       </div>
     )
   }
 
   return (
-    <>
-      <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-        crossOrigin="anonymous"
-      ></script>
-
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client={clientId}
-        data-ad-slot={slotId}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-    </>
+    <ins
+      className="adsbygoogle"
+      style={{ display: "block" }}
+      data-ad-client={clientId}
+      data-ad-slot={slotId}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
   )
 }
 

@@ -148,8 +148,6 @@ export default App
 /*
 
 - mobile delete - cancel delete the property
-+ החזר חודשי גבוה מדי - אין התראה
-+ כשנמצאים בנכס ולוחצים הוסף נכס - השדות לא נמחקים
 - הוצאות נלוות נוספות
 
 - במעבר ל-HOME תמיד יש קפיצה כפולה
@@ -159,20 +157,10 @@ export default App
 - home page - when no items the image show slow
 - calculators - transparent cities icons
 
-+ app - splash icon
-+ app - back button - terms of use
-+ app - terms of use
-+ app - fix CSS
-+ app - calculators fix icons text
-+ app - back button - check all backs
-+ app - back button - try using history -1
-+ app - back button - try move to one place
-+ app - prevent LANDSCAPE
-+ app - max-price cant show 0
-+ app - create icons
-
+- app - in menu - web link not opening
 - app - learn native lifesycle
 
+- adirahav76@gmail.com and adi_rahav@yahoo.com - not login properly
 
 - לשים פרסומות
 - lazy load
