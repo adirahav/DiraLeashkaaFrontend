@@ -17,6 +17,7 @@ import { FormField } from '../cmps/FormField.jsx'
 import { useHomeWorker } from '../hooks/useHomeWorker'
 import { AdMob } from '@capacitor-community/admob'
 import { config } from '../config.js'
+import AdBanner from '../cmps/AdBanner.jsx'
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -227,7 +228,7 @@ export function HomePage() {
             {showOverlay && <Overlay />}
             <h1 className={citiesClass}>{citiesTitle}</h1>
             <HomeCities citiesNames={citiesNames} selectedCity={selectedCity} onCityPress={onCityPress} />
-            
+            <AdBanner />
             <h2 className={propertiesClass} dangerouslySetInnerHTML={{ __html: propertiesTitle}}></h2>
             <HomeProperties 
                 selectedCity={selectedCity}
