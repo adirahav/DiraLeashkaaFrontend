@@ -82,7 +82,7 @@ function formatFloat(value) {
 }
 
 function parseNumber(value) {
-    return value.toString().replace(/,/g, '')
+    return value?.toString().replace(/,/g, '')
 }
 
 function toSnakeCase(str) {

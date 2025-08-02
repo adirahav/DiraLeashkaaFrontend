@@ -273,9 +273,9 @@ export function SignUpPage() {
             "password": details.password ? details.password.value : loggedinUser?.password, 
             "fullname": details.name ? details.name.value : loggedinUser?.fullname,  
             "yearOfBirth": details.yearOfBirth ? details.yearOfBirth.value : loggedinUser?.yearOfBirth,
-            "equity": details.equity ? details.equity.value : loggedinUser?.equity, 
-            "incomes": details.incomes ? details.incomes.value : loggedinUser?.incomes,  
-            "commitments": details.commitments ? details.commitments.value : loggedinUser?.commitments,   
+            "equity": details.equity ? utilService.parseNumber(details.equity.value) : loggedinUser?.equity, 
+            "incomes": details.incomes ? utilService.parseNumber(details.incomes.value) : loggedinUser?.incomes,  
+            "commitments": details.commitments ? utilService.parseNumber(details.commitments.value) : loggedinUser?.commitments,   
             "termsOfUseAccept": details.accept ? details.accept.value : loggedinUser?.termsOfUseAccept, 
             "webDeviceType": window.navigator.userAgent
         }

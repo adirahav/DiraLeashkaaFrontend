@@ -229,9 +229,9 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     }, [phrases, isLoadingState])
 
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("ADITEST "+JSON.stringify(commitments))
-    }, commitments)
+    }, commitments)*/
 
     const loadProperty = () => {
         try {

@@ -24,7 +24,7 @@ export function FinancialDetailsPage() {
         return {
             name,
             label: utilService.getPhrase(labelKey, phrases), 
-            value,
+            value: value === 0 ? "0" : utilService.formatNumber(value),
             error: utilService.getPhrase(errorKey, phrases), 
             tooltip: utilService.getPhrase(tooltipKey, phrases), 
             maxLength,

@@ -51,4 +51,4 @@ function WebAdBanner() {
   )
 }
 
-export default AdBanner
+export default WebAdBanner

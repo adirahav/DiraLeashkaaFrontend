@@ -128,7 +128,12 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
 
         useEffect(() => {
             //setValueToEdit(params.value || '')
-            setValueToEdit(params.value >= 0 ? params.value : '')
+            setValueToEdit(
+                params?.value === null || params?.value === ''
+                    ? ''
+                    : utilService.parseNumber(params.value) >= 0 ? params.value : ''
+            )
+            
         }, [params.value])
         
         const handleValueChange = (ev) => {
