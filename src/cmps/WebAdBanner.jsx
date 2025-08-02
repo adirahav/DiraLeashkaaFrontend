@@ -1,12 +1,14 @@
+import { Capacitor } from "@capacitor/core"
 import { useEffect } from "react"
 
-function AdBanner() {
+function WebAdBanner() {
+  const isWeb = !Capacitor.isNativePlatform()
   const isTesting = import.meta.env.VITE_IS_TESTING === "true"
   const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID
   const slotId = import.meta.env.VITE_ADSENSE_SLOT_ID
 
   useEffect(() => {
-    if (!isTesting && window.adsbygoogle) {
+    if (isWeb && !isTesting && window.adsbygoogle) {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       } catch (e) {
@@ -15,7 +17,7 @@ function AdBanner() {
     }
   }, [isTesting])
 
-  if (isTesting) {
+  if (isWeb && isTesting) {
     return (
       <div
         style={{
@@ -36,14 +38,16 @@ function AdBanner() {
   }
 
   return (
-    <ins
-      className="adsbygoogle"
-      style={{ display: "block" }}
-      data-ad-client={clientId}
-      data-ad-slot={slotId}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
-    ></ins>
+    <>
+      {isWeb && <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client={clientId}
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>}
+    </>
   )
 }
 
