@@ -2,7 +2,7 @@ import { Capacitor } from '@capacitor/core'
 import Axios from 'axios'
 
 const BASE_URL = Capacitor.isNativePlatform()
-    ? 'https://diraleashkaabackend.onrender.com/api/'
+    ? 'https://diraleashkaa.onrender.com/api/'
     : process.env.NODE_ENV === 'production'
         ? '/api/'
         : 'http://localhost:3032/api/'

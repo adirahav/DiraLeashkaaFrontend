@@ -139,7 +139,7 @@ export function Header() {
 
     function onToggleTabletMenu(ev) {  
         const whatsappShareItem = ev.target.closest('li > a[href^="whatsapp://send"]')
-        const shareMoreItem = ev.target.closest('li > a[href^="https://diraleashkaabackend.onrender.com"]') 
+        const shareMoreItem = ev.target.closest('li > a[href^="https://diraleashkaa.onrender.com"]') 
                            || ev.target.closest('li > a[href^="https://play.google.com/store/apps/details?id=com.adirahav.diraleashkaa"]')
         
         if (whatsappShareItem || shareMoreItem) {
