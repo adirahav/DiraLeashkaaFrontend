@@ -420,7 +420,8 @@
 
     @include tablet-layout {
         & {
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             height: fit-content;
         }
         
@@ -547,7 +548,8 @@
         & {
             grid-column: 1 / -1;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             height: fit-content;
 
             h1 {
