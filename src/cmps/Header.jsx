@@ -194,12 +194,16 @@ export function Header() {
     }
 
     const openWebBrowser = async (e) => {
+        alert('openWebBrowser')
+        alert("is native="+Capacitor.isNativePlatform())
+        alert("moreIcon="+share?.moreIcon)
+        alert("moreUrl="+share?.moreUrl)
         if (Capacitor.isNativePlatform() && share?.moreIcon === "web" && share?.moreUrl) {
             e.preventDefault()
             try {
-              await Browser.open({ url: share.moreUrl });
+              await Browser.open({ url: share.moreUrl })
             } catch (err) {
-              console.error("Failed to open external browser:", err);
+              console.error("Failed to open external browser:", err)
             }
         }
     }
