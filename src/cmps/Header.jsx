@@ -198,13 +198,22 @@ export function Header() {
         alert("is native="+Capacitor.isNativePlatform())
         alert("moreIcon="+share?.moreIcon)
         alert("moreUrl="+share?.moreUrl)
+        alert(Capacitor.isNativePlatform() && share?.moreIcon === "web" && share?.moreUrl)
         if (Capacitor.isNativePlatform() && share?.moreIcon === "web" && share?.moreUrl) {
+            alert(1)
             e.preventDefault()
+            alert(2)
             try {
+                alert(3)
               await Browser.open({ url: share.moreUrl })
+              alert(4)
             } catch (err) {
+                alert("5: " + JSON.stringify(err))
               console.error("Failed to open external browser:", err)
             }
+            alert(5)
+        } else {
+            alert(6)
         }
     }
 
