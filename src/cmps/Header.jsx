@@ -139,8 +139,10 @@ export function Header() {
 
     function onToggleTabletMenu(ev) {  
         const whatsappShareItem = ev.target.closest('li > a[href^="whatsapp://send"]')
-    
-        if (whatsappShareItem) {
+        const shareMoreItem = ev.target.closest('li > a[href^="https://diraleashkaabackend.onrender.com"]') 
+                           || ev.target.closest('li > a[href^="https://play.google.com/store/apps/details?id=com.adirahav.diraleashkaa"]')
+        
+        if (whatsappShareItem || shareMoreItem) {
             return
         }
 
@@ -252,7 +254,7 @@ export function Header() {
                     <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
-                    <li><NavLink onClick={openWebBrowser} to={share?.moreUrl} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
+                    <li><a href={share?.moreUrl} onClick={openWebBrowser} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? (<WebIcon sx={IconSizes.Small} />) : (<AndroidIcon sx={IconSizes.Small} />)}<span>{share?.moreText}</span></a></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                 </ul>
                 <ul className="bottom">
@@ -281,7 +283,7 @@ export function Header() {
                     <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
                     <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
-                    <li><NavLink onClick={openWebBrowser} to={share?.moreUrl} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? <WebIcon sx={IconSizes.Small} /> : <AndroidIcon sx={IconSizes.Small} />}<span>{share?.moreText}</span></NavLink></li>
+                    <li><a href={share?.moreUrl} onClick={openWebBrowser} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? (<WebIcon sx={IconSizes.Small} />) : (<AndroidIcon sx={IconSizes.Small} />)}<span>{share?.moreText}</span></a></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                
                     <li className="divider"></li>
