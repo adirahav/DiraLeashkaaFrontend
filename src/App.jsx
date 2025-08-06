@@ -115,6 +115,22 @@ function App() {
     }
   })
 
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      const initAdMobConsent = () => {
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.consent) {
+          window.cordova.plugins.consent.requestInfoUpdate(() => {
+            window.cordova.plugins.consent.showForm((status) => {
+              console.log("Consent form status:", status)
+            })
+          })
+        }
+      }
+
+      document.addEventListener("deviceready", initAdMobConsent, false)
+    }
+  }, [])
+
   return (    
     <SplashProvider>
       <Provider store={store}>    
