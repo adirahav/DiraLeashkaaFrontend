@@ -165,6 +165,7 @@ export default App
 
 - mobile delete - cancel delete the property
 - הוצאות נלוות נוספות
+- להוסיף הון עצמי מהלוואה
 
 - במעבר ל-HOME תמיד יש קפיצה כפולה
 
@@ -186,7 +187,7 @@ export default App
 - max price - missing years
 
 - delete image from cloudinary
-- לינק לאפליקציה
++ לינק לאפליקציה
 - micro services
 - Grpc - proto files
 - Graph api

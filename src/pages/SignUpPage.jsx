@@ -12,6 +12,10 @@ import { useSplash } from '../contexts/SplashContext.jsx'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { Footer } from '../cmps/Footer.jsx'
 import { Header } from '../cmps/Header.jsx'
+import promoImage1 from '../assets/images/promo-1.png'
+import promoImage2 from '../assets/images/promo-2.png'
+import promoImage3 from '../assets/images/promo-3.png'
+import promoImage4 from '../assets/images/promo-4.png'
 
 export function SignUpPage() {
     const TAG = 'SignUpPage'
@@ -107,6 +111,18 @@ export function SignUpPage() {
         back: defultButtonState("button_back"),
     })
      
+    const PROMO_IMAGES_SIZE = 4
+    const [promo, setPromo] = useState({
+        counter: 1,
+        items: [
+            { display: 'show', img: promoImage1, text: 'הדירות שלך, מסודרות לפי עיר – לראות את התמונה הגדולה בקלות.' },
+            { display: 'hide', img: promoImage2, text: 'איזו דירה עשויה להניב הכי הרבה? מבוסס על נתונים והערכות עדכניות.' },
+            { display: 'hide', img: promoImage3, text: 'חשב את מחיר הדירה המקסימלי שתוכל לרכוש.' },
+            { display: 'hide', img: promoImage4, text: 'התרחיש המשוער של צמיחת ההשקעה שלך לאורך השנים.' },
+        ]
+        
+    })
+    
     useEffect(() => {
         const loadStep = jumpToStep()                       
         if (!loadStep) {
@@ -118,7 +134,27 @@ export function SignUpPage() {
                 direction: 'forward'
             })
         }
+
+        // promo
+        const intervalId = setInterval(() => {
+            setPromo((prevPromo) => ({
+                ...prevPromo,
+                counter: prevPromo.counter == PROMO_IMAGES_SIZE ? 1 : prevPromo.counter + 1
+            }))
+        }, 4000)
+    
+        return () => clearInterval(intervalId)
     }, [])
+
+    useEffect(() => {
+        setPromo((prevPromo) => ({
+            ...prevPromo,
+            items: prevPromo.items.map((item, index) => ({
+              ...item,
+              display: prevPromo.counter === index + 1 ? 'show' : 'hide',
+            })),
+          }))
+    }, [promo.counter])
 
     useEffect(() => {
         if (phrases) {
@@ -435,26 +471,39 @@ export function SignUpPage() {
     return (<>
         <Header />
         <form className={formClass}>
-            <h2 className={titleClass}>{stepTitle}</h2>
-            <ul className={progressClass}>
-                <li className={progressLiClass[0]}></li>
-                <li className={progressLiClass[1]}></li>
-                <li className={progressLiClass[2]}></li>
-            </ul>
-            <article className={articleClass}>
-                {progress.step === STEP.PRESONAL_INFO && <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} onSubmit={handleNext} />}
-                {progress.step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} onSubmit={handleNext} />}
-                {progress.step === STEP.TERMS_OF_USE && <UserTermsOfUse termsOfUse={termsOfUse} onChange={handleValueChanged} />}
-                {progress.step === STEP.COMPLETE && <UserTermsOfUse termsOfUse={termsOfUse} />}
-                
-                {<div className='buttons'>
-                    <FormField type={"BUTTON"} key={keys.back} params={buttons.back} onPress={handleBack} />
-                    <FormField type={"BUTTON"} key={keys.next} params={buttons.next} onPress={handleNext} />
-                </div>}   
-            </article>
-            <article className={footerClass}>
-                <div><NavLink to='/login' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("signup_goto_login", phrases) }}></NavLink></div>
-            </article>
+            <section className='form-container'>
+                <h2 className={titleClass}>{stepTitle}</h2>
+                <ul className={progressClass}>
+                    <li className={progressLiClass[0]}></li>
+                    <li className={progressLiClass[1]}></li>
+                    <li className={progressLiClass[2]}></li>
+                </ul>
+                <article className={articleClass}>
+                    {progress.step === STEP.PRESONAL_INFO && <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} onSubmit={handleNext} />}
+                    {progress.step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} onSubmit={handleNext} />}
+                    {progress.step === STEP.TERMS_OF_USE && <UserTermsOfUse termsOfUse={termsOfUse} onChange={handleValueChanged} />}
+                    {progress.step === STEP.COMPLETE && <UserTermsOfUse termsOfUse={termsOfUse} />}
+                    
+                    {<div className='buttons'>
+                        <FormField type={"BUTTON"} key={keys.back} params={buttons.back} onPress={handleBack} />
+                        <FormField type={"BUTTON"} key={keys.next} params={buttons.next} onPress={handleNext} />
+                    </div>}   
+                </article>
+                <article className={footerClass}>
+                    <div><NavLink to='/login' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("signup_goto_login", phrases) }}></NavLink></div>
+                </article>
+            </section>
+            <section className='promo'>
+                {promo.counter > 0 && (
+                    <div>
+                        {promo.items.map((item, index) => (
+                            <article key={index} className={item.display}>
+                                <p>{item.text}</p><img src={item.img}  />
+                            </article>
+                        ))}
+                    </div>
+                )}
+            </section>
         </form>
         <Footer />
     </>)
