@@ -113,14 +113,15 @@ export function SignUpPage() {
      
     const PROMO_IMAGES_SIZE = 4
     const [promo, setPromo] = useState({
-        counter: 1,
+        currentIndex: 1,
+        prevIndex: null,
         items: [
             { display: 'show', img: promoImage1, text: 'הדירות שלך, מסודרות לפי עיר – לראות את התמונה הגדולה בקלות.' },
-            { display: 'hide', img: promoImage2, text: 'איזו דירה עשויה להניב הכי הרבה? מבוסס על נתונים והערכות עדכניות.' },
-            { display: 'hide', img: promoImage3, text: 'חשב את מחיר הדירה המקסימלי שתוכל לרכוש.' },
-            { display: 'hide', img: promoImage4, text: 'התרחיש המשוער של צמיחת ההשקעה שלך לאורך השנים.' },
-        ]
-        
+            { display: 'hidden', img: promoImage2, text: 'איזו דירה עשויה להניב הכי הרבה? מבוסס על נתונים והערכות עדכניות.' },
+            { display: 'hidden', img: promoImage3, text: 'חשב את מחיר הדירה המקסימלי שתוכל לרכוש.' },
+            { display: 'hidden', img: promoImage4, text: 'התרחיש המשוער של צמיחת ההשקעה שלך לאורך השנים.' },
+        ],
+        animation: false
     })
     
     useEffect(() => {
@@ -139,7 +140,8 @@ export function SignUpPage() {
         const intervalId = setInterval(() => {
             setPromo((prevPromo) => ({
                 ...prevPromo,
-                counter: prevPromo.counter == PROMO_IMAGES_SIZE ? 1 : prevPromo.counter + 1
+                prevIndex: prevPromo.currentIndex,
+                currentIndex: prevPromo.currentIndex == PROMO_IMAGES_SIZE ? 1 : prevPromo.currentIndex + 1
             }))
         }, 4000)
     
@@ -151,10 +153,13 @@ export function SignUpPage() {
             ...prevPromo,
             items: prevPromo.items.map((item, index) => ({
               ...item,
-              display: prevPromo.counter === index + 1 ? 'show' : 'hide',
+              display: prevPromo.currentIndex === index + 1 
+                    ? 'show' 
+                    : prevPromo.animation && prevPromo.prevIndex === index + 1 ? 'hide' : 'hidden',
             })),
+            animation: true
           }))
-    }, [promo.counter])
+    }, [promo.currentIndex])
 
     useEffect(() => {
         if (phrases) {
@@ -494,7 +499,7 @@ export function SignUpPage() {
                 </article>
             </section>
             <section className='promo'>
-                {promo.counter > 0 && (
+                {promo.currentIndex > 0 && (
                     <div>
                         {promo.items.map((item, index) => (
                             <article key={index} className={item.display}>

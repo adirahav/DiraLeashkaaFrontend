@@ -219,7 +219,7 @@
     
     .promo {
         grid-column: 2;
-        width: 349px;
+        width: 340px;
         background-color: var(--inside-container-background);
         border-radius: 8px;
 
@@ -227,7 +227,7 @@
         padding: 0 10px 20px;
         border-radius: 12px;
         box-shadow: 0 4px 15px var(--palette5_transparent);
-        max-width: 320px;
+        max-width: 340px;
         margin: 0 auto;
         text-align: center;
 
@@ -243,6 +243,10 @@
             article {
                 position: absolute;
                 
+                &.hidden {
+                    display: none;
+                }
+
                 &.hide {
                     animation: 2s ease 0s 1 normal forwards running fadeout;
                 }
@@ -253,11 +257,10 @@
 
                 p {
                     font-family: 'gveret-levin-regular';
-                    color: vat(--text);
+                    color: var(--text);
                     font-size: 18px;
                     line-height: 1.5;
                     margin-bottom: 20px;
-                    font-weight: 600;
                 }
 
                 img {
