@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FormField } from '../cmps/FormField'
-import { motion } from "framer-motion"
+import { hex, motion } from "framer-motion"
 import useEmblaCarousel from 'embla-carousel-react'
 import { Footer } from '../cmps/Footer'
 
 import imgLogo from '../assets/images/icon_web.png'
-import imgBanner1 from '../assets/images/landing-banner-1.png'
+import imgBanner from '../assets/images/landing-banner-1.png'
 import imgHowDoesItWorks1 from '../assets/images/landing-how-does-it-works-1.png'
 import imgHowDoesItWorks2 from '../assets/images/landing-how-does-it-works-2.png'
 import imgHowDoesItWorks3 from '../assets/images/landing-how-does-it-works-3.png'
@@ -23,8 +23,29 @@ import imgCard4 from '../assets/images/landing-card-4.png'
 import imgTargetAudience1 from '../assets/images/landing-target-audience-1.svg'
 import imgTargetAudience2 from '../assets/images/landing-target-audience-2.svg'
 import imgTargetAudience3 from '../assets/images/landing-target-audience-3.svg'
+import { LazyLoadMedia } from '../cmps/LazyLoadMedia'
 
 export function LandingPage() {
+
+    // banner
+    const bannerRatio = 4.107
+    const [banner, setBanner] = useState({
+        width: window.innerWidth,
+        height: window.innerWidth / bannerRatio,
+        url: imgBanner
+    })
+
+    useEffect(() => {
+        const handleResize = () => setBanner(prevBanner => ({
+            ...prevBanner,
+            width: window.innerWidth,
+            height: window.innerWidth / bannerRatio,
+        }))
+    
+        window.addEventListener("resize", handleResize)
+    
+        return () => window.removeEventListener("resize", handleResize)
+      }, [])
 
     // title
     //const title = "שמים סוף לניחושים, מתחילים לחשב תשואה"
@@ -300,7 +321,9 @@ export function LandingPage() {
 
     return (<>
         <main className="landing narrow container full">
-            <img className='banner' src={imgBanner1} alt='' />
+            <section className='banner'>
+                <LazyLoadMedia mediaUrl={banner.url} mediaWidth={banner.width} mediaHeight={banner.height} isVideo={false} alt={''} />
+            </section>
 
             <section className='logo'>
                 <img src={imgLogo} alt='' />
@@ -362,9 +385,7 @@ export function LandingPage() {
                     </motion.li>
                     ))}
                 </motion.ul>
-                </section>
-
-
+            </section>
 
             <section className='how-does-it-works'>
                 <h2>{howDoesItWorks.title}</h2>
@@ -437,7 +458,6 @@ export function LandingPage() {
                     ))}
                 </ul>
             </section>     
-            
 
             <section className="guidance">
                 <h2>{guidance.title}</h2>

@@ -89,6 +89,7 @@
 
                 img {
                     width: 100px;
+                    height: 100px;
                 }
 
                 p {
@@ -258,7 +259,7 @@
 
     .signup {
         display: block;
-        min-height: 205px;
+        min-height: 230px;
 
         position: relative;
         top: -50px;
@@ -780,6 +781,8 @@
         }
     
         .guidance {
+            padding-bottom: 100px;
+
             ul {
                 li {
                     height: 98px;
@@ -787,6 +790,7 @@
                     p {
                         text-align: right;
                         padding: 10px 20px;
+                        height: 48px;
                      }
                 }
             }
