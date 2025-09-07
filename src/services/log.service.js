@@ -1,11 +1,11 @@
-const LOG_TYPE = {
+/*const LOG_TYPE = {
     DEBUG: 'DEBUG',
     NOTIFY: 'NOTIFY',
     WARNING: 'WARNING',
     ERROR: 'ERROR'
-}
+}*/
 
-const isDebug = process.env.NODE_ENV === 'development'
+//const isDebug = import.meta.env.MODE === 'development'
 
 export const logService = {
     debug,

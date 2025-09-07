@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
@@ -30,7 +30,7 @@ import iconAmortizationScheduleDisable from '../assets/images/icon_amortization_
 import iconChartOff from '../assets/images/icon_chart_off.png'
 import iconChartOn from '../assets/images/icon_chart_on.png'
 import iconChartDisable from '../assets/images/icon_chart_disable.png'
-import { ZoomOutIcon, DoubleArrowDownIcon, ClosePropertyMenuIcon } from '../assets/icons'
+import { ZoomOutIcon, DoubleArrowDownIcon } from '../assets/icons'
 import { Capacitor } from '@capacitor/core'
 
 
@@ -48,7 +48,7 @@ export function PropertyPage() {
     const [showMobileData, setShowMobileData] = useState("")
     const [fragment, setFragment] = useState("form")
     const [preventUpdateServer, setPreventUpdateServer] = useState(city !== null)
-    const [isBlocked, setIsBlocked] = useState(false)
+    //const [isBlocked, setIsBlocked] = useState(false)
     const [showGoToResults, setShowGoToResults] = useState(false)
     const [isDataVisible, setIsDataVisible] = useState(false)
     
@@ -72,13 +72,14 @@ export function PropertyPage() {
           { threshold: 0.1 } 
         )
     
-        if (dataRef.current) {
-          observer.observe(dataRef.current);
+        const currentElement = dataRef.current
+        if (currentElement) {
+          observer.observe(currentElement)
         }
     
         return () => {
-          if (dataRef.current) {
-            observer.unobserve(dataRef.current)
+          if (currentElement) {
+            observer.unobserve(currentElement)
           }
         }
       }, [])
@@ -107,7 +108,7 @@ export function PropertyPage() {
                 setLockYields(true)
             }
         }
-    }, [splash, propertyId])
+    }, [phrases])
 
     useEffect(() => {
         if (city) {
@@ -128,7 +129,7 @@ export function PropertyPage() {
             propertyId = property?._id
             window.history.pushState(null, '', `/property?propertyId=${propertyId}`)
         }
-    }, [property])
+    }, [property, propertyId])
 
     useEffect(() => {
         const propertyToUpdate = { 
@@ -143,7 +144,7 @@ export function PropertyPage() {
 
         setPreventUpdateServer(false)
         
-    }, [showInterestsContainer])
+    }, [showInterestsContainer, preventUpdateServer, propertyId])
 
     useEffect(() => {
         switch (fragment) {
@@ -183,26 +184,28 @@ export function PropertyPage() {
         setShowGoToResults(!lockYields && !isLoadingState && !isFirstLoading && !isDataVisible)
     }, [lockYields, isLoadingState, isFirstLoading, isDataVisible])
 
-    const hasOnlyCity = (property) => {
+    /*const hasOnlyCity = (property) => {
         return Object.keys(property).length === 1 && property.hasOwnProperty('city')
+    }*/
+    const hasOnlyCity = (property) => {
+        return Object.keys(property).length === 1 && Object.prototype.hasOwnProperty.call(property, 'city')
     }
 
-    const fetchProperty = async () => {
+    const fetchProperty = useCallback(async () => {
         try {
-            onLoadingStart()  
-            setShowOverlay(true)
-            const property = await propertyService.getById(propertyId)
-            setProperty(property)   
-            setIsFirstLoading(false)
-            setShowOverlay(false)
+          onLoadingStart()  
+          setShowOverlay(true)
+          const property = await propertyService.getById(propertyId)
+          setProperty(property)   
+          setIsFirstLoading(false)
+          setShowOverlay(false)
         } catch (error) {
-            console.error(`Error fetching property ${propertyId}:`, error)
-            navigate("/home") 
-        } 
-        finally {
-            onLoadingDone()  
+          console.error(`Error fetching property ${propertyId}:`, error)
+          navigate("/home") 
+        } finally {
+          onLoadingDone()  
         }
-    }
+    }, [propertyId, navigate, onLoadingStart, onLoadingDone])
 
     const updateProperty = async (fieldName, fieldValue) => {
         try {
@@ -230,31 +233,31 @@ export function PropertyPage() {
         } 
     }
     
-    const [focusedElement, setFocusedElement] = useState(null)
+    //const [focusedElement, setFocusedElement] = useState(null)
 
     useEffect(() => {
-        if (isBlocked) {
-            const currentActiveElement = document.activeElement
-            if (currentActiveElement && currentActiveElement.focus) {
-                setFocusedElement(currentActiveElement)
-            }
-        } else {
+        //if (isBlocked) {
+        //    const currentActiveElement = document.activeElement
+        //    if (currentActiveElement && currentActiveElement.focus) {
+        //        setFocusedElement(currentActiveElement)
+        //    }
+        //} else {
             window.removeEventListener("keydown", preventDefault)
             window.removeEventListener("click", preventDefault)
             window.removeEventListener("scroll", preventScroll)
             
-            if (focusedElement) {
+            /*if (focusedElement) {
                 const timeoutId = setTimeout(() => {
                     if (focusedElement && typeof focusedElement.focus === "function") {
                         focusedElement.focus()
                         setFocusedElement(null)
                     }
-                }, 1000);
+                }, 1000)
     
                 return () => clearTimeout(timeoutId)
-            }
+            }*/
             
-        }
+        //}
 
         return () => {
             window.removeEventListener("keydown", preventDefault)
@@ -262,7 +265,7 @@ export function PropertyPage() {
             window.removeEventListener("scroll", preventScroll)
             document.removeEventListener("focusin", keepFocus)
         }
-    }, [isBlocked])
+    }, [/*isBlocked*/])
 
     const preventDefault = (event) => {
         event.preventDefault()
@@ -304,10 +307,10 @@ export function PropertyPage() {
         setShowInterestsContainer(!showInterestsContainer)
     } 
 
-    const handleBackToForm = () => {
+    /*const handleBackToForm = () => {
         setFragment('form')
         setShowMobileData('')
-    }
+    }*/
 
     const handleMediaUpload = (media) => {
         const mediaToUpload = !property.media 
@@ -364,7 +367,7 @@ export function PropertyPage() {
             {!isFirstLoading && !lockYields && <h1 className={titleClass}>תחזית פיננסית</h1>}
             <section className={dataClass} ref={dataRef}>
                 {!showInterestsContainer && <div className="unavailable-overlay">
-                    <img src={iconMissingData} />
+                    <img src={iconMissingData} alt='' />
                     <div>
                         חסרים נתונים לחישוב
                     </div>
@@ -375,7 +378,7 @@ export function PropertyPage() {
                 {lockYields && <section className='lock-yields'>
                     {/*<h3>{utilService.getPhrase('property_lock_yields_missing_data', phrases)}</h3>*/}
                     <h3>אין מספיק נתונים כדי להציג תחזיות פיננסיות. אנא מלא את כל השדות הנדרשים.</h3>
-                    <img src={iconMissingData} />
+                    <img src={iconMissingData} alt='' />
                 </section>}
                 {isFirstLoading && <section className='loading-calc-yields'>
                     <h3>{utilService.getPhrase('property_calc_yields', phrases)}</h3>
@@ -387,12 +390,24 @@ export function PropertyPage() {
             <PropertyMedia list={property?.media} onUpload={handleMediaUpload} onRemove={handleMediaRemove} />
             <div className={menuClass}>
                 <ZoomOutIcon className='zoom-out' onClick={handleDisplayInterests} />
-                <article onClick={onYieldForecastPress}><img src={iconYieldForecast} /><h3 className={yieldForecastLabelClass}>{utilService.getPhrase('property_yield_forecast_label', phrases)}</h3></article>
-                {property?.showMortgagePrepayment && <article onClick={onAmortizationSchedulePress}><img src={iconAmortizationSchedule} /><h3 className={amortizationScheduleLabelClass}>{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h3></article>}
-                <article onClick={onChartPress}><img src={iconChart} /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3></article>
-                {lockYields && <img src={iconLock} />}
+                <article>
+                    <button type="button" onClick={onYieldForecastPress} className="yield-forecast-btn">
+                        <img src={iconYieldForecast} alt="" /><h3 className={yieldForecastLabelClass}>{utilService.getPhrase('property_yield_forecast_label', phrases)}</h3>
+                    </button>
+                </article>
+                {property?.showMortgagePrepayment && <article>
+                    <button type="button" onClick={onAmortizationSchedulePress}>
+                        <img src={iconAmortizationSchedule} alt='' /><h3 className={amortizationScheduleLabelClass}>{utilService.getPhrase('property_amortization_schedule_label', phrases)}</h3>
+                    </button>
+                </article>}
+                <article>
+                    <button type="button" onClick={onChartPress}>
+                        <img src={iconChart} alt='' /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3>
+                    </button>
+                </article>
+                {lockYields && <img src={iconLock} alt='נעול - חסרים נתונים' />}
             </div>
-            {showGoToResults && <DoubleArrowDownIcon className='goto-results' onClick={handleGotoResults} />}
+            {showGoToResults && <DoubleArrowDownIcon className='goto-results' onClick={handleGotoResults} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { handleGotoResults() }}} />}
         </main>
         {showMobileData === "" && <Footer />}
     </>)

@@ -1,13 +1,14 @@
 import { NavLink } from "react-router-dom"
 import { useSelector } from 'react-redux'                   
-import { ContactUsIcon, AndroidIcon, WebIcon, ShareIcon, TermsOfUseIcon, IconSizes } from "../assets/icons" 
+import { ContactUsIcon, AndroidIcon, WebIcon, ShareIcon, TermsOfUseIcon, IconSizes, AccessibilityStatementIcon } from "../assets/icons" 
 import { useEffect, useState } from "react"
 import { useSplash } from '../contexts/SplashContext'
 import { utilService } from "../services/util.service"
 import { Capacitor } from "@capacitor/core"
 import { Browser } from '@capacitor/browser'
+import PropTypes from "prop-types"
 
-export function Footer() {
+export function Footer({ showForAnonimous = false }) {
     const [showAllFooter, setShowAllFooter] = useState(false)
     const [share, setShare] = useState(null)
 
@@ -26,7 +27,7 @@ export function Footer() {
         if (!isLoadingState && phrases && fixedParameters) {
             setShare(utilService.getShareMenu(phrases, fixedParameters))
         }
-    }, [isLoadingState])
+    }, [isLoadingState, phrases, fixedParameters])
 
     const openWebBrowser = async (e) => {
         if (Capacitor.isNativePlatform()) {
@@ -40,7 +41,7 @@ export function Footer() {
     }
 
     return (<>
-        {loggedinUser && <footer className='full'>
+        {(loggedinUser || showForAnonimous) && <footer className='full'>
             <div>
                 <nav>
                     <ul>
@@ -48,6 +49,7 @@ export function Footer() {
                         {showAllFooter && <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_contact_us", phrases)}</span></NavLink></li>}
                         {showAllFooter && <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>}
                         {showAllFooter && <li><a href={share?.moreUrl} onClick={openWebBrowser} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? (<WebIcon sx={IconSizes.Small} />) : (<AndroidIcon sx={IconSizes.Small} />)}<span>{share?.moreText}</span></a></li>}
+                        <li><NavLink to="/accessibility-statement"><AccessibilityStatementIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_accessibility_statement", phrases)}</span></NavLink></li>
                         {showAllFooter && <li><span>|</span></li>}
                         {showAllFooter && <li><span>{utilService.getPhrase("drawer_version", phrases).replace("%1$s", parseFloat(share?.versionNumber).toFixed(1))}</span></li>}
                     </ul>
@@ -55,4 +57,8 @@ export function Footer() {
             </div>
         </footer>}
     </>)
+}
+
+Footer.propTypes = {
+    showForAnonimous: PropTypes.bool,
 }

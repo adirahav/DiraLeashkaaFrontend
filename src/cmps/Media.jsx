@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react"
-import { MovieIcon, PictureIcon, MuteIcon } from "../assets/icons"
+import { MovieIcon, PictureIcon, MuteIcon, SoundIcon  } from "../assets/icons"
 import createThumbnail from "react-thumbnail-creator"
 import { LazyLoadMedia } from "./LazyLoadMedia"
+import PropTypes from "prop-types"
 
 export function Media({media, isMediaPreview = false, aspectRatio = "square", onDelete = null}) { // aspectRatio: "square" | "original"
     const [isUserStoppedVideo, setIsUserStoppedVideo] = useState(false)
@@ -99,7 +100,7 @@ export function Media({media, isMediaPreview = false, aspectRatio = "square", on
                     <LazyLoadMedia mediaUrl={media.url} mediaWidth={media.width} mediaHeight={media.height} isVideo={false} alt={media.alt} />
                     <PictureIcon.preview />
                 </div>}
-            {media.type === "video" && !isMediaPreview && <div className="video" onClick={handlePressVideo}>
+            {media.type === "video" && !isMediaPreview && <div className="video" role="button" tabIndex={0} onClick={handlePressVideo} onKeyDown={(e) => {if (e.key === "Enter" || e.key === " ") handlePressVideo()}}>
                     <LazyLoadMedia mediaUrl={media.url} mediaWidth={media.width} mediaHeight={media.height} isVideo={true} videoRef={videoRef} />
                     <span className={playClass}><span><span></span></span></span>
                     <span className="sound"><span><button onClick={handlePressSound}>
@@ -115,3 +116,17 @@ export function Media({media, isMediaPreview = false, aspectRatio = "square", on
     )
         
 }
+
+Media.propTypes = {
+    media: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(["image", "video"]).isRequired,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      publicId: PropTypes.string,
+      alt: PropTypes.string,
+    }).isRequired,
+    isMediaPreview: PropTypes.bool,
+    aspectRatio: PropTypes.oneOf(["square", "original"]),
+    onDelete: PropTypes.func,
+  }

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { useSplash } from '../contexts/SplashContext'
-import { authService } from '../services/auth.service'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CalculatorMaxPrice } from '../cmps/CalculatorMaxPrice'
 import { CalculatorCompare } from '../cmps/CalculatorCompare'
@@ -21,8 +20,6 @@ export function CalculatorPage() {
     const fixedParameters = splash?.fixedParameters
     const calculators = splash?.calculators
     
-    const loggedinUser = authService.getLoggedinUser()
-
     const [type, setType] = useState()
 
     useEffect(() => {
@@ -36,7 +33,7 @@ export function CalculatorPage() {
             setType(calculator?.type) 
             onLoadingDone()  
         }
-    }, [splash, calculatorId])
+    }, [phrases, fixedParameters, calculators, calculatorId, navigate])
 
     const mainClass = `calculator ${utilService.toKebabCase(type)}`
 

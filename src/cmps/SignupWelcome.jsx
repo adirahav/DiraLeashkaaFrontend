@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import imgBagMoney from '../assets/images/lottie_bag_money.json'
 import Lottie from 'lottie-react'
 import { utilService } from '../services/util.service'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
+import PropTypes from "prop-types"
 
 export function SignupWelcome({ onComplete }) {   
 
@@ -30,4 +31,8 @@ export function SignupWelcome({ onComplete }) {
             autoplay={true} 
             onComplete={() => handleOnComplete()}  />
     </div>)
+}
+
+SignupWelcome.propTypes = {
+    onComplete: PropTypes.func.isRequired
 }

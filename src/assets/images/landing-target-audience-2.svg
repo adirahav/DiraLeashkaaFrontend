@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 300 300" role="img" aria-label="זכוכית מגדלת על ROI">
+  <title>זכוכית מגדלת על ROI</title>
+  <desc>איור בסגנון קווי: זכוכית מגדלת זזה מצד לצד, נעצרת על ה-ROI הגבוה ביותר ומדגישה אותו.</desc>
+
+  <defs>
+    <style>
+      .line { stroke:#ff4e31; stroke-width:1.5; fill:none; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+      .fill { stroke:#123985; stroke-width:1.5; fill:#ffffff; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+      .highlight { stroke:#ff4e31; stroke-width:2; fill:#ff4e31; }
+    </style>
+  </defs>
+
+  <!-- ROIs -->
+  <g id="rois" transform="translate(40,180)">
+    <!-- ROI1 -->
+    <rect x="0" y="0" width="40" height="30" class="fill"/>
+    <!-- ROI2 -->
+    <rect x="60" y="-20" width="40" height="50" class="fill"/>
+    <!-- ROI3 (highest one) -->
+    <rect id="roi-max" x="120" y="-60" width="40" height="90" class="fill"/>
+    <!-- ROI4 -->
+    <rect x="180" y="-10" width="40" height="40" class="fill"/>
+  </g>
+
+  <!-- Highlight effect on max ROI -->
+  <rect x="160" y="120" width="40" height="90" rx="2" class="highlight">
+    <animate attributeName="fill-opacity" values="0;0;0.3;0.1;0.3" keyTimes="0;0.6;0.7;0.85;1" dur="4s" begin="0s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Magnifying Glass -->
+  <g id="magnifier">
+    <!-- movement -->
+    <animateTransform attributeName="transform" type="translate"
+      values="40,140; 100,120; 160,90; 160,90" keyTimes="0;0.4;0.7;1"
+      dur="4s" begin="0s" repeatCount="indefinite"/>
+    <!-- lens -->
+    <circle cx="0" cy="0" r="25" class="fill"/>
+    <!-- handle -->
+    <line x1="15" y1="15" x2="35" y2="35" class="line"/>
+  </g>
+</svg>

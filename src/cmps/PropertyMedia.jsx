@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import { mediaService } from '../services/media.service'
-import { IconSizes, AddMediatIcon, LoadingIcon } from '../assets/icons'
+import { IconSizes, AddMediatIcon } from '../assets/icons'
+import { LoadingIcon } from '../cmps/LoadingIcon'
 import { Media } from './Media'
 import { utilService } from '../services/util.service'
 import { showErrorAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
+import PropTypes from "prop-types"
 
 export function PropertyMedia({ list, onUpload, onRemove }) {
     const [mediaList, setMediaList] = useState([])
     const [isUploading, setIsUploading] = useState(false)
+    //const [isDragging, setIsDragging] = useState(false)
+
     const fileInputRef = useRef()
 
     const { splash } = useSplash()
@@ -38,13 +42,13 @@ export function PropertyMedia({ list, onUpload, onRemove }) {
     const handleDragEnter = (event) => {
         event.preventDefault()
         event.stopPropagation()
-        setIsDragging(true)
+        //setIsDragging(true)
     }
 
     const handleDragLeave = (event) => {
         event.preventDefault()
         event.stopPropagation()
-        setIsDragging(false)
+        //setIsDragging(false)
     }
 
     const handleDragOver = (event) => {
@@ -56,7 +60,7 @@ export function PropertyMedia({ list, onUpload, onRemove }) {
         event.preventDefault()
         event.stopPropagation()
 
-        setIsDragging(false)
+        //setIsDragging(false)
         const files = event.dataTransfer.files
         uploadMedia(files)
     }
@@ -107,11 +111,11 @@ export function PropertyMedia({ list, onUpload, onRemove }) {
     
     
     return (
-        <article className="media-list">
+        <article className="media-list" onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onDrop={handleDrop}>
             {(mediaList || []).map((media, index) => (
                 <Media key={index} media={media} onDelete={deleteMedia} />
             ))}
-           {(mediaList?.length ?? 0) < MAX_MEDIA_COUNT && <div className='file-upload' onClick={onTriggerUploadMedia}>
+           {(mediaList?.length ?? 0) < MAX_MEDIA_COUNT && <div className='file-upload' role="button" tabIndex={0} onClick={onTriggerUploadMedia} onKeyDown={(e) => { if(e.key === 'Enter' || e.key === ' ') onTriggerUploadMedia(e) }}>
                 {isUploading && <LoadingIcon />}
                 {!isUploading && <div><span>העלה תמונה</span><AddMediatIcon sx={IconSizes.Small} /></div>}
             </div>}
@@ -119,4 +123,10 @@ export function PropertyMedia({ list, onUpload, onRemove }) {
             <input type="file" onChange={browseMedia}  accept="image/*" id="imgUpload" ref={fileInputRef} />
         </article>
     )
+}
+
+PropertyMedia.propTypes = {
+    list: PropTypes.array,
+    onUpload: PropTypes.func,
+    onRemove: PropTypes.func
 }

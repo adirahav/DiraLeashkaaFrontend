@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HomeCity } from './HomeCity'
 import { useSelector } from 'react-redux'
+import PropTypes from "prop-types"
 
 export function HomeCities({ citiesNames, selectedCity, onCityPress }) {   
     const [normalizedCities, setNormalizedCities] = useState()
@@ -53,4 +54,10 @@ export function HomeCities({ citiesNames, selectedCity, onCityPress }) {
             }
         </section>
     )
+}
+
+HomeCities.propTypes = {
+    citiesNames: PropTypes.arrayOf(PropTypes.object),   
+    selectedCity: PropTypes.string,                     
+    onCityPress: PropTypes.func.isRequired,             
 }

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import PropTypes from "prop-types"
 
 export function HomeCity({ index, city, citiesNames, propertiesCount, selected, onCityPress }) {   
 
@@ -27,7 +28,7 @@ export function HomeCity({ index, city, citiesNames, propertiesCount, selected, 
         }
     }
 
-    const handleCityPress = (ev) => {
+    const handleCityPress = () => {
         if (city && !isDeletingState) {
             onCityPress(city)
         }
@@ -41,14 +42,14 @@ export function HomeCity({ index, city, citiesNames, propertiesCount, selected, 
 
     const cityLabel = !isLoadingState
                         ? !city || city === "else"
-                            ? citiesNames?.find(c => c.key === "else").value 
-                            : citiesNames?.find(c => c.key === city).value
+                            ? citiesNames?.find(c => c.key === "else")?.value 
+                            : citiesNames?.find(c => c.key === city)?.value
                         : ""    
                     
 
     return (
-        <article className={divClass} onClick={() => handleCityPress(this)}>
-            {cityIcon && <img src={cityIcon} />}
+        <article role='button' tabIndex={0} className={divClass} onClick={handleCityPress} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleCityPress() }>
+            {cityIcon && <img src={cityIcon} alt='' />}
             <div>
                 {cityLabel} 
                 <span className='desktop'>({propertiesCount === 1 ? "נכס אחד" : `${propertiesCount} נכסים`})</span>
@@ -56,4 +57,18 @@ export function HomeCity({ index, city, citiesNames, propertiesCount, selected, 
             </div>
         </article>
     )
+}
+
+HomeCity.propTypes = {
+    index: PropTypes.number,
+    city: PropTypes.string,
+    citiesNames: PropTypes.arrayOf(
+        PropTypes.shape({
+            key: PropTypes.string.isRequired,
+            value: PropTypes.string.isRequired,
+        })
+    ),
+    propertiesCount: PropTypes.number,
+    selected: PropTypes.bool,
+    onCityPress: PropTypes.func,
 }

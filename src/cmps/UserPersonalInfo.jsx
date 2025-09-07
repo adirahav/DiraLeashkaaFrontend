@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
 import { FormField } from './FormField'
 import { useSelector } from 'react-redux'
+import PropTypes from "prop-types"
 
 export function UserPersonalInfo({ personalInfo, onChange, onSubmit }) {   
     
@@ -41,4 +41,15 @@ export function UserPersonalInfo({ personalInfo, onChange, onSubmit }) {
         <FormField type={"PASSWORD"} key={keys.password} params={personalInfo.password} onChange={(value, hasError) => handleOnChange('password', value, hasError)} onEnter={handleSubmit} />
         <FormField type={"BIRTH_OF_YEAR"} key={keys.yearOfBirth} params={personalInfo.yearOfBirth} onChange={(value, hasError) => handleOnChange('yearOfBirth', value, hasError)} onEnter={handleSubmit} />
     </div>)
+}
+
+UserPersonalInfo.propTypes = {
+    personalInfo: PropTypes.shape({
+        name: PropTypes.object.isRequired,
+        email: PropTypes.object.isRequired,
+        password: PropTypes.object.isRequired,
+        yearOfBirth: PropTypes.object.isRequired
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired
 }

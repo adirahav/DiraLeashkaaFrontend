@@ -1,18 +1,16 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { authService } from '../services/auth.service.js'
 import { utilService } from '../services/util.service.js'
 import { FormField } from '../cmps/FormField.jsx'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { forgotPasswordService } from '../services/forgotPassword.service.js'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSelector } from 'react-redux'
 import { Header } from '../cmps/Header.jsx'
 import { Footer } from '../cmps/Footer.jsx'
 
 export function ForgotPasswordPage() {
-    const TAG = 'ForgotPasswordPage'
-
     const STEP = {
         GENERATE_CODE: 1,
         VALIDATE_CODE: 2,
@@ -65,16 +63,16 @@ export function ForgotPasswordPage() {
     const [submit, setSubmit] = useState(defultButtonState("button_send"))
     
     useEffect(() => {
-        setEmail({ ...email, value: authService.getLastLoggedinEmail() })  
+        setEmail(prevEmail => ({ ...prevEmail, value: authService.getLastLoggedinEmail() }))
     }, [])
 
 
     useEffect(() => {
         if (phrases) {
-            setEmail({ ...email, label: utilService.getPhrase("forgot_password_email_label", phrases), value: authService.getLastLoggedinEmail()})
-            setCode({ ...code, label: utilService.getPhrase("forgot_password_code_title", phrases)})
-            setNewPassword({ ...newPassword, label: utilService.getPhrase("forgot_password_new_password_label", phrases)})
-            setSubmit({ ...submit, text: utilService.getPhrase("button_send", phrases)})
+            setEmail(prevEmail => ({ ...prevEmail, label: utilService.getPhrase("forgot_password_email_label", phrases), value: authService.getLastLoggedinEmail() }))
+            setCode(prevCode => ({ ...prevCode, label: utilService.getPhrase("forgot_password_code_title", phrases) }))
+            setNewPassword(prevNewPassword => ({ ...prevNewPassword, label: utilService.getPhrase("forgot_password_new_password_label", phrases) }))
+            setSubmit(prevSubmit => ({ ...prevSubmit, label: utilService.getPhrase("button_send", phrases) }))
         }
 
         if (!phrases) {
@@ -86,27 +84,21 @@ export function ForgotPasswordPage() {
 
     useEffect(() => {
         if (step === STEP.GENERATE_CODE) {
-            setSubmit({ 
-                ...submit, 
-                isDisabled: !utilService.REG_EXP.EMAIL.test(email.value)
-            })
+            setSubmit(prevSubmit => ({ ...prevSubmit, isDisabled: !utilService.REG_EXP.EMAIL.test(email.value) }))
         }
-    }, [email])
+    }, [email, step])
 
     useEffect(() => {
         if (step === STEP.CHANGE_PASSWORD) {
-            setSubmit({ 
-                ...submit, 
-                isDisabled: !utilService.REG_EXP.PASSWORD.test(newPassword.value)
-            })
+            setSubmit(prevSubmit => ({ ...prevSubmit, isDisabled: !utilService.REG_EXP.PASSWORD.test(newPassword.value) }))
         }
-    }, [newPassword])
+    }, [newPassword, step])
 
     useEffect(() => {
         if (step === STEP.VALIDATE_CODE) {
             handleCodeValidation()
         }
-    }, [code.value])
+    }, [code.value, step])
 
     const handleCodeValidation = async () => {
         if (code.value.some(ch => ch === '')) {
@@ -114,26 +106,26 @@ export function ForgotPasswordPage() {
         }
 
         try {
-            setNote({ ...note, text: null })
+            setNote(prevNote => ({ ...prevNote, text: null }))
             await forgotPasswordService.validateCode(email.value, code.value.join(''))
             handleNext()
         }
         catch(e) {
             //e.response.status 400
-            setNote({ ...note, text: utilService.getPhrase("forgot_password_code_error", phrases) })
+            setNote(prevNote => ({ ...prevNote, text: utilService.getPhrase("forgot_password_code_error", phrases) }))
         }
     }
 
     function handleValueChanged(fieldName, value) {
         switch (fieldName) {
             case "email":
-                setEmail({ ...email, value })
+                setEmail(prevEmail => ({ ...prevEmail, value }))
                 break
             case "code":
-                setCode({ ...code, value })
+                setCode(code => ({ ...code, value }))
                 break
             case "newPassword":
-                setNewPassword({ ...newPassword, value })
+                setNewPassword(prevNewPassword => ({ ...prevNewPassword, value }))
         }
     }
 
@@ -172,16 +164,16 @@ export function ForgotPasswordPage() {
     useEffect(() => {
         switch (step) {
             case STEP.GENERATE_CODE: 
-                setSubmit({  ...submit, text: utilService.getPhrase("button_send", phrases), isVisible: true, isLinkView: false, isLoading: false })
+                setSubmit(prevSubmit => ({ ...prevSubmit, text: utilService.getPhrase("button_send", phrases), isVisible: true, isLinkView: false, isLoading: false }))
                 break
             case STEP.VALIDATE_CODE: 
-                setSubmit({  ...submit, text: utilService.getPhrase("forgot_password_send_again", phrases), isLinkView: true, isLoading: false })
+                setSubmit(prevSubmit => ({ ...prevSubmit, text: utilService.getPhrase("forgot_password_send_again", phrases), isLinkView: true, isLoading: false }))
                 break
             case STEP.CHANGE_PASSWORD: 
-                setSubmit({  ...submit, text: utilService.getPhrase("button_change", phrases), isLinkView: false, isLoading: false, isDisabled: true })
+                setSubmit(prevSubmit => ({ ...prevSubmit, text: utilService.getPhrase("button_change", phrases),  isLinkView: false, isLoading: false, isDisabled: true }))
                 break
             case STEP.DONE: 
-                setSubmit({  ...submit, isVisible: false })
+                setSubmit(prevSubmit => ({ ...prevSubmit, isVisible: false }))
                 break
         }
     }, [step])
@@ -196,26 +188,26 @@ export function ForgotPasswordPage() {
         switch (step) {
             case STEP.GENERATE_CODE: 
                 try {
-                    setNote({  ...note, text: null })
-                    setSubmit({ ...submit, isLoading: true})
+                    setNote(prevNote => ({  ...prevNote, text: null }))
+                    setSubmit(prevSubmit => ({ ...prevSubmit, isLoading: true }))
                     await forgotPasswordService.generateCode(email.value)
                     handleNext()
                 } catch (error) {
-                    setNote({  ...note, text: utilService.getPhrase("forgot_password_credentials_error", phrases) })
-                    setSubmit({ ...submit, isLoading: false})
+                    setNote(prevNote => ({  ...prevNote, text: utilService.getPhrase("forgot_password_credentials_error", phrases) }))
+                    setSubmit(prevSubmit => ({ ...prevSubmit, isLoading: false }))
                 } 
                 break
             case STEP.VALIDATE_CODE: 
-                setNote({  ...note, text: null })
+                setNote(prevNote => ({  ...prevNote, text: null }))
                 setCode(defultCodeState("code", "forgot_password_code_title"))
                 handleBack()
                 break
             case STEP.CHANGE_PASSWORD: 
-                setNote({  ...note, text: null })
-                setSubmit({ ...submit, isLoading: true})
+                setNote(prevNote => ({  ...prevNote, text: null }))
+                setSubmit(prevSubmit => ({ ...prevSubmit, isLoading: true }))
                 await forgotPasswordService.changePassword(newPassword.value)
-                setNewPassword({ ...newPassword, isDisabled: true })
-                setNote({  ...note, text: utilService.getPhrase("forgot_password_email_done_body", phrases), type: "message" })
+                setNewPassword(prevNewPassword => ({ ...prevNewPassword, isDisabled: true }))
+                setNote(prevNote => ({  ...prevNote, text: utilService.getPhrase("forgot_password_email_done_body", phrases), type: "message" }))
                 handleNext()
                 setTimeout(()=> {
                     navigate(`/login`)

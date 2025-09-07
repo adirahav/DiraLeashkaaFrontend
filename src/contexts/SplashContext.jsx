@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { userService } from '../services/user.service'
+import PropTypes from 'prop-types'
 
 const SplashContext = createContext()
 
@@ -52,3 +53,7 @@ export const SplashProvider = ({ children }) => {
 }
 
 export const useSplash = () => useContext(SplashContext)
+
+SplashProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+}

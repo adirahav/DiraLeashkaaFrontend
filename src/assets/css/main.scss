@@ -24,6 +24,8 @@
 @import "./pages/terms-of-use.scss";
 @import "./pages/copyright.scss";
 @import "./pages/contact-us.scss";
+@import "./pages/landing.scss";
+@import "./pages/accessibility-statement.scss";
 
 /* Components */
 @import "./cmps/header.scss";
@@ -36,5 +38,6 @@
 @import "./cmps/form-field.scss";
 @import "./cmps/resizable-table.scss";
 @import "./cmps/lazyLoadMedia";
+@import "./cmps/accessibility-panel.scss";
 
 @import "react-tabs/style/react-tabs.css";

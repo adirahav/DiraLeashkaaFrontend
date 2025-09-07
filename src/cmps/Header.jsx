@@ -5,7 +5,7 @@ import logoTablet from '../assets/images/icon.png'
 import { NavLink, useNavigate } from "react-router-dom"
 import { useSelector } from 'react-redux'                   
 import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon, LogoutIcon, 
-         PersonalDetailsIcon, ShareIcon, TermsOfUseIcon, 
+         PersonalDetailsIcon, ShareIcon, TermsOfUseIcon, AccessibilityStatementIcon,
          MissingAvatarIcon,  BackIcon,
          WebIcon,
          AndroidIcon} from "../assets/icons"
@@ -217,7 +217,7 @@ export function Header() {
         return (<>
             <header className='full logout'>
                 <div className="logo">
-                    <img  src={logoDesktop} />  
+                    <img  src={logoDesktop}  alt="דירה להשקעה" />  
                 </div>
             </header>
         </>)
@@ -226,40 +226,41 @@ export function Header() {
     return (<>
         <header className='full desktop'>
             <div className="logo">
-                <NavLink to="/"><img  src={logoDesktop} /></NavLink>  
+                <NavLink to="/"><img  src={logoDesktop} alt="דירה להשקעה" /></NavLink>  
             </div>
             <nav className={navClassMobile}>
                 <ul>
-                    <li className="welcome"><a><MissingAvatarIcon sx={IconSizes.Small} /> שלום {loggedinUser?.fullname ?? 'אורח'}</a></li>
-                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>מחשבונים</span></NavLink></li>
-                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></NavLink></li>
-                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
+                    <li className="welcome"><span><MissingAvatarIcon sx={IconSizes.Small} /> שלום {loggedinUser?.fullname ?? 'אורח'}</span></li>
+                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_calculators", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_personal_details", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_financial_details", phrases)}</span></NavLink></li>
                     <li><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyWeb} params={addPropertyWeb} /></NavLink></li>
-                    <li className="logout"><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
+                    <li className="logout"><button onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_logout", phrases)}</span></button></li>
                 </ul>
             </nav>
         </header>
-        <header onTransitionEnd={handleTabletTransitionEnd} onClick={onToggleTabletMenu} className={'full tablet ' + navClassTablet} ref={headerTabletRef}>
+        <header onTransitionEnd={handleTabletTransitionEnd} onClick={onToggleTabletMenu} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onToggleTabletMenu()} className={'full tablet ' + navClassTablet} ref={headerTabletRef}>
             <div className="logo">
-                {(navClassTablet === "narrow" || navClassTablet === "narrowing") && <NavLink to="/"><img src={logoTablet} /></NavLink>}  
-                {(navClassTablet === "wide" || navClassTablet === "widing") && <NavLink to="/"><img  src={logoDesktop} /></NavLink>}  
+                {(navClassTablet === "narrow" || navClassTablet === "narrowing") && <NavLink to="/"><img src={logoTablet} alt='דירה להשקעה' /></NavLink>}  
+                {(navClassTablet === "wide" || navClassTablet === "widing") && <NavLink to="/"><img  src={logoDesktop} alt='דירה להשקעה' /></NavLink>}  
             </div>
             <nav>
                 <ul>
-                    <li className="welcome"><a><MissingAvatarIcon sx={IconSizes.Small} /> <span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></a></li>
+                    <li className="welcome"><span><MissingAvatarIcon sx={IconSizes.Small} /> <span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></span></li>
                     
-                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>מחשבונים</span></NavLink></li>
-                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></NavLink></li>
-                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
-                    <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
-                    <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
+                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_calculators", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_personal_details", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_financial_details", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_terms_of_use", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_contact_us", phrases)}</span></NavLink></li>
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
                     <li><a href={share?.moreUrl} onClick={openWebBrowser} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? (<WebIcon sx={IconSizes.Small} />) : (<AndroidIcon sx={IconSizes.Small} />)}<span>{share?.moreText}</span></a></li>
+                    <li><NavLink to="/accessibility-statement"><AccessibilityStatementIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_accessibility_statement", phrases)}</span></NavLink></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                 </ul>
                 <ul className="bottom">
                     <li className="version"><span>v {parseFloat(share?.versionNumber).toFixed(1)}</span></li>
-                    <li><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
+                    <li><button onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_logout", phrases)}</span></button></li>
                 </ul>
             </nav>
         </header>
@@ -267,9 +268,9 @@ export function Header() {
             <div className="logo">
                 {showAllHeader && <MenuIcon className="menu" onClick={onToggleMobileMenu} sx={ IconSizes.Medium } />}
                 {showAllHeader && <NavLink to="/">
-                    <img src={logoDesktop} />
+                    <img src={logoDesktop} alt='דירה להשקעה'/>
                 </NavLink>}
-                {!showAllHeader && <img src={logoDesktop} />}    
+                {!showAllHeader && <img src={logoDesktop}  alt='דירה להשקעה'/>}    
                 {showBack && <BackIcon className="back" onClick={onPressBack} sx={ IconSizes.Medium } />}
             </div>
             <nav className={navClassMobile} onAnimationEnd={handleMobileAnimationEnd}>
@@ -277,17 +278,18 @@ export function Header() {
                     <li><MenuIcon onClick={onToggleMobileMenu} sx={ IconSizes.Medium } /></li>
                     <li className="welcome"><MissingAvatarIcon sx={IconSizes.Small} /><span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></li>
                     <li className="divider"></li>
-                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>מחשבונים</span></NavLink></li>
-                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>פרטים אישיים</span></NavLink></li>
-                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>נתונים כלכליים</span></NavLink></li>
-                    <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>תנאי שימוש</span></NavLink></li>
-                    <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>צור קשר</span></NavLink></li>
+                    <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_calculators", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_personal_details", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_financial_details", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/terms-of-use"><TermsOfUseIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_terms_of_use", phrases)}</span></NavLink></li>
+                    <li><NavLink to="/contact-us"><ContactUsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_contact_us", phrases)}</span></NavLink></li>
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
                     <li><a href={share?.moreUrl} onClick={openWebBrowser} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? (<WebIcon sx={IconSizes.Small} />) : (<AndroidIcon sx={IconSizes.Small} />)}<span>{share?.moreText}</span></a></li>
+                    <li><NavLink to="/accessibility-statement"><AccessibilityStatementIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_accessibility_statement", phrases)}</span></NavLink></li>
                     <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
                
                     <li className="divider"></li>
-                    <li className="logout"><a href="#" onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>התנתק</span></a></li>
+                    <li className="logout"><button onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_logout", phrases)}</span></button></li>
                 </ul>}
             </nav>
         </header>

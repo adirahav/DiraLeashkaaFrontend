@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import '../services/util.service'
 import { useWindowSize } from '../hooks/useWindowSize'
+import PropTypes from "prop-types"
 
 ChartJS.register(
   CategoryScale,
@@ -39,16 +40,16 @@ export function YieldChart({rawData}) {
         return
     }
 
-    setYieldForcast((prevYieldForecast) => {
-        const filteredData = rawData.filter(item => item.monthNo % 12 === 0).map(item => {
-            return {
-                ...item,
-                yearNo: item.monthNo / 12
-            }
-        })
-        
-        return filteredData
-    }) 
+    setYieldForcast(() => {
+      if (!rawData) return []
+    
+      return rawData
+        .filter(item => item.monthNo % 12 === 0)
+        .map(item => ({
+          ...item,
+          yearNo: item.monthNo / 12,
+        }))
+    })
   }, [rawData]) 
 
   useEffect(() => {
@@ -93,4 +94,19 @@ export function YieldChart({rawData}) {
   if (!chartData) return <div>טוען</div>
 
   return <Line key={chartKey} options={options} data={chartData} />
+}
+
+
+YieldChart.propTypes = {
+  rawData: PropTypes.arrayOf(
+    PropTypes.shape({
+      monthNo: PropTypes.number.isRequired,
+      returnOnEquity: PropTypes.shape({
+        fractionToFloatFormat: PropTypes.func
+      }),
+      totalReturn: PropTypes.shape({
+        fractionToFloatFormat: PropTypes.func
+      })
+    })
+  )
 }

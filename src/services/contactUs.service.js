@@ -9,7 +9,7 @@ export const contactUsService = {
 async function send(messageToSend) {
     messageToSend = {
         ...messageToSend,
-        appEnv: process.env.NODE_ENV
+        appEnv: import.meta.env.MODE
     }
     const sentMessage = await httpService.post(BASE_URL, messageToSend)
     return sentMessage

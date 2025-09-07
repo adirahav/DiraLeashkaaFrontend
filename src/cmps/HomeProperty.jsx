@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { utilService } from '../services/util.service'
-import { IconSizes, MedaltIcon, MissDataIcon, AddPropertyIcon, DeleteIcon, EditIcon } from '../assets/icons'
+import { IconSizes, MedaltIcon, MissDataIcon, DeleteIcon, EditIcon } from '../assets/icons'
 import missingPictureImage from '../assets/images/missing_picture.png'
 import deletingIcon from '../assets/images/anim_delete.gif'
 import { useSelector } from 'react-redux'
 import { onAboutDeletingProperty, onAboutActingProperty } from '../store/actions/user.actions'
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from './FormField'
-const { PLATFORM } = utilService
+import PropTypes from 'prop-types'
 
 export function HomeProperty({ index, property, isBestYield, fullData, onPropertyPress }) {   
     const defultButtonState = (textKey) => {
@@ -101,7 +101,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
 
     useEffect(() => {
         setPicturesClasses(
-            (picturesClasses) => {
+            () => {
                 return Array.from({ length: PICTURES_IMAGES_SIZE }, (_, index) =>
                     picturesCounter === index + 1 ? "show" : "hide"
                 )
@@ -192,13 +192,13 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
         } 
     }
 
-    const handleMobileEdit = (event) => {
+    /*const handleMobileEdit = (event) => {
         if (utilService.getPlatform() === PLATFORM.MOBILE) {
             if (deleteStatus !== 'before-deleting') {
                 handleEdit(event)
             }
         }
-    }
+    }*/
 
     const handleCancleAction = () => {
         if (property._id === aboutActionIdRef.current) {
@@ -250,7 +250,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
                 {property && property._id && 
                     <div className='media'>
                         {(property?.media || [{url:missingPictureImage}]).map((media, index) => (
-                            <img key={index} src={media.url} className={picturesClasses[index]} />
+                            <img key={index} src={media.url} className={picturesClasses[index]} alt='' />
                         ))}
                 </div>}  
                 <div className='details'>
@@ -283,22 +283,43 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
                                 <FormField type={"BUTTON"} key={keys.cancelDelete} params={deleteButtons.cancel} onPress={handleCancleDelete} />
                             </div>
                         </div>}
-                    {deleteStatus === 'deleting' && <img src={deletingIcon} />}
+                    {deleteStatus === 'deleting' && <img src={deletingIcon} alt='מחק'/>}
                 </div>
             </div>}
             {property && property._id && <div className='mobile actions-overlay'>
                 {actionStatus === 'before-acting' && 
                     <div>
-                        <div onClick={handleActionPress}>
+                        <div onClick={handleActionPress} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleActionPress() } role='button' tabIndex={0}>
                             {property && property?._id && <>
                                 <DeleteIcon className='icon-delete' sx={IconSizes.Small} title='מחק'  /> 
                                 <span className='label-delete' >מחק</span>
                             </>}     
                         </div>
                     </div>}
-                {actionStatus === 'acting' && <img src={deletingIcon} />}
+                {actionStatus === 'acting' && <img src={deletingIcon} alt='מחק' />}
             </div>}
             
         </article>
     )
+}
+
+HomeProperty.propTypes = {
+    index: PropTypes.number,
+    property: PropTypes.shape({
+        _id: PropTypes.string,
+        media: PropTypes.arrayOf(
+            PropTypes.shape({
+                url: PropTypes.string
+            })
+        ),
+        address: PropTypes.string,
+        city: PropTypes.string,
+        cityElse: PropTypes.string,
+        price: PropTypes.number,
+        calcYieldForecast: PropTypes.bool,
+        note: PropTypes.string
+    }),
+    isBestYield: PropTypes.bool,
+    fullData: PropTypes.bool,
+    onPropertyPress: PropTypes.func
 }

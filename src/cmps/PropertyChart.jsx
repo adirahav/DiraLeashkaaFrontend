@@ -1,7 +1,7 @@
-import React from 'react'
 import { YieldChart } from './YieldChart'
 import { utilService } from '../services/util.service'
 import { useSplash } from '../contexts/SplashContext'
+import PropTypes from "prop-types"
 
 export function PropertyChart({data}) {   
     
@@ -16,4 +16,8 @@ export function PropertyChart({data}) {
             </div>
         </section>
     </>)
+}
+
+PropertyChart.propTypes = {
+    data: PropTypes.string, 
 }

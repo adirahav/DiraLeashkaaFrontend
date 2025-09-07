@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import iconProgram from '../assets/images/icon_program.png'
 import iconProgramSelected from '../assets/images/icon_program_selected.png'
 import { utilService } from '../services/util.service'
+import PropTypes from "prop-types"
+import { useSplash } from '../contexts/SplashContext'
 
 export function UserPrograms({ programs, onChange }) {   
+
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
 
     const [selectedProgram, setSelectedProgram] = useState()
 
@@ -15,13 +20,7 @@ export function UserPrograms({ programs, onChange }) {
 
     useEffect(() => {
         onChange("selectedProgram", selectedProgram, !selectedProgram)
-    }, [selectedProgram])
-    
-/*{
-            "key": "signup_pay_program_label",
-            "value": "בחר מנוי"
-        },
-        */
+    }, [selectedProgram, onChange])
 
     function getPeriod(duration, unit) {
         const durationValue = duration ?? 0
@@ -50,12 +49,12 @@ export function UserPrograms({ programs, onChange }) {
     }
     
     return (<section className="programs">
-        {programs.programTypes.filter(program => program.isAvailable).map((program, index) => (    
-            <article key={`program${program.programId}`} className={selectedProgram === program.programId ? 'selected' : ''} onClick={() => handleChoose(program.programId)}>
+        {programs.programTypes.filter(program => program.isAvailable).map((program) => (    
+            <article key={`program${program.programId}`} className={selectedProgram === program.programId ? 'selected' : ''} role="button" tabIndex={0} onClick={() => handleChoose(program.programId)} onKeyDown={(e) => e.key === 'Enter' && handleChoose(program.programId)}>
                 <div className='duration'>
                     <h2>{getPeriod(program.durationValue, program.durationUnit)}</h2>
-                    {selectedProgram !== program.programId && <img src={iconProgram} />}
-                    {selectedProgram === program.programId && <img src={iconProgramSelected} />}
+                    {selectedProgram !== program.programId && <img src={iconProgram} alt='' />}
+                    {selectedProgram === program.programId && <img src={iconProgramSelected} alt='' />}
                 </div>
                 <span className='price'>
                     {utilService.getPhrase("signup_pay_program_price", phrases).replace("%1$s", program.price)}
@@ -64,3 +63,16 @@ export function UserPrograms({ programs, onChange }) {
         ))}
     </section>)
 }
+
+UserPrograms.propTypes = {
+    programs: PropTypes.shape({
+      programTypes: PropTypes.arrayOf(PropTypes.shape({
+        programId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        durationValue: PropTypes.number,
+        durationUnit: PropTypes.string,
+        price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        isAvailable: PropTypes.bool
+      }))
+    }).isRequired,
+    onChange: PropTypes.func.isRequired
+  }

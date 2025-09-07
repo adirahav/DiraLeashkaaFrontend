@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .line { stroke:#123985; stroke-width:4.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+      .fill { stroke:#ff4e31; stroke-width:4.5; fill:#ffffff; stroke-linecap:round; stroke-linejoin:round; }
+      .highlight { stroke:#ff4e31; stroke-width:4.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    </style>
+  </defs>
+
+  <!-- Bullseye target in the center -->
+  <g transform="translate(150,150)">
+    <circle r="80" class="line"/>
+    <circle r="60" class="line"/>
+    <circle r="40" class="line"/>
+    <circle r="20" class="line"/>
+    <line x1="-8" y1="0" x2="8" y2="0" class="highlight" />
+    <line x1="0" y1="-8" x2="0" y2="8" class="highlight" />
+  </g>
+
+  <!-- Arrow -->
+  <g id="arrow" opacity="1">
+    <!-- shaft -->
+    <line x1="-42" y1="0" x2="0" y2="0" class="line"/>
+    <!-- head -->
+    <path d="M 0 0 L -10 -6 L -10 6 Z" class="fill"/>
+    <!-- fletching -->
+    <path d="M -42 0 l -10 -6 l 0 12 Z" class="fill"/>
+
+    <!-- Animate arrow entering from far left -->
+    <animateTransform attributeName="transform" type="translate"
+      values="-100,150; 150,150" 
+      dur="2s" 
+      begin="0s;arrowAnim.end" 
+      fill="freeze"
+      id="arrowAnim"
+      repeatCount="indefinite"/>
+    
+    <!-- Animate disappearance after hitting -->
+    <animate attributeName="opacity"
+      values="1;1;0" 
+      dur="0.5s" 
+      begin="arrowAnim.end" 
+      fill="freeze"/>
+  </g>
+</svg>

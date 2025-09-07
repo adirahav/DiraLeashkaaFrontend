@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import pixelImage from '../assets/images/pixel.gif'
-import { IconSizes, DeleteIcon, CloseIcon } from "../assets/icons"
+import { IconSizes, CloseIcon } from "../assets/icons"
+import PropTypes from 'prop-types'
 
 export function LazyLoadMedia({mediaUrl, mediaWidth, mediaHeight, mediaPublicId, isVideo = false, alt, aspectRatio, videoRef, onDelete}) {
 
@@ -20,7 +21,7 @@ export function LazyLoadMedia({mediaUrl, mediaWidth, mediaHeight, mediaPublicId,
             }
             
         }
-    }, [mediaUrl])  
+    }, [mediaUrl, isVideo])  
 
     function getLowResolutionBase64Image(url) {
         return new Promise((resolve, reject) => {
@@ -120,11 +121,23 @@ export function LazyLoadMedia({mediaUrl, mediaWidth, mediaHeight, mediaPublicId,
    
     return (
         <>
-            <img src={pixelImage} title={alt} className={preloadingClass} style={mediaStyle} />
-            {mediaUrl && <img src={blurMediaUrl} title={alt} className={loadingClass} style={mediaStyle} />}
-            {!isVideo && mediaUrl && <img src={mediaUrl} title={alt} className={loadedClass} onLoad={handleMediaLoad} style={mediaStyle} />}
+            <img src={pixelImage} title={alt} className={preloadingClass} style={mediaStyle} alt='' />
+            {mediaUrl && <img src={blurMediaUrl} title={alt} className={loadingClass} style={mediaStyle} alt='' />}
+            {!isVideo && mediaUrl && <img src={mediaUrl} title={alt} className={loadedClass} onLoad={handleMediaLoad} style={mediaStyle} alt='' />}
             {isVideo && mediaUrl && <video autoPlay loop muted ref={videoRef} src={mediaUrl} className={loadedClass} onLoadedMetadata={handleMediaLoad} style={mediaStyle} />}
             {onDelete && <CloseIcon sx={ IconSizes.Small } onClick={handleDelete} />}
         </>
     )    
+}
+
+LazyLoadMedia.propTypes = {
+  mediaUrl: PropTypes.string.isRequired,
+  mediaWidth: PropTypes.number,
+  mediaHeight: PropTypes.number,
+  mediaPublicId: PropTypes.string,
+  isVideo: PropTypes.bool,
+  alt: PropTypes.string,
+  aspectRatio: PropTypes.string,
+  videoRef: PropTypes.object,
+  onDelete: PropTypes.func
 }

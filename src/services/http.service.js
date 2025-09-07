@@ -3,7 +3,7 @@ import Axios from 'axios'
 
 const BASE_URL = Capacitor.isNativePlatform()
     ? 'https://diraleashkaa.onrender.com/api/'
-    : process.env.NODE_ENV === 'production'
+    : import.meta.env.MODE === 'production'
         ? '/api/'
         : 'http://localhost:3032/api/'
 

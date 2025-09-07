@@ -39,7 +39,7 @@ export function useInternetStatus(callback, dependencies = []) {
             window.removeEventListener("offline", updateOnlineStatus)
             clearInterval(timer)
         }
-    }, [callback, ...dependencies])
+    }, [callback, dependencies])
 
     return isConnected
 }

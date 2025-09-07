@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Provider, useSelector } from 'react-redux'     
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
 import { SplashProvider } from './contexts/SplashContext.jsx'
 
 import { store } from './store/store.js'   
-import { useInternetStatus } from './hooks/useInternetStatus.jsx'
 import { useNativeBackButton } from './hooks/useNativeBackButton.jsx'
 import { App as CapacitorApp } from '@capacitor/app'
 
@@ -20,45 +19,47 @@ import { LoginPage } from './pages/LoginPage.jsx'
 import { SignUpPage } from './pages/SignUpPage.jsx'
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage.jsx'
 import { ErrorPage } from './pages/ErrorPage.jsx'
-
 import { Alert } from './cmps/Alert'
 import { Dialog, } from './cmps/Dialog.jsx'
 import { CalculatorPage } from './pages/CalculatorPage.jsx'
-
 import { SplashScreen } from '@capacitor/splash-screen'
 import { Capacitor } from '@capacitor/core'
+import { LandingPage } from './pages/LandingPage.jsx'
+import { AccessibilityStatementPage } from './pages/AccessibilityStatementPage.jsx'
+import { AccessibilityPanel } from './cmps/AccessibilityPanel'
+import PropTypes from 'prop-types'
 
 function RouteGuard({ children }) {
-  const [isOnline, setIsOnline] = useState(true)
-  const [isLoggedIn, setLoggedIn] = useState(true)
+  //const [isOnline, setIsOnline] = useState(true)
+  //const [isLoggedIn, setLoggedIn] = useState(true)
 
   const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
   const isLoggedinUserCompleted = useSelector(storeState => storeState.userModule.isLoggedinUserCompleted)
   // internet connection
   /*useInternetStatus((isConnected) => {
     setIsOnline(isConnected)
-  }, [])*/
+  }, [])
 
   if (!isOnline) {
     if (!location.pathname.includes('/error')) {
       const redirect = new URL(window.location.href).pathname
       return <Navigate to={`/error?redirect=${encodeURIComponent(redirect)}&errorType=noInternet`} />
     }
-  } 
+  } */
 
   useEffect(() => {
     SplashScreen.hide()
   }, [])
 
   
-  useEffect(() => {
+  /*useEffect(() => {
     setLoggedIn(loggedinUser !== null)
-  }, [loggedinUser])
+  }, [loggedinUser])*/
 
   if (loggedinUser === null && !allowAnonymous()) {
     const navigate = localStorage.getItem("email")
                         ? '/login'
-                        : '/signup' 
+                        : '/landing' 
 
     return <Navigate to={`${navigate}`} />
   }
@@ -98,6 +99,7 @@ function allowAnonymous() {
   if (pathname === "/signup") return true
   if (pathname === "/terms-of-use") return true
   if (pathname === "/contact-us") return true
+  if (pathname === "/landing") return true
   return false
 }
 
@@ -140,6 +142,7 @@ function App() {
                   <Route path="/error" element={<RouteGuard><ErrorPage /></RouteGuard>} />
                   <Route path="/login" element={<RouteGuard><LoginPage /></RouteGuard>} />
                   <Route path="/signup" element={<RouteGuard><SignUpPage /></RouteGuard>} />
+                  <Route path="/landing" element={<RouteGuard><LandingPage /></RouteGuard>} />
                   <Route path="/forgot-password" element={<RouteGuard><ForgotPasswordPage /></RouteGuard>} />
                   <Route path="/home" element={<RouteGuard><HomePage /></RouteGuard>} />
                   <Route path="/property" element={<RouteGuard><Orientation><PropertyPage /></Orientation></RouteGuard>} />
@@ -149,10 +152,12 @@ function App() {
                   <Route path="/financial-details" element={<RouteGuard><FinancialDetailsPage /></RouteGuard>} />
                   <Route path="/terms-of-use" element={<RouteGuard><TermsOfUsePage /></RouteGuard>} />
                   <Route path="/contact-us" element={<RouteGuard><ContactUsPage /></RouteGuard>} />
+                  <Route path="/accessibility-statement" element={<RouteGuard><AccessibilityStatementPage /></RouteGuard>} />
               </Routes>
               
               <Alert />
               <Dialog />
+              {false && <AccessibilityPanel />}
           </section>
       </Provider>
     </SplashProvider>
@@ -161,8 +166,15 @@ function App() {
 
 export default App
 
-/*
+RouteGuard.propTypes = {
+  children: PropTypes.node.isRequired
+}
 
+Orientation.propTypes = {
+  children: PropTypes.node.isRequired
+}
+
+/*
 - mobile delete - cancel delete the property
 - הוצאות נלוות נוספות
 - להוסיף הון עצמי מהלוואה
@@ -171,6 +183,7 @@ export default App
 
 - sign up loading when no phrases not looks good - desktop / tablet
 - sign up not show title after complete and before move on
+- sign up with just missing accept - jumping to first step
 - home page - when no items the image show slow
 - calculators - transparent cities icons
 
@@ -187,11 +200,8 @@ export default App
 - max price - missing years
 
 - delete image from cloudinary
-+ לינק לאפליקציה
 - micro services
 - Grpc - proto files
-- Graph api
+- Graph api
 - cicd
-+ compile to android app
-
 */

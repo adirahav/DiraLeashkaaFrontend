@@ -5,7 +5,7 @@
         color: var(--text);
         padding: 0;
         margin: 42px 0 20px;
-        font-size: 24px;
+        font-size: rem(24px);
         font-weight: bold;
         height: 24px;
 
@@ -16,7 +16,7 @@
         color: var(--text);
         padding: 0;
         margin: 20px 0;
-        font-size: 18px;
+        font-size: rem(18px);
         font-weight: bold;
         height: 24px;
     }
@@ -66,6 +66,14 @@
                 }
             }
 
+            *:nth-child(7) {
+                &.property-field.warning {
+                    span {
+                        line-height: 16px;
+                    }
+                }
+            }
+
             &:nth-child(9) {
                 *:nth-child(1), *:nth-child(4) {
                     &.property-field {
@@ -84,15 +92,7 @@
                         }
                     }
                 }
-            }
-
-            *:nth-child(7) {
-                &.property-field.warning {
-                    span {
-                        line-height: 16px;
-                    }
-                }
-            }
+            }  
         }
 
         &:not(.city-else) {
@@ -237,7 +237,7 @@
 
                 h3 {
                     padding-top: 60px;
-                    font-size: 24px;
+                    font-size: rem(24px);
                 }
 
                 img {
@@ -304,7 +304,7 @@
                 }
 
                 div {
-                    font-size: 30px;
+                    font-size: rem(30px);
                     margin-top: 30px;
                 }
             }
@@ -380,7 +380,7 @@
                 }
     
                 svg {
-                    font-size: 24px;
+                    font-size: rem(24px);
                     margin-right: 10px;
                     fill: var(--property-media-upload-icon);
                 }
@@ -501,7 +501,7 @@
             margin: 20px;
 
             h1:first-of-type {
-                font-size: 22px;
+                font-size: rem(22px);
                 height: auto;
                 margin: 0 0 20px;
 
@@ -521,6 +521,16 @@
 
             article {
                 grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+
+                &:nth-child(11) {
+                    *:nth-child(4) {
+                        &.property-field {
+                            span {
+                                line-height: 30px;
+                            }
+                        }
+                    }
+                }
             }
 
             .property-field {
@@ -538,7 +548,7 @@
             }
 
             &:not(.city-else) {
-                *:nth-child(7), *:nth-child(33)  {
+                /**:nth-child(7),*/ *:nth-child(33)  {
                     &.property-field {
                         span {
                             line-height: 16px;
@@ -636,26 +646,32 @@
 
             article {
                 text-align: center;
-                margin: 10px auto;
-                max-width: 100px;
-                padding-right: 4px;
-
-                h3 {
-                    color: var(--mobile-property-menu-text);
-                    font-size: 16px;
-                    font-weight: normal;
-                    margin: auto;
+                
+                button {
                     text-align: center;
-                    word-spacing: 100px;
-
-                    &.label-on {
-                        color: var(--mobile-property-menu-text-selected);
+                    margin: 10px auto;
+                    max-width: 100px;
+                    padding-right: 4px;
+                    background-color: transparent;
+                    border: 0;
+    
+                    h3 {
+                        color: var(--mobile-property-menu-text);
+                        font-size: rem(16px);
+                        font-weight: normal;
+                        margin: auto;
+                        text-align: center;
+                        word-spacing: 100px;
+    
+                        &.label-on {
+                            color: var(--mobile-property-menu-text-selected);
+                        }
                     }
-                }
-
-                img {
-                    width: 24px;
-                    height: 24px;
+    
+                    img {
+                        width: 24px;
+                        height: 24px;
+                    }
                 }
             }
 
@@ -920,7 +936,7 @@
                     }
 
                     .property-field span {
-                        font-size: 14px;
+                        font-size: rem(14px);
                     }
 
                     

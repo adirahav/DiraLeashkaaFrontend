@@ -1,9 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Resizable } from 'react-resizable'
 import Table from 'rc-table'
 import { utilService } from '../services/util.service'
 import 'react-resizable/css/styles.css'
 import { useSplash } from '../contexts/SplashContext'
+import PropTypes from 'prop-types'
+
+PropertyYieldForecast.propTypes = {
+    data: PropTypes.string, 
+}
 
 export function PropertyYieldForecast({data}) {   
     const buildHeaders = () => {
@@ -77,6 +82,11 @@ export function PropertyYieldForecast({data}) {
             <th {...restProps} />
           </Resizable>
         )
+    }
+
+    ResizableTitle.propTypes = {
+        onResize: PropTypes.func,
+        width: PropTypes.number,
     }
 
     const { splash } = useSplash()

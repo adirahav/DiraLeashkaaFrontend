@@ -5,7 +5,7 @@ import { authService } from '../services/auth.service.js'
 import { utilService } from '../services/util.service.js'
 import { FormField } from '../cmps/FormField.jsx'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { Footer } from '../cmps/Footer.jsx'
 import { Header } from '../cmps/Header.jsx'
@@ -47,21 +47,18 @@ export function LoginPage() {
             navigate(`/home`)
         }
 
-        setEmail({ ...email, value: authService.getLastLoggedinEmail() })  
+        setEmail(email => ({ ...email, value: authService.getLastLoggedinEmail() }))
     }, [])
 
     useEffect(() => {
-        setSubmit({ 
-            ...submit, 
-            isDisabled: !utilService.REG_EXP.EMAIL.test(email.value) || !utilService.REG_EXP.PASSWORD.test(password.value)
-        })
+        setSubmit(submit => ({ ...submit, isDisabled: !utilService.REG_EXP.EMAIL.test(email.value) || !utilService.REG_EXP.PASSWORD.test(password.value) }))
     }, [email, password])
 
     useEffect(() => {
         if (phrases) {
-            setEmail({ ...email, label: utilService.getPhrase("login_email_label", phrases)})
-            setPassword({ ...password, label: utilService.getPhrase("login_password_label", phrases)})
-            setSubmit({ ...submit, text: utilService.getPhrase("login_submit", phrases)})
+            setEmail(email => ({ ...email, label: utilService.getPhrase("login_email_label", phrases) }))
+            setPassword(password => ({ ...password, label: utilService.getPhrase("login_password_label", phrases) }))
+            setSubmit(submit => ({ ...submit, label: utilService.getPhrase("login_submit", phrases) }))
         }
 
         if (!phrases) {
@@ -74,10 +71,10 @@ export function LoginPage() {
     function handleValueChanged(fieldName, value) {
         switch (fieldName) {
             case "email":
-                setEmail({ ...email, value })
+                setEmail(email => ({ ...email, value }))
                 break
             case "password":
-                setPassword({ ...password, value })
+                setPassword(password => ({ ...password, value }))
                 break
         }
     }

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, AttentionIcon, ShowPasswordIcon, HidePasswordIcon } from '../assets/icons'
+import PropTypes from "prop-types"
+import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, AttentionIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
 import { showWarningAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
-import { CheckBox } from '@mui/icons-material'
 
 export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueChanged, onPercentChanged }) {
     // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | VISUAL_DROP_DOWN | MULTIPLE_DROP_DOWN | STRING | TEXT_AREA | PERCENT
@@ -110,10 +110,10 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                             ? ' empty' 
                                                             : '')
 
-        const showRollback1 = valueToEdit.replace(/,/g, '') !== params.defaultValue?.toString() && 
+        /*const showRollback1 = valueToEdit.replace(/,/g, '') !== params.defaultValue?.toString() && 
                              !isFirstLoading && 
                              params.defaultValue != undefined && 
-                             params.id 
+                             params.id */
             
         const showRollback = isFirstLoading || !valueToEdit 
                              ? false 
@@ -263,7 +263,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             [onSetPercent]
         )
 
-        const handleClickLabel = (event) => {
+        const handleClickLabel = () => {
             if (!showNumberPicker) {
                 numberPickerRef.current = undefined 
                 setShowNumberPicker(true)
@@ -318,13 +318,13 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             })
         }
 
-        function handleNumberPickerPercentCancle(ev) {
+        function handleNumberPickerPercentCancle() {
             setPercentToEdit(orgPercent)
             setLabel(params.label.withPercent.replace("%1$.1f&percnt;", `${orgPercent}%`) )
             setShowNumberPicker(false)
         }
 
-        const handleNumberPickerPercentAccept = (ev) => {
+        const handleNumberPickerPercentAccept = () => {
             const fixedPercentToEdit = utilService.formatFloat(percentToEdit)
             setOrgPercent(fixedPercentToEdit)
             setLabel(params.label.withPercent.replace("%1$.1f&percnt;", `${fixedPercentToEdit}%`) )
@@ -366,7 +366,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                       (!valueToEdit && valueToEdit?.toString().replace(/,/g, '') !== params.value.default?.toString())
         
         return  <div className={`property-field ${fieldClass}`}>
-                    {!showNumberPicker && <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel}></span>}
+                    {!showNumberPicker && <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleClickLabel() } role='button' tabIndex={0}></span>}
                     {showNumberPicker && <NumberPicker ref={numberPickerRef} numberPicker={params.numberPicker} value={percentToEdit} onAccept={handleNumberPickerPercentAccept} onCancel={handleNumberPickerPercentCancle} onStepUp={handleStepUp} onStepDown={handleStepDown} onValueChange={handleNumberPickerPercentChange} />}
                     <div>
                         <input 
@@ -483,7 +483,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         return (
             <div className={fieldClass} ref={dropdownRef}>
                 <span>{params.label}</span>
-                <div className={`custom-dropdown ${isOpen ? "open" : ""}`} onClick={toggleDropdown}>
+                <div className={`custom-dropdown ${isOpen ? "open" : ""}`} onClick={toggleDropdown} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggleDropdown() } role='button' tabIndex={0}>
                 {params.hasWarning && <AttentionIcon onClick={handleShowWarningAlert} />}
                     <button className="dropdown-toggle">
                         {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || "בחר"}
@@ -497,6 +497,9 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                     key={index}
                                     className={valueToEdit?.toString() === option.key.toString() ? "selected" : ""}
                                     onClick={() => handleValueChange(option.key)}
+                                    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleValueChange() } 
+                                    role='button' 
+                                    tabIndex={0}
                                 >
                                     {option.value}
                                 </li>
@@ -603,7 +606,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
 
         return  <div className={fieldClass} ref={dropdownRef}>
                     <span>{params.label}</span>
-                    <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`} onClick={toggleDropdown}>
+                    <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`} onClick={toggleDropdown} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggleDropdown() } role='button' tabIndex={0}>
                         <button className="dropdown-toggle">
                             {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || "בחר"}
                             {!isOpen && <ArrowDownIcon />}
@@ -613,7 +616,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                             <input placeholder={"חפש..."} value={searchToEdit} onChange={handleSearchChange} />
                             <ul>
                                 {filteredOptions.map((option, index) => (
-                                    <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress}>{option.value}</li>
+                                    <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleOptionPress() } role='button' tabIndex={0}>{option.value}</li>
                                 ))}
                             </ul>
                         </div>}
@@ -669,6 +672,10 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
     
         }, [params])
 
+        useEffect(() => {
+            setFilteredOptions(params.options)
+        }, [params.options])
+
         const toggleDropdown = (event) => {  
             event.preventDefault()
             setIsOpen(true)
@@ -709,7 +716,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                         {isOpen && <div className="dropdown-menu">
                             <ul>
                                 {filteredOptions.map((option, index) => (
-                                    <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress}>
+                                    <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleOptionPress() } role='button' tabIndex={0}>
                                         {option.image && <img src={option.image} alt={option.value} />}
                                         <div>
                                             <span>{option.value}</span>
@@ -911,7 +918,6 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                 </div>
     }
     
-
     function Percent({params, onSetPercent}) {
         const [isChangedByUser, setIsChangedByUser] = useState(false)
 
@@ -959,7 +965,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             [onSetPercent]
         )
 
-        const handleClickLabel = (event) => {
+        const handleClickLabel = () => {
             if (!showNumberPicker) {
                 numberPickerRef.current = undefined 
                 setShowNumberPicker(true)
@@ -1001,13 +1007,13 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             })
         }
 
-        function handleNumberPickerPercentCancle(ev) {
+        function handleNumberPickerPercentCancle() {
             setPercentToEdit(orgPercent)
             setLabel(params.label.replace("%1$.1f&percnt;", `${orgPercent}%`) )
             setShowNumberPicker(false)
         }
 
-        const handleNumberPickerPercentAccept = (ev) => {
+        const handleNumberPickerPercentAccept = () => {
             setOrgPercent(percentToEdit)
             setLabel(params.label
                 //.replace("<u>", "<span>")
@@ -1046,7 +1052,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                     <div className='rollback'>
                         {showRollback && <RollbackIcons onClick={handleValueRollback} />}
                     </div>
-                    <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel}></span>
+                    <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleClickLabel() } role='button' tabIndex={0}></span>
                     {showNumberPicker && <NumberPicker ref={numberPickerRef} numberPicker={params.numberPicker} value={formattedPercentToEdit} onAccept={handleNumberPickerPercentAccept} onCancel={handleNumberPickerPercentCancle} onStepUp={handleStepUp} onStepDown={handleStepDown} onValueChange={handleNumberPickerPercentChange} /> }
                 </div>
     }
@@ -1094,6 +1100,86 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
     })
     
 
+    Number.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func
+    }
+    
+    AutoFill.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func
+    }
+    
+    Calc.propTypes = {
+        params: PropTypes.object
+    }
+    
+    CalcEditable.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func,
+        onSetPercent: PropTypes.func
+    }
+    
+    CalcTotal.propTypes = {
+        params: PropTypes.object
+    }
+    
+    DropDown.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func
+    }
+    
+    SearchableDropDown.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func
+    }
+    
+    VisualDropDownn.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func
+    }
+    
+    MultipleDropDownn.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func
+    }
+    
+    String.propTypes = {
+        params: PropTypes.oneOfType([
+            PropTypes.shape({
+              isFocus: PropTypes.bool,
+              label: PropTypes.string,
+              maxLength: PropTypes.number
+            }),
+            PropTypes.oneOf([null]),
+          ]),
+        onSetValue: PropTypes.func
+    }
+    
+    TextArea.propTypes = {
+        params: PropTypes.object,
+        onSetValue: PropTypes.func
+    }
+    
+    Percent.propTypes = {
+        params: PropTypes.object,
+        onSetPercent: PropTypes.func
+    }
+
+    NumberPicker.propTypes = {
+        numberPicker: PropTypes.shape({
+          step: PropTypes.number,
+          min: PropTypes.number,
+          max: PropTypes.number,
+        }).isRequired,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        onAccept: PropTypes.func.isRequired,
+        onCancel: PropTypes.func.isRequired,
+        onStepUp: PropTypes.func.isRequired,
+        onStepDown: PropTypes.func.isRequired,
+        onValueChange: PropTypes.func.isRequired,
+    }
+
     return (
         <>
             {type === "NUMBER" && Number({params, onSetValue: onValueChanged})}
@@ -1124,3 +1210,13 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         </>  
     )
 }
+
+
+PropertyField.propTypes = {
+    type: PropTypes.string,
+    params: PropTypes.object,
+    isFirstLoading: PropTypes.bool,  
+    onValueChanged: PropTypes.func,
+    onPercentChanged: PropTypes.func,
+}
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { HomeCities } from '../cmps/HomeCities'
@@ -6,12 +6,12 @@ import { HomeProperties } from '../cmps/HomeProperties'
 import { HomeBestYields } from '../cmps/HomeBestYields'
 import { Overlay } from '../cmps/Overlay'
 import { utilService } from '../services/util.service'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { getHome, onDeletingPropertyStart, onAboutDeletingProperty, saveHome, onDeletingPropertyDone, onDeleteProperty } from '../store/actions/user.actions.js'
+import { useNavigate } from 'react-router-dom'
+import { getHome, onDeletingPropertyStart, onAboutDeletingProperty, onDeletingPropertyDone, onDeleteProperty } from '../store/actions/user.actions.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSelector } from 'react-redux'
-import { IconSizes, AddPropertyIcon, LoadingIcon, DoubleArrowDownIcon } from "../assets/icons"
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { LoadingIcon } from '../cmps/LoadingIcon'
+import { useSplash } from "../contexts/SplashContext"
 import imgLetsStart from '../assets/images/lets_start.png'
 import { FormField } from '../cmps/FormField.jsx'
 import { useHomeWorker } from '../hooks/useHomeWorker'
@@ -24,13 +24,11 @@ export function HomePage() {
     const [swipingToRefresh, setSwipeToRefresh] = useState('')
     const [selectedCity, setSelectedCity] = useState(null)
     const [bestYield, setBestYield] = useState(null)
-    const [letsStartButton, setLetsStartButton] = useState(
-        {
+    const letsStartButton = {
             text: "התחל", 
             isDisabled: false,
             isLoading: false
         }
-    )
 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
@@ -206,12 +204,12 @@ export function HomePage() {
             <Header />
             <main className="home container start" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
                 {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
-                <img className='desktop' src={imgLetsStart} />
+                <img className='desktop' src={imgLetsStart} alt='' />
                 <section>
                     <h2>דירה להשקעה</h2>
                     <hr />
-                    <img className='tablet' src={imgLetsStart} />
-                    <img className='mobile' src={imgLetsStart} />
+                    <img className='tablet' src={imgLetsStart} alt='' />
+                    <img className='mobile' src={imgLetsStart} alt='' />
                     <h3>מצא את הדירה בעלת הפוטנציאל לתשואה הגבוהה ביותר בקלות וביעילות!</h3>
                     <hr />
                     <FormField type={"BUTTON_LONG"} params={letsStartButton} onPress={() =>  navigate(`/property`)} />

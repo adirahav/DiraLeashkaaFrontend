@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { utilService } from '../services/util.service'
 import iconLock from '../assets/images/icon_lock.svg'
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from './FormField'
+import PropTypes from "prop-types"
 
 export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) {   
     const { splash } = useSplash()
     const phrases = splash?.phrases
 
     const [calculatorIcon, setCalculatorIcon] = useState(null)
-    const [enterButton, setEnterButton] = useState(
-        {
+    
+    const enterButton = {
             text: utilService.getPhrase("calculator_calculate_button", phrases), 
             isDisabled: false,
             isLoading: false
         }
-    )
 
     useEffect(() => {
         (async () => {
@@ -54,17 +54,28 @@ export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) 
                         
     return (
         <article className={articleClass}>
-            <img src={calculatorIcon} />
+            <img src={calculatorIcon} alt='' />
             <div>
                 <h2>{utilService.getPhrase(`calculator_title_${utilService.toSnakeCase(calculator?.type)}`, phrases)}</h2>
                 <span>{utilService.getPhrase(`calculator_desc_${utilService.toSnakeCase(calculator?.type)}`, phrases)}</span>
             </div>
             <div>
                 {!calculator?.isLock && !calculator?.isComingSoon && <FormField type={"BUTTON_LONG"} params={enterButton} onPress={(ev) =>  handleCalculatorPress(ev, calculator)} />}
-                {calculator?.isLock && !calculator?.isComingSoon && <img src={iconLock} />}
+                {calculator?.isLock && !calculator?.isComingSoon && <img src={iconLock} alt='נעול - בקרוב' />}
                 {calculator?.isComingSoon && <span>{utilService.getPhrase("calculator_coming_soon", phrases)}</span>}
             </div>
             
         </article>
     )
+}
+
+CalculatorsCalculator.propTypes = {
+    index: PropTypes.number,
+    calculator: PropTypes.shape({
+      isLock: PropTypes.bool,
+      isComingSoon: PropTypes.bool,
+      type: PropTypes.string,
+    }),
+    onCalculatorPress: PropTypes.func,
+    setEnterButton: PropTypes.func,
 }

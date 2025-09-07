@@ -71,7 +71,7 @@ header {
                 li {
                     padding: 0 0 0 40px;
 
-                    a {
+                    a, button, span {
                         align-items: center;
                         display: inline-flex;
                         margin-top: 2px;
@@ -90,10 +90,21 @@ header {
                             margin-top: 2px;
                             color: var(--nav-header-icon);
                         }
+
+                        span {
+                            font-size: rem(16px);
+                        }
+                    }
+
+                    button {
+                        background-color: transparent;
+                        border: 0;
                     }
 
                     &.welcome {
-                        a {
+                        span {
+                            font-size: rem(16px);
+
                             &:hover {
                                 cursor: auto;
         
@@ -153,20 +164,15 @@ header {
                         
                     li {
                         padding: 0;
-                        width: 100%;
+                        width: calc(100% - 10px);
                         height: 44px;
-                        padding: 0 0 0 10px;
+                        padding: 0;
     
-                        a {
-                            display: inline-grid;
+                        a, button, span {
                             height: 40px;
     
                             svg.css-1lrr7yx-MuiSvgIcon-root {
-                                font-size: 25px;
-                            }
-    
-                            & > span {
-                                display: none;
+                                font-size: rem(25px);
                             }
     
                             .form-field.button button {
@@ -175,7 +181,15 @@ header {
                                 padding: 0;
     
                                 span {
-                                    font-size: 18px;
+                                    font-size: rem(18px);
+                                }
+                            }
+                        }
+
+                        &.welcome {
+                            & > span{
+                                &:first-child {
+                                   // margin-top: -2px;
                                 }
                             }
                         }
@@ -228,7 +242,7 @@ header {
     
                 ul {
                     li {
-                        a {
+                        & > span, & > button, & > a {
                             width: 30px;
                             height: 30px;
                             margin: 7px 17px;
@@ -246,14 +260,23 @@ header {
                                     color: var(--tablet-nav-header-icon);
                                 }
                             }
+
+                            & > span {
+                                display: none;
+                            }
                         }
     
                         &.welcome {
                             text-align: center;
                             display: flex;
     
-                            a {
-                                span {
+                            & > span {
+                                & > svg {
+                                    width: 25px;
+                                    height: 25px;
+                                }
+
+                                & > span {
                                     display: none;
                                 }
                             }
@@ -265,7 +288,17 @@ header {
                             }
                         }
                     }
+
+                    &.bottom {
+                        & > li {
+                            button {
+                                margin-right: 12px;
+                            }
+                        }
+                    }
                 }
+
+                
             }
     
             &.widing {
@@ -288,7 +321,7 @@ header {
     
                 ul {
                     li {
-                        a {
+                        a, button, span {
                             display: inline-flex;
                             width: 100%;
     
@@ -317,11 +350,11 @@ header {
                             }
     
                             & > span {
-                                display: block;
+                                display: inline-flex;
                                 width: 100%;
                                 white-space: nowrap;
                                 overflow: hidden;
-                                margin-left: 5px;
+                                margin: 0 5px 2px 0;
                             }
                         }
     
@@ -337,6 +370,14 @@ header {
                         &.add-property {
                             a.active {
                                 background-color: transparent;
+                            }
+                        }
+                    }
+
+                    &.bottom {
+                        & > li {
+                            button {
+                                margin-right: -5px;
                             }
                         }
                     }
@@ -360,7 +401,7 @@ header {
                                             width: fit-content;
                                             
                                             span {
-                                                font-size: 14px;
+                                                font-size: rem(14px);
                                             }
                                         }
                                         
@@ -404,7 +445,7 @@ header {
                 .menu {
                     grid-column: 1;
                     margin: auto;
-                    font-size: 30px;
+                    font-size: rem(30px);
                 }
 
                 a, a img {
@@ -416,7 +457,7 @@ header {
                 .back {
                     grid-column: 3;
                     margin: auto;
-                    font-size: 30px;
+                    font-size: rem(30px);
                 }
             }
 
@@ -475,19 +516,19 @@ header {
     
                             span {
                                 color: var(--mobile-nav-text);
-                                font-size: 20px;
+                                font-size: rem(20px);
                             }
                         }
                         
-                            &.logout {
-                                margin-right: 20px;
-                            }
+                        &.logout {
+                            margin-right: 20px;
+                        }
                             
                         &:not(.add-property) {
                             a {
                                 span {
                                     color: var(--mobile-nav-text);
-                                    font-size: 20px;
+                                    font-size: rem(20px);
                                 }
         
                                 svg {

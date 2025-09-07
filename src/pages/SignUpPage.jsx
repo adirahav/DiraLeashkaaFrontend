@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
-import { signup, updateUser, login } from '../store/actions/user.actions.js'
+import { signup, updateUser } from '../store/actions/user.actions.js'
 import { utilService } from '../services/util.service.js'
 import { FormField } from '../cmps/FormField.jsx'
 import { NavLink, useNavigate } from 'react-router-dom'
@@ -8,14 +8,14 @@ import { UserPersonalInfo } from '../cmps/UserPersonalInfo.jsx'
 import { UserFinancialDetails } from '../cmps/UserFinancialDetails.jsx'
 import { UserTermsOfUse } from '../cmps/UserTermsOfUse.jsx'
 import { logService } from '../services/log.service.js'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { Footer } from '../cmps/Footer.jsx'
 import { Header } from '../cmps/Header.jsx'
-import promoImage1 from '../assets/images/promo-1.png'
-import promoImage2 from '../assets/images/promo-2.png'
-import promoImage3 from '../assets/images/promo-3.png'
-import promoImage4 from '../assets/images/promo-4.png'
+//import promoImage1 from '../assets/images/promo-1.png'
+//import promoImage2 from '../assets/images/promo-2.png'
+//import promoImage3 from '../assets/images/promo-3.png'
+//import promoImage4 from '../assets/images/promo-4.png'
 
 export function SignUpPage() {
     const TAG = 'SignUpPage'
@@ -39,8 +39,7 @@ export function SignUpPage() {
     
     const { splash, setForceFetchSplash } = useSplash()
     const phrases = splash?.phrases
-    const fixedParameters = splash?.fixedParameters
-
+    
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
     const defultInputState = (name, labelKey, value, errorKey, tooltipKey, maxLength) => {
@@ -111,7 +110,7 @@ export function SignUpPage() {
         back: defultButtonState("button_back"),
     })
      
-    const PROMO_IMAGES_SIZE = 4
+    /*const PROMO_IMAGES_SIZE = 4
     const [promo, setPromo] = useState({
         currentIndex: 1,
         prevIndex: null,
@@ -122,9 +121,9 @@ export function SignUpPage() {
             { display: 'hidden', img: promoImage4, text: 'התרחיש המשוער של צמיחת ההשקעה שלך לאורך השנים.' },
         ],
         animation: false
-    })
+    })*/
     
-    useEffect(() => {
+    /*useEffect(() => {
         const loadStep = jumpToStep()                       
         if (!loadStep) {
             navigate("/home")
@@ -137,6 +136,42 @@ export function SignUpPage() {
         }
 
         // promo
+        //const intervalId = setInterval(() => {
+        //    setPromo((prevPromo) => ({
+        //        ...prevPromo,
+        //        prevIndex: prevPromo.currentIndex,
+        //        currentIndex: prevPromo.currentIndex == PROMO_IMAGES_SIZE ? 1 : prevPromo.currentIndex + 1
+        //    }))
+        //}, 4000)
+    
+        //return () => clearInterval(intervalId)
+    }, [])*/
+
+    const shouldJumpToStep = useCallback(() => {
+        if (!loggedinUser || !loggedinUser.fullname || !loggedinUser.email || !loggedinUser.yearOfBirth) {
+            return STEP.PRESONAL_INFO
+        } else if (!loggedinUser.equity || !loggedinUser.incomes || !loggedinUser.commitments) {
+            return STEP.FINANCIAL_DETAILS
+        } else if (!loggedinUser.termsOfUseAccept) {
+            return STEP.TERMS_OF_USE
+        } else {
+            return null
+        }
+    }, [loggedinUser])
+
+    useEffect(() => {
+        const loadStep = jumpToStep()                       
+        if (!loadStep) {
+            navigate("/home")
+        }
+        else {
+            setProgress({
+                step: loadStep,
+                direction: 'forward'
+            })
+        }
+
+        /*// promo
         const intervalId = setInterval(() => {
             setPromo((prevPromo) => ({
                 ...prevPromo,
@@ -145,10 +180,10 @@ export function SignUpPage() {
             }))
         }, 4000)
     
-        return () => clearInterval(intervalId)
+        return () => clearInterval(intervalId)*/
     }, [])
 
-    useEffect(() => {
+    /*useEffect(() => {
         setPromo((prevPromo) => ({
             ...prevPromo,
             items: prevPromo.items.map((item, index) => ({
@@ -159,7 +194,7 @@ export function SignUpPage() {
             })),
             animation: true
           }))
-    }, [promo.currentIndex])
+    }, [promo.currentIndex])*/
 
     useEffect(() => {
         if (phrases) {
@@ -445,7 +480,7 @@ export function SignUpPage() {
         generalError: "generalError"
     }
 
-    const programs = utilService.getFixedParameter("payPrograms", fixedParameters)
+    //const programs = utilService.getFixedParameter("payPrograms", fixedParameters)
     
     const formClass = `signup ${(Object.keys(STEP).find(key => STEP[key] === progress.step) || Object.keys(STEP)[0]).toLowerCase()}`
     const titleClass = `title ${isLoadingState || !phrases ? 'loading1' : ''}`
@@ -498,17 +533,17 @@ export function SignUpPage() {
                     <div><NavLink to='/login' dangerouslySetInnerHTML={{ __html: utilService.getPhrase("signup_goto_login", phrases) }}></NavLink></div>
                 </article>
             </section>
-            <section className='promo'>
+            {/*<section className='promo'>
                 {promo.currentIndex > 0 && (
                     <div>
                         {promo.items.map((item, index) => (
                             <article key={index} className={item.display}>
-                                <p>{item.text}</p><img src={item.img}  />
+                                <p>{item.text}</p><img src={item.img} alt=''  />
                             </article>
                         ))}
                     </div>
                 )}
-            </section>
+            </section>*/}
         </form>
         <Footer />
     </>)

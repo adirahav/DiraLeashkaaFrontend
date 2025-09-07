@@ -1,16 +1,17 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Resizable } from 'react-resizable'
 import Table from 'rc-table'
 import { utilService } from '../services/util.service'
 import 'react-resizable/css/styles.css'
 import { useSplash } from '../contexts/SplashContext'
+import PropTypes from "prop-types"
 
 export function PropertyAmortizationSchedule({data}) {   
-    const [columns, setColumns] = useState(buildHeaders())
-    
     const { splash } = useSplash()
     const phrases = splash?.phrases
 
+    const [columns, setColumns] = useState(buildHeaders(phrases))
+    
     const handleResize = useCallback(
         (index) => (e, { size }) => {
             setColumns((prevColumns) => {
@@ -60,10 +61,7 @@ export function PropertyAmortizationSchedule({data}) {
     
 }
 
-const buildHeaders = () => {
-    const { splash } = useSplash()
-    const phrases = splash?.phrases
-    
+const buildHeaders = (phrases) => {
     return [
         {
             title: utilService.getPhrase('amortization_schedule_month_label', phrases),
@@ -122,4 +120,13 @@ const ResizableTitle = (props) => {
         <th {...restProps} />
       </Resizable>
     )
+}
+
+ResizableTitle.propTypes = {
+    onResize: PropTypes.func,
+    width: PropTypes.number,
+}
+
+PropertyAmortizationSchedule.propTypes = {
+    data: PropTypes.string, 
 }

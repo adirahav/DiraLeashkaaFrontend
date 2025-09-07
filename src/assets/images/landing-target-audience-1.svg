@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 300 300" role="img" aria-label="בית ומחשבון מקפץ">
+  <title>בית ומחשבון מקפץ</title>
+  <desc>איור קווי: בית סטטי ומחשבון שמקפץ בעדינות. צבע #123985, רקע שקוף.</desc>
+
+  <defs>
+    <style>
+      .line { stroke:#ff4e31; stroke-width:1.5; fill:none; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+      .fill { stroke:#123985; stroke-width:1.5; fill:#ffffff; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+    </style>
+  </defs>
+
+  <!-- HOUSE (static) -->
+  <g id="house" transform="translate(40,70)">
+    <!-- base -->
+    <rect x="20" y="90" width="110" height="80" rx="6" class="fill"/>
+    <!-- roof -->
+    <polygon points="20,90 75,45 130,90" class="fill"/>
+    <!-- chimney -->
+    <rect x="96" y="52" width="14" height="22" class="fill"/>
+    <!-- door -->
+    <rect x="39" y="128" width="26" height="42" rx="3" class="fill"/>
+    <circle cx="60" cy="149" r="2" class="line"/>
+    <!-- window left -->
+    <rect x="77" y="118" width="40" height="28" rx="3" class="fill"/>
+    <line x1="97" y1="118" x2="97" y2="146" class="line"/>
+    <line x1="77" y1="132" x2="117" y2="132" class="line"/>
+    <!-- ground hint -->
+    <path d="M 0 185 Q 75 200 160 185" class="line"/>
+  </g>
+
+  <!-- CALCULATOR (bouncy) -->
+  <g id="calculator">
+    <animateTransform attributeName="transform" type="translate"
+      values="180,81; 180,85; 180,81" keyTimes="0; .5; 1"
+      dur="0.8s" begin="0s" repeatCount="indefinite"/>
+    <rect x="0" y="0" width="95" height="140" rx="12" class="fill"/>
+    <!-- screen -->
+    <rect x="12" y="12" width="71" height="26" rx="4" class="fill"/>
+    <!-- buttons grid -->
+    <g class="line">
+      <line x1="12" y1="52" x2="83" y2="52"/>
+      <line x1="12" y1="76" x2="83" y2="76"/>
+      <line x1="12" y1="100" x2="83" y2="100"/>
+      <line x1="12" y1="124" x2="83" y2="124"/>
+      <line x1="31" y1="52" x2="31" y2="124"/>
+      <line x1="52" y1="52" x2="52" y2="124"/>
+      <line x1="73" y1="52" x2="73" y2="124"/>
+    </g>
+  </g>
+</svg>

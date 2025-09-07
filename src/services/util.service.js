@@ -1,3 +1,5 @@
+import { Capacitor } from "@capacitor/core"
+
 const PLATFORM = {
     MOBILE: "MOBILE",
     TABLET: "TABLET",

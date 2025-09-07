@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { IconSizes, ShowPasswordIcon, HidePasswordIcon, HelpIcon, RestartIcon } from '../assets/icons'
+import { IconSizes, ShowPasswordIcon, HidePasswordIcon, HelpIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
-import { LoadingIcon } from '../assets/icons'
+import { LoadingIcon } from '../cmps/LoadingIcon'
 import { showTooltipAlert } from './Alert'
-import { useSplash } from '../contexts/SplashContext'
+import { useSplash } from "../contexts/SplashContext"
 import { Button as MaterialButton} from "@mui/material"
+import PropTypes from "prop-types"
 
 export function FormField({type = "STRING", params, onChange, onPress, onEnter }) {
     
@@ -171,7 +172,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
             }
         }
 
-        const handleShowTooltip = (ev) => {
+        const handleShowTooltip = () => {
             showTooltipAlert({
                 title: "Tooltip",
                 message: params.tooltip,
@@ -346,7 +347,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
             }
         }
 
-        const handleShowTooltip = (ev) => {
+        const handleShowTooltip = () => {
             showTooltipAlert({
                 title: "Tooltip",
                 message: params.tooltip,
@@ -417,10 +418,10 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
     function Error({params}) {
         return  <>{params.hasError && <div className='form-field-error'>{params.error}</div>}</>
     }
-
+    
     function Code({params, onChange, onEnter}) {
         const [valueToEdit, setValueToEdit] = useState(params.value)
-        const [hasError, setHasError] = useState(false)
+        //const [hasError, setHasError] = useState(false)
 
         const inputRefs = useRef([])
 
@@ -474,8 +475,9 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
             }
         }
 
-        const fieldClass = `form-field code ${hasError ? ' error' : ''}`
-
+        //const fieldClass = `form-field code ${hasError ? ' error' : ''}`
+        const fieldClass = `form-field code`
+        
         return  <><div className={fieldClass}>
                     <span>{params.label}</span>
                     {[...Array(params.length)].map((_, index) => (
@@ -495,7 +497,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
                         />
                     ))}
                 </div>
-                {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>
+                {params.error && /*hasError &&*/ <div className='form-field-error'>{params.error}</div>}</>
     }
 
     function DropDown({params, onChange}) {
@@ -506,7 +508,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
         useEffect(() => {
             setValueToEdit(params.selectedValue)
         }, [params.selectedValue])
-
+        
         useEffect(() => {
             if (valueToEdit) {
                 debouncedOnValueChange(valueToEdit)
@@ -536,7 +538,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
         }
         
         const fieldClass = `form-field dropdown ${hasError ? ' error' : ''}` 
-
+        
         return  <><div className={fieldClass}>
                     <label>
                         <select 
@@ -551,6 +553,167 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
                     </label>
                 </div>
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>    
+    }
+
+    String.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }),
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func,
+        onEnter: PropTypes.func
+    }
+
+    TextArea.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }),
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func,
+        onEnter: PropTypes.func
+    }
+
+    Number.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            name: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+            tooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            maxLength: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }), 
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func,
+        onEnter: PropTypes.func
+    }
+
+    Email.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            name: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            hasError: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])])
+          }),
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func,
+        onEnter: PropTypes.func
+    }
+
+    Password.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            name: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            hasError: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])]),
+            isDisabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])])
+          }),
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func,
+        onEnter: PropTypes.func
+    }
+   
+    YearOfBirth.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            name: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+            tooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            maxLength: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }), 
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func,
+        onEnter: PropTypes.func
+    }
+
+    Checkbox.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])]),
+            enable: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }), 
+          PropTypes.oneOf([null])
+        ]),
+        onChange: PropTypes.func
+    }
+
+    Button.propTypes = { 
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            text: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            isDisabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])]),
+            isLoading: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])])
+          }), 
+          PropTypes.oneOf([null])
+        ]),
+      
+        onPress: PropTypes.func,
+        type: PropTypes.string
+    }
+
+    Error.propTypes = { 
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            hasError: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }), 
+          PropTypes.oneOf([null])
+        ])
+    }
+
+    Code.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            label: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            value: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+            length: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }), 
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func,
+        onEnter: PropTypes.func
+    }
+       
+    DropDown.propTypes = {
+        params: PropTypes.oneOfType([
+          PropTypes.shape({
+            selectedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+            options: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.oneOf([null])]),
+            label: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+            error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+          }), 
+          PropTypes.oneOf([null])
+        ]),
+      
+        onChange: PropTypes.func
     }
 
     return (
@@ -583,4 +746,13 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
         </>
 
     )
+
+}
+
+FormField.propTypes = {
+    type: PropTypes.string,
+    params: PropTypes.object, 
+    onChange: PropTypes.func,
+    onPress: PropTypes.func,
+    onEnter: PropTypes.func,
 }

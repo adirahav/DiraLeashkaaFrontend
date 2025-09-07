@@ -1,14 +1,9 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { eventBusService } from "../services/eventBus.service"
 import { IconSizes, SuccessIcon, ErrorIcon, WarningIcon, MessageIcon, CloseIcon, TooltipIcon} from '../assets/icons'
 import { FormField } from "./FormField"
 import { utilService } from "../services/util.service"
 import { useSplash } from "../contexts/SplashContext"
-
-window.showSuccessAlert = showSuccessAlert
-window.showWarningAlert = showWarningAlert
-window.showErrorAlert = showErrorAlert
-window.showTooltipAlert = showTooltipAlert
 
 export function Alert() {
 
@@ -27,10 +22,10 @@ export function Alert() {
         const unsubscribe = eventBusService.on('show-alert', (data) => {
             setType(data.type ?? type)
             setMessage(data.message)
-            setPositiveButton({ ...positiveButton, ...data.positiveButton })
-            setNegativeButton({ ...negativeButton, ...data.negativeButton })
+            setPositiveButton(prevPositiveButton => ({ ...prevPositiveButton, ...data.positiveButton }))
+            setNegativeButton(prevNegativeButton => ({ ...prevNegativeButton, ...data.negativeButton }))
             
-            setCloseButton((prevCloseButton) => {
+            setCloseButton(() => {
                 const _closeButton = { ...closeButton, ...data.closeButton }
                 
                 if (_closeButton && _closeButton.autoClose) {
@@ -48,6 +43,12 @@ export function Alert() {
         return unsubscribe
     }, [type, message, positiveButton, negativeButton, closeButton])
 
+    const handleClickOutside = useCallback((ev) => {
+        if (alertRef.current && !alertRef.current.contains(ev.target)) {
+            onClose()
+        }
+    }, [])
+
     useEffect(() => {
         if (type || message || positiveButton || negativeButton || closeButton) {
             setTimeout(() => {
@@ -58,14 +59,8 @@ export function Alert() {
         return () => {
             document.removeEventListener('click', handleClickOutside)
         }
-    }, [type, message, positiveButton, negativeButton, closeButton])
+    }, [type, message, positiveButton, negativeButton, closeButton, handleClickOutside])
 
-
-    function handleClickOutside(ev) {
-        if (alertRef.current && !alertRef.current.contains(ev.target)) {
-            onClose()
-        }
-    }
 
     function onClose() {
         setType(null)
@@ -125,22 +120,13 @@ function showAlert(data) {
     eventBusService.emit('show-alert', data)
 }
 
-export function showErrorAlert(data) {
-    showAlert({ ...data, type: 'error' })
-}
+export const showErrorAlert   = (data) => showAlert({ ...data, type: "error" })
+export const showWarningAlert = (data) => showAlert({ ...data, type: "warning" })
+export const showSuccessAlert = (data) => showAlert({ ...data, type: "success" })
+export const showMessageAlert = (data) => showAlert({ ...data, type: "message" })
+export const showTooltipAlert = (data) => showAlert({ ...data, type: "tooltip" })
 
-export function showWarningAlert(data) {
-    showAlert({ ...data, type: 'warning' })
-}
-
-export function showSuccessAlert(data) {
-    showAlert({ ...data, type: 'success' })
-}
-
-export function showMessageAlert(data) {
-    showAlert({ ...data, type: 'message' })
-}
-
-export function showTooltipAlert(data) {
-    showAlert({ ...data, type: 'tooltip' })
-}
+window.showSuccessAlert = showSuccessAlert
+window.showWarningAlert = showWarningAlert
+window.showErrorAlert = showErrorAlert
+window.showTooltipAlert = showTooltipAlert

@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { PropertyField } from './PropertyField'
 import { utilService } from '../services/util.service'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { useSelector } from 'react-redux'
 import averageReturnImage from '../assets/images/icon_best_average_return.png'
 import averageReturnOnEquityImage from '../assets/images/icon_best_yield_average_return_on_equity.png'
 import totalProfitImage from '../assets/images/icon_best_yield_total_profit.png'
 import npvImage from '../assets/images/icon_best_yield_npv.png'
-import { YieldChart } from './YieldChart.jsx'
-
+import PropTypes from "prop-types"
 
 export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPropertyId}) { 
 
@@ -165,7 +164,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     
     const [yields, setYields] = useState(defultYieldsState("property_price_label", 9))
     
-    const [showMortgagePrepayment, setShowMortgagePrepayment] = useState(true)
+    //const [showMortgagePrepayment, setShowMortgagePrepayment] = useState(true)
     
     useEffect(() => {
         if (property || !queryPropertyId) {
@@ -177,53 +176,53 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     useEffect(() => {
         if (!isLoadingState && !property && !queryPropertyId && phrases) {
-            setEquity({ ...equity, id: property?._id, value: user?.equity, defaultValue: user?.equity})
-            setIncomes({ ...incomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes})
-            setCommitments({ ...commitments, id: property?._id, value: user?.commitments, defaultValue: user?.commitments})
+            setEquity(prevEquity => ({ ...prevEquity, id: property?._id, value: user?.equity, defaultValue: user?.equity}))
+            setIncomes(prevIncomes => ({ ...prevIncomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes}))
+            setCommitments(prevCommitments => ({ ...prevCommitments, id: property?._id, value: user?.commitments, defaultValue: user?.commitments}))
         }
         else if (phrases) {
-            setCity({...city, label: utilService.getPhrase("property_city_label", phrases)})
-            setCityElse({...cityElse, label: utilService.getPhrase("property_city_else_label", phrases)})
-            setAddress({...address, label: utilService.getPhrase("property_address_label", phrases)})
-            setApartmentType({...apartmentType, label: utilService.getPhrase("property_apartment_type_label", phrases)})
+            setCity(prevCity => ({...prevCity, label: utilService.getPhrase("property_city_label", phrases)}))
+            setCityElse(prevCityElse => ({...prevCityElse, label: utilService.getPhrase("property_city_else_label", phrases)}))
+            setAddress(prevAddress => ({...prevAddress, label: utilService.getPhrase("property_address_label", phrases)}))
+            setApartmentType(prevApartmentType => ({...prevApartmentType, label: utilService.getPhrase("property_apartment_type_label", phrases)}))
             
-            setPrice({...price, label: utilService.getPhrase("property_price_label", phrases)})
-            setEquity({...equity, label: utilService.getPhrase("property_equity_label", phrases)})
-            setEquityCleaningExpenses({...equityCleaningExpenses, label: utilService.getPhrase("property_equity_cleaning_expenses_label", phrases), warning: utilService.getPhrase("property_equity_cleaning_expenses_warning", phrases)})
-            setMortgageRequired({...mortgageRequired, label: utilService.getPhrase("property_mortgage_required_label", phrases), warning: utilService.getPhrase("property_mortgage_required_warning", phrases)})
-            setNote({...note, label: utilService.getPhrase("property_note_label", phrases)})
-            setIncomes({...incomes, label: utilService.getPhrase("property_incomes_label", phrases)})
-            setCommitments({...commitments, label: utilService.getPhrase("property_commitments_label", phrases)})
-            setDisposableIncome({...disposableIncome, label: utilService.getPhrase("property_disposable_income_label", phrases)})
-            setPossibleMonthlyRepayment({...possibleMonthlyRepayment, label: {withPercent: utilService.getPhrase("property_possible_monthly_payment_label", phrases), withCustomValue: utilService.getPhrase("possibleMonthlyRepaymentPercent", phrases)}})
+            setPrice(prevPrice => ({...prevPrice, label: utilService.getPhrase("property_price_label", phrases)}))
+            setEquity(prevEquity => ({...prevEquity, label: utilService.getPhrase("property_equity_label", phrases)}))
+            setEquityCleaningExpenses(prevEquityCleaningExpenses => ({...prevEquityCleaningExpenses, label: utilService.getPhrase("property_equity_cleaning_expenses_label", phrases), warning: utilService.getPhrase("property_equity_cleaning_expenses_warning", phrases)}))
+            setMortgageRequired(prevMortgageRequired => ({...prevMortgageRequired, label: utilService.getPhrase("property_mortgage_required_label", phrases), warning: utilService.getPhrase("property_mortgage_required_warning", phrases)}))
+            setNote(prevNote => ({...prevNote, label: utilService.getPhrase("property_note_label", phrases)}))
+            setIncomes(prevIncomes => ({...prevIncomes, label: utilService.getPhrase("property_incomes_label", phrases)}))
+            setCommitments(prevCommitments => ({...prevCommitments, label: utilService.getPhrase("property_commitments_label", phrases)}))
+            setDisposableIncome(prevDisposableIncome => ({...prevDisposableIncome, label: utilService.getPhrase("property_disposable_income_label", phrases)}))
+            setPossibleMonthlyRepayment(prevPossibleMonthlyRepayment => ({...prevPossibleMonthlyRepayment, label: {withPercent: utilService.getPhrase("property_possible_monthly_payment_label", phrases), withCustomValue: utilService.getPhrase("possibleMonthlyRepaymentPercent", phrases)}}))
             
-            setMaxPercentOfFinancing({...maxPercentOfFinancing, label: utilService.getPhrase("property_max_percent_of_financing_label", phrases)})
-            setActualPercentOfFinancing({...actualPercentOfFinancing, label: utilService.getPhrase("property_actual_percent_of_financing_label", phrases), warning: utilService.getPhrase("property_actual_percent_of_financing_warning", phrases)})
-            setTransferTax({...transferTax, label: utilService.getPhrase("property_transfer_tax_label", phrases)})
+            setMaxPercentOfFinancing(prevMaxPercentOfFinancing => ({...prevMaxPercentOfFinancing, label: utilService.getPhrase("property_max_percent_of_financing_label", phrases)}))
+            setActualPercentOfFinancing(prevActualPercentOfFinancing => ({...prevActualPercentOfFinancing, label: utilService.getPhrase("property_actual_percent_of_financing_label", phrases), warning: utilService.getPhrase("property_actual_percent_of_financing_warning", phrases)}))
+            setTransferTax(prevTransferTax => ({...prevTransferTax, label: utilService.getPhrase("property_transfer_tax_label", phrases)}))
             
-            setLawyer({...lawyer, label: {withPercent: utilService.getPhrase("property_lawyer_label", phrases), withCustomValue: utilService.getPhrase("property_lawyer_label_without_value", phrases)}})
-            setRealEstateAgent({...realEstateAgent, label: {withPercent: utilService.getPhrase("property_real_estate_agent_label", phrases), withCustomValue: utilService.getPhrase("property_real_estate_agent_label_without_value", phrases)}})
+            setLawyer(prevLawyer => ({...prevLawyer, label: {withPercent: utilService.getPhrase("property_lawyer_label", phrases), withCustomValue: utilService.getPhrase("property_lawyer_label_without_value", phrases)}}))
+            setRealEstateAgent(prevRealEstateAgent => ({...prevRealEstateAgent, label: {withPercent: utilService.getPhrase("property_real_estate_agent_label", phrases), withCustomValue: utilService.getPhrase("property_real_estate_agent_label_without_value", phrases)}}))
             
-            setBrokerMortgage({...brokerMortgage, label: utilService.getPhrase("property_broker_mortgage_label", phrases)})
-            setRepairing({...repairing, label: utilService.getPhrase("property_repairing_label", phrases)})
-            setIncidentalsTotal({...incidentalsTotal, label: utilService.getPhrase("property_incidentals_total_label", phrases)})
+            setBrokerMortgage(prevBrokerMortgage => ({...prevBrokerMortgage, label: utilService.getPhrase("property_broker_mortgage_label", phrases)}))
+            setRepairing(prevRepairin => ({...prevRepairin, label: utilService.getPhrase("property_repairing_label", phrases)}))
+            setIncidentalsTotal(prevIncidentalsTotal => ({...prevIncidentalsTotal, label: utilService.getPhrase("property_incidentals_total_label", phrases)}))
             
-            setRent({...rent, label: {withPercent: utilService.getPhrase("property_rent_label", phrases), withCustomValue: utilService.getPhrase("property_rent_label_without_value", phrases)}})
-            setLifeInsurance({...lifeInsurance, label: utilService.getPhrase("property_life_insurance_label", phrases)})
-            setStructureInsurance({...structureInsurance, label: utilService.getPhrase("property_structure_insurance_label", phrases)})
-            setRentCleaningExpenses({...rentCleaningExpenses, label: utilService.getPhrase("property_rent_cleaning_expenses_label", phrases)})
+            setRent(prevRent => ({...prevRent, label: {withPercent: utilService.getPhrase("property_rent_label", phrases), withCustomValue: utilService.getPhrase("property_rent_label_without_value", phrases)}}))
+            setLifeInsurance(prevLifeInsurance => ({...prevLifeInsurance, label: utilService.getPhrase("property_life_insurance_label", phrases)}))
+            setStructureInsurance(prevStructureInsurance => ({...prevStructureInsurance, label: utilService.getPhrase("property_structure_insurance_label", phrases)}))
+            setRentCleaningExpenses(prevRentCleaningExpenses => ({...prevRentCleaningExpenses, label: utilService.getPhrase("property_rent_cleaning_expenses_label", phrases)}))
            
-            setMortgagePeriod({...mortgagePeriod, label: utilService.getPhrase("property_mortgage_period_label", phrases), warning: utilService.getPhrase("property_mortgage_period_warning", phrases)})
-            setMortgageMonthlyRepayment({...mortgageMonthlyRepayment, label: utilService.getPhrase("property_mortgage_monthly_repayment_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_repayment_warning", phrases)})
-            setMortgageMonthlyYield({...mortgageMonthlyYield, label: utilService.getPhrase("property_mortgage_monthly_yield_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_yield_warning", phrases)})
+            setMortgagePeriod(prevMortgagePeriod => ({...prevMortgagePeriod, label: utilService.getPhrase("property_mortgage_period_label", phrases), warning: utilService.getPhrase("property_mortgage_period_warning", phrases)}))
+            setMortgageMonthlyRepayment(prevMortgageMonthlyRepayment => ({...prevMortgageMonthlyRepayment, label: utilService.getPhrase("property_mortgage_monthly_repayment_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_repayment_warning", phrases)}))
+            setMortgageMonthlyYield(prevMortgageMonthlyYield => ({...prevMortgageMonthlyYield, label: utilService.getPhrase("property_mortgage_monthly_yield_label", phrases), warning: utilService.getPhrase("property_mortgage_monthly_yield_warning", phrases)}))
         
-            setYields({
-                ...yields,
-                profit: {...yields.profit, label: utilService.getPhrase("home_best_yield_total_profit", phrases)},
-                profitNpv: {...yields.profitNpv, label: utilService.getPhrase("home_best_yield_total_profit_npv", phrases)},
-                averageReturn: {...yields.averageReturn, label: utilService.getPhrase("home_best_yield_average_return", phrases)},
-                averageReturnOnEquity: {...yields.averageReturnOnEquity, label: utilService.getPhrase("home_best_yield_average_return_on_equity", phrases)},
-            })
+            setYields(prevYields => ({
+                ...prevYields,
+                profit: {...prevYields.profit, label: utilService.getPhrase("home_best_yield_total_profit", phrases)},
+                profitNpv: {...prevYields.profitNpv, label: utilService.getPhrase("home_best_yield_total_profit_npv", phrases)},
+                averageReturn: {...prevYields.averageReturn, label: utilService.getPhrase("home_best_yield_average_return", phrases)},
+                averageReturnOnEquity: {...prevYields.averageReturnOnEquity, label: utilService.getPhrase("home_best_yield_average_return_on_equity", phrases)},
+            }))
         }
 
     }, [phrases, isLoadingState])
@@ -236,156 +235,159 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     const loadProperty = () => {
         try {
         
-            setCity({...city, selectedValue: property?.city})
+            setCity(prevCity => ({...prevCity, selectedValue: property?.city}))
 
             if (property?.updatedByField !== "cityElse") {
-                setCityElse({...cityElse, value: property?.cityElse})
+                setCityElse(prevCityElse => ({...prevCityElse, value: property?.cityElse}))
             }
             
             if (property?.updatedByField !== "address") {
-                setAddress({...address, value: property?.address})
+                setAddress(prevAddress => ({...prevAddress, value: property?.address}))
             }
             
-            setApartmentType({...apartmentType, selectedValue: property?.apartmentType})
+            setApartmentType(prevApartmentType => ({...prevApartmentType, selectedValue: property?.apartmentType}))
 
             if (property?.updatedByField !== "price") {
-                setPrice({...price, value: property?.price})
+                setPrice(prevPrice => ({...prevPrice, value: property?.price}))
             }
             
             if (property?.updatedByField !== "equity" || !queryPropertyId) {
-                setEquity({
-                    ...equity, 
+                setEquity(prevEquity=> ({
+                    ...prevEquity, 
                     id: property?._id, 
                     value: queryPropertyId ? property?.calcEquity : user?.equity, 
                     defaultValue: queryPropertyId ? property?.defaultEquity : user?.equity
-                })
+                }))
             }
 
-            setEquityCleaningExpenses({
-                ...equityCleaningExpenses, 
+            setEquityCleaningExpenses(prevEquityCleaningExpenses => ({
+                ...prevEquityCleaningExpenses, 
                 value: property?.calcEquityCleaningExpenses,
                 hasWarning: property?.calcEquityCleaningExpenses < 0
-            })
-            setMortgageRequired({
-                ...mortgageRequired, 
+            }))
+            
+            setMortgageRequired(prevMortgageRequired => ({
+                ...prevMortgageRequired, 
                 value: property?.calcMortgageRequired,
-                hasWarning: !user.calcCanTakeMortgage && property?.calcMortgageRequired > 0
-            })
+                hasWarning: user?.calcCanTakeMortgage && property?.calcMortgageRequired > 0
+            }))
 
             if (property?.updatedByField !== "note") {
-                setNote({...note, value: property?.note})
+                setNote(prevNote => ({...prevNote, value: property?.note}))
             }
 
             if (property?.updatedByField !== "incomes" || !queryPropertyId) {
-                setIncomes({
-                    ...incomes, 
+                setIncomes(prevIncomes => ({
+                    ...prevIncomes, 
                     id: property?._id, 
                     value: queryPropertyId ? property?.calcIncomes : user?.incomes, 
                     defaultValue: queryPropertyId ? property?.defaultIncomes : user?.incomes
-                })
+                }))
             }
 
             if (property?.updatedByField !== "commitments" || !queryPropertyId) {
-                setCommitments({
-                    ...commitments, 
+                setCommitments(prevCommitments => ({
+                    ...prevCommitments, 
                     id: property?._id, 
                     value: queryPropertyId ? property?.calcCommitments : user?.commitments, 
                     defaultValue: queryPropertyId ? property?.defaultCommitments : user?.commitments
-                })
+                }))
             }
 
-            setDisposableIncome({...disposableIncome, value: property?.calcDisposableIncome})
+            setDisposableIncome(prevMortgagePeriod => ({...prevMortgagePeriod, value: property?.calcDisposableIncome}))
 
-            setPossibleMonthlyRepayment({...possibleMonthlyRepayment, 
+            setPossibleMonthlyRepayment(prevPossibleMonthlyRepayment => ({...prevPossibleMonthlyRepayment, 
                 value: {calc: property?.calcPossibleMonthlyRepayment, customValue: property?.possibleMonthlyRepaymentCustomValue, default: property?.defaultPossibleMonthlyRepayment},
                 numberPicker: {...possibleMonthlyRepayment.numberPicker, customPercent: property?.calcPossibleMonthlyRepaymentPercent},
                 isReadOnly: true
-            }) 
+            })) 
 
-            setMaxPercentOfFinancing({...maxPercentOfFinancing, value: property?.calcMaxPercentOfFinancing})
+            setMaxPercentOfFinancing(prevMaxPercentOfFinancing => ({...prevMaxPercentOfFinancing, value: property?.calcMaxPercentOfFinancing}))
 
-            setActualPercentOfFinancing({
-                ...actualPercentOfFinancing, 
+            setActualPercentOfFinancing(prevActualPercentOfFinancing => ({
+                ...prevActualPercentOfFinancing, 
                 value: property?.calcActualPercentOfFinancing,
                 hasWarning: property?.calcActualPercentOfFinancing === null || property?.calcMaxPercentOfFinancing === null
                                 ? false
                                 : property?.calcActualPercentOfFinancing > property?.calcMaxPercentOfFinancing
-            })
+            }))
 
-            setTransferTax({...transferTax, value: property?.calcTransferTax})
+            setTransferTax(prevTransferTax => ({...prevTransferTax, value: property?.calcTransferTax}))
             
-            setLawyer({
-                ...lawyer, 
+            setLawyer(prevLawyer => ({
+                ...prevLawyer, 
                 id: property?._id, 
                 value: {calc: property?.calcLawyer, customValue: property?.lawyerCustomValue, default: property?.defaultLawyer},
-                numberPicker: {...lawyer.numberPicker, customPercent: property?.calcLawyerPercent},
+                numberPicker: {...prevLawyer.numberPicker, customPercent: property?.calcLawyerPercent},
                 isReadOnly: false
-            })        
-            setRealEstateAgent({
-                ...realEstateAgent, 
+            }))       
+
+            setRealEstateAgent(prevRealEstateAgent => ({
+                ...prevRealEstateAgent, 
                 id: property?._id, 
                 value: {calc: property?.calcRealEstateAgent, customValue: property?.realEstateAgentCustomValue, default: property?.defaultRealEstateAgent},
-                numberPicker: {...realEstateAgent.numberPicker, customPercent: property?.calcRealEstateAgentPercent},
+                numberPicker: {...prevRealEstateAgent.numberPicker, customPercent: property?.calcRealEstateAgentPercent},
                 isReadOnly: false,
-            })    
+            }))    
             
             if (property?.updatedByField !== "brokerMortgage") {
-                setBrokerMortgage({...brokerMortgage, value: property?.calcBrokerMortgage})
+                setBrokerMortgage(prevBrokerMortgage => ({...prevBrokerMortgage, value: property?.calcBrokerMortgage}))
             }
 
             if (property?.updatedByField !== "repairing") {
-                setRepairing({...repairing, value: property?.calcRepairing})
+                setRepairing(prevtRepairing => ({...prevtRepairing, value: property?.calcRepairing}))
             }
 
-            setIncidentalsTotal({...incidentalsTotal, value: property?.calcIncidentalsTotal})
+            setIncidentalsTotal(prevIncidentalsTotal => ({...prevIncidentalsTotal, value: property?.calcIncidentalsTotal}))
 
-            setRent({...rent, 
+            setRent(prevRent => ({...prevRent, 
                 value: {calc: property?.calcRent, customValue: property?.rentCustomValue, default: property?.defaultRent},
                 numberPicker: {...rent.numberPicker, customPercent: property?.calcRentPercent},
                 isReadOnly: false
-            })        
+            }))        
 
             if (property?.updatedByField !== "lifeInsurance") {
-                setLifeInsurance({...lifeInsurance, value: property?.calcLifeInsurance})
+                setLifeInsurance(prevLifeInsurance => ({...prevLifeInsurance, value: property?.calcLifeInsurance}))
             }
 
             if (property?.updatedByField !== "structureInsurance") {
-                setStructureInsurance({...structureInsurance, value: property?.calcStructureInsurance})
+                setStructureInsurance(prevStructureInsurance => ({...prevStructureInsurance, value: property?.calcStructureInsurance}))
             }
 
-            setRentCleaningExpenses({
-                ...rentCleaningExpenses, 
+            setRentCleaningExpenses(prevRentCleaningExpense => ({
+                ...prevRentCleaningExpense, 
                 value: property?.calcRentCleaningExpenses
-            })
+            }))
 
-            setMortgagePeriod({
-                ...mortgagePeriod, 
+            setMortgagePeriod(prevMortgagePeriod => ({
+                ...prevMortgagePeriod, 
                 selectedValue: property?.calcMortgagePeriod,
                 hasWarning: property?.calcMortgagePeriod !== null 
-                         && user.calcAge !== null 
+                         && user?.calcAge !== null 
                          && utilService.getFixedParameter("mortgageMaxAge", fixedParameters) != null
-                         && property?.calcMortgagePeriod + user.calcAge > utilService.getFixedParameter("mortgageMaxAge", fixedParameters)
-            })
-            setMortgageMonthlyRepayment({
-                ...mortgageMonthlyRepayment, 
+                         && property?.calcMortgagePeriod + user?.calcAge > utilService.getFixedParameter("mortgageMaxAge", fixedParameters)
+            }))
+
+            setMortgageMonthlyRepayment(prevMortgageMonthlyRepayment => ({
+                ...prevMortgageMonthlyRepayment, 
                 value: property?.calcMortgageMonthlyRepayment,
                 hasWarning: property?.calcMortgageMonthlyRepayment !== null && property?.calcMortgageMonthlyRepayment > property?.calcPossibleMonthlyRepayment
-            })
-            setMortgageMonthlyYield({
-                ...mortgageMonthlyYield, 
+            }))
+            setMortgageMonthlyYield(prevMortgageMonthlyYield => ({
+                ...prevMortgageMonthlyYield, 
                 value: property?.calcMortgageMonthlyYield,
                 hasWarning: property?.calcMortgageMonthlyYield !== null && property?.calcMortgageMonthlyYield < 0
-            })
+            }))
             
-            setShowMortgagePrepayment(property?.showMortgagePrepayment)
+            //setShowMortgagePrepayment(property?.showMortgagePrepayment)
 
-            setYields({
-                ...yields,
+            setYields(prevYields => ({
+                ...prevYields,
                 profit: {...yields.profit, value: property?.yields?.profit},
                 profitNpv: {...yields.profitNpv, value: property?.yields?.profitNpv},
                 averageReturn: {...yields.averageReturn, value: property?.yields?.averageReturn},
                 averageReturnOnEquity: {...yields.averageReturnOnEquity, value: property?.yields?.averageReturnOnEquity},
-            })
+            }))
 
             
         } catch (error) {
@@ -497,18 +499,16 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         yieldAverageReturnOnEquity: "yieldAverageReturnOnEquity" + (yields.averageReturnOnEquity.value !== null ? yields.averageReturnOnEquity.value : "Default"),
     }
 
-    const [cityLogoIcon, setCityLogoIcon] = useState(null)
-
-    useEffect(() => {
+   /* useEffect(() => {
         (async () => {
             if (!isLoadingState) {
                 const iconPath = await getCityLogoIcon(city)
                 setCityLogoIcon(iconPath)
             }
         })()
-    }, [city, isLoadingState])
+    }, [city, isLoadingState])*/
 
-    const getCityLogoIcon = async (city) => {
+    /*const getCityLogoIcon = async (city) => {
         try {
             const module = await import(`../assets/images/icon_city_${city.selectedValue === 'choose' || !city.selectedValue ? 'else' : city.selectedValue}.png`)
             return module.default
@@ -516,7 +516,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             const fallback = await import('../assets/images/icon_city_else.png')
             return fallback.default
         }
-    }
+    }*/
     
     // best yield
     const bestYieldTitle = !isLoadingState && phrases && fixedParameters
@@ -526,7 +526,6 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                             : ''
      
     const sectionClass = `form ${city.selectedValue === "else" ? "city-else" : ""}`
-    const cityLogoClass = (isFirstLoading ? ' loading1' : '')
     const h3Class = isFirstLoading ? 'loading0' : ''
     const hrClass = isFirstLoading ? 'loading9' : ''
 
@@ -595,19 +594,19 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                 <h3 className={h3Class} dangerouslySetInnerHTML={{ __html: bestYieldTitle}}></h3>
                 <ul className='yields'>
                     <li>
-                        <img src={averageReturnImage} />
+                        <img src={averageReturnImage} alt='' />
                         <PropertyField type={"CALC_TOTAL"} key={keys.yieldAverageReturn} params={yields.averageReturn} isFirstLoading={isFirstLoading} />
                     </li>
                     <li>
-                        <img src={averageReturnOnEquityImage} />
+                        <img src={averageReturnOnEquityImage} alt='' />
                         <PropertyField type={"CALC_TOTAL"} key={keys.yieldAverageReturnOnEquity} params={yields.averageReturnOnEquity} isFirstLoading={isFirstLoading} />
                     </li>
                     <li>
-                        <img src={totalProfitImage} />
+                        <img src={totalProfitImage} alt='' />
                         <PropertyField type={"CALC_TOTAL"} key={keys.yieldProfit} params={yields.profit} isFirstLoading={isFirstLoading} />
                     </li>
                     <li>
-                        <img src={npvImage} />
+                        <img src={npvImage} alt='' />
                         <PropertyField type={"CALC_TOTAL"} key={keys.yieldProfitNpv} params={yields.profitNpv} isFirstLoading={isFirstLoading} />
                     </li>
                 </ul>
@@ -619,4 +618,37 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         </section>    
     </>
     )
+}
+
+PropertyForm.propTypes = {
+    property: PropTypes.oneOfType([
+      PropTypes.shape({
+        calcMortgageMonthlyRepayment: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        calcPossibleMonthlyRepayment: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        calcMortgageMonthlyYield: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        //showMortgagePrepayment: PropTypes.bool,
+        yields: PropTypes.oneOfType([
+          PropTypes.shape({
+            profit: PropTypes.number,
+            profitNpv: PropTypes.number,
+            averageReturn: PropTypes.number,
+            averageReturnOnEquity: PropTypes.number,
+          }),
+          PropTypes.oneOf([null]),
+        ]),
+        calcIncidentalsTotal: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        calcRent: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        rentCustomValue: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        calcRentPercent: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        updatedByField: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+        calcLifeInsurance: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+        calcStructureInsurance: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      }),
+      PropTypes.oneOf([null])
+    ]),
+  
+    user: PropTypes.object,
+    isFirstLoading: PropTypes.bool,  
+    onUpdate: PropTypes.func,
+    queryPropertyId: PropTypes.string,
 }

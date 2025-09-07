@@ -1,6 +1,6 @@
-import React from 'react'
 import { HomeProperty } from './HomeProperty'
 import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 
 export function HomeProperties({ selectedCity, bestYield, fullData, onPropertyPress }) {   
 
@@ -8,8 +8,6 @@ export function HomeProperties({ selectedCity, bestYield, fullData, onPropertyPr
     
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     const propertiesState = useSelector(storeState => storeState.userModule.home?.properties)
-
-    const propertyToAdd = !isLoadingState && propertiesState?.length > 0 ? { city: propertiesState[0].city } : null
 
     const selectedCityProperties = 
         propertiesState?.filter(property => 
@@ -34,4 +32,13 @@ export function HomeProperties({ selectedCity, bestYield, fullData, onPropertyPr
             }
         </section>
     )
+}
+
+HomeProperties.propTypes = {
+    selectedCity: PropTypes.string,
+    bestYield: PropTypes.shape({
+        _id: PropTypes.string,
+    }),
+    fullData: PropTypes.bool,
+    onPropertyPress: PropTypes.func.isRequired,
 }

@@ -1,0 +1,15 @@
+
+.accessibility-panel {
+    background-color: red;
+    width: 100px;
+    display: block;
+
+    @include tablet-layout {
+        
+    }
+
+    @include mobile-layout {
+        
+    }
+}
+

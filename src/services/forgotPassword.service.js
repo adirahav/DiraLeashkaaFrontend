@@ -1,6 +1,4 @@
-import { STORAGE_KEY_LAST_LOGGEDIN_EMAIL } from './auth.service.js'
 import { httpService } from './http.service.js'
-import { userService } from './user.service.js'
 
 const BASE_URL = 'forgotPassword/'
 

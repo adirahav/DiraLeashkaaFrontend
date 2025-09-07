@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { UserPersonalInfo } from '../cmps/UserPersonalInfo'
@@ -7,7 +7,7 @@ import { utilService } from '../services/util.service'
 import { FormField } from '../cmps/FormField'
 import { logService } from '../services/log.service'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { userService } from '../services/user.service.js'
 
 export function PersonalInfoPage() {
@@ -66,7 +66,7 @@ export function PersonalInfoPage() {
         if (personalInfo) {
             let hasError = false
 
-            Object.entries(personalInfo).forEach(([fieldName, fieldValue]) => {
+            Object.entries(personalInfo).forEach(([fieldValue]) => {
                 if (fieldValue.value === undefined && fieldValue.hasError === undefined) {
                     return
                 }
@@ -75,8 +75,8 @@ export function PersonalInfoPage() {
                 }
             })
 
-            setSubmit({ ...submit, isDisabled: hasError })
-            setNote({  ...note, text: null })
+            setSubmit(submit => ({ ...submit, isDisabled: hasError }))
+            setNote(prevNote => ({ ...prevNote, text: null }))
         }
     }, [personalInfo])
 
@@ -100,15 +100,15 @@ export function PersonalInfoPage() {
         }
         
         try {
-            setNote({  ...note, text: null })
-            setSubmit({ ...submit, isLoading: true} )
+            setNote(prevNote => ({ ...prevNote, text: null }))
+            setSubmit(submit => ({ ...submit, isLoading: true }))
             await userService.save(userToSave)
-            setNote({ ...note, type: "message", text: utilService.getPhrase("user_save_success", phrases) })
+            setNote(prevNote => ({ ...prevNote, type: "message", text: utilService.getPhrase("user_save_success", phrases) }))
         } catch(error) {
             logService.error(TAG, error)
-            setNote({ ...note, type: "error", text: utilService.getPhrase("dialog_data_error_title", phrases) })
+            setNote(prevNote => ({ ...prevNote, type: "error", text: utilService.getPhrase("dialog_data_error_title", phrases) }))
         } finally {
-            setSubmit({ ...submit, isLoading: false} )
+            setSubmit(submit => ({ ...submit, isLoading: false }))
         }
         
     }

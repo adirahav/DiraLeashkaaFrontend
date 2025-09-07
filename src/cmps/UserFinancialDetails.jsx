@@ -1,5 +1,5 @@
-import React from 'react'
 import { FormField } from './FormField'
+import PropTypes from "prop-types"
 
 export function UserFinancialDetails({ financialDetails, onChange, onSubmit }) {   
     
@@ -22,4 +22,14 @@ export function UserFinancialDetails({ financialDetails, onChange, onSubmit }) {
         <FormField type={"NUMBER"} key={keys.incomes} params={financialDetails.incomes} onChange={(value, hasError) => handleOnChange('incomes', value, hasError)} onEnter={handleSubmit} />
         <FormField type={"NUMBER"} key={keys.commitments} params={financialDetails.commitments} onChange={(value, hasError) => handleOnChange('commitments', value, hasError)} onEnter={handleSubmit} />
     </div>)
+}
+
+UserFinancialDetails.propTypes = {
+    financialDetails: PropTypes.shape({
+        equity: PropTypes.object.isRequired,
+        incomes: PropTypes.object.isRequired,
+        commitments: PropTypes.object.isRequired
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired
 }

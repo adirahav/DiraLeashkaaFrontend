@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { useSelector } from 'react-redux'
@@ -6,14 +6,13 @@ import { utilService } from '../services/util.service'
 import { FormField } from '../cmps/FormField'
 import { logService } from '../services/log.service'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { contactUsService } from '../services/contactus.service.js'
 
 export function ContactUsPage() {
 
     const TAG = "PersonalInfoPage"
     
-    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
     const { splash } = useSplash()
@@ -60,7 +59,7 @@ export function ContactUsPage() {
         if (!phrases) {
             onLoadingStart()  
         } else {
-            setSubmit({...submit, text: utilService.getPhrase("button_send", phrases)})
+            setSubmit(prevSubmit => ({...prevSubmit, text: utilService.getPhrase("button_send", phrases)}))
             onLoadingDone()  
         }
         
@@ -71,20 +70,22 @@ export function ContactUsPage() {
                             ? JSON.parse(fixedParameters.contactus)?.message_types
                             : null
 
-        setContactUs({
-            ...contactUs, 
-            subject: { 
-                ...contactUs.subject, 
-                options 
+        setContactUs((prevContactUs) => {
+            return { 
+                ...prevContactUs, 
+                subject: { 
+                    ...contactUs.subject, 
+                    options 
+                } 
             }
-        })                                    
+        })                             
     }, [fixedParameters])
     
     useEffect(() => {
         if (contactUs) {
             let hasError = false
 
-            Object.entries(contactUs).forEach(([fieldName, fieldValue]) => {
+            Object.entries(contactUs).forEach(([fieldValue]) => {
                 if (fieldValue.value === undefined && fieldValue.hasError === undefined) {
                     return
                 }
@@ -93,7 +94,7 @@ export function ContactUsPage() {
                 }
             })
 
-            setSubmit({ ...submit, isDisabled: hasError })
+            setSubmit(prevSubmit => ({ ...prevSubmit, isDisabled: hasError }))
         }
     }, [contactUs])
 
@@ -101,7 +102,7 @@ export function ContactUsPage() {
         setContactUs((prevContactUs) => {
             return { ...prevContactUs, [fieldName]: {...prevContactUs[fieldName], value, hasError} }
         })
-        setNote({  ...note, text: null })
+        setNote(prevNote => ({ ...prevNote, text: null }))
     }
 
     const handleSubmit = async (event) => {
@@ -118,28 +119,31 @@ export function ContactUsPage() {
         }
         
         try {
-            setNote({  ...note, text: null })
-            setSubmit({ ...submit, isLoading: true} )
-            await contactUsService.send(messageToSend)
-            setNote({ ...note, type: "message", text: utilService.getPhrase("contactus_message_send_success", phrases) })
+            setNote(prevNote => ({ ...prevNote, text: null }))
+            setSubmit(prevSubmit => ({ ...prevSubmit, isLoading: true }))
         
-            setContactUs({
-                ...contactUs, 
-                subject: { 
-                    ...contactUs.subject, 
-                    value: null,
-                    selectedValue: 0 
-                },
-                message: { 
-                    ...contactUs.message, 
-                    value: null 
+            await contactUsService.send(messageToSend)
+            setNote(prevNote => ({ ...prevNote, type: "message", text: utilService.getPhrase("contactus_message_send_success", phrases)}))
+            
+            setContactUs((prevContactUs) => {
+                return { 
+                    ...prevContactUs, 
+                    subject: { 
+                        ...contactUs.subject, 
+                        value: null,
+                        selectedValue: 0 
+                    },
+                    message: { 
+                        ...contactUs.message, 
+                        value: null 
+                    }
                 }
             }) 
         } catch(error) {
             logService.error(TAG, error)
-            setNote({ ...note, type: "error", text: utilService.getPhrase("dialog_data_error_title", phrases) })
+            setNote(prevNote => ({ ...prevNote, type: "error", text: utilService.getPhrase("dialog_data_error_title", phrases) }))
         } finally {
-            setSubmit({ ...submit, isLoading: false} )
+            setSubmit(prevSubmit => ({ ...prevSubmit, isLoading: false }))
         }
         
     }

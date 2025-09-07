@@ -1,20 +1,21 @@
 .signup {
     @include container;
-    width: 900px;
+    //width: 900px;
+    width: 500px;
     margin: 0 0 20px;
     padding: 17px;
     margin: 60px auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 17px;
+    //grid-template-columns: 1fr 1fr;
+    //grid-gap: 17px;
 
     .form-container {
-        grid-column: 1;
-        width: 500px;
+        //grid-column: 1;
+        //width: 500px;
 
         .title {
             color: var(--text);
-            font-size: 30px;
+            font-size: rem(30px);
             font-weight: bold;
             padding: 6px;
             margin: 0;    
@@ -29,7 +30,7 @@
     
             li {
                 background-color: var(--signup-progress-background);
-                font-size: 16px;
+                font-size: rem(16px);
                 height: 8px;
                 width: 33.3%;
                 display: inline-block;
@@ -75,7 +76,7 @@
     
             .error:not(.form-field) {
                 height: 40px;
-                font-size: 16px;
+                font-size: rem(16px);
                 padding: 4px 8px;
                 width: 268px;
                 color: var(--form-field-error-text);
@@ -151,7 +152,7 @@
     
             .welcome {
                 h2 {
-                    font-size: 16px;
+                    font-size: rem(16px);
                 }
     
                 svg {
@@ -217,14 +218,14 @@
         }
     }
     
-    .promo {
+    /*.promo {
         grid-column: 2;
         width: 340px;
         background-color: var(--inside-container-background);
         border-radius: 8px;
 
-        background-color: #f9fafb; /* רקע בהיר ונעים */
-        padding: 0 10px 20px;
+        background-color: #f9fafb; 
+        padding: 0;
         border-radius: 12px;
         box-shadow: 0 4px 15px var(--palette5_transparent);
         max-width: 340px;
@@ -258,7 +259,7 @@
                 p {
                     font-family: 'gveret-levin-regular';
                     color: var(--text);
-                    font-size: 18px;
+                    font-size: rem(18px);
                     line-height: 1.5;
                     margin-bottom: 20px;
                 }
@@ -272,7 +273,7 @@
                 }
             }
         }
-    }
+    }*/
 
     @include tablet-layout {
 
@@ -291,9 +292,9 @@
                 }
             }
     
-            .promo {
+            /*.promo {
                 display: none;
-            }
+            }*/
         }
     }
 
@@ -303,9 +304,9 @@
             
             }
     
-            .promo {
+            /*.promo {
                 display: none;
-            }
+            }*/
         }
     }
     
@@ -353,9 +354,9 @@
                 }
             }
 
-            .promo {
+            /*.promo {
                 display: none;
-            }
+            }*/
         }
     }
 }

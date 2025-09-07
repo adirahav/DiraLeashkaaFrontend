@@ -15,7 +15,7 @@ function WebAdBanner() {
         console.error("AdSense error", e)
       }
     }
-  }, [isTesting])
+  }, [isWeb, isTesting])
 
   if (isWeb && isTesting) {
     return (

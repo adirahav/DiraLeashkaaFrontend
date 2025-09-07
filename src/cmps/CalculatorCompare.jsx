@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { PropertyField } from './PropertyField.jsx'
 import { utilService } from '../services/util.service.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { useSelector } from 'react-redux'
 import { authService } from '../services/auth.service.js'
 import { Overlay } from './Overlay.jsx'
@@ -11,14 +11,12 @@ import { propertyService } from '../services/property.service.js'
 import { getCompare, saveCompare, resetCompare } from '../store/actions/user.actions.js'
 import missingPictureImage from '../assets/images/missing_picture_white.png'
 import chooseApartments from '../assets/images/choose_apartments.png'
-import iconArrowRight from '../assets/images/icon_arrow_right.png'
-import iconArrowRightDisable from '../assets/images/icon_arrow_right_disable.png'
-import iconArrowLeft from '../assets/images/icon_arrow_left.png'
-import iconArrowLeftDisable from '../assets/images/icon_arrow_left_disable.png'
 import { FormField } from './FormField.jsx'
 import { ViewComfyIcon, ViewCompactIcon, ScrollArrowLeftIcon, ScrollArrowRightIcon } from '../assets/icons'
+import PropTypes from "prop-types"
+import { Navigate } from 'react-router-dom'
 
-export function CalculatorCompare({ }) {  
+export function CalculatorCompare() {  
     const MAX_APARTMENTS_TO_COMPARE = 3
     const LOADING_PROPERTIES_COUNT = 3
 
@@ -88,7 +86,7 @@ export function CalculatorCompare({ }) {
         }
 
         init()
-    }, [splash])
+    }, [phrases, fixedParameters])
     
     useEffect(() => {
         const init = async () => {
@@ -230,13 +228,13 @@ export function CalculatorCompare({ }) {
     }, [cityFilter.selectedValue, propertyFilter/*, compareState.comparedPropertyIds*/])
 
     // filter
-    const fetchCompareData = async () => {
+    /*const fetchCompareData = async () => {
         try {
             await getCompare()
         } catch (error) {
             console.error(`Error fetching compare data:`, error)
         } 
-    }
+    }*/
    
     function onCityChanged(city) {
         setCityFilter(prevCity => ({
@@ -279,7 +277,7 @@ export function CalculatorCompare({ }) {
     }
 
     // scroll
-    const updateScrollButtons_new = () => {
+    /*const updateScrollButtons_new = () => {
         const main = mainRef.current
         if (!main) return
     
@@ -288,7 +286,7 @@ export function CalculatorCompare({ }) {
     
         setCanScrollLeft(scrollLeftPos > 0)
         setCanScrollRight(scrollLeftPos < maxScrollLeft)
-    }
+    }*/
 
     const updateScrollButtons = () => {
         const main = mainRef.current
@@ -376,7 +374,7 @@ export function CalculatorCompare({ }) {
             })
         } catch (error) {
             console.error(`Error fetching properties ${JSON.stringify(compareState.comparedPropertyIds)}:`, error)
-            navigate("/home") 
+            Navigate("/home") 
         } 
     }
 
@@ -431,7 +429,7 @@ export function CalculatorCompare({ }) {
         </section>
         {!isLoadingState && properties !== null && properties.length === 0 && <div className={`main-content no-compared-properties`}>
             <h3>אין עדיין דירות להשוואה – בחר 2-3 דירות כדי לראות את ההבדלים.</h3>
-            <img src={chooseApartments} />
+            <img src={chooseApartments} alt='' />
         </div>}
         {isLoadingState && <div className={`main-content ${viewState} loading`}>
             {[...Array(LOADING_PROPERTIES_COUNT)].map((_, index) => (
@@ -456,3 +454,14 @@ export function CalculatorCompare({ }) {
         </>}
     </>)
 }
+
+CalculatorCompare.propTypes = {
+    index: PropTypes.number,
+    calculator: PropTypes.shape({
+      isLock: PropTypes.bool,
+      isComingSoon: PropTypes.bool,
+      type: PropTypes.string,
+    }),
+    onCalculatorPress: PropTypes.func,
+    setEnterButton: PropTypes.func,
+  }

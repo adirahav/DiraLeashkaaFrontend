@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import PropTypes from "prop-types"
 import { PropertyField } from './PropertyField.jsx'
 import { utilService } from '../services/util.service.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
-import { useSplash } from '../contexts/SplashContext.jsx'
+import { useSplash } from "../contexts/SplashContext"
 import { useSelector } from 'react-redux'
 import { authService } from '../services/auth.service.js'
 import { calculatorService } from '../services/calculator.service.js'
@@ -155,9 +156,9 @@ export function CalculatorMaxPrice() {
 
     useEffect(() => {
        if (!isLoadingState  && !isFirstLoading && !property) {
-            setEquity({ ...equity, value: loggedinUser?.equity, defaultValue: loggedinUser?.equity})
-            setIncomes({ ...incomes, value: loggedinUser?.incomes, defaultValue: loggedinUser?.incomes})
-            setCommitments({ ...commitments, value: loggedinUser?.commitments, defaultValue: loggedinUser?.commitments})
+            setEquity(prevEquity => ({ ...prevEquity, value: loggedinUser?.equity, defaultValue: loggedinUser?.equity }))
+            setIncomes(prevIncomes => ({ ...prevIncomes, value: loggedinUser?.incomes, defaultValue: loggedinUser?.incomes }))
+            setCommitments(prevCommitments => ({ ...prevCommitments,value: loggedinUser?.commitments, defaultValue: loggedinUser?.commitments }))
         }
     }, [isLoadingState])
 
@@ -171,89 +172,90 @@ export function CalculatorMaxPrice() {
 
     const loadProperty = () => {
         try {
-            setApartmentType({...apartmentType, selectedValue: property.apartmentType})
+            setApartmentType(prevApartmentType => ({ ...prevApartmentType, selectedValue: property.apartmentType }))
             
-            setPrice({...price, value: property.price})
-
+            setPrice(prevPrice => ({ ...prevPrice, value: property.price }))
+            
             if (property.updatedByField !== "equity") {
-                setEquity({...equity, value: property.calcEquity, defaultValue: property.defaultEquity})
+                setEquity(prevEquity => ({ ...prevEquity, value: property.calcEquity, defaultValue: property.defaultEquity }))
             }
 
-            setEquityCleaningExpenses({
-                ...equityCleaningExpenses, 
+            setEquityCleaningExpenses(prevEquityCleaningExpenses => ({ 
+                ...prevEquityCleaningExpenses, 
                 value: property.calcEquityCleaningExpenses,
                 hasWarning: property.calcEquityCleaningExpenses < 0
-            })
-            setMortgageRequired({
-                ...mortgageRequired, 
+            }))
+            
+            setMortgageRequired(prevMortgageRequired => ({
+                ...prevMortgageRequired, 
                 value: property.calcMortgageRequired,
                 hasWarning: !loggedinUser.calcCanTakeMortgage && property.calcMortgageRequired > 0
-            })
+            }))
             
             if (property.updatedByField !== "incomes") {
-                setIncomes({...incomes, value: property.calcIncomes, defaultValue: property.defaultIncomes})
+                setIncomes(prevIncomes => ({ ...prevIncomes, value: property.calcIncomes, defaultValue: property.defaultIncomes }))
             }
 
             if (property.updatedByField !== "commitments") {
-                setCommitments({...commitments, value: property.calcCommitments, defaultValue: property.defaultCommitments})
+                setCommitments(prevCommitments => ({ ...prevCommitments, value: property.calcCommitments, defaultValue: property.defaultCommitments }))
             }
 
-            setDisposableIncome({...disposableIncome, value: property.calcDisposableIncome})
-            setPossibleMonthlyRepayment({...possibleMonthlyRepayment, 
+            setDisposableIncome(prevDisposableIncome => ({...prevDisposableIncome, value: property.calcDisposableIncome}))
+            setPossibleMonthlyRepayment(prevPossibleMonthlyRepayment => ({...prevPossibleMonthlyRepayment, 
                 value: {calc: property.calcPossibleMonthlyRepayment, customValue: property.possibleMonthlyRepaymentCustomValue, default: property.defaultPossibleMonthlyRepayment},
-                numberPicker: {...possibleMonthlyRepayment.numberPicker, customPercent: property.calcPossibleMonthlyRepaymentPercent},
+                numberPicker: {...prevPossibleMonthlyRepayment.numberPicker, customPercent: property.calcPossibleMonthlyRepaymentPercent},
                 isReadOnly: true
-            }) 
+            })) 
 
-            setMaxPercentOfFinancing({...maxPercentOfFinancing, value: property.calcMaxPercentOfFinancing})
-            setActualPercentOfFinancing({...actualPercentOfFinancing, 
+            setMaxPercentOfFinancing(prevMaxPercentOfFinancing => ({...prevMaxPercentOfFinancing, value: property.calcMaxPercentOfFinancing}))
+            setActualPercentOfFinancing(prevActualPercentOfFinancing => ({...prevActualPercentOfFinancing, 
                 value: property.calcActualPercentOfFinancing,
                 hasWarning: property.calcActualPercentOfFinancing === null || property.calcMaxPercentOfFinancing === null
                                 ? false
                                 : property.calcActualPercentOfFinancing > property.calcMaxPercentOfFinancing
-            })
+            }))
 
-            setTransferTax({...transferTax, value: property.calcTransferTax})
+            setTransferTax(prevTransferTax => ({...prevTransferTax, value: property.calcTransferTax}))
             
-            setLawyer({...lawyer, 
+            setLawyer(prevLawyer => ({...prevLawyer, 
                 value: {calc: property.calcLawyer, customValue: property.lawyerCustomValue, default: property.defaultLawyer},
-                numberPicker: {...lawyer.numberPicker, customPercent: property.calcLawyerPercent},
+                numberPicker: {...prevLawyer.numberPicker, customPercent: property.calcLawyerPercent},
                 isReadOnly: false
-            })        
-            setRealEstateAgent({...realEstateAgent, 
+            }))       
+            setRealEstateAgent(prevRealEstateAgent => ({...prevRealEstateAgent, 
                 value: {calc: property.calcRealEstateAgent, customValue: property.realEstateAgentCustomValue, default: property.defaultRealEstateAgent},
-                numberPicker: {...realEstateAgent.numberPicker, customPercent: property.calcRealEstateAgentPercent},
+                numberPicker: {...prevRealEstateAgent.numberPicker, customPercent: property.calcRealEstateAgentPercent},
                 isReadOnly: false,
-            })    
+            }))    
             
             if (property.updatedByField !== "brokerMortgage") {
-                setBrokerMortgage({...brokerMortgage, value: property.calcBrokerMortgage})
+                setBrokerMortgage(prevBrokerMortgage => ({...prevBrokerMortgage, value: property.calcBrokerMortgage}))
             }
 
             if (property.updatedByField !== "repairing") {
-                setRepairing({...repairing, value: property.calcRepairing})
+                setRepairing(prevRepairing => ({...prevRepairing, value: property.calcRepairing}))
             }
 
-            setIncidentalsTotal({...incidentalsTotal, value: property.calcIncidentalsTotal})
+            setIncidentalsTotal(prevIncidentalsTotal => ({...prevIncidentalsTotal, value: property.calcIncidentalsTotal}))
 
-            setRent({...rent, 
+            setRent(prevRent => ({...prevRent, 
                 value: {calc: property.calcRent, customValue: property.rentCustomValue, default: property.defaultRent},
-                numberPicker: {...rent.numberPicker, customPercent: property.calcRentPercent},
+                numberPicker: {...prevRent.numberPicker, customPercent: property.calcRentPercent},
                 isReadOnly: false
-            })        
+            }))    
 
             if (property.updatedByField !== "lifeInsurance") {
-                setLifeInsurance({...lifeInsurance, value: property.calcLifeInsurance})
+                setLifeInsurance(prevLifeInsurance => ({...prevLifeInsurance, value: property.calcLifeInsurance}))
             }
 
             if (property.updatedByField !== "structureInsurance") {
-                setStructureInsurance({...structureInsurance, value: property.calcStructureInsurance})
+                setStructureInsurance(prevStructureInsurance => ({...prevStructureInsurance, value: property.calcStructureInsurance}))
             }
 
-            setRentCleaningExpenses({
-                ...rentCleaningExpenses, 
+            setRentCleaningExpenses(prevRentCleaningExpenses => ({
+                ...prevRentCleaningExpenses, 
                 value: property.calcRentCleaningExpenses
-            })
+            }))
 
         } catch (error) {
             console.error(`Error load property ${property._id}:`, error)
@@ -295,7 +297,6 @@ export function CalculatorMaxPrice() {
         lifeInsurance: "lifeInsurance" + (lifeInsurance.value !== null ? lifeInsurance.value : "Default"),
         structureInsurance: "structureInsurance" + (structureInsurance.value !== null ? structureInsurance.value : "Default"),
         rentCleaningExpenses: "rentCleaningExpenses" + (rentCleaningExpenses.value ? rentCleaningExpenses.value : "Default"),
-        
     }
 
     const h3Class = isFirstLoading ? 'loading0' : ''
@@ -356,3 +357,20 @@ export function CalculatorMaxPrice() {
     </>
     )
 }
+
+CalculatorMaxPrice.propTypes = {
+    property: PropTypes.shape({
+      calcBrokerMortgage: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      calcRepairing: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      calcIncidentalsTotal: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      calcRent: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      rentCustomValue: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      defaultRent: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      calcRentPercent: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      updatedByField: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+      calcLifeInsurance: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      calcStructureInsurance: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+      calcRentCleaningExpenses: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
+    }).isRequired,
+}
+

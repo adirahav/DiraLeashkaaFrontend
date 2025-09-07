@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { eventBusService } from "../services/eventBus.service"
 import { Button } from "@mui/material"
 import { utilService } from "../services/util.service"
+import { useSplash } from "../contexts/SplashContext"
 
 window.showNoInternetDialog = showNoInternetDialog
 
@@ -14,12 +15,15 @@ export function Dialog() {
     const [negativeButton, setNegativeButton] = useState({show: true, text: "", onPress: null, closeAfterPress: true})
     const dialogRef = useRef()
 
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
+
     useEffect(() => {
         const unsubscribeShow = eventBusService.on('show-dialog', (data) => {
             setType(data.type ?? type)
             setMessage(data.message)
-            setPositiveButton({ ...positiveButton, ...data.positiveButton })
-            setNegativeButton({ ...negativeButton, ...data.negativeButton })   
+            setPositiveButton(prevPositiveButton => ({ ...prevPositiveButton, ...data.positiveButton }))
+            setNegativeButton(prevNegativeButton => ({ ...prevNegativeButton, ...data.negativeButton }))   
             setDisplayDialog(true)
         })
 
@@ -83,7 +87,7 @@ export function Dialog() {
     return (
         <div ref={dialogRef} className={"dialog " + type}>
             <section className="image">
-                <img src={imageAnimation} />
+                <img src={imageAnimation} alt='' />
             </section>
             <section className="message">
                 <h2>{utilService.getPhrase(`dialog_${type}_title`, phrases)}</h2>

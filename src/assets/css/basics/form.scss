@@ -8,7 +8,7 @@
     
     .title {
         color: var(--text);
-        font-size: 30px;
+        font-size: rem(30px);
         font-weight: bold;
         padding: 6px;
         margin: 0;    
@@ -42,7 +42,7 @@
 
         .note {
             height: 40px;
-            font-size: 0.75rem;
+            font-size: rem(14px);
             padding: 0;
             
             &.error {
@@ -59,7 +59,7 @@
         }
 
         .error:not(.form-field) {
-            font-size: 16px;
+            font-size: rem(16px);
             padding: 4px 8px;
             color: var(--form-field-error-text);
         }
@@ -118,7 +118,7 @@
             max-width: 300px;
 
             .title {
-                font-size: 40px;
+                font-size: rem(30px);
             }
 
             .footer {

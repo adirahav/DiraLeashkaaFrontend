@@ -39,7 +39,7 @@
       padding: 5px 8px;
       border: none;
       border-radius: 4px;
-      font-size: 14px;
+      font-size: rem(14px);
       color: var(--form-text);
 
       &[type=number]::-webkit-inner-spin-button, 
@@ -63,7 +63,7 @@
           height: 26px;
           background: transparent;
           margin: 0;
-          font-size: 14px;
+          font-size: rem(14px);
           border: 0;
 
           &:focus-visible {
@@ -98,7 +98,7 @@
           margin: 0;
 
           &[data-testid=DoneIcon], &[data-testid=CloseIcon] {
-            font-size: 15px;
+            font-size: rem(15px);
             font-weight: bold;
           }
           &[data-testid=CloseIcon] {
@@ -202,7 +202,7 @@
         user-select: none;
         width: 1em;
         height: 1em;
-        font-size: 20px;
+        font-size: rem(20px);
       }
       
     }
@@ -275,7 +275,7 @@
             display: none; 
             list-style: none;
             margin: 0;
-            font-size: 14px;
+            font-size: rem(14px);
             
             li {
               padding: 10px;
@@ -309,7 +309,7 @@
           user-select: none;
           width: 1em;
           height: 1em;
-          font-size: 20px;
+          font-size: rem(20px);
           position: absolute;
           left: -20px;
         }
@@ -331,7 +331,7 @@
             color: var(--property-field-text);
             width: 162px;
             height: 30px;
-            margin: 0 10px;
+            margin: 0 8px;
             direction: rtl;
             text-align: right;
 
@@ -376,7 +376,7 @@
         height: 50px;
 
         .dropdown-toggle {
-          font-size: 18px;
+          font-size: rem(18px);
           height: 100%;
           width: 100%;
           padding: 0 10px;
@@ -427,7 +427,7 @@
                   height: 30px;
                   width: 100%;
                   line-height: 30px;
-                  font-size: 18px;
+                  font-size: rem(18px);
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis
@@ -437,7 +437,7 @@
                   height: 30px;
                   width: 100%;
                   line-height: 30px;
-                  font-size: 14px;
+                  font-size: rem(14px);
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis
@@ -465,7 +465,7 @@
         height: 50px;
 
         .dropdown-toggle {
-          font-size: 18px;
+          font-size: rem(18px);
           height: 100%;
           width: 100%;
           padding: 0 10px;
@@ -529,7 +529,7 @@
                   height: 30px;
                   width: 100%;
                   line-height: 30px;
-                  font-size: 18px;
+                  font-size: rem(18px);
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis
@@ -539,7 +539,7 @@
                   height: 30px;
                   width: 100%;
                   line-height: 30px;
-                  font-size: 15px;
+                  font-size: rem(15px);
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis
@@ -582,7 +582,7 @@
         user-select: none;
         width: 1em;
         height: 1em;
-        font-size: 20px;
+        font-size: rem(20px);
       }
     }
   }
@@ -609,22 +609,34 @@
     }
   }
 
+  @include tablet-small-layout {
+    & {
+      &.dropdown {
+        &.searchable {
+          .custom-dropdown {
+            .dropdown-menu {
+              input {
+                width: 152px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   @include mobile-layout {
     & {
       span {
         font-size: rem(17px);
         width: 110px;
       }
-      
-      /*input {
-        font-size: rem(17px);
-      }*/
     
       .number-picker {
           /*width: 125px;
           .input {
             input {
-              font-size: 14px;
+              font-size: rem(14px);
             }  
           }*/
           
@@ -640,7 +652,7 @@
       &.auto-fill, &.calc-editable, &.percent {
         & > div {
           svg  {
-            /*font-size: 24px;
+            /*font-size: rem(24px);
             margin: 1px 6px 1px 0;*/
           }
     
@@ -667,18 +679,10 @@
             }
     
             /*& > svg {
-              font-size: 20px;
+              font-size: rem(20px);
             }*/
         }
       }
-    
-      /*&.warning {
-        div {
-          & > svg {
-            font-size: 20px;
-          }
-        }
-      }*/
     }
   }
 }

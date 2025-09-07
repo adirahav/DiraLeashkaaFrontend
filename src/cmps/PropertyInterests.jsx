@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { utilService } from '../services/util.service'
 import { PropertyField } from './PropertyField'
 import { ZoomInIcon } from '../assets/icons'
 import { useSplash } from '../contexts/SplashContext'
+import PropTypes from 'prop-types'
 
 export function PropertyInterests({property, display, fragment, onUpdate, onCloseInterests}) {   
 
@@ -127,3 +128,29 @@ export function PropertyInterests({property, display, fragment, onUpdate, onClos
         </section>
     )
 }
+
+PropertyInterests.propTypes = {
+    property: PropTypes.shape({
+      _id: PropTypes.string,
+      defaultInterestPercent: PropTypes.number,
+      calcInterestPercent: PropTypes.number,
+      calcInterestIn5YearsPercent: PropTypes.number,
+      calcInterestIn10YearsPercent: PropTypes.number,
+      defaultAverageInterestAtTakingPercent: PropTypes.number,
+      calcAverageInterestAtTakingPercent: PropTypes.number,
+      defaultAverageInterestAtMaturityPercent: PropTypes.number,
+      calcAverageInterestAtMaturityPercent: PropTypes.number,
+      defaultIndexPercent: PropTypes.number,
+      calcIndexPercent: PropTypes.number,
+      defaultForecastAnnualPriceIncreasePercent: PropTypes.number,
+      calcForecastAnnualPriceIncreasePercent: PropTypes.number,
+      defaultSalesCostsPercent: PropTypes.number,
+      calcSalesCostsPercent: PropTypes.number,
+      defaultDepreciationForTaxPurposesPercent: PropTypes.number,
+      calcDepreciationForTaxPurposesPercent: PropTypes.number,
+    }),
+    display: PropTypes.bool,
+    fragment: PropTypes.string,
+    onUpdate: PropTypes.func.isRequired,
+    onCloseInterests: PropTypes.func.isRequired,
+  }

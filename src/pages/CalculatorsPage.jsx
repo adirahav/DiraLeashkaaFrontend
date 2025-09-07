@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { useSplash } from '../contexts/SplashContext'
@@ -10,8 +10,6 @@ import { onLoadingDone, onLoadingStart } from '../store/actions/app.actions'
 export function CalculatorsPage() {
 
     const LOADING_CALCULATORS_COUNT = 4
-    
-    const [showOverlay, setShowOverlay] = useState(false)
     
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
