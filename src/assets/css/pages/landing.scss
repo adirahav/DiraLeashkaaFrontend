@@ -30,6 +30,10 @@
     }
 
     
+    .ad {
+        grid-column: -1 / 1;
+    }
+
     .banner {
         grid-column: -1 / 1;
     }
@@ -107,6 +111,7 @@
         h2 {
             margin-top: 55px;
         }
+
         ul {
             padding: 20px 0;
             display: grid;
@@ -118,6 +123,17 @@
                 padding: 0;
                 align-items: start;
                 justify-content: start;
+                border-radius: 0;
+
+                &:first-child {
+                    border-top-left-radius: 8px;
+                    border-top-right-radius: 8px;
+                }
+
+                &:last-child {
+                    border-bottom-left-radius: 8px;
+                    border-bottom-right-radius: 8px;
+                }
                 
                 img {
                     height: 120px;
@@ -641,6 +657,11 @@
                         h3 {
                             font-size: rem(14px);
                         }
+
+                        span {
+                            font-size: rem(14px);
+                            font-weight: bold;
+                        }
                     }
     
                 }
@@ -781,7 +802,7 @@
         }
     
         .guidance {
-            padding-bottom: 100px;
+            padding-bottom: 120px;
 
             ul {
                 li {
@@ -790,7 +811,7 @@
                     p {
                         text-align: right;
                         padding: 10px 20px;
-                        height: 48px;
+                        height: 70px;
                      }
                 }
             }

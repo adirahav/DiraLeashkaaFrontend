@@ -1,4 +1,4 @@
-import { LOADING_START, LOADING_DONE, GET_MODAL_DATA } from "../reducers/app.reducer.js"
+import { LOADING_START, LOADING_DONE, GET_MODAL_DATA, CHANGE_FONT_SIZE } from "../reducers/app.reducer.js"
 import { store } from "../store.js"
 
 export function onLoadingStart() {
@@ -23,7 +23,7 @@ export function onLoadingDone() {
 export function onToggleModal(modalData = null) {
     try {
         store.dispatch({
-            type: GET_MODAL_DATA, 
+            type: CHANGE_FONT_SIZE, 
             modalData
         })
     } catch(err) {
@@ -32,3 +32,14 @@ export function onToggleModal(modalData = null) {
     }
 }
 
+export function onChangeFontSize(customeFontSize = null) {
+    try {
+        store.dispatch({
+            type: GET_MODAL_DATA, 
+            customeFontSize
+        })
+    } catch(err) {
+        console.error("Had issues change font size")
+        throw err
+    }
+}

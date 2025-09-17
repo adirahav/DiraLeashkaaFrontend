@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { NavLink } from "react-router-dom"
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { HomeCities } from '../cmps/HomeCities'
@@ -18,6 +19,7 @@ import { useHomeWorker } from '../hooks/useHomeWorker'
 import { AdMob } from '@capacitor-community/admob'
 import { config } from '../config.js'
 import WebAdBanner from '../cmps/WebAdBanner.jsx'
+import { Promotion } from '../cmps/Promotion.jsx'
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -204,6 +206,8 @@ export function HomePage() {
             <Header />
             <main className="home container start" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
                 {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
+                <WebAdBanner />
+                <Promotion />
                 <img className='desktop' src={imgLetsStart} alt='' />
                 <section>
                     <h2>דירה להשקעה</h2>
@@ -224,9 +228,10 @@ export function HomePage() {
         <main className={mainClass} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
             {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
             {showOverlay && <Overlay />}
+            <WebAdBanner />
+            <Promotion />
             <h1 className={citiesClass}>{citiesTitle}</h1>
             <HomeCities citiesNames={citiesNames} selectedCity={selectedCity} onCityPress={onCityPress} />
-            <WebAdBanner />
             <h2 className={propertiesClass} dangerouslySetInnerHTML={{ __html: propertiesTitle}}></h2>
             <HomeProperties 
                 selectedCity={selectedCity}

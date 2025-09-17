@@ -1,0 +1,75 @@
+.promotion {
+  @include inside-container;
+
+  position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 50px;
+  border-radius: 0;
+  font-family: 'gveret-levin-regular';
+  
+  li {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    animation: fade 75s linear infinite;
+    white-space: nowrap;        
+    overflow: hidden;           
+    text-overflow: ellipsis;    
+
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 15px;
+    font-size: rem(18px);
+
+    &.title {
+      font-weight: bold;
+    }
+
+    &:nth-child(1)  { animation-delay: 0s; }
+    &:nth-child(2)  { animation-delay: 3s; }
+    &:nth-child(3)  { animation-delay: 6s; }
+    &:nth-child(4)  { animation-delay: 9s; }
+    &:nth-child(5)  { animation-delay: 12s; }
+    &:nth-child(6)  { animation-delay: 15s; }
+    &:nth-child(7)  { animation-delay: 18s; }
+    &:nth-child(8)  { animation-delay: 21s; }
+    &:nth-child(9)  { animation-delay: 24s; }
+    &:nth-child(10) { animation-delay: 27s; }
+
+    &:nth-child(11) { animation-delay: 30s; }
+    &:nth-child(12) { animation-delay: 33s; }
+    &:nth-child(13) { animation-delay: 36s; }
+    &:nth-child(14) { animation-delay: 39s; }
+    &:nth-child(15) { animation-delay: 42s; }
+    &:nth-child(16) { animation-delay: 45s; }
+    &:nth-child(17) { animation-delay: 48s; }
+    &:nth-child(18) { animation-delay: 51s; }
+    &:nth-child(19) { animation-delay: 54s; }
+    &:nth-child(20) { animation-delay: 57s; }
+
+    &:nth-child(21) { animation-delay: 60s; }
+    &:nth-child(22) { animation-delay: 63s; }
+    &:nth-child(23) { animation-delay: 66s; }
+    &:nth-child(24) { animation-delay: 69s; }
+    &:nth-child(25) { animation-delay: 72s; }
+
+  }
+  
+  @keyframes fade {
+    0%   { opacity: 0; }
+    2%   { opacity: 1; }   /* fade in quickly */
+    4%   { opacity: 1; }   /* stay visible */
+    5%   { opacity: 0; }   /* fade out quickly */
+    100% { opacity: 0; }   /* rest of cycle invisible */
+  }
+
+  @include mobile-layout {
+    li {
+      font-size: rem(16px);
+    }
+  }
+}

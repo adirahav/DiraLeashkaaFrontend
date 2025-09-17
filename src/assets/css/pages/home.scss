@@ -370,6 +370,15 @@
         align-items: center;
         grid-template-columns: 504px 1fr;
 
+        & > div {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+
+        & > .promotion {
+            grid-column: 1 / -1;
+        }
+
         & > img {
             grid-column: 1;
             width: 504px;
@@ -391,14 +400,25 @@
                 height: 88px;
             }
 
-            h3 {
+            h3, h4 {
                 color: var(--home-lets-start-title-text);
-                font-size: rem(24px);
-                font-weight: bold;
                 padding: 0;
                 margin: 27px auto 31px;
                 text-align: center;
                 width: 468px;
+            }
+
+            h3 {
+                font-size: rem(24px);
+                font-weight: bold;
+            }
+            
+            h4 {
+                a {
+                    font-weight: bold;
+                    text-decoration: none;
+                    cursor: default;
+                }
             }
 
             hr {
@@ -439,7 +459,12 @@
 
         &.start {
             grid-template-columns: 1fr;
+            grid-template-rows: 90px 50px 1fr;
             height: 100vh;
+
+            & > div {
+                margin-top: 0;
+            }
 
             & > section {
                 display: grid;
@@ -456,16 +481,16 @@
     
                 h3 {
                     grid-column: 2;
-                    grid-row: 3;
                     align-items: center;
-                    display: flex;
-                    width: 300px;
                     margin: auto;
+                    width: 300px;
+                    display: flex;
+                    grid-row: 3;
                 }
     
                 img {
                     grid-column: 1;
-                    grid-row: 3 / 6;
+                    grid-row: 3 / -1;
                     width: 354px;
                     height: 354px;
                     margin: auto;
@@ -484,6 +509,7 @@
                         grid-column: 2;
                         grid-row: 4;
                     }
+
                 }
     
                 .button.long {
@@ -782,7 +808,11 @@
             margin: 0;
             padding: 0;
 
-            section {
+            & > div {
+                margin-top: 0;
+            }
+
+            & > section {
                 grid-column: 2;
                 width: 100%;
                 display: inline;
@@ -793,12 +823,12 @@
                     width: 100%;
                     font-size: rem(40px);
                     height: auto;
-                    margin: 15px auto;
+                    margin: 10px auto;
                 }
 
                 img.mobile {
-                    width: 300px;
-                    height: 300px;
+                    width: 250px;
+                    height: 250px;
                     margin: auto;
                     display: block;
 
@@ -808,11 +838,11 @@
                     width: 100%;
                     font-size: rem(22px);
                     height: auto;
-                    margin: 20px auto;
+                    margin: 0 auto 10px;
                 }
 
                 .button.long {
-                    margin: 20px auto;
+                    margin: 15px auto;
 
                     button {
                         width: calc(100% - 20px);

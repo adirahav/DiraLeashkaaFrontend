@@ -24,6 +24,7 @@ import imgTargetAudience1 from '../assets/images/landing-target-audience-1.svg'
 import imgTargetAudience2 from '../assets/images/landing-target-audience-2.svg'
 import imgTargetAudience3 from '../assets/images/landing-target-audience-3.svg'
 import { LazyLoadMedia } from '../cmps/LazyLoadMedia'
+import WebAdBanner from '../cmps/WebAdBanner'
 
 export function LandingPage() {
 
@@ -321,6 +322,10 @@ export function LandingPage() {
 
     return (<>
         <main className="landing narrow container full">
+            <section className='ad'>
+                <WebAdBanner />
+            </section>
+
             <section className='banner'>
                 <LazyLoadMedia mediaUrl={banner.url} mediaWidth={banner.width} mediaHeight={banner.height} isVideo={false} alt={''} />
             </section>
@@ -394,7 +399,7 @@ export function LandingPage() {
                         <li key={index}>
                             <img src={item.image} alt='' />
                             <div><hr /><span ref={(el) => (howDoesItWorksBulletRefs.current[index] = el)} className={`bullet ${howDoesItWorksVisibleStates[index] ? "visible" : ""}`}></span></div>
-                            <p><span>{item.label}</span>{item.text}</p>
+                            <p><span>{item.label}</span> {item.text}</p>
                         </li> 
                     ))}
                 </ul>

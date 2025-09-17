@@ -371,6 +371,6 @@ CalculatorMaxPrice.propTypes = {
       calcLifeInsurance: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
       calcStructureInsurance: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
       calcRentCleaningExpenses: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
-    }).isRequired,
+    }),
 }
 

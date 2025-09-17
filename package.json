@@ -34,6 +34,7 @@
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.0",
     "node": "^23.9.0",
+    "rc-slider": "^11.1.9",
     "rc-table": "^7.47.5",
     "react": "^18.2.0",
     "react-adsense": "^0.1.0",

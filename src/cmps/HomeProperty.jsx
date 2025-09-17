@@ -316,7 +316,7 @@ HomeProperty.propTypes = {
         city: PropTypes.string,
         cityElse: PropTypes.string,
         price: PropTypes.number,
-        calcYieldForecast: PropTypes.bool,
+        calcYieldForecast: PropTypes.number,
         note: PropTypes.string
     }),
     isBestYield: PropTypes.bool,

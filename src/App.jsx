@@ -35,6 +35,7 @@ function RouteGuard({ children }) {
 
   const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
   const isLoggedinUserCompleted = useSelector(storeState => storeState.userModule.isLoggedinUserCompleted)
+  const customeFontSize = useSelector(storeState => storeState.appModule.customeFontSize)
   // internet connection
   /*useInternetStatus((isConnected) => {
     setIsOnline(isConnected)
@@ -51,7 +52,10 @@ function RouteGuard({ children }) {
     SplashScreen.hide()
   }, [])
 
-  
+  useEffect(() => {
+    console.log("customeFontSize="+customeFontSize)
+  }, [customeFontSize])
+
   /*useEffect(() => {
     setLoggedIn(loggedinUser !== null)
   }, [loggedinUser])*/
@@ -193,7 +197,7 @@ Orientation.propTypes = {
 - adirahav76@gmail.com and adi_rahav@yahoo.com - not login properly
 
 - לשים פרסומות
-- lazy load
++ lazy load
 - סדר במונחים - continue from header
 
 - camera upload not work

@@ -101,12 +101,8 @@ YieldChart.propTypes = {
   rawData: PropTypes.arrayOf(
     PropTypes.shape({
       monthNo: PropTypes.number.isRequired,
-      returnOnEquity: PropTypes.shape({
-        fractionToFloatFormat: PropTypes.func
-      }),
-      totalReturn: PropTypes.shape({
-        fractionToFloatFormat: PropTypes.func
-      })
+      returnOnEquity: PropTypes.number,
+      totalReturn: PropTypes.number
     })
   )
 }
