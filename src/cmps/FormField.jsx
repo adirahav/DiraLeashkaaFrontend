@@ -20,6 +20,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
     //       ERROR
     //       CODE   
     //       DROP_DOWN
+    //       TOGGLE
     
     const DEBOUNCE_AWAIT = 500
 
@@ -555,6 +556,33 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
                 {params.error && hasError && <div className='form-field-error'>{params.error}</div>}</>    
     }
 
+    function Toggle({params, onChange}) {
+        
+        const handleToggleChange = (ev) => {
+            ev.preventDefault()
+            ev.stopPropagation()
+            const { checked } = ev.target
+            
+            onChange(checked)
+        }
+        
+        const fieldClass = `form-field toggle` 
+        
+        return  <><div className={fieldClass}>
+                    <label className={params.checked === true ? "checked" : ""}>
+                        <input type="checkbox" checked={params.checked} onChange={handleToggleChange}/>
+                        <div>
+                            <div></div>
+                        </div>
+                    </label>
+                    <span>
+                        { params.checked ? params.onLabel : params.offLabel }
+                    </span>
+                </div>
+                
+            </>    
+    }
+
     String.propTypes = {
         params: PropTypes.oneOfType([
           PropTypes.shape({
@@ -743,6 +771,8 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
             {type === "CODE" && Code({params, onChange, onEnter})}
 
             {type === "DROP_DOWN" && DropDown({params, onChange})}
+
+            {type === "TOGGLE" && Toggle({params, onChange})}
         </>
 
     )

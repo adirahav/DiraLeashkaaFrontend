@@ -14,25 +14,69 @@ ChartJS.register(
   Tooltip,
   Legend
 )
-
-export const options = {
+export function YieldChart({rawData}) {
+  const [fontSize, setFontSize] = useState(14)
+  const [chartHeight, setChartHeight] = useState(300)
+  const [yieldForecast, setYieldForcast] = useState() 
+  const [chartData, setChartData] = useState() 
+  const [chartKey, setChartKey] = useState(0)
+  const { screenWidth, screenHeight } = useWindowSize()
+  
+  const options = {
     responsive: true,
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          font: {
+            size: fontSize,
+          },
+        },
       },
       title: {
         display: false,
         text: 'כותרת',
       },
     },
-}
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: fontSize,
+          },
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: fontSize,
+          },
+        },
+      },
+    },
+  }
 
-export function YieldChart({rawData}) {
-  const [yieldForecast, setYieldForcast] = useState() 
-  const [chartData, setChartData] = useState() 
-  const { screenWidth, screenHeight } = useWindowSize()
-  const [chartKey, setChartKey] = useState(0)
+  useEffect(() => {
+    
+
+    const updateFontSize = () => {
+      const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
+      const baseFont = 16
+      
+      const zoomRatio = rootFontSize / baseFont
+      const scaledFont = Math.min(14 * zoomRatio, 26)
+      
+      setFontSize(scaledFont)
+      setChartHeight(100 * zoomRatio) 
+    }
+  
+    updateFontSize() 
+  
+    const observer = new ResizeObserver(updateFontSize)
+    observer.observe(document.documentElement)
+  
+    return () => observer.disconnect()
+  }, [])
   
   useEffect(() => {
     
@@ -93,7 +137,7 @@ export function YieldChart({rawData}) {
   
   if (!chartData) return <div>טוען</div>
 
-  return <Line key={chartKey} options={options} data={chartData} />
+  return <Line key={chartKey} options={options} data={chartData} height={chartHeight}  />
 }
 
 

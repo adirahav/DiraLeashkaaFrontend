@@ -116,9 +116,9 @@
             box-shadow: unset;
             width: 100%;
             max-width: 300px;
-
+            
             .title {
-                font-size: rem(30px);
+                font-size: rem-capped(30px, 42px);
             }
 
             .footer {

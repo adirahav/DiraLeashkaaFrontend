@@ -32,6 +32,7 @@
     
     .ad {
         grid-column: -1 / 1;
+        overflow-y: hidden;
     }
 
     .banner {
@@ -92,7 +93,7 @@
                 animation-fill-mode: forwards;
 
                 img {
-                    width: 100px;
+                    width: rem-capped(100px, 125px);
                     height: auto;
                 }
 
@@ -136,7 +137,7 @@
                 }
                 
                 img {
-                    height: 120px;
+                    height: rem-capped(120px, 200px);
                     margin: 90px;
                     justify-self: end;
                 }
@@ -235,14 +236,15 @@
             margin: auto;
 
             li {
-                display: flex;
+                display: grid;
+                grid-template-columns: rem(80px) 1fr;
                 align-items: center;
                 position: relative;
                 margin: 20px 0;
 
                 span {
-                    width: 40px;
-                    height: 40px;
+                    width: rem(40px);
+                    height: rem(40px);
                     background-color: var(--light-color);
                     color: var(--dark-color);
                     font-size: rem(20px);
@@ -251,7 +253,7 @@
                     border-radius: 8px;
                     align-items: center;
                     justify-content: center;
-                    margin: 5px 20px;
+                    margin: rem(5px) rem(20px);
                     position: relative;
                   
                     /* מצב מוסתר */
@@ -306,8 +308,8 @@
             display: inline-block;
 
             button {
-                height: 62px;
-                width: 320px;
+                height: rem(62px);
+                width: rem-capped(320px, 480px);
                 background-color: var(--dark-color);
 
                 span {
@@ -321,7 +323,7 @@
     .cards-carousel {
         width: 1024px;
         margin: -22px auto 0;
-        --slide-height: 240px;
+        --slide-height: rem(240px);
         --slide-spacing: 1.5%;
         --slide-size: 32%;
     
@@ -385,7 +387,7 @@
     }
 
     .target-audience {
-        margin-top: 28px;
+        margin-top: rem(28px);
 
         ul {
             list-style: none;
@@ -398,7 +400,7 @@
                 h3 {
                     background-color: var(--dark-color);
                     width: 250px;
-                    height: 50px;
+                    height: rem(50px);
                     margin: auto;
                     align-items: center;
                     justify-content: center;
@@ -408,7 +410,7 @@
                     border-radius: 8px;
 
                     span {
-                        font-size: rem(26px);
+                        font-size: rem-capped(26px, 44px);
                         color: var(--light-color);
                     }
                 }
@@ -419,17 +421,17 @@
                     top: -25px;
                     margin: 0;
                     border-radius: 8px;
-                    height: 250px;
+                    height: rem(250px);
 
                     img {
-                        width: 100px;
-                        height: 100px;
+                        width: rem-capped(100px, 160px);
+                        height: rem-capped(100px, 160px);
                         margin-top: 40px;
                     }
 
                     p {
-                        font-size: rem(20px);
-                        margin: 0 20px 20px;
+                        font-size: rem-capped(20px, 34px);
+                        margin: 0 rem(20px) rem(20px);
                     }
                 }
             }
@@ -437,11 +439,11 @@
     }
 
     .guidance {
-        margin-top: 28px;
+        margin-top: rem(28px);
         margin-bottom: 66px;
 
         h2 {
-            margin-top: 2px;
+            margin-top: rem(2px);
         }
 
         ul {
@@ -450,14 +452,14 @@
             
             li {
                 position: relative;
-                margin: 10px 0;
-                height: 50px;
+                margin: rem(10px) 0;
+                height: rem-capped(50px, 70px);
 
                 p {
                     background-color: var(--dark-color);
                     color: var(--light-color);
                     border-radius: 8px;
-                    font-size: rem(20px);
+                    font-size: rem-capped(20px, 33px);
                     margin: 0 0 20px;
                 }
             }
@@ -494,7 +496,18 @@
             .viewport {
                 .container {
                     .slide {
-                        --slide-size: calc((100% - (2 * var(--slide-spacing))) / 2)
+                        --slide-size: calc((100% - (2 * var(--slide-spacing))) / 2);
+
+                        .card {
+                            h3 {
+                                font-size: rem-capped(20px, 34px);
+                            }
+
+                            P {
+                                font-size: rem-capped(18px, 28px);
+                                padding: rem(10px) 0;
+                            }
+                        }
                     }
                 }
             }
@@ -508,7 +521,7 @@
                     }
 
                     div {
-                        height: 270px;
+                        height: rem(270px);
 
                         img {
                             margin-top: 40px;
@@ -517,7 +530,68 @@
                 }
             }
         }
+
+        .guidance {
+            ul {
+                li {
+                    p {
+                        font-size: rem-capped(20px, 30px);
+                    }
+                }
+            }
+        }
     }
+
+    @media (min-width: 850.1px) and (max-width: 960px) {
+        .cards-carousel {
+            width: 100%;
+            
+            .viewport {
+                .container {
+                    .slide {
+                        .card {
+                            h3 {
+                                font-size: rem-capped(20px, 30px);
+                            }
+
+                            P {
+                                font-size: rem-capped(18px, 24px);
+                                padding: rem(10px) 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .target-audience {
+            ul {
+                li {
+                    h3 {
+                        span {
+                            font-size: rem-capped(26px, 40px);
+                        }
+                    }
+
+                    div {
+                        p {
+                            font-size: rem-capped(20px, 30px);
+                        }
+                    }
+                }
+            }
+        }
+
+		.guidance {
+            ul {
+                li {
+                    p {
+                        font-size: rem-capped(20px, 26px);
+                    }
+                }
+            }
+        }
+	}
 
     @include tablet-small-layout {
         .target-audience {
@@ -525,15 +599,32 @@
                 li {
                     h3 {
                         width: 180px;
+
+                        span {
+                            font-size: rem-capped(26px, 40px);
+                        }
                     }
 
                     div {
-                        border-color: green;
-                        height: 290px;
+                        height: rem(290px);
 
                         img {
                             margin-top: 40px;
                         }
+
+                        p {
+                            font-size: rem-capped(20px, 30px);
+                        }
+                    }
+                }
+            }
+        }
+
+        .guidance {
+            ul {
+                li {
+                    p {
+                        font-size: rem-capped(20px, 24px);
                     }
                 }
             }
@@ -552,13 +643,12 @@
                 display: grid;
 
                 span {
-                    font-size: rem(40px);
+                    font-size: rem-capped(40px, 60px);
                 }
             }
     
             
         }
-    
     
         .investment-budget {
             
@@ -591,6 +681,7 @@
                         position: absolute;
                         right: 0;
                         text-align: right;
+                        font-size: rem-capped(20px, 24px);
                     }
 
                     &:hover p {
@@ -639,7 +730,7 @@
                 & > li {
                     
                     img {
-                        height: 60px;
+                        height: rem(60px);
                         margin: 22px;
                     }
     
@@ -651,15 +742,15 @@
                     
     
                      p {
-                        font-size: rem(14px);
+                        font-size: rem-capped(14px, 24px);
                         padding: 30px 30px 30px 10px;
     
                         h3 {
-                            font-size: rem(14px);
+                            font-size: rem-capped(14px, 24px);
                         }
 
                         span {
-                            font-size: rem(14px);
+                            font-size: rem-capped(14px, 24px);
                             font-weight: bold;
                         }
                     }
@@ -674,35 +765,45 @@
                 padding: 0;
                 
                 li {
-                    margin: 10px 0;
-    
+                    grid-template-columns: rem-capped(80px, 120px)  1fr;
+
+                    span {
+                        width: rem-capped(40px, 60px);
+                        height: rem-capped(40px, 60px);
+                        font-size: rem-capped(20px, 30px);
+                    }
+
                     p {
                         width: calc(100% - 40px);
                         margin-left: 21px;
+                        font-size: rem-capped(20px, 30px);
                     }
                 }
             }
         }
     
         .signup {
-            height: 230px;
+            height: rem-capped(170px, 395px);
+            min-height: 170px;
             box-shadow: 0px 4px 12px var(--container-border);
-            padding: 0 20px 10px;
+            padding: 0 20px rem(20px);
             width: calc(100% - 55px);
             margin-bottom: 20px;
 
             h3 {
-                font-size: rem(24px);
+                font-size: rem-capped(24px, 38px);
             }
     
             p {
-                font-size: rem(18px);
+                font-size: rem-capped(18px, 28px);
+                /*height: rem(100px);*/
+                min-height: 70px;
             }
     
             .signup-btn {
                 button {
-                    height: 52px;
-                    width: 200px;
+                    height: rem(52px);
+                    width: rem-capped(225px, 100%);
                 }   
             }
             
@@ -713,8 +814,21 @@
             
             .viewport {
                 .container {
+                    width: calc(100vw - rem-capped(30px, 40px));
+                        
                     .slide {
-                        --slide-size: calc((100% - (var(--slide-spacing))))
+                        --slide-size: calc((100% - (var(--slide-spacing))));
+                        
+                        .card {
+                            h3 {
+                                font-size: rem-capped(20px, 22px);
+                            }
+
+                            P {
+                                font-size: rem-capped(18px, 20px);
+                                
+                            }
+                        }
                     }
                 }
             }
@@ -724,16 +838,16 @@
             margin-top: 0px;
 
             h2 {
-                margin-top: 30px;
+                margin-top: rem(30px);
             }
 
-            ul {
+            /*ul {
                 grid-template-columns: unset;
                 position: relative;
                 list-style: none;
                 padding: 0;
                 margin: 0;
-                height: 277px;
+                height: rem(277px);
     
                 li {
                     width: 100%;
@@ -743,18 +857,22 @@
                     right: 0;
 
                     h3 {
-                        animation: h3ZIndex 6s infinite;
+                        animation: h3ZIndex 12s infinite;
 
                         span {
                             opacity: 0;
-                            animation: fade 6s infinite;
+                            animation: fade 12s infinite ease-in-out;
                         }
                     }
 
                     div {
                         img, p {
                             opacity: 0;
-                            animation: fade 6s infinite;
+                            animation: fade 12s infinite ease-in-out;
+                        }
+
+                        p {
+                            font-size: rem-capped(20px, 30px);
                         }
                     }
                     &:nth-child(1) { 
@@ -764,21 +882,21 @@
                     }
                     &:nth-child(2) { 
                         h3 { animation-name: h3Z2; }
-                        h3 { span { animation-delay: 2s; }}
-                        div { img, p { animation-delay: 2s; } } 
+                        h3 { span { animation-delay: 4s; }}
+                        div { img, p { animation-delay: 4s; } } 
                     }
                     &:nth-child(3) { 
                         h3 { animation-name: h3Z3; }
-                        h3 { span { animation-delay: 4s; }}
-                        div { img, p { animation-delay: 4s; } } 
+                        h3 { span { animation-delay: 8s; }}
+                        div { img, p { animation-delay: 8s; } } 
                     }
                     
                     @keyframes fade {
                         0% { opacity: 0; }
-                        5% { opacity: 1; }
-                        30% { opacity: 1; }
-                        35% { opacity: 0; }
-                        100% { opacity: 0; }
+                        5% { opacity: 1; }   // fade in
+                        35% { opacity: 1; }  // stay visible
+                        40% { opacity: 0; }  // fade out
+                        100% { opacity: 0; } // stay hidden
                     }
                     
                     @keyframes h3Z1 {
@@ -798,7 +916,77 @@
                         96.1%, 100% { z-index: 1000; }
                     }
                 }
-            }
+            }*/
+
+            ul {
+                grid-template-columns: unset;
+                position: relative;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                height: rem(277px);
+              
+                li {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+              
+                  h3 span,
+                  div img,
+                  div p {
+                    opacity: 0;
+                    animation: fadeContent 9s linear infinite;
+                    animation-fill-mode: both;
+                  }
+
+                  h3 {
+                    animation: h3ZIndex 9s linear infinite;
+                  }
+              
+                  &:nth-child(1) h3 span,
+                  &:nth-child(1) div img,
+                  &:nth-child(1) div p { animation-delay: 0s; }
+                  &:nth-child(1) { h3 { animation-name: h3Z1; } }
+                  
+                  &:nth-child(2) h3 span,
+                  &:nth-child(2) div img,
+                  &:nth-child(2) div p { animation-delay: 3s; }
+                  &:nth-child(2) { h3 { animation-name: h3Z2; } }
+                  
+                  &:nth-child(3) h3 span,
+                  &:nth-child(3) div img,
+                  &:nth-child(3) div p { animation-delay: 6s; }
+                  &:nth-child(3) { h3 { animation-name: h3Z3; } }
+                }
+              
+                @keyframes fadeContent {
+                    0% { opacity: 0; }
+                    5% { opacity: 1; }   /* fade in quickly */
+                    33% { opacity: 1; }  /* stay visible */
+                    38% { opacity: 0; }  /* fade out quickly */
+                    100% { opacity: 0; }
+                }
+
+                @keyframes h3Z1 {
+                    0%, 30% { z-index: 1003; }   
+                    30.1%, 100% { z-index: 1000; }
+                }
+                  
+                @keyframes h3Z2 {
+                    0%, 33% { z-index: 1000; }
+                    33.1%, 63% { z-index: 1003; } 
+                    63.1%, 100% { z-index: 1000; }
+                }
+                  
+                @keyframes h3Z3 {
+                    0%, 66% { z-index: 1000; }
+                    66.1%, 96% { z-index: 1003; } 
+                    96.1%, 100% { z-index: 1000; }
+                }
+              }
+              
+              
         }
     
         .guidance {

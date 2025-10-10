@@ -103,13 +103,6 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             setValueToEdit(value)
         }
 
-        const fieldClass = 'property-field auto-fill' + (isFirstLoading
-                                                        ? ' loading1' 
-                                                        : valueToEdit === null || 
-                                                          valueToEdit.length === 0 
-                                                            ? ' empty' 
-                                                            : '')
-
         /*const showRollback1 = valueToEdit.replace(/,/g, '') !== params.defaultValue?.toString() && 
                              !isFirstLoading && 
                              params.defaultValue != undefined && 
@@ -121,6 +114,13 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                              : (!(typeof params.value === 'number') && !(typeof params.defaultValue === 'number')) ||
                                (valueToEdit?.toString().replace(/,/g, '') !== params.defaultValue?.toString())
      
+        const fieldClass = 'property-field auto-fill' + (showRollback ? ' roll-back' : '') + (isFirstLoading
+                                ? ' loading1' 
+                                : valueToEdit === null || 
+                                  valueToEdit.length === 0 
+                                    ? ' empty' 
+                                    : '')
+
         return  <div className={fieldClass}>
                     <span>{params.label}</span>
                     <div>
@@ -348,14 +348,6 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             }
         }
 
-        const fieldClass = 'calc-editable' + (isFirstLoading
-                                            ? ' loading3' 
-                                            : valueToEdit === null || 
-                                              valueToEdit.length === 0 
-                                                ? ' empty' 
-                                                : '')
-
-            
         const showRollback = isFirstLoading || valueToEdit === null || valueToEdit === ''
                                 ? false 
                                 : params.isReadOnly
@@ -365,6 +357,13 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                       (params.numberPicker.customPercent !== params.numberPicker.default) ||
                                       (!valueToEdit && valueToEdit?.toString().replace(/,/g, '') !== params.value.default?.toString())
         
+        const fieldClass = 'calc-editable' + (showRollback ? ' roll-back' : '') + (showNumberPicker ? ' number-picker' : '') + (isFirstLoading
+                                        ? ' loading3' 
+                                        : valueToEdit === null || 
+                                          valueToEdit.length === 0 
+                                            ? ' empty' 
+                                            : '')
+
         return  <div className={`property-field ${fieldClass}`}>
                     {!showNumberPicker && <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleClickLabel() } role='button' tabIndex={0}></span>}
                     {showNumberPicker && <NumberPicker ref={numberPickerRef} numberPicker={params.numberPicker} value={percentToEdit} onAccept={handleNumberPickerPercentAccept} onCancel={handleNumberPickerPercentCancle} onStepUp={handleStepUp} onStepDown={handleStepDown} onValueChange={handleNumberPickerPercentChange} />}
@@ -797,7 +796,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         return  <div className={fieldClass} ref={dropdownRef}>
                     <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`}>
                         <button className="dropdown-toggle" onClick={toggleDropdown}>
-                            {choosenText}
+                            <span dangerouslySetInnerHTML={{ __html: choosenText }} />
                             {!isOpen && <ArrowDownIcon />}
                             {isOpen && <ArrowUpIcon />}
                         </button>
@@ -1045,14 +1044,14 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         const showRollback = isFirstLoading || !percentToEdit 
                                 ? false 
                                 : formattedPercentToEdit !== formattedDefault
-        
-        const divClass = `property-field percent ${showNumberPicker ? 'number-picker' : ''}`
+                                
+        const divClass = `property-field percent ${showRollback ? 'roll-back' : ''} ${showNumberPicker ? 'number-picker' : ''}`
 
         return  <div className={divClass}>
                     <div className='rollback'>
                         {showRollback && <RollbackIcons onClick={handleValueRollback} />}
                     </div>
-                    <span dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleClickLabel() } role='button' tabIndex={0}></span>
+                    <span className='label' dangerouslySetInnerHTML={{ __html: label }} onClick={handleClickLabel} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleClickLabel() } role='button' tabIndex={0}></span>
                     {showNumberPicker && <NumberPicker ref={numberPickerRef} numberPicker={params.numberPicker} value={formattedPercentToEdit} onAccept={handleNumberPickerPercentAccept} onCancel={handleNumberPickerPercentCancle} onStepUp={handleStepUp} onStepDown={handleStepDown} onValueChange={handleNumberPickerPercentChange} /> }
                 </div>
     }

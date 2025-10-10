@@ -1,7 +1,7 @@
 .form-field {
  
   color: rgb(0, 0, 0);
-  margin: 15px 0;
+  margin: rem(15px) 0;
   width: 100%;
   position: relative;
   border-radius: 8px;
@@ -9,11 +9,16 @@
   
   &.tooltip {
     width: calc(100% - 25px);
+    
+    svg {
+      width: rem(20px);
+      height: rem(20px);
+    }
   }
 
   label {
       display: flex;
-      height: 34px;
+      height: rem(34px);
       position: relative;
       color: var(--form-field-label);
           
@@ -21,7 +26,7 @@
           color: var(--form-field-label);
           font-size: rem(14px);
           right: 8px;
-          line-height: 36px;
+          line-height: rem-capped(36px, 42px);
           position: absolute;
           transform-origin: left;
       }
@@ -30,18 +35,19 @@
           border: 0;
           border-radius: 8px;
           flex: 1 0 auto;
-          padding: 9px 8px 7px;
+          padding: rem(9px) rem(8px) rem(7px);
           background: var(--form-field-input-background);
           color: var(--form-field-input-text);
-
+          font-size: rem(14px);
+              
           &:valid  {
-              font-size: rem(14px);
-              padding: 14px 8px 2px;
+              padding: rem(14px) rem(8px) rem(2px);
           
               & + span {
                   transform: scale(calc(10 / 12)) translateY(-10px) translateX(40px);
                   width: 200px;
                   text-align: right;
+                  white-space: nowrap;
               }
           }
 
@@ -65,8 +71,8 @@
 
   .tooltip {
     position: absolute;
-    top: 8px;
-    left: -28px;
+    top: rem(8px);
+    left: rem-capped-min(-28px, -22px);
     color: var(--form-field-tooltip-background);
   }
 
@@ -81,8 +87,10 @@
 
     svg {
       position: absolute;
-      top: 15px;
-      right: 13px;
+      top: rem-capped(15px, 20px);
+      right: rem-capped(13px, 20px);
+      width: rem(20px);
+      height: rem(20px);
     }
   }
   
@@ -94,13 +102,14 @@
 
     button {
       min-width: 75px;
-      height: 40px;
+      height: rem-capped(40px, 54px);
       border-radius: 8px;
       border: 0;
       padding: 10px 20px;
       margin: 5px;
       background: var(--form-field-button-background);
       cursor: default;
+      line-height: 28px;
 
       &:hover {
         span {
@@ -185,13 +194,13 @@
         font-size: rem(16px);
         transform: scale(0.8333333333) translateY(-10px) translateX(5px);
         position: absolute;
-        top: 10px;
+        top: 5px;
         line-height: 24px;
       }
 
       input {
-        width: 20px;
-        height: 20px;
+        width: rem(20px);
+        height: rem(20px);
 
         &:valid  {
           & + span {
@@ -230,8 +239,8 @@
     }
 
     input {
-      width: 50px;
-      height: 50px;
+      width: rem-capped(50px, 94px);
+      height: rem-capped(50px, 94px);
       margin: 10px 11px;
       border: 1px solid var(--form-field-border);
       text-align: center;
@@ -326,20 +335,109 @@
     }
   }
 
+  &.toggle {
+    border: 0;
+
+    & > label {
+        align-items: center;
+        cursor: pointer;
+        display: inline-flex;
+        position: relative;
+
+        input[type="checkbox"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+            --tw-bg-opacity: 1;
+        }
+
+        & > div {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+            --tw-bg-opacity: 1;
+            border-radius: 9999px;
+            border: 1px solid var(--toggle-off-border);
+            background-color: var(--toggle-off-background);
+            width: rem(44px);
+            height: rem(24px);
+            margin-left: rem(4px);
+
+            & > div {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
+                --tw-bg-opacity: 1;
+                border-radius: 9999px;
+                width: rem(16px);
+                height: rem(16px);
+                top: rem(9px);
+                left: rem(8px);
+                right: unset;
+                position: absolute;
+                background-color: var(--toggle-off-circle);
+            }
+        }
+
+        &.checked {
+            & > div {
+                border: 1px solid var(--toggle-on-border);
+                background-color: var(--toggle-on-background);
+
+                & > div {
+                    --tw-translate-x: 1.25rem;
+                    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+                    background-color: var(--toggle-on-circle);
+                    right: 0.30rem;
+                    left: unset;
+                }
+            }
+        }
+    }
+
+    & > span {
+        top: rem(-7px);
+        position: relative;
+        font-size: rem(16px);
+        margin-right: rem(4px);
+    }
+}
+
+
+
+ /* @include tablet-layout {
+    & {
+      display: none;
+    }
+    .tooltip {display: none;
+      svg {
+        
+      }
+    }
+  }*/
+
   @include mobile-layout {
     & {
       label {
-          height: 40px;
+          height: rem(40px);
               
           span {
               font-size: rem(16px);
-              line-height: 40px;
+              line-height: rem-capped(40px, 60px);
           }
 
           input {
+              width: 100%;
+
               &:valid  {
                   font-size: rem(16px);
-
+                  
                   & + span {
                     transform: scale(0.8333333333) translateY(-12px) translateX(40px);
                   }
@@ -398,7 +496,8 @@
           font-size: rem(18px);
         }
         input {
-          width: 40px;
+          width: rem-capped(40px, 50px);
+          height: rem-capped(40px, 5s0px);
           font-size: rem(22px);
         }
       }
@@ -419,6 +518,14 @@
             font-size: rem(16px);
             height: 98px;
           }
+        }
+      }
+
+      &.password {
+        svg {
+          width: 1rem;
+          height: 1rem;
+          top: rem-capped(15px, 30px);
         }
       }
     }

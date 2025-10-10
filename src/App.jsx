@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Provider, useSelector } from 'react-redux'     
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
@@ -35,7 +35,7 @@ function RouteGuard({ children }) {
 
   const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
   const isLoggedinUserCompleted = useSelector(storeState => storeState.userModule.isLoggedinUserCompleted)
-  const customeFontSize = useSelector(storeState => storeState.appModule.customeFontSize)
+  
   // internet connection
   /*useInternetStatus((isConnected) => {
     setIsOnline(isConnected)
@@ -51,10 +51,6 @@ function RouteGuard({ children }) {
   useEffect(() => {
     SplashScreen.hide()
   }, [])
-
-  useEffect(() => {
-    console.log("customeFontSize="+customeFontSize)
-  }, [customeFontSize])
 
   /*useEffect(() => {
     setLoggedIn(loggedinUser !== null)
@@ -113,6 +109,23 @@ function App() {
   const navigate = useNavigate()
   const location = useLocation()
 
+  const showAccessibilityPanelState = useSelector(storeState => storeState.appModule.accessibility.showAccessibilityPanel)
+  const customeFontSizeState = useSelector(storeState => storeState.appModule.accessibility.customeFontSize)
+  const [customeFontSize, setCustomeFontSize] = useState(customeFontSizeState)
+
+  useEffect(() => {
+    if (customeFontSize) {
+      document.documentElement.style.fontSize = `${customeFontSize}px`
+      document.documentElement.style.setProperty('--custome-font-size', `${customeFontSize}px`)
+    }
+  }, [customeFontSize])
+
+  useEffect(() => {
+    if (customeFontSizeState) {
+      setCustomeFontSize(customeFontSizeState)
+    }
+  }, [customeFontSizeState])
+
   useNativeBackButton(() => {
     if (location.pathname === '/home' || location.pathname === '/login') {
       CapacitorApp.exitApp()
@@ -161,7 +174,7 @@ function App() {
               
               <Alert />
               <Dialog />
-              {false && <AccessibilityPanel />}
+              {showAccessibilityPanelState && <AccessibilityPanel />}
           </section>
       </Provider>
     </SplashProvider>
@@ -179,6 +192,7 @@ Orientation.propTypes = {
 }
 
 /*
+- נכס -> לוח סילוקין -> ריבית -> ריבית לא תקינה אחרי 60 חודשים 
 - mobile delete - cancel delete the property
 - הוצאות נלוות נוספות
 - להוסיף הון עצמי מהלוואה
@@ -196,12 +210,14 @@ Orientation.propTypes = {
 
 - adirahav76@gmail.com and adi_rahav@yahoo.com - not login properly
 
-- לשים פרסומות
+- web לשים פרסומות
 + lazy load
 - סדר במונחים - continue from header
 
 - camera upload not work
 - max price - missing years
+
+- support safari
 
 - delete image from cloudinary
 - micro services

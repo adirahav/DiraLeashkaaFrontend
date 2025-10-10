@@ -15,6 +15,7 @@ import { FormField } from './FormField.jsx'
 import { ViewComfyIcon, ViewCompactIcon, ScrollArrowLeftIcon, ScrollArrowRightIcon } from '../assets/icons'
 import PropTypes from "prop-types"
 import { Navigate } from 'react-router-dom'
+import { useWindowSize } from '../hooks/useWindowSize'
 
 export function CalculatorCompare() {  
     const MAX_APARTMENTS_TO_COMPARE = 3
@@ -34,8 +35,8 @@ export function CalculatorCompare() {
         options: [],
         texts: {
             any: 'בחר דירות',
-            one: 'דירה אחת נבחרה',
-            many: `נבחרו %1$s דירות`
+            one: 'דירה אחת <span>נבחרה</span>',
+            many: `<span>נבחרו</span> %1$s דירות`
         }
     })
 
@@ -57,14 +58,20 @@ export function CalculatorCompare() {
     const [isFirstLoading, setIsFirstLoading] = useState(true)
     const [viewState, setViewState] = useState('') // comfy | compact | comfying | compacting
     
+    const { screenWidth, screenHeight } = useWindowSize()
+
     const loggedinUser = authService.getLoggedinUser()
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     const compareState = useSelector(storeState => storeState.userModule.compare)
 
     // scroll
     const mainRef = useRef(null)
-    const [canScrollRight, setCanScrollRight] = useState(false)
-    const [canScrollLeft, setCanScrollLeft] = useState(false)
+    const [scroll, setScroll] = useState({
+        hasScroll: true,//false,
+        canScrollRight: false,
+        canScrollLeft: false
+    })
+    
     const SCROLL_AMOUNT = 100
 
     //
@@ -277,27 +284,57 @@ export function CalculatorCompare() {
     }
 
     // scroll
-    /*const updateScrollButtons_new = () => {
+    const updateScrollState = () => {
         const main = mainRef.current
         if (!main) return
-    
-        const scrollLeftPos = main.scrollLeft
-        const maxScrollLeft = main.scrollWidth - main.clientWidth
-    
-        setCanScrollLeft(scrollLeftPos > 0)
-        setCanScrollRight(scrollLeftPos < maxScrollLeft)
-    }*/
+      
+        setScroll((prevScroll) => ({
+            ...prevScroll,
+            hasScroll: main.scrollWidth > main.clientWidth
+        }))
+    }
+
+    useEffect(() => {
+        const main = mainRef.current
+        if (!main) return
+      
+        main.scrollTo({ left: 0, behavior: 'smooth' })
+      
+        const handleScroll = () => {
+          updateScrollButtons()
+        }
+      
+        main.addEventListener('scroll', handleScroll)
+      
+        updateScrollButtons()
+        //updateScrollState()
+      
+        return () => {
+          main.removeEventListener('scroll', handleScroll)
+        }
+      }, [viewState, properties, screenWidth])
 
     const updateScrollButtons = () => {
         const main = mainRef.current
         if (!main) return
-        console.log(main.scrollLeft)
-        setCanScrollRight(main.scrollLeft < 0)
-        setCanScrollLeft(Math.round(main.scrollLeft - 1) > Math.round(main.clientWidth - main.scrollWidth))
+        
+        console.log("============================================")
+        console.log("canScrollRight=" + (main.scrollLeft < 0))
+        console.log("canScrollLeft=" + (Math.round(main.scrollLeft - 1) > Math.round(main.clientWidth - main.scrollWidth)))
+        console.log("             =" + main.scrollLeft)
+        console.log("             =" + main.clientWidth)
+        console.log("             =" + main.scrollWidth)
+       
+        
+        setScroll((prevScroll) => ({
+            ...prevScroll,
+            canScrollRight: main.scrollLeft < 0,
+            canScrollLeft: Math.round(main.scrollLeft - 1) > Math.round(main.clientWidth - main.scrollWidth)
+        }))
     }
     
     const scrollLeft = () => {
-        if (!canScrollLeft) return
+        if (!scroll.canScrollLeft) return
         
         const main = mainRef.current
         if (!main) return
@@ -307,7 +344,7 @@ export function CalculatorCompare() {
     }
     
     const scrollRight = () => {
-        if (!canScrollRight) return
+        if (!scroll.canScrollRight) return
 
         const main = mainRef.current
         if (!main) return
@@ -354,12 +391,13 @@ export function CalculatorCompare() {
     
     const handleViewStateTransitionEnd = () => {
         setViewState((prevViewState) => {
-            return prevViewState === "compacting"
-                    ? "compact"
-                    : prevViewState === "comfying"
-                        ? "comfy"
-                        : prevViewState
-        })
+            const newState =
+              prevViewState === "compacting" ? "compact" :
+              prevViewState === "comfying" ? "comfy" :
+              prevViewState
+            setTimeout(updateScrollButtons, 100) // wait for layout update
+            return newState
+          })
     }
 
     // main
@@ -437,14 +475,16 @@ export function CalculatorCompare() {
             ))}
         </div>}
         {!isLoadingState && properties && properties.length > 0 && <>
-            <div className={`view-buttons ${viewState} ('count' + properties?.length) ?? 0}`}>
-                <h2>תצוגה:</h2>
-                <ViewComfyIcon className='comfy' onClick={() => changeViewState('comfy')} />
-                <ViewCompactIcon className='compact' onClick={() => changeViewState('compact')} />
-            </div>
-            <div className={`scroll-buttons ${canScrollRight ? 'scroll-right' : ''} ${canScrollLeft ? 'scroll-left' : ''} count${properties?.length ?? 0}`}>
-                <ScrollArrowRightIcon onClick={scrollRight} />
-                <ScrollArrowLeftIcon onClick={scrollLeft} />
+            <div className={`view-controller ${scroll.hasScroll ? 'has-scroll': ''}`}>
+                <div className={`view-buttons ${viewState}`}>
+                    <h2>תצוגה:</h2>
+                    <ViewComfyIcon className='comfy' onClick={() => changeViewState('comfy')} />
+                    <ViewCompactIcon className='compact' onClick={() => changeViewState('compact')} />
+                </div>
+                <div className={`scroll-buttons ${scroll.canScrollRight ? 'scroll-right' : ''} ${scroll.canScrollLeft ? 'scroll-left' : ''}`}>
+                    <ScrollArrowRightIcon onClick={scrollRight} />
+                    <ScrollArrowLeftIcon onClick={scrollLeft} />
+                </div>
             </div>
             <div className={`main-content ${viewState}`} ref={mainRef} onTransitionEnd={handleViewStateTransitionEnd}>
                 {properties.map((property, index) => (

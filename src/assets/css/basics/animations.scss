@@ -32,7 +32,7 @@
 
 @keyframes reveal-overlay {
     from { width: 0; }
-    to { width: 80px; }
+    to { width: rem(80px); }
 }
 
 @keyframes conceal-overlay {

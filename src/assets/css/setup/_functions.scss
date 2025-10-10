@@ -10,3 +10,35 @@
 @function lh($pixels, $context: 16px) {
     @return calc($pixels/$context);
 }
+
+/// @param $min-pad - padding value at $min-font
+/// @param $max-pad - padding value at $max-font
+@function responsive-px($min-pad: 40px, $max-pad: 0px) {
+    $min-font: 16px;
+    $max-font: 32px;
+    
+    // slope = (change in padding) / (change in font-size)
+    $slope: ($max-pad - $min-pad) / ($max-font - $min-font);
+  
+    // Linear interpolation: y = y1 + (x - x1) * slope
+    @return clamp(#{$max-pad}, calc(#{$min-pad} + (1rem - #{$min-font}) * #{$slope}), #{$min-pad});
+}
+  
+/// Convert px to rem with runtime cap
+/// @param $px - desired font in px
+/// @param $max-px - max font size in px
+@function rem-capped($px, $max-px: 36px) {
+    $base-font: 16px;
+    $rem: $px / $base-font * 1rem;
+  
+    @return clamp(0rem, $rem, #{$max-px});
+}
+  
+@function rem-capped-min($px, $min-px: -30px) {
+    $base-font: 16px;
+    $rem: $px / $base-font * 1rem;
+  
+    @return clamp($min-px / $base-font * 1rem, $rem, 999rem);
+}  
+  
+  

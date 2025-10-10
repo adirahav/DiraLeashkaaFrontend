@@ -7,6 +7,7 @@ import { useSplash } from "../contexts/SplashContext"
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import { onChangeFontSize } from "../store/actions/app.actions"
+import { useSelector } from "react-redux"
 
 export function AccessibilityPanel() {
 
@@ -15,7 +16,8 @@ export function AccessibilityPanel() {
     
     const handleOpenAccessibilityModal = () => {
         showAccessibilityModal({
-            positiveButton: { text: utilService.getPhrase("accessibility_button_close", phrases) }, 
+            positiveButton: { text: utilService.getPhrase("accessibility_button_save", phrases) }, 
+            negativeButton: { text: utilService.getPhrase("accessibility_button_close", phrases) }, 
         })
     }
 
@@ -31,7 +33,8 @@ export function AccessibilityModal() {
 
     const [displayAccessibilityModal, setDisplayAccessibilityModal] = useState(false)    
     const [positiveButton, setPositiveButton] = useState({text: ""})
-    
+    const [negativeButton, setNegativeButton] = useState({text: ""})
+
     const accessibilityModalRef = useRef()
 
     const { splash } = useSplash()
@@ -40,17 +43,18 @@ export function AccessibilityModal() {
     const BASE_FONT = 16
     const MIN_FONT = 14
     const MAX_FONT = 32
-    //const FONT_MARKS = [14, 16, 20, 24, 28, 32]
-    const [fontSize, setFontSize] = useState(BASE_FONT)
     
+    const customeFontSizeState = useSelector(storeState => storeState.appModule.accessibility.customeFontSize)
+
     useEffect(() => {
         const unsubscribe = eventBusService.on('show-accessibility-modal', (data) => {
             setPositiveButton(prevPositiveButton => ({ ...prevPositiveButton, ...data.positiveButton }))
+            setNegativeButton(prevNegativeButton => ({ ...prevNegativeButton, ...data.negativeButton }))
             setDisplayAccessibilityModal(true)
         })
 
         return unsubscribe
-    }, [positiveButton])
+    }, [positiveButton, negativeButton])
 
     const handleClickOutside = useCallback((ev) => {
         if (accessibilityModalRef.current && !accessibilityModalRef.current.contains(ev.target)) {
@@ -59,7 +63,7 @@ export function AccessibilityModal() {
     }, [])
 
     useEffect(() => {
-        if (positiveButton) {
+        if (positiveButton && negativeButton) {
             setTimeout(() => {
                 document.addEventListener('click', handleClickOutside)
             }, 0)
@@ -68,12 +72,22 @@ export function AccessibilityModal() {
         return () => {
             document.removeEventListener('click', handleClickOutside)
         }
-    }, [positiveButton, handleClickOutside])
+    }, [positiveButton, negativeButton, handleClickOutside])
 
 
     function onClose() {
+       console.log("")//
         setPositiveButton(null)
+        setNegativeButton(null)
         setDisplayAccessibilityModal(false)
+    }
+
+    function onSave() {
+        onClose()
+    }
+
+    function onReset() {
+        onChangeFontSize(BASE_FONT)
     }
 
     function handleButton(button) {
@@ -95,26 +109,27 @@ export function AccessibilityModal() {
                 <CloseIcon sx={ IconSizes.Small } onClick={onClose} />
             </header>
             <section className="font-size">
-                <div style={{ padding: "2rem" }}>
-                    <label htmlFor="font-slider" style={{ display: "block", marginBottom: "1rem" }}>
-                        גודל טקסט: {fontSize}px
-                    </label>
+                <div>
+                    <div className="header">
+                        <label htmlFor="font-slider">
+                            גודל טקסט: {100 * (customeFontSizeState / 16)}%
+                        </label>
+                        <a onClick={onReset}>{ utilService.getPhrase("accessibility_button_reset", phrases) }</a>
+                    </div>
                     <Slider
                         id="font-slider"
                         className="slider"
-                        value={fontSize}
+                        value={customeFontSizeState}
                         min={MIN_FONT}
                         max={MAX_FONT}
-                        step={1.6} 
+                        step={2} 
                         onChange={(value) => onChangeFontSize(value)}
                     />
-                    <p style={{ fontSize: `${fontSize}px`, marginTop: "2rem" }}>
-                        זה טקסט לדוגמה שמציג את גודל הפונט שבחרת
-                    </p>
                 </div>
             </section>
             <section className="buttons">
-                <FormField type={"BUTTON_LONG"} params={positiveButton} onPress={onClose} />
+                <FormField type={"BUTTON_LONG"} params={positiveButton} onPress={onSave} />
+                <FormField type={"BUTTON_LONG"} params={negativeButton} onPress={onClose} />
             </section>
         </div>
     )

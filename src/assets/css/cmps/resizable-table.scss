@@ -36,8 +36,8 @@
   position: relative;
   box-sizing: border-box;
   color: var(--table-text);
-  font-size: rem(14px);
-  line-height: 1.5;
+  font-size: rem-capped(14px, 22px);
+  line-height: rem-capped(24px, 32px);
   direction: ltr;
   margin: 0;
 
@@ -307,10 +307,10 @@
 
   &-row-expand-icon {
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: rem(16px);
+    height: rem(16px);
     color: #aaa;
-    line-height: 16px;
+    line-height: rem(16px);
     text-align: center;
     vertical-align: middle;
     border: 1px solid currentColor;
@@ -408,7 +408,8 @@
 
   @include mobile-layout {
     & {
-      font-size: rem(14px);
+      font-size: rem-capped(14px, 20px);
+      line-height: rem-capped(14px, 20px);
       
       th, td {
         padding: 6px 4px;

@@ -5,26 +5,26 @@
         h1 {
             color: var(--text);
             padding: 0;
-            margin: 42px 0 20px;
+            margin: rem(42px) 0 rem(20px);
             font-size: rem(24px);
             font-weight: bold;
-            height: 24px;
+            height: rem(24px);
         }
 
         .form {
             @include container;
             width: 100%;
-            margin-bottom: 35px;
+            margin-bottom: rem(35px);
             
             article {
                 &:not(:nth-child(1)) {
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));    
+                    grid-template-columns: repeat(auto-fill, minmax(rem(310px), 1fr));    
                 }
                 
                 .property-field {
                     span {
-                        line-height: 30px;
+                        line-height: rem(30px);
                     }
         
                     &.percent {
@@ -36,12 +36,12 @@
         
                 &:nth-child(1) {
                     @include inside-container;
-                    width: 250px;
-                    height: 100px;
+                    width: rem(250px);
+                    height: rem(100px);
                     text-align: center;
                     display: grid;
-                    padding: 18px 10px;
-                    margin: 0 auto 20px;
+                    padding: rem(18px) rem(10px);
+                    margin: 0 auto rem(20px);
 
                     h2 {
                         color: var(--calculator-result-text);
@@ -57,7 +57,7 @@
                     *:nth-child(3), *:nth-child(4) { 
                         &.property-field {
                             span {
-                                line-height: 16px;
+                                line-height: rem(16px);
                             }
                         }
                     }
@@ -67,7 +67,7 @@
                     *:nth-child(2), *:nth-child(4) {
                         &.property-field {
                             span {
-                                line-height: 16px;
+                                line-height: rem(16px);
                             }
                         }
                     }
@@ -77,7 +77,7 @@
                     *:nth-child(1), *:nth-child(2) {
                         &.property-field {
                             span {
-                                line-height: 16px;
+                                line-height: rem(16px);
                             }
                         }
                     }
@@ -93,7 +93,7 @@
                     *:nth-child(1), *:nth-child(4) {
                         &.property-field {
                             span {
-                                line-height: 16px;
+                                line-height: rem(16px);
                             }
                         }
                     }
@@ -110,13 +110,13 @@
                 .form {
                     article {
                         &:not(:nth-child(1)) {
-                            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                            grid-template-columns: repeat(auto-fill, minmax(rem(300px), 1fr));
                         }
 
                         .property-field.dropdown .custom-dropdown,
                         .property-field.dropdown .custom-dropdown .dropdown-toggle,
                         .property-field div input {
-                            width: 160px;
+                            width: rem(160px);
                         }
                         
                         
@@ -125,9 +125,9 @@
                             *:nth-child(3), *:nth-child(4) { 
                                 &.property-field {
                                     span {
-                                        line-height: 16px;
-                                        width: 57px;
-                                        margin-left: 30px;
+                                        line-height: rem(16px);
+                                        width: rem(57px);
+                                        margin-left: rem(30px);
                                     }
 
                                     
@@ -146,11 +146,11 @@
                 margin: 20px;
                 
                 h1 {
-                    font-size: rem(22px);
+                    font-size: rem-capped(22px, 40px);
                     height: auto;
-                    margin: 0 0 20px;
+                    margin: 0 0 rem(20px);
     
-                    &.loading0 { width: calc(100% - 40px); }
+                    &.loading0 { width: calc(100% - rem(40px)); }
                 }
     
                 .form {
@@ -158,6 +158,20 @@
                     max-width: unset;
                     padding: 0;
                     margin-bottom: 0;
+
+                    article {
+                        &:nth-child(1) {
+                           width: calc(100vw - 40px);
+
+                           h2 {
+                            font-size: rem-capped(24px, 40px);
+                           }
+                        }
+
+                        &:not(:nth-child(1)) {
+                            grid-template-columns: 1fr;    
+                        }
+                    }
                 }
             }
         } 
@@ -188,10 +202,10 @@
             .elements {
                 display: grid;
                 grid-template-columns: 1fr 2fr auto;
-                gap: 10px;
+                gap: rem(10px);
             
                 .property-field {
-                    margin: 7px 0;
+                    margin: rem(7px) 0;
                     
                     & > span {
                         display: none;
@@ -200,6 +214,20 @@
                     &.dropdown {
                         .custom-dropdown {
                             margin: 0;
+
+                            .dropdown-toggle {
+                                direction: rtl;
+
+                                & > span {
+                                    width: fit-content;
+
+                                    & > span {
+                                        line-height: rem(30px);
+                                        display: inline-block;
+                                        width: fit-content;
+                                    }
+                                }
+                            }
                         }
 
                         &.visual {
@@ -207,6 +235,10 @@
                             
                             .custom-dropdown {
                                 width: 100%;
+
+                                .dropdown-toggle {
+                                    font-size: rem(16px);
+                                }
                             }
                         }
 
@@ -215,6 +247,15 @@
                             
                             .custom-dropdown {
                                 width: 100%;
+
+                                & > .dropdown-toggle {
+                                    & > span {
+                                        & > span {
+                                            text-decoration: none;
+                                        }
+                                    }
+                                }
+                                
                             }
                         }
                     }
@@ -225,16 +266,18 @@
                 }
 
                 .form-field.button {
-                    margin: 2px 0;
+                    margin: 0;
+                    align-items: center;
+                    display: flex;
 
                     button {
-                        height: 48px;
+                        height: rem-capped(48px, 78px);
                     }
                 }
             }
 
             .apartments {
-                margin-top: 14px;
+                margin-top: rem(14px);
                 white-space: nowrap; 
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -245,19 +288,19 @@
                     background: var(--property-field-background);
                     color: var(--property-field-text);
                     width: 100%;
-                    height: 30px;
-                    line-height: 30px;
-                    margin: 4px 0;
-                    padding: 0 7px;
+                    height: rem(30px);
+                    line-height: rem(30px);
+                    margin: rem(4px) 0;
+                    padding: 0 rem(7px);
                     text-align: right;
 
                     span {
-                        padding-left: 10px;
-                        margin-top: 5px;
+                        padding-left: rem(10px);
+                        margin-top: rem(5px);
                         display: ruby-text;
                        
                         &:not(:first-child) {
-                            padding-right: 10px;
+                            padding-right: rem(10px);
                         
                             border-right: 1px solid var(--home-my-property-separator);
                         }
@@ -267,53 +310,162 @@
             }
         }
 
-        .view-buttons {
+        .view-controller {
             display: none;
-        }
+            position: sticky;
+            top: 72px;
+            background: white; 
+            z-index: 1001;
+            
+            &.has-scroll {
+                display: inline-flex;
+                overflow-x: auto;
+                overflow-y: auto;
+                height: rem(60px);
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: rem(10px);
+            }
 
-        .scroll-buttons {
-            display: none;
+            .view-buttons {
+                align-items: center;
+                display: flex;
+                height: rem(24px);
+                
+                h2 {
+                     display: inline;
+                     font-size: rem(16px);
+                     margin: 0 0 0 rem(5px);
+                     padding: 0;
+                }
+    
+                svg {
+                     width: rem(24px);
+                     height: rem(24px);
+                     display: inline;
+                     color: var(--mobile-icon-disabled);
+                }
+    
+                &.comfy {
+                    svg:first-of-type {
+                        color: var(--icon-color);
+                    }
+    
+                    svg:last-of-type {
+                        color: var(--mobile-icon-disabled);
+                    }
+                }
+    
+                &.compact {
+                    
+                    svg:first-of-type {
+                        color: var(--mobile-icon-disabled);
+                    }
+    
+                    svg:last-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+            }
+    
+            .scroll-buttons {
+                align-items: center;
+                height: rem(24px);
+
+                svg {
+                    width: rem(24px);
+                    height: rem(24px);
+                    display: inline;
+                    color: var(--mobile-icon-disabled);
+                }
+    
+                &.scroll-right {
+                    svg:first-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+    
+                &.scroll-left {
+                    svg:last-of-type {
+                        color: var(--icon-color);
+                    }
+                }
+            }
+    
+            
         }
 
         .main-content {
             display: flex;
-            grid-gap: 25px;
-            width: fit-content;
+            grid-gap: rem(25px);
+            width: 1024px;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding: 0 rem(9px);
+
+            &.has-scroll {
+                /*padding-bottom: rem(10px);
+                border-bottom: 1px solid var(--divider);
+                background-color: red;*/
+            }
 
             .form {
-                width: 325px;
+                width: rem(319px);
                 display: flex;
                 flex-direction: column;
+                margin: 10px 0;
 
                 article {
-                    .property-field .custom-dropdown,
-                    .property-field .custom-dropdown .dropdown-toggle,
-                    .property-field > div > input,
-                    .property-field > div > textarea {
-                        width: 150px;
-                    }
-
-                    .property-field > div > textarea {
-                        max-width: 150px;
-                    }
-
-                    .property-field.dropdown.searchable .custom-dropdown .dropdown-menu {
-                        input {
-                            width: 135px;
-                            margin: 0 6px;
-                        }
-                    }
-
                     .property-field {
+                        display: grid;
+                        grid-template-columns: rem(87px) rem(150px) minmax(rem(20px), 1fr);
+
+                        .custom-dropdown,
+                        .custom-dropdown .dropdown-toggle {
+                            width: rem(150px);
+                        }
+
+                        .custom-dropdown .dropdown-menu input {
+                            width: calc(100% - rem(20px));
+                        }
+
+                        .custom-dropdown,
+                        .custom-dropdown .dropdown-toggle,
+                        & > div {
+                            & > input,
+                            & > textarea {
+                                width: rem(150px);
+                            }
+
+                            & > textarea {
+                                max-width: rem(150px);
+                            }
+                        }
+
+                        &.dropdown.searchable .custom-dropdown .dropdown-menu {
+                            &.searchable .custom-dropdown .dropdown-menu {
+                                input {
+                                    width: rem(135px);
+                                    margin: 0 rem(6px);
+                                }
+                            }
+                            
+                            &.multiple .custom-dropdown ui li {
+                                display: grid;
+                                grid-template-columns: rem(20px) 1fr 1fr;
+                            }
+                        }
+                        
                         span {
-                            line-height: 30px;
+                            line-height: rem(30px);
                         }
                     }
                 }
 
                 .yields {
                     list-style: none;
-                    padding: 0 10px;
+                    padding: 0 rem(10px);
                     
                     li {
                         align-items: center;
@@ -322,12 +474,12 @@
                         position: relative;
                         
                         img {
-                            width: 20px;
+                            width: rem(20px);
                         }
 
                         .property-field {
                             width: 100%;
-                            margin: 0 5px 0 0px;
+                            margin: 0 rem(5px) 0 0;
                             border: 0;
 
                             span {
@@ -352,7 +504,7 @@
                         }
 
                         & > b {
-                            margin: 0 10px;
+                            margin: 0 rem(10px);
                             font-size: rem(15px);
                             font-weight: normal;
                         }
@@ -370,7 +522,7 @@
                             *:nth-child(6), *:nth-child(7) { 
                                 &.property-field {
                                     span {
-                                        line-height: 16px;
+                                        line-height: rem(16px);
                                     }
                                 }
                             }
@@ -380,7 +532,7 @@
                             *:nth-child(2), *:nth-child(4) {
                                 &.property-field {
                                     span {
-                                        line-height: 16px;
+                                        line-height: rem(16px);
                                     }
                                 }
                             }
@@ -390,7 +542,7 @@
                             *:nth-child(1), *:nth-child(2) {
                                 &.property-field {
                                     span {
-                                        line-height: 16px;
+                                        line-height: rem(16px);
                                     }
                                 }
                             }
@@ -400,7 +552,7 @@
                             *:nth-child(1), *:nth-child(4) {
                                 &.property-field {
                                     span {
-                                        line-height: 16px;
+                                        line-height: rem(16px);
                                     }
                                 }
                             }
@@ -410,7 +562,7 @@
                             *:nth-child(4) {
                                 &.property-field {
                                     span {
-                                        line-height: 16px;
+                                        line-height: rem(16px);
                                     }
                                 }
                             }
@@ -424,7 +576,7 @@
                             *:nth-child(7), *:nth-child(8) { 
                                 &.property-field {
                                     span {
-                                        line-height: 16px;
+                                        line-height: rem(16px);
                                     }
                                 }
                             }
@@ -436,7 +588,7 @@
                 &.city-else article:nth-child(1) *:nth-child(8).property-field span,*/
                 &.city-else article:nth-child(3) *:nth-child(3).property-field span,
                 &.city-else article:nth-child(9) *:nth-child(2).property-field span {
-                    line-height: 30px;
+                    line-height: rem(30px);
                 }
 
                 &.city-else article:nth-child(3) *:nth-child(2).property-field span,
@@ -446,7 +598,7 @@
                 &.city-else article:nth-child(9) *:nth-child(1).property-field span,
                 &.city-else article:nth-child(9) *:nth-child(4).property-field span,
                 &.city-else article:nth-child(11) *:nth-child(4).property-field span {
-                    line-height: 16px;
+                    line-height: rem(16px);
                 }
 
             }
@@ -463,61 +615,305 @@
 
                 img {
                     margin: auto;
-                    width: 400px;
+                    width: rem(400px);
+                }
+            }
+
+            &.compact {
+                gap: rem(10px);
+
+                .form {
+                    width: auto;
+                    max-width: unset;
+                    
+                    &:not(.city-else) article:nth-child(3) *:nth-child(4).property-field span {
+                        line-height: rem(30px);
+                    }
+
+                    &.city-else {
+                        article {
+                            .property-field.dropdown.searchable {
+                                &:first-child {
+                                    display: none;
+                                }
+                            }
+                        } 
+                    }
+
+                    article {
+                        .property-field {
+                            div, .custom-dropdown {
+                                pointer-events: none;
+                                cursor: not-allowed;
+                                margin: 0;
+                                width: auto;
+                                
+                                svg {
+                                    display: none;
+                                }
+                                
+                                input, button, textarea, button.dropdown-toggle {
+                                    color: var(--property-field-input-disabled-text);
+                                    opacity: 0.6;
+                                    border: 0;
+                                    margin: 0;
+                                    width: rem(120px);
+                                    font-size: rem(16px);
+                                }
+
+                                textarea {
+                                    resize: none;
+                                }
+                            }
+
+                            &.calc-total {
+                                span {
+                                    margin-top: 0;
+                                }
+                            }
+
+                            &.dropdown.empty {
+                                button.dropdown-toggle { 
+                                    color: transparent;
+                                }
+                            }
+                        }
+                    }
+
+                    ul.yields {
+                        padding: 0;
+                            
+                        li {
+                            img {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    &:first-child {
+                        article {
+                            &:nth-child(7), &:nth-child(11) {
+                                h3 {
+                                    display: block;
+                                }
+
+                                .property-field {
+                                    &:first-of-type {
+                                    margin-top: rem(26px);
+                                    }
+                                }
+                            }
+
+                            .property-field {
+                                display: grid;
+                                grid-template-columns: rem(90px) rem(120px);
+
+                                span {
+                                    width: rem(90px);
+                                    margin-left: rem(10px);
+                                    font-size: rem(15px);
+
+                                    u {
+                                        display: none;
+                                    }
+                                }
+
+                                &.textarea {
+                                    white-space: nowrap; 
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
+                            }
+
+                            h3 {
+                                height: rem(19px);
+                            }
+                        }
+
+                        & > h3 {
+                            padding: 0;
+                        }
+
+                        ul.yields {   
+                            width: rem(230px);
+
+                            li {
+                                .property-field {
+                                    margin: 0;
+
+                                    span {
+                                        margin-right: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &:not(:first-child) {
+                        width: rem(145px);
+                        max-width: rem(145px);
+                        padding-right: rem(10px);
+
+                        article {
+                            h3 {
+                                color: transparent;
+                                height: rem(19px);
+                            }
+
+                            .property-field {
+                                display: grid;
+                                grid-template-columns: 0 rem(120px);
+                                
+                                span {
+                                    display: inline-block; 
+                                    width: 0;
+                                    overflow: hidden;
+                                    white-space: nowrap;
+                                }
+
+                               
+                            }
+                        }
+
+                        & > h3 {
+                            color: transparent;
+                            white-space: nowrap;
+
+                            & > b > font {
+                                color: transparent;
+                            }
+                        }
+
+                        ul.yields {   
+                            width: rem(120px);
+                            padding: 0;
+                                    
+                            li {
+                                display: block;
+
+                                .property-field {
+                                    max-width: rem(145px);
+                                    height: rem(30px);
+                                    
+                                    span {
+                                        display: none;
+                                    }
+
+                                    div {
+                                        left: unset;
+                                        
+                                        input {
+                                            max-width: rem(115px);
+                                            text-align: right;
+                                            margin: 0;
+                                            padding: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.compacting {
+                .form {
+                    &:not(:first-child) {
+                        article {
+                            .property-field {
+                                span {
+                                    width: 0;
+                                    transition: width 0.3s ease-in-out;  
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    
+            &.comfying {
+                .form {
+                    &:not(:first-child) {
+                        article {
+                            .property-field {
+                                span {
+                                    width: rem(100px);
+                                    transition: width 0.3s ease-in-out;  
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.loading.compact {
+                .form article .property-field.dropdown .custom-dropdown .dropdown-toggle {
+                    color: transparent;
                 }
             }
         }
 
+
+        @media (min-width: 1064.1px) and (max-width: 1076px) {
+            .main-content {
+                width: 1010px;
+            }
+        }
+        
         @include tablet-layout {  
             position: relative;
 
-            .scroll-buttons.count2, .scroll-buttons.count3 {
-                display: flex;
-                overflow-x: auto;
-                overflow-y: auto;
-                height: 40px;
-                width: 58px;
-                position: absolute;
-                top: 174px;
-                left: 0;
-                justify-content: space-between;
-                align-items: center;
-
-                svg {
-                    width: 24px;
-                    height: 24px;
-                    display: inline;
-                    color: var(--mobile-icon-disabled);
-                }
-
-                &.scroll-right {
-                    svg:first-of-type {
-                        color: var(--icon-color);
-                    }
-                }
-
-                &.scroll-left {
-                    svg:last-of-type {
-                        color: var(--icon-color);
-                    }
-                }
-            }
-
-            .scroll-buttons.count2 {
-                display: none;
+            .view-controller {
+                top: 0;
             }
 
             .main-content {
-                width: calc(100vw - 116px);
+                width: calc(100vw - rem(58px) - 64px);
                 overflow-y: auto;
                 overflow-x: auto;
-                grid-gap: 20px;
-
+                grid-gap: rem(20px);
+               
                 .form {
-                    margin: 40px 4px 20px;
-                    width: 310px;
-                    padding: 10px 4px;
+                    width: rem(310px);
+                    padding: rem(10px) rem(4px);
                     height: unset;
+                    margin-top: 0;
+                }
+            }
+        }
+
+        @media (min-width: 850.1px) and (max-width: 1000px)  {
+            .filter {
+                .elements {
+                    .property-field {
+                        &.dropdown {
+                            &.multiple {
+                                .custom-dropdown {
+    
+                                    ul li {
+                                        grid-template-columns: rem(26px) 1fr;
+                                    
+                                        & > img {
+                                            display: none;
+                                        }
+    
+                                        & > div {
+                                            grid-column: 2;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &.visual {
+                            .custom-dropdown {
+                                .dropdown-menu {
+                                    margin-left: rem(-50px);
+                                    width: calc(100% + rem(50px));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -531,8 +927,35 @@
                         &.dropdown {
                             &.multiple {
                                 .custom-dropdown {
-                                    ul li > img {
-                                        display: none;
+
+                                    .dropdown-toggle {
+                                        padding: 0;
+                                    }
+
+                                    .dropdown-menu {
+                                        margin-left: rem(-50px);
+                                        width: calc(100% + rem(50px));
+
+                                        ul li {
+                                            grid-template-columns: rem(26px) 1fr;
+                                        
+                                            & > img {
+                                                display: none;
+                                            }
+    
+                                            & > div {
+                                                grid-column: 2;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            &.visual {
+                                .custom-dropdown {
+                                    .dropdown-menu {
+                                        margin-left: rem(-50px);
+                                        width: calc(100% + rem(50px));
                                     }
                                 }
                             }
@@ -544,26 +967,31 @@
 
         @include mobile-layout {
             margin: 20px;
+
             position: relative;
 
+            h1 {
+                font-size: rem-capped(32px, 42px);
+            }
+
             .filter {
-                padding: 10px;
+                padding: rem-capped(10px, 200px);
 
                 .header {
                     display: grid;
                     grid-template-columns: 1fr auto;
-                    height: 20px;
+                    height: rem-capped(20px, 40px);
 
                     h2 {
                         display: inline;
-                        font-size: rem(16px);
+                        font-size: rem-capped(16px, 28px);
                     }
     
                     .form-field {
                         display: inline;
                         text-align: left;
-                        width: 28px;
-                        height: 20px;
+                        width: rem-capped(28px, 56px);
+                        height: rem-capped(20px, 40px);
                         padding: 0;
                         margin: 0;
 
@@ -572,14 +1000,13 @@
 
                             button {
                                 min-width: unset;
-                                height: 20px;
+                                height: rem-capped(20px, 30px);
                                 padding: 0;
                                 margin: 0;
                                 
                                 span {
-                                    line-height: 20px;
-                                    font-size: rem(16px);
-                                    margin-bottom: 3px;
+                                    font-size: rem-capped(16px, 24px);
+                                    margin-bottom: rem(3px);
                                 }
                             }
                         }
@@ -587,83 +1014,122 @@
                 }
 
                 .elements {
-                    grid-template-columns: 122px 1fr;
-                    
+                    /*grid-template-columns: repeat(auto-fit, minmax(rem(100px), 1fr));*/
+                    grid-template-columns: 1fr 1fr;
+                    gap: rem-capped(10px, 20px);
+
                     .property-field {
                         &.dropdown {
                             &.multiple {
                                 .custom-dropdown {
-                                    height: 40px;
-
                                     .dropdown-toggle {
-                                        font-size: rem(16px);
-                                    }
+                                        font-size: rem-capped(16px, 32px);
+                                        padding: 0 10px;
 
-                                    ul {
-                                        height: 180px;
+                                        & > span {
+                                            display: inline;
 
-                                        li {
-                                            margin: 4px;
-                                            width: calc(100% - 8px);
-                                            height: 40px;
-    
-                                            & > img {
+                                            & > span {
                                                 display: none;
                                             }
-    
-                                            & div {
-                                                width: calc(100% - 20px);
-                                                display: block;
-                                                margin: 0 5px 0 0;
-                                                padding: 0;
-    
-                                                span {
-                                                    height: 20px;
-                                                    line-height: 20px;
-                                                    font-size: rem(16px);
-                                                    display: block;
-                                                    margin: 0;
-                                                    padding: 0;
-                                                    white-space: normal;
+                                        }
+
+                                        & > svg {
+                                            width: rem-capped(28px, 56px);
+                                            height: rem-capped(28px, 56px);
+                                            left: 0;
+                                        }
+                                    }
+
+                                    .dropdown-menu {
+                                        width: calc(100% + rem(60px));
+
+                                        ul {
+                                            height: rem(180px);
+
+                                            li {
+                                                margin: rem(4px);
+                                                width: calc(100% - rem(8px));
+                                                height: rem(40px);
         
-                                                    &:not(:first-child) {
-                                                        display: none;
+                                                & > img {
+                                                    display: none;
+                                                }
+        
+                                                & div {
+                                                    display: block;
+                                                    margin: 0 5px 0 0;
+                                                    padding: 0;
+                                                    grid-column: 2;
+        
+                                                    span {
+                                                        height: rem(20px);
+                                                        line-height: rem(20px);
+                                                        font-size: rem(16px);
+                                                        display: block;
+                                                        margin: 0;
+                                                        padding: 0;
+                                                        white-space: normal;
+            
+                                                        &:not(:first-child) {
+                                                            display: none;
+                                                        }
                                                     }
                                                 }
+                                                
                                             }
-                                            
+                                        } 
+                                    }
+                                    
+                                }
+                            }
+
+                            &.visual {
+                                
+                                .custom-dropdown {
+                                    .dropdown-toggle {
+                                        font-size: rem-capped(16px, 28px);
+                                        padding: 0 10px;
+
+                                        & > svg {
+                                            width: rem-capped(28px, 42px);
+                                            height: rem-capped(28px, 42px);
+                                            left: 0;
                                         }
-                                    } 
+                                    }
+                                    .dropdown-menu {
+                                        margin-left: rem(-60px);
+                                        width: calc(100% + rem(60px));
+
+                                        ul {
+                                            height: rem-capped(180px, 270px);
+    
+                                            li {
+                                                margin: rem-capped(4px, 6px);
+                                                width: calc(100% - rem(8px));
+                                                height: rem-capped(40px, 60px);
+        
+                                                & > img {
+                                                    display: none;
+                                                }
+        
+                                                & div span {
+                                                    height: rem-capped(20px, 30px);
+                                                    line-height: rem-capped(20px, 30px);
+                                                    font-size: rem-capped(16px, 24px);
+                                                }
+                                            }
+                                        }
+                                    }
                                     
                                 }
                             }
 
                             &.visual {
                                 .custom-dropdown {
-                                    height: 40px;
-                                    
-                                    .dropdown-toggle {
-                                        font-size: rem(16px);
-                                    }
-
-                                    ul {
-                                        height: 180px;
-
-                                        li {
-                                            margin: 4px;
-                                            width: calc(100% - 8px);
-                                            height: 40px;
-    
-                                            & > img {
-                                                display: none;
-                                            }
-    
-                                            & div span {
-                                                height: 20px;
-                                                line-height: 20px;
-                                                font-size: rem(16px);
-                                            }
-                                        }
+                                    .dropdown-menu {
+                                        margin-left: rem(-50px);
+                                        width: calc(100% + rem(50px));
                                     }
                                 }
                             }
@@ -678,93 +1144,18 @@
                 }
             }
 
-            .view-buttons.count2, .view-buttons.count3 {
-                display: block;
-                overflow-x: auto;
-                overflow-y: auto;
-                height: 40px;
-                width: 106px;
-                position: absolute;
-                justify-content: space-between;
-                display: flex;
-                align-items: center;
-
-                h2 {
-                    display: inline;
-                    font-size: rem(16px);
-                }
-
-                svg {
-                    width: 24px;
-                    height: 24px;
-                    display: inline;
-                    color: var(--mobile-icon-disabled);
-                }
-
-                &.comfy {
-                    svg:first-of-type {
-                        color: var(--icon-color);
-                    }
-
-                    svg:last-of-type {
-                        color: var(--mobile-icon-disabled);
-                    }
-                }
-
-                &.compact {
-                    svg:first-of-type {
-                        color: var(--mobile-icon-disabled);
-                    }
-
-                    svg:last-of-type {
-                        color: var(--icon-color);
-                    }
-                }
-            }
-
-            .scroll-buttons.count2, .scroll-buttons.count3 {
-                display: block;
-                overflow-x: auto;
-                overflow-y: auto;
-                height: 40px;
-                width: 58px;
-                position: absolute;
-                left: 0;
-                justify-content: space-between;
-                display: flex;
-                align-items: center;
-
-                svg {
-                    width: 24px;
-                    height: 24px;
-                    display: inline;
-                    color: var(--mobile-icon-disabled);
-                }
-
-                &.scroll-right {
-                    svg:first-of-type {
-                        color: var(--icon-color);
-                    }
-                }
-
-                &.scroll-left {
-                    svg:last-of-type {
-                        color: var(--icon-color);
-                    }
-                }
-            }
-
+            
             .main-content {
-                width: calc(100vw - 41px);
+                width: calc(100vw - rem(41px));
                 overflow-y: auto;
                 overflow-x: auto;
-                grid-gap: 20px;
+                grid-gap: rem(20px);
+                padding: 0;
 
                 .form {
-                    margin: 38px 0 20px;
-                    width: 293px;
-                    max-width: 293px;
-                    padding: 10px 0;
+                    margin: 0 0 rem(20px);
+                    width: rem(293px);
+                    padding: 0 0 rem(10px);
 
                     article {
                         h3 {
@@ -772,28 +1163,52 @@
                         }
 
                         .property-field {
-                            margin: 7px 0;
+                            margin: rem(7px) 0;
+                            display: grid;
+                            grid-template-columns: rem-capped(87px, calc(100vw / 2 - rem(10px))) rem(150px) minmax(rem(20px), 1fr);
+                            
+                            .custom-dropdown {
+                                width: calc(50vw - rem(10px));
+                                max-width: 100%;
 
-                            span {
-                                margin-right: 0;
-                                width: 100px;
+                                .dropdown-toggle {
+                                    width: 100%;
+                                }
                             }
-                        }
+
+                            &.warning {
+                                div {
+                                    & > svg {
+                                        margin: rem(5px) 0;
+                                    }
+                                }
+                            }
+
+                            & > span {
+                                line-height: rem(30px);
+                                width: rem-capped(87px, calc(100vw / 2 - rem(10px)));
+                                font-size: rem-capped(15px, 28px);
+                            }
+
+                            & > div {
+                                width: calc(100vw / 2 - rem(10px));
+                                max-width: 100%;
+                            }
+                        }     
                     }
 
                     hr {
-                        margin: 20px 0;
+                        margin: rem(20px) 0;
                         height: 1.6px;
                     }
 
-                    &:not(:first-child) {
-                        border-right: 1px solid var(--property-form-spinner-divider);
-                        border-radius: 0;
-                        padding-right: 20px;
+                    ul.yields {
+                        width: rem(240px);
+                        padding: 0;
                     }
 
-                    ul.yields {
-                        width: 240px;
+                    h3 {
+                        padding: 0;
                     }
                 }
 
@@ -804,14 +1219,14 @@
                 }
 
                 &.compact {
-                    grid-gap: 10px;
-
+                    grid-gap: 0;
+                    
                     .form {
-                        width: auto;
+                        width: rem(200px);
                         max-width: unset;
-                        
+
                         &:not(.city-else) article:nth-child(3) *:nth-child(4).property-field span {
-                            line-height: 30px;
+                            line-height: rem(30px);
                         }
 
                         &.city-else {
@@ -841,7 +1256,7 @@
                                         opacity: 0.6;
                                         border: 0;
                                         margin: 0;
-                                        width: 130px;
+                                        width: rem(100px);
                                         font-size: rem(16px);
                                     }
 
@@ -863,29 +1278,39 @@
                                 }
                             }
                         }
-
-                        ul.yields {
-                            padding: 0;
-                                
-                            li {
-                                img {
-                                    display: none;
-                                }
-                            }
-                        }
-
+                        
                         &:first-child {
                             article {
                                 .property-field {
+
+                                    &.dropdown {
+                                        position: unset;
+                                    }
+
                                     span {
-                                        width: 90px;
-                                        margin-left: 10px;
+                                        width: rem(90px);
+                                        margin-left: rem(10px);
                                         font-size: rem(15px);
+                                        position: absolute;
+                                        background-color: white;
+                                        z-index: 1000;
 
                                         u {
                                             display: none;
                                         }
                                     }
+
+                                    div {
+                                        grid-column: 2;
+                                        max-width: rem(100px);
+                                    }
+                                }
+
+                                & > h3 {
+                                    position: absolute;
+                                    background-color: white;
+                                    z-index: 1000;
+                                    display: contents;
                                 }
                             }
 
@@ -894,7 +1319,7 @@
                             }
 
                             ul.yields {   
-                                width: 230px;
+                                width: rem(200px);
 
                                 li {
                                     .property-field {
@@ -909,9 +1334,8 @@
                         }
 
                         &:not(:first-child) {
-                            width: 145px;
-                            max-width: 145px;
-                            padding-right: 10px;
+                            width: rem(100px);
+                            padding-right: 0;//rem(10px);
 
                             article {
                                 h3 {
@@ -919,11 +1343,18 @@
                                 }
 
                                 .property-field {
+                                    grid-template-columns: 0 rem(100px);
+
                                     span {
                                         display: inline-block; 
                                         width: 0;
                                         overflow: hidden;
                                         white-space: nowrap;
+                                    }
+
+                                    div {
+                                        grid-column: 2;
+                                        max-width: rem(100px);
                                     }
                                 }
                             }
@@ -938,15 +1369,15 @@
                             }
 
                             ul.yields {   
-                                width: 120px;
+                                width: rem(100px);
                                 padding: 0;
                                         
                                 li {
                                     display: block;
   
                                     .property-field {
-                                        max-width: 145px;
-                                        height: 30px;
+                                        max-width: rem(145px);
+                                        height: rem(30px);
                                         
                                         span {
                                             display: none;
@@ -956,7 +1387,7 @@
                                             left: unset;
                                             
                                             input {
-                                                max-width: 115px;
+                                                max-width: rem(115px);
                                                 text-align: right;
                                                 margin: 0;
                                                 padding: 0;
@@ -971,11 +1402,47 @@
 
                 &.comfy {
                     .form {
-                       &:not(:first-child) {
-                            article {
-                                .property-field {
-                                    span {
-                                        width: 100px;
+                        article {
+                            .property-field {
+                                &.number-picker {
+                                    & > .number-picker {
+                                        position: absolute;
+                                        width: auto;
+                                        background-color: white;
+                                        /*box-shadow: 0px 4px 12px var(--container-border);
+                                        background-color: var(--mobile-number-picker-background);
+                                        border-radius: 8px;*/
+                                        padding: 0 rem(4px);
+
+                                        .input {
+                                            display: contents;
+                                            
+                                            svg {
+                                                width: rem(24px);
+                                                height: rem(24px);
+                                            }
+                                        }
+
+                                        .actions {
+                                            display: contents;
+                                            
+                                            svg {
+                                                width: rem(20px);
+                                                height: rem(20px);
+
+                                                &[data-testid=CloseIcon] {
+                                                    margin-left: rem(8px);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    & > div {
+                                        width: calc(100% - rem(50px));
+                                        
+                                        display: block;
+                                        grid-column: 2;
+                                        margin-right: rem(60px);
                                     }
                                 }
                             }
@@ -983,10 +1450,10 @@
                     }
                 }
 
-                &.compacting {
+                &.compacting {/*background-color: red;
                     .form {
                         &:not(:first-child) {
-                            article {
+                            article {background-color: green;
                                 .property-field {
                                     span {
                                         width: 0;
@@ -995,28 +1462,28 @@
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
         
                 &.comfying {
-                    .form {
+                    /*.form {
                         &:not(:first-child) {
                             article {
                                 .property-field {
                                     span {
-                                        width: 100px;
+                                        width: rem(100px);
                                         transition: width 0.3s ease-in-out;  
                                     }
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
 
                 &.loading.compact {
-                    .form article .property-field.dropdown .custom-dropdown .dropdown-toggle {
+                    /*.form article .property-field.dropdown .custom-dropdown .dropdown-toggle {
                         color: transparent;
-                    }
+                    }*/
                 }
             }
         }
@@ -1032,22 +1499,56 @@
                 .form {
                     article {
                         &:not(:nth-child(1)) {
-                            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                            grid-template-columns: repeat(auto-fill, minmax(rem(300px), 1fr));
                         }
 
                         .property-field.dropdown .custom-dropdown,
                         .property-field.dropdown .custom-dropdown .dropdown-toggle,
                         .property-field div input {
-                            width: 160px;
+                            width: rem(160px);
+                        }
+                    }
+                }
+            }
+        }
+
+        .compare {
+            .filter {
+                .elements {
+                    .property-field {
+                        &.dropdown {
+                            &.multiple {
+                                .custom-dropdown {
+    
+                                    ul li {
+                                        grid-template-columns: rem(26px) 1fr;
+                                    
+                                        & > img {
+                                            display: none;
+                                        }
+    
+                                        & > div {
+                                            grid-column: 2;
+                                        }
+                                    }
+                                }
+                            }
+
+                            &.visual {
+                                .custom-dropdown {
+                                    .dropdown-menu {
+                                        margin-left: rem(-50px);
+                                        width: calc(100% + rem(50px));
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            &.compare {
-                .main-content {
-                    width: calc(100vw - 207px);
-                }
+            .main-content {
+                width: calc(100vw - rem(58px) - 155px);
             }
         }
     }
@@ -1058,23 +1559,43 @@
                 .form {
                     article {
                         &:not(:nth-child(1)) {
-                            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                            grid-template-columns: repeat(auto-fill, minmax(rem(260px), 1fr));
                         }
 
                         .property-field.dropdown .custom-dropdown,
                         .property-field.dropdown .custom-dropdown .dropdown-toggle,
                         .property-field div input {
-                            width: 115px;
+                            width: rem(115px);
                         }
                     }
                 }
             }
 
             &.compare {
-                .scroll-buttons.count2 {
-                    display: flex;
+                .filter {
+                    .dropdown {
+                        &.multiple {
+                            .custom-dropdown {
+                                .dropdown-toggle {
+                                    & > span {
+                                        display: inline;
+
+                                        & > span {
+                                            display: none;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+.main-layout:not(.logout) {
+    @include tablet-layout {
+        grid-template-rows: unset;
     }
 }

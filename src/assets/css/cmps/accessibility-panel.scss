@@ -1,4 +1,3 @@
-
 .accessibility-panel {
     background-color: var(--accessibility-panel-background);
     width: 50px;
@@ -17,7 +16,7 @@
     }
 
     @include tablet-layout {
-        
+        bottom: 25px;
     }
 
     @include mobile-layout {
@@ -34,12 +33,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 600px;
-    min-height: 290px;
+    height: 300px;
     margin: 20px auto; 
     padding-bottom: 26px;
-    z-index: 5;
+    z-index: 1001;
     background-color: var(--accessibility-modal-background);
-
+    display: grid;
+    grid-template-rows: 48px 150px 80px;
+    
     header {
         background-color: var(--accessibility-modal-header-background);
         border-radius: 8px 8px 0 0;
@@ -49,6 +50,7 @@
         align-items: center;
         padding: 0 15px;
         box-sizing: border-box;
+        grid-row: 1;
 
         div {
             display: flex;
@@ -66,6 +68,9 @@
     }
     
     .font-size {
+        padding: 25px;
+        grid-row: 2;
+        
         /*.marks-container {
             .mark-label {
                 position: absolute;
@@ -79,7 +84,18 @@
                 &:nth-child(6) { left: 90%; }
             }
         }*/
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin: 10px 0 20px;
+    
+            a {
+                margin-right: auto;
+            }
+        }
     }
+
     
     .buttons {
         border: 0;
@@ -89,6 +105,8 @@
         align-items: center;
         margin: 19px 2px 0 12px;
         padding: 25px;
+        gap: 20px;
+        grid-row: 3;
 
         button {
             @include conditional-button('default');
@@ -123,7 +141,8 @@
         & {
             width: calc(100% - 40px);
             min-height: 210px;
-
+            z-index: 1001;
+            
             header {
                 div {
                     h2 {
@@ -145,8 +164,6 @@
 
 @include tablet-layout {
     .main-layout.wide, .main-layout.widing, .main-layout.narrowing {
-        .alert {
-            left: calc((100% - 155px) / 2);
-        }
+        
     }
 }

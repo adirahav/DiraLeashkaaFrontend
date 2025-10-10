@@ -1,31 +1,30 @@
 .property-field {
   display: flex;
-  margin: 7px;
+  margin: rem(7px);
 
   span {
     color: var(--property-field-label);
-    width: 87px;
-    height: 30px;
+    width: rem(87px);
+    height: rem(030px);
     display: block;
     align-items: center;
     font-size: rem(15px);
-    margin-right: 5px;
+    margin-right: rem(5px);
 
     &.bold {
       font-weight: bold;
     }
 
     & > span {
-      margin-right: 5px;
+      margin-right: rem(5px);
       display: contents;
-      background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
+      /*background: linear-gradient(to left, #f69ec4, #f9dd94 100%);*/
       text-decoration: underline;
 
-      &::after {
+      /*&::after {
         border-bottom: 10px solid red;
-      }
+      }*/
     }
-    
   }
   
   .number-picker {
@@ -34,9 +33,9 @@
   }
  
   input {
-      width: 214px;
-      height: 20px;
-      padding: 5px 8px;
+      width: rem(214px);
+      height: rem(20px);
+      padding: rem(5px) rem(8px);
       border: none;
       border-radius: 4px;
       font-size: rem(14px);
@@ -53,14 +52,14 @@
 
   .number-picker {
       margin: 0;
-      width: 105px;
+      width: rem(105px);
 
       .input {
         input {
-          width: 30px;
+          width: rem(30px);
           text-align: center;
           padding: 0;
-          height: 26px;
+          height: rem(26px);
           background: transparent;
           margin: 0;
           font-size: rem(14px);
@@ -80,19 +79,19 @@
           }  
   
           button {
-            margin: 0 5px;
+            margin: 0 rem(5px);
             cursor: pointer; 
           }
   
           i {
-            margin: 0 2px;
+            margin: 0 rem(2px);
             cursor: pointer;
           }
         }  
       }
       
       .actions {
-        margin-left: 5px;
+        margin-left: rem(5px);
         svg {
           color: var(--number-picker-icon);
           margin: 0;
@@ -114,13 +113,13 @@
         border: 1px solid var(--form-field-input-border);
         border-radius: 8px;
         flex: 1 0 auto;
-        padding: 9px 8px 7px;
+        padding: rem(9px) rem(8px) rem(7px);
         background: var(--property-field-background);
         color: var(--property-field-text);
 
-        width: 180px;
-        height: 30px;
-        margin: 0 10px;
+        width: rem(180px);
+        height: rem(30px);
+        margin: 0 rem(10px);
         direction: ltr;
         text-align: right;
       
@@ -154,12 +153,12 @@
         background: var(--property-field-background);
         color: var(--property-field-text);
         color: var(--form-field-input-text);
-        width: 180px;
-        max-width: 180px;
-        min-height: 30px;
-        height: 30px;
-        margin: 0 10px;
-        padding: 7px 8px;
+        width: rem(180px);
+        max-width: rem(180px);
+        min-height: rem(30px);
+        height: rem(30px);
+        margin: 0 rem(10px);
+        padding: rem(7px) rem(8px);
         overflow: hidden;
 
         &:focus-visible {
@@ -200,8 +199,8 @@
       svg  {
         margin: auto 0;
         user-select: none;
-        width: 1em;
-        height: 1em;
+        width: rem(16px);
+        height: rem(16px);
         font-size: rem(20px);
       }
       
@@ -209,7 +208,7 @@
 
     & > div {
       & > svg {
-        margin: 3px 6px 3px 0;
+        margin: rem(3px) rem(6px) rem(3px) 0;
       }
       
     }
@@ -217,7 +216,7 @@
 
   &.calc-total {
     span {
-      margin-top: 5px;
+      margin-top: rem(5px);
     }
 
     div {
@@ -227,7 +226,7 @@
         border-top: 1px solid var(--property-form-spinner-divider);
         border-radius: 0;
         margin-left: 0;
-        margin-top: 5px;
+        margin-top: rem(5px);
         font-weight: bold;
       }
     }
@@ -239,21 +238,23 @@
     
     .custom-dropdown {
         position: relative;
-        width: 180px;
-        height: 30px;
-        margin: 0 10px;
+        width: rem(180px);
+        height: rem(30px);
+        margin: 0 rem(10px);
         direction: ltr;
         text-align: right;
 
         .dropdown-toggle {
-            width: 180px;
-            height: 30px;
+            width: rem(180px);
+            height: rem(30px);
             border: 1px solid var(--form-field-input-border);
             border-radius: 8px;
             background: var(--property-field-background);
             color: var(--property-field-text);
             cursor: default;
             text-align: right; 
+            font-size: rem(14px);
+            padding: rem(9px) rem(8px) rem(7px);
 
             svg {
               position: absolute;
@@ -278,12 +279,12 @@
             font-size: rem(14px);
             
             li {
-              padding: 10px;
+              padding: rem(10px);
               cursor: default;
   
               &:hover {
                   background: var(--property-field-hover-background);
-                  margin-left: -40px;
+                  margin-left: rem(-40px);
               }
 
               &:first-child {
@@ -311,7 +312,7 @@
           height: 1em;
           font-size: rem(20px);
           position: absolute;
-          left: -20px;
+          left: rem(-20px);
         }
     }
 
@@ -319,19 +320,19 @@
       .custom-dropdown {
         .dropdown-menu {
           input {
-            top: 10px;
+            top: rem(10px);
             left: 0;
             position: absolute;
             z-index: 1001;
             border: 1px solid var(--form-field-input-border);
             border-radius: 8px;
             flex: 1 0 auto;
-            padding: 9px 8px 7px;
+            padding: rem(9px) rem(8px) rem(7px);
             background: var(--property-field-background);
             color: var(--property-field-text);
-            width: 162px;
-            height: 30px;
-            margin: 0 8px;
+            width: rem(162px);
+            height: rem(30px);
+            margin: 0 rem(10px);
             direction: rtl;
             text-align: right;
 
@@ -344,11 +345,11 @@
         ul {
           @include scrollbar;
     
-          height: 180px;
+          height: rem(180px);
           overflow-y: visible;
           overflow-x: hidden;
           list-style: none;
-          margin-top: 40px;
+          margin-top: rem(40px);
 
           &::-webkit-scrollbar {
             width: 0;
@@ -372,25 +373,25 @@
 
     &.visual {
       .custom-dropdown {
-        width: 300px;
-        height: 50px;
+          width: rem(300px);
+          height: rem-capped(50px, 80px);
 
         .dropdown-toggle {
-          font-size: rem(18px);
+          font-size:rem(18px);
           height: 100%;
           width: 100%;
-          padding: 0 10px;
+          padding: 0 rem(10px);
 
           svg {
-            width: 28px;
-            height: 28px;
+            width: rem(28px);
+            height: rem(28px);
           }
         }
 
         ul {
           @include scrollbar;
           box-sizing: border-box;
-          height: 310px;
+          height: rem(310px);
           overflow-y: visible;
           overflow-x: hidden;
           list-style: none;
@@ -404,18 +405,18 @@
 
           li {
             @include inside-container;
-            margin: 16px;
-            height: 50px;
-            width: calc(100% - 20px);
+            margin: rem(16px);
+            height: rem(50px);
+            width: calc(100% - rem(20px));
             box-sizing: border-box;
             display: flex;
-            margin: 10px;
+            margin: rem(10px);
             align-items: center;
             direction: rtl;
            
             & > img {
-              margin-left: 4px;
-              width: 25px;
+              margin-left: rem(4px);
+              width: rem(25px);
               height: fit-content;
             }
 
@@ -424,9 +425,9 @@
               
               & > span {
                 &:nth-child(1) {
-                  height: 30px;
+                  height: rem(30px);
                   width: 100%;
-                  line-height: 30px;
+                  line-height: rem(30px);
                   font-size: rem(18px);
                   white-space: nowrap;
                   overflow: hidden;
@@ -434,9 +435,9 @@
                 }
 
                 &:nth-child(2) {
-                  height: 30px;
+                  height: rem(30px);
                   width: 100%;
-                  line-height: 30px;
+                  line-height: rem(30px);
                   font-size: rem(14px);
                   white-space: nowrap;
                   overflow: hidden;
@@ -446,7 +447,7 @@
             }
 
             &:hover {
-              margin-left: 10px;
+              margin-left: rem(10px);
               
               div > span:nth-child(1) {
                 font-weight: bold;
@@ -461,25 +462,25 @@
       display: inline-flex;
 
       .custom-dropdown {
-        width: 300px;
-        height: 50px;
+        width: rem(300px);
+        height: rem-capped(50px, 80px);
 
         .dropdown-toggle {
           font-size: rem(18px);
           height: 100%;
           width: 100%;
-          padding: 0 10px;
+          padding: 0 rem(10px);
 
           svg {
-            width: 28px;
-            height: 28px;
+            width: rem(28px);
+            height: rem(28px);
           }
         }
 
         ul {
           @include scrollbar;
           box-sizing: border-box;
-          height: 340px;
+          height: rem(340px);
           overflow-y: visible;
           overflow-x: hidden;
           list-style: none;
@@ -493,18 +494,20 @@
 
           li {
             @include inside-container;
-            margin: 16px;
-            height: 100px;
-            width: calc(100% - 20px);
+            height: rem-capped(100px, 120px);
+            width: calc(100% - rem(20px));
             box-sizing: border-box;
-            display: flex;
-            margin: 10px;
+            display: grid;
+            margin: rem(10px);
             align-items: center;
             direction: rtl;
-             
+            grid-template-columns: rem(26px) rem-capped(132px, 166px) 1fr;
+            padding: 0 rem(10px);
+          
             & > input {
-              width: 20px;
-              height: 20px;
+              width: rem(20px);
+              height: rem(20px);
+              grid-column: 1;
 
               &:focus-visible {
                 outline: 0;
@@ -512,23 +515,26 @@
             }
 
             & > img {
-              margin-right: 8px;
-              margin-left: 4px;
-              width: 120px;
-              height: 80px;
+              margin-right: rem(8px);
+              margin-left: rem(8px);
+              width: rem-capped(120px, 150px);
+              height: rem-capped(80px, 100px);
               object-fit: cover;
               border-radius: 8px;
               flex-shrink: 0;
+              grid-column: 2;
             }
 
             & > div {
-              width: 100%;
+              grid-column: 3;
+              display: inline-grid;
               
               & > span {
+                width: auto;
+
                 &:nth-child(1) {
-                  height: 30px;
-                  width: 100%;
-                  line-height: 30px;
+                  height: rem-capped(30px, 38px);
+                  line-height: rem-capped(30px, 38px);
                   font-size: rem(18px);
                   white-space: nowrap;
                   overflow: hidden;
@@ -536,9 +542,8 @@
                 }
 
                 &:nth-child(2) {
-                  height: 30px;
-                  width: 100%;
-                  line-height: 30px;
+                  height: rem(30px);
+                  line-height: rem(30px);
                   font-size: rem(15px);
                   white-space: nowrap;
                   overflow: hidden;
@@ -548,7 +553,7 @@
             }
 
             &:hover {
-              margin-left: 10px;
+              margin-left: rem(10px);
               
               div > span:nth-child(1) {
                 font-weight: bold;
@@ -568,7 +573,7 @@
 
   &.warning {
       /*span {
-      width: 95px;
+      width: rem(95px);
       padding: 0;
       margin: 0 5px 0 0;
     }*/
@@ -578,7 +583,7 @@
 
       & > svg {
         color: var(--property-field-warning-icon);
-        margin: 5px -10px 5px 0;
+        margin: rem(5px) rem(-10px) rem(5px) 0;
         user-select: none;
         width: 1em;
         height: 1em;
@@ -602,23 +607,7 @@
       &.searchable-dropdown {
         div {
           ul {
-            height: 140px;
-          }
-        }
-      }
-    }
-  }
-
-  @include tablet-small-layout {
-    & {
-      &.dropdown {
-        &.searchable {
-          .custom-dropdown {
-            .dropdown-menu {
-              input {
-                width: 152px;
-              }
-            }
+            height: rem(140px);
           }
         }
       }
@@ -627,13 +616,16 @@
 
   @include mobile-layout {
     & {
+      margin: rem(7px) 0;
+
       span {
-        font-size: rem(17px);
-        width: 110px;
+        font-size: rem-capped(15px, 28px);
+        width: rem-capped(87px, 170px);
+        margin-right: 0;
       }
-    
+      
       .number-picker {
-          /*width: 125px;
+          /*width: rem(125px);
           .input {
             input {
               font-size: rem(14px);
@@ -649,54 +641,105 @@
           }
       }
     
-      &.auto-fill, &.calc-editable, &.percent {
+      &.auto-fill, &.calc-editable, &.percent, &.calc, &.number, &.calc-total, &.string, &.textarea {
         & > div {
-          svg  {
-            /*font-size: rem(24px);
-            margin: 1px 6px 1px 0;*/
+          width: calc(100vw - rem(85px) - 50px);
+          margin: 0 10px 0 0;
+
+          input, textarea {
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+            font-size: rem-capped(14px, 26px);
+            padding: rem(9px) 8px rem(7px);
           }
-    
+        }
+        
+        &.roll-back, &.warning {
+          & > div {
+            input, textarea {
+              width: calc(100% - rem(22px));
+              max-width: calc(100% - rem(22px));
+            }
+          }
+        }
+      }
+
+      &.calc-editable {
+        div {
+          svg {
+            width: rem-capped(16px, 30px);
+            height: rem-capped(16px, 30px);
+            font-size: rem-capped(20px, 36px);
+          }
+        }
+      }
+
+      .number-picker {
+        width: fit-content;
+
+        .actions {
+          margin-left: 10px;
+        }
+
+        .input {
+          input {
+            font-size: rem-capped(14px, 26px);
+            width: rem(30px);
+          }
         }
       }
     
       &.dropdown {
-        
         .custom-dropdown {
 
-            .dropdown-toggle {
+          width: calc(100vw - rem(85px) - 50px);
+          margin: 0 10px 0 0;
+          
+          .dropdown-toggle {
+            font-size: rem-capped(14px, 26px);
+            width: 100%;
+          }
+
+          .dropdown-menu {
               font-size: rem(16px);
-            }
-            .dropdown-menu {
+
+              input {
                 font-size: rem(16px);
+              }
 
-                input {
-                  font-size: rem(16px);
-                }
-
-                li {
-                  padding: 8px;
-                }
-            }
-    
-            /*& > svg {
-              font-size: rem(20px);
-            }*/
+              li {
+                padding: rem(8px);
+              }
+          }
+  
+          /*& > svg {
+            font-size: rem(20px);
+          }*/
         }
       }
+    
+      /*&.warning {
+        div {
+          & > svg {
+            font-size: rem(20px);
+          }
+        }
+      }*/
     }
   }
 }
 
 hr {
   border-top: 1px solid var(--property-form-spinner-divider);
-  margin: 20px 8px;
+  margin: rem(20px) rem(8px);
   &.loading9 { animation: loading9-animation 3s infinite; } 
 }
 
 h3 {
-  padding: 0 7px;
+  padding: 0 rem(7px);
   font-size: rem(15px);
   font-weight: bold;
 
-  &.loading0 { animation: loading0-animation 3s infinite; color: transparent; padding: 0; margin: 0 7px; width: 100px; height: 18.4px; } 
+  &.loading0 { animation: loading0-animation 3s infinite; color: transparent; padding: 0; margin: 0 rem(7px); width: rem(100px); height: rem(18.4px); } 
 }

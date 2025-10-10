@@ -329,7 +329,7 @@ export function PropertyPage() {
         dataRef.current?.scrollIntoView({ behavior: "smooth" });
     }
 
-    const mainClass = `property container ${!showInterestsContainer ? "lock" : ""} ${showMobileData}`
+    const mainClass = `property container ${lockYields ? "lock" : ""} ${showMobileData}`
     const menuClass = `menu ${fragment === "form" ? 'bottom' : 'side'} ${property?.showMortgagePrepayment ? '' : 'no-mortgage'}`
     const yieldForecastLabelClass = `label-${fragment === 'yield-forecast' ? 'on' : 'off'}`
     const amortizationScheduleLabelClass = `label-${fragment === 'amortization-schedule' ? 'on' : 'off'}`

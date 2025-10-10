@@ -50,10 +50,13 @@ footer {
                             color: var(--nav-footer-text)
                         }
     
-                        svg {
+                        svg.css-1lrr7yx-MuiSvgIcon-root {
                             margin-left: 5px;
                             margin-top: 3px;
                             color: var(--nav-footer-icon);
+                            width: rem(20px);
+                            height: rem(20px);
+                            font-size: rem(20px);
                         }
                     }
 

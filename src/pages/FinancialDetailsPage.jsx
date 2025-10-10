@@ -135,7 +135,7 @@ export function FinancialDetailsPage() {
                 <div className={noteClass}>{note.text}</div>
                 <FormField type={"BUTTON_SUBMIT"} key={keys.submit} params={submit} onPress={handleSubmit} />
             </article>
-            <article className={footerClass}></article>
+            {/*<article className={footerClass}></article>*/}
         </form>
         <Footer />
     </>)

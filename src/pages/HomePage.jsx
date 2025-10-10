@@ -206,8 +206,8 @@ export function HomePage() {
             <Header />
             <main className="home container start" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
                 {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
-                <WebAdBanner />
-                <Promotion />
+                {false && <WebAdBanner />}
+                {false && <Promotion />}
                 <img className='desktop' src={imgLetsStart} alt='' />
                 <section>
                     <h2>דירה להשקעה</h2>
@@ -228,8 +228,8 @@ export function HomePage() {
         <main className={mainClass} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
             {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
             {showOverlay && <Overlay />}
-            <WebAdBanner />
-            <Promotion />
+            {false && <WebAdBanner />}
+            {false && <Promotion />}
             <h1 className={citiesClass}>{citiesTitle}</h1>
             <HomeCities citiesNames={citiesNames} selectedCity={selectedCity} onCityPress={onCityPress} />
             <h2 className={propertiesClass} dangerouslySetInnerHTML={{ __html: propertiesTitle}}></h2>

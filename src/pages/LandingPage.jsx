@@ -216,7 +216,7 @@ export function LandingPage() {
     }
 
     const signupButton = {
-        text: "הירשם עכשיו", 
+        text: "הירשם עכשיו ללא עלות", 
         isDisabled: false,
         isLoading: false
     }

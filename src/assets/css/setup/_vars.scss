@@ -90,6 +90,7 @@
     --nav-footer-background: var(--palette7);
     --nav-footer-icon: var(--palette1);
     --nav-footer-text: var(--palette1);
+    --tablet-nav-header-background: var(--palette1);
     --tablet-nav-header-icon-background: var(--palette7);
     --tablet-nav-header-icon: var(--palette1);
     --mobile-nav-background: var(--palette2);
@@ -148,6 +149,7 @@
     
     --number-picker-icon: var(--palette4);
     --number-picker-icon-light: var(--palette3);
+    --mobile-number-picker-background: var(--palette8);
 
     --table-text: var(--palette5);
     --table-head-background: var(--palette8);
@@ -160,6 +162,14 @@
     --table-scrollbar-track-border-hover: var(--palette1);
 
     --chart-background: var(--palette8);
+
+    --toggle-off-border: var(--palette2);
+    --toggle-off-background: var(--palette1);
+    --toggle-off-circle:var(--palette6);
+    --toggle-on-border: var(--palette2);
+    --toggle-on-background: var(--palette1);
+    --toggle-on-circle: var(--palette7);
+
 
     --loading-0: #f3f3f3;
     --loading-1: #f5f5f5;
