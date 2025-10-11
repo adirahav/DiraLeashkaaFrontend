@@ -919,7 +919,6 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
     
     function Percent({params, onSetPercent}) {
         const [isChangedByUser, setIsChangedByUser] = useState(false)
-
         // -------------
         // label / number picker
         // -------------
@@ -1038,12 +1037,28 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             }
         }
 
-        const formattedDefault = utilService.formatFloat(params.numberPicker.default?.toString())
+        const formattedDefault = (
+            (parseFloat(params.numberPicker?.default ?? 0) || 0) +
+            (parseFloat(params.numberPicker?.delta ?? 0) || 0)
+        )
+
         const formattedPercentToEdit = utilService.formatFloat(percentToEdit?.toString().replace(/,/g, ''))
+
+        
+        const normalize = val => {
+            if (val == null || isNaN(val)) return null
+            const num = window.Number(val)
+            return Math.round(num * 10) / 10        // round to one decimal
+        }
+        
+        const normalizedEdit = normalize(formattedPercentToEdit)
+        const normalizedDefault = normalize(formattedDefault)
+        
+        console.log(`${params.label}: ${normalizedEdit} !== ${normalizedDefault} + (${JSON.stringify(params.numberPicker)})`)
         
         const showRollback = isFirstLoading || !percentToEdit 
-                                ? false 
-                                : formattedPercentToEdit !== formattedDefault
+            ? false 
+            : normalizedEdit !== normalizedDefault
                                 
         const divClass = `property-field percent ${showRollback ? 'roll-back' : ''} ${showNumberPicker ? 'number-picker' : ''}`
 
