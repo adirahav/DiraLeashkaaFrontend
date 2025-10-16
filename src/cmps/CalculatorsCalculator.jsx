@@ -61,7 +61,7 @@ export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) 
             </div>
             <div>
                 {!calculator?.isLock && !calculator?.isComingSoon && <FormField type={"BUTTON_LONG"} params={enterButton} onPress={(ev) =>  handleCalculatorPress(ev, calculator)} />}
-                {calculator?.isLock && !calculator?.isComingSoon && <img src={iconLock} alt='נעול - בקרוב' />}
+                {calculator?.isLock && !calculator?.isComingSoon && <img src={iconLock} alt={utilService.getPhrase("calculator_locked_alt", phrases)} />}
                 {calculator?.isComingSoon && <span>{utilService.getPhrase("calculator_coming_soon", phrases)}</span>}
             </div>
             

@@ -48,6 +48,7 @@ export function Header() {
         isDisabled: false,
         isLoading: false
     })
+    const [helloUser, setHelloUser] = useState("")
 
     useEffect(() => {
         const hasAllHeader = loggedinUser && 
@@ -59,8 +60,13 @@ export function Header() {
     useEffect(() => {
         if (splash?.phrases) {
             setAddPropertyWeb({ ...addPropertyWeb, text: utilService.getPhrase("home_add_property", splash?.phrases)})
+            setHelloUser(
+                loggedinUser?.fullname
+                            ? utilService.getPhrase("drawer_hello_user", phrases).replace("%1$s", loggedinUser?.fullname)
+                            : utilService.getPhrase("drawer_hello_guest", phrases)
+            )
         }
-    }, [splash?.phrases])
+    }, [splash?.phrases, loggedinUser])
 
     useEffect(() => {
         if (!isLoadingState && phrases && fixedParameters) {
@@ -217,7 +223,7 @@ export function Header() {
         return (<>
             <header className='full logout'>
                 <div className="logo">
-                    <img  src={logoDesktop}  alt="דירה להשקעה" />  
+                    <img  src={logoDesktop} alt={utilService.getPhrase("drawer_logo_alt", phrases)} />  
                 </div>
             </header>
         </>)
@@ -226,11 +232,11 @@ export function Header() {
     return (<>
         <header className='full desktop'>
             <div className="logo">
-                <NavLink to="/"><img  src={logoDesktop} alt="דירה להשקעה" /></NavLink>  
+                <NavLink to="/"><img  src={logoDesktop} alt={utilService.getPhrase("drawer_logo_alt", phrases)} /></NavLink>  
             </div>
             <nav className={navClassMobile}>
                 <ul>
-                    <li className="welcome"><span><MissingAvatarIcon sx={IconSizes.Small} /> שלום {loggedinUser?.fullname ?? 'אורח'}</span></li>
+                    <li className="welcome"><span><MissingAvatarIcon sx={IconSizes.Small} />{helloUser}</span></li>
                     <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_calculators", phrases)}</span></NavLink></li>
                     <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_personal_details", phrases)}</span></NavLink></li>
                     <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_financial_details", phrases)}</span></NavLink></li>
@@ -241,12 +247,12 @@ export function Header() {
         </header>
         <header onTransitionEnd={handleTabletTransitionEnd} onClick={onToggleTabletMenu} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onToggleTabletMenu()} className={'full tablet ' + navClassTablet} ref={headerTabletRef}>
             <div className="logo">
-                {(navClassTablet === "narrow" || navClassTablet === "narrowing") && <NavLink to="/"><img src={logoTablet} alt='דירה להשקעה' /></NavLink>}  
-                {(navClassTablet === "wide" || navClassTablet === "widing") && <NavLink to="/"><img  src={logoDesktop} alt='דירה להשקעה' /></NavLink>}  
+                {(navClassTablet === "narrow" || navClassTablet === "narrowing") && <NavLink to="/"><img src={logoTablet} alt={utilService.getPhrase("drawer_logo_alt", phrases)} /></NavLink>}  
+                {(navClassTablet === "wide" || navClassTablet === "widing") && <NavLink to="/"><img  src={logoDesktop} alt={utilService.getPhrase("drawer_logo_alt", phrases)} /></NavLink>}  
             </div>
             <nav>
                 <ul>
-                    <li className="welcome"><span><MissingAvatarIcon sx={IconSizes.Small} /> <span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></span></li>
+                    <li className="welcome"><span><MissingAvatarIcon sx={IconSizes.Small} /> <span>{helloUser}</span></span></li>
                     
                     <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_calculators", phrases)}</span></NavLink></li>
                     <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_personal_details", phrases)}</span></NavLink></li>
@@ -268,15 +274,15 @@ export function Header() {
             <div className="logo">
                 {showAllHeader && <MenuIcon className="menu" onClick={onToggleMobileMenu} sx={ IconSizes.Medium } />}
                 {showAllHeader && <NavLink to="/">
-                    <img src={logoDesktop} alt='דירה להשקעה'/>
+                    <img src={logoDesktop} alt={utilService.getPhrase("drawer_logo_alt", phrases)} />
                 </NavLink>}
-                {!showAllHeader && <img src={logoDesktop}  alt='דירה להשקעה'/>}    
+                {!showAllHeader && <img src={logoDesktop}  alt={utilService.getPhrase("drawer_logo_alt", phrases)} />}    
                 {showBack && <BackIcon className="back" onClick={onPressBack} sx={ IconSizes.Medium } />}
             </div>
             <nav className={navClassMobile} onAnimationEnd={handleMobileAnimationEnd}>
                 {showAllHeader && <ul>
                     <li><MenuIcon onClick={onToggleMobileMenu} sx={ IconSizes.Medium } /></li>
-                    <li className="welcome"><MissingAvatarIcon sx={IconSizes.Small} /><span>שלום {loggedinUser?.fullname ?? 'אורח'}</span></li>
+                    <li className="welcome"><MissingAvatarIcon sx={IconSizes.Small} /><span>{helloUser}</span></li>
                     <li className="divider"></li>
                     <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_calculators", phrases)}</span></NavLink></li>
                     <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_personal_details", phrases)}</span></NavLink></li>

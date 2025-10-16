@@ -3,14 +3,14 @@ import pixelImage from '../assets/images/pixel.gif'
 import { IconSizes, CloseIcon } from "../assets/icons"
 import PropTypes from 'prop-types'
 
-export function LazyLoadMedia({mediaUrl, mediaWidth, mediaHeight, mediaPublicId, isVideo = false, alt, aspectRatio, videoRef, onDelete}) {
+export function LazyLoadMedia({mediaUrl, mediaWidth, mediaHeight, mediaPublicId, isVideo = false, customClass, alt, aspectRatio, videoRef, onDelete}) {
 
     const [preload, setPreLoad] = useState(true)
     const [blurMediaUrl, setBlurMediaUrl] = useState()
     const [loaded, setLoaded] = useState(false)
 
-    const lowResolutionWidth = 100
-    const lowResolutionHeight = 100
+    const lowResolutionWidth = mediaWidth
+    const lowResolutionHeight = mediaHeight
 
     useEffect(() => {
         if (mediaUrl) {
@@ -110,9 +110,9 @@ export function LazyLoadMedia({mediaUrl, mediaWidth, mediaHeight, mediaPublicId,
         onDelete(mediaPublicId)  
     }
       
-    const preloadingClass = `lazy-media preloading ${preload ? '' : 'hidden'}`
-    const loadingClass = `lazy-media loading ${loaded || preload ? 'hidden' : ''}`
-    const loadedClass = `lazy-media loaded ${!loaded ? 'hidden' : ''}`
+    const preloadingClass = `lazy-media ${customClass ?? ''} preloading ${preload ? '' : 'hidden'}`
+    const loadingClass = `lazy-media ${customClass ?? ''} loading ${loaded || preload ? 'hidden' : ''}`
+    const loadedClass = `lazy-media ${customClass ?? ''} loaded ${!loaded ? 'hidden' : ''}`
 
 
     const mediaStyle = aspectRatio === "original" && mediaWidth && mediaHeight 

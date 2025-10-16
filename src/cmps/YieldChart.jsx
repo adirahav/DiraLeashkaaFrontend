@@ -4,6 +4,8 @@ import { Line } from 'react-chartjs-2'
 import '../services/util.service'
 import { useWindowSize } from '../hooks/useWindowSize'
 import PropTypes from "prop-types"
+import { useSplash } from '../contexts/SplashContext'
+import { utilService } from '../services/util.service'
 
 ChartJS.register(
   CategoryScale,
@@ -15,6 +17,9 @@ ChartJS.register(
   Legend
 )
 export function YieldChart({rawData}) {
+  const { splash } = useSplash()
+  const phrases = splash?.phrases
+
   const [fontSize, setFontSize] = useState(14)
   const [chartHeight, setChartHeight] = useState(300)
   const [yieldForecast, setYieldForcast] = useState() 
@@ -35,7 +40,7 @@ export function YieldChart({rawData}) {
       },
       title: {
         display: false,
-        text: 'כותרת',
+        text: utilService.getPhrase("yield_chart_title", phrases),
       },
     },
     scales: {
@@ -106,7 +111,7 @@ export function YieldChart({rawData}) {
         labels: yieldForecast.map(item => item.yearNo),
         datasets: [
           {
-            label: 'תשואה על ההון',
+            label: utilService.getPhrase("yield_chart_datasets_label1", phrases),
             data: yieldForecast.map(item => {
                 return item.returnOnEquity?.fractionToFloatFormat(1)
             }),
@@ -114,7 +119,7 @@ export function YieldChart({rawData}) {
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
           },
           {
-            label: 'תשואה כוללת',
+            label: utilService.getPhrase("yield_chart_datasets_label2", phrases),
             data: yieldForecast.map(item => {
                 return item.totalReturn?.fractionToFloatFormat(1)
             }),

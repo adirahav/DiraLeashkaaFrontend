@@ -488,9 +488,11 @@ export function SignUpPage() {
     const articleClass = `form ${isLoadingState || !phrases ? 'loading1' : ''}`
     const footerClass = `footer ${isLoadingState || !phrases ? 'loading1' : ''}`
     
-    const stepTitle = progress.step === STEP.PRESONAL_INFO ? "פרטים אישיים" :
-    progress.step === STEP.FINANCIAL_DETAILS ? "נתונים כלכליים" :
-                      progress.step === STEP.TERMS_OF_USE ? "תנאי שימוש" : ""
+    const stepTitle = progress.step === STEP.PRESONAL_INFO 
+                        ? utilService.getPhrase("signup_personal_details", phrases) 
+                        : progress.step === STEP.FINANCIAL_DETAILS 
+                            ? utilService.getPhrase("signup_financial_details", phrases) 
+                            : utilService.getPhrase("signup_terms_of_use", phrases)
 
     const setProgressClass = (currentStep) => {
         if (progress.step === currentStep + 1 && progress.direction === "forward" || progress.step === currentStep && progress.direction === "backward") {

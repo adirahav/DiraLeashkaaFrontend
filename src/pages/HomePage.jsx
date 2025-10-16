@@ -20,6 +20,7 @@ import { AdMob } from '@capacitor-community/admob'
 import { config } from '../config.js'
 import WebAdBanner from '../cmps/WebAdBanner.jsx'
 import { Promotion } from '../cmps/Promotion.jsx'
+import { LazyLoadMedia } from '../cmps/LazyLoadMedia.jsx'
 
 export function HomePage() {
     const [showOverlay, setShowOverlay] = useState(false)
@@ -31,6 +32,20 @@ export function HomePage() {
             isDisabled: false,
             isLoading: false
         }
+
+    const [mediaLetsStart, setMediaLetsStart] = useState({
+        width: {
+            web: 504,
+            tablet: 354,
+            mobile: 250
+        },
+        height: {
+            web: 504,
+            tablet: 354,
+            mobile: 250
+        },
+        url: imgLetsStart
+    })
 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
@@ -208,13 +223,16 @@ export function HomePage() {
                 {swipingToRefresh !== '' && <div className={swipeToRefreshClass}><LoadingIcon /></div>}
                 {false && <WebAdBanner />}
                 {false && <Promotion />}
-                <img className='desktop' src={imgLetsStart} alt='' />
+                {true && <LazyLoadMedia customClass={'desktop'} mediaUrl={mediaLetsStart.url} mediaWidth={mediaLetsStart.width.web} mediaHeight={mediaLetsStart.height.web} isVideo={false} alt={''} />}
+                {false && <img className='desktop' src={mediaLetsStart.url} alt='' />}
                 <section>
-                    <h2>דירה להשקעה</h2>
+                    <h2>{utilService.getPhrase("home_start_title", phrases)}</h2>
                     <hr />
-                    <img className='tablet' src={imgLetsStart} alt='' />
-                    <img className='mobile' src={imgLetsStart} alt='' />
-                    <h3>מצא את הדירה בעלת הפוטנציאל לתשואה הגבוהה ביותר בקלות וביעילות!</h3>
+                    {true && <LazyLoadMedia customClass={'tablet'} mediaUrl={mediaLetsStart.url} mediaWidth={mediaLetsStart.width.tablet} mediaHeight={mediaLetsStart.height.tablet} isVideo={false} alt={''} />}
+                    {false && <img className='tablet' src={imgLetsStart} alt='' />}
+                    {true && <LazyLoadMedia customClass={'mobile'} mediaUrl={mediaLetsStart.url} mediaWidth={mediaLetsStart.width.mobile} mediaHeight={mediaLetsStart.height.mobile} isVideo={false} alt={''} />}
+                    {false && <img className='mobile' src={imgLetsStart} alt='' />}
+                    <h3>{utilService.getPhrase("home_start_subtitle", phrases)}</h3>
                     <hr />
                     <FormField type={"BUTTON_LONG"} params={letsStartButton} onPress={() =>  navigate(`/property`)} />
                 </section>

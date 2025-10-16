@@ -89,7 +89,7 @@ export function PropertyMedia({ list, onUpload, onRemove }) {
         }
         catch(e) {
             showErrorAlert({
-                message: "ארעה תקלה בעת העלאת תמונה.\nנסה שוב מאוחר יותר.",
+                message: utilService.getPhrase("property_media_error", phrases),
                 closeButton: { show: true, autoClose: false }, 
                 positiveButton: { show: true, text: utilService.getPhrase("dialog_tooltip_button_ok", phrases), onPress: async () => { }, closeAfterPress: true }, 
                 negativeButton: { show: false }, 

@@ -755,6 +755,11 @@
                                 grid-column: unset;
                                 grid-row: 1;
                                 height: rem(40px);
+
+                                & > h2 {
+                                    height: auto;
+                                    white-space: unset;
+                                }
                             }
  
                             &:nth-child(2) {
@@ -934,11 +939,13 @@
                 }
 
                 img.mobile {
-                    width: rem(250px);
-                    height: auto;
+                    width: 250px;
+                    height: 250px;
                     margin: auto;
-                    display: block;
 
+                    &:not(.lazy-media.hidden) {
+                        display: block;
+                    }
                 }
 
                 h3 {
@@ -986,12 +993,12 @@
         .my-properties {
             & > article {
                 & > .container {
-                    grid-template-columns: rem-capped(120px, 226px) 1fr rem(36px);
+                    grid-template-columns: rem-capped(120px, 226px) 1fr rem(40px);
     
                     & > .media {
                         img {
-                            width: rem-capped(120px, 216px);
-                            height: rem-capped(80px, 144px);
+                            width: rem-capped(110px, 198px);
+                            height: rem-capped(73px, 131px);
                         }
                     }
                 }

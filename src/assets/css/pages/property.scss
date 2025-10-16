@@ -450,7 +450,11 @@
             .data {
                 & section {
                     max-width: 100%;
-                    width: calc(100vw - 170px);
+                    width: calc(100vw - 225px);
+                }
+
+                &.lock-yields {
+                    margin-top: 36px;
                 }
             }
 
@@ -543,6 +547,7 @@
             max-width: unset;
             padding: 0;
             margin-bottom: 30px;
+            grid-template-rows: unset;
 
             article {
                 grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
@@ -1002,7 +1007,7 @@
 .main-layout.wide, .main-layout.widing, .main-layout.narrowing {
     @include tablet-layout {
         .property {
-            & > section {
+            & > section:not(.data.lock-yields) {
                 margin: 0;
             }
 
@@ -1055,8 +1060,10 @@
                 section.amortization-schedule, 
                 section.chart {
                     padding: 20px 4px;
-                    width: calc(100vw - rem(238px));
+                    width: calc(100vw - 238px);
                 }
+
+                width: calc(100vw - 207px);
             } 
         }
     }

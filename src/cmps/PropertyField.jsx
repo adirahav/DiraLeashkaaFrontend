@@ -485,7 +485,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                 <div className={`custom-dropdown ${isOpen ? "open" : ""}`} onClick={toggleDropdown} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggleDropdown() } role='button' tabIndex={0}>
                 {params.hasWarning && <AttentionIcon onClick={handleShowWarningAlert} />}
                     <button className="dropdown-toggle">
-                        {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || "בחר"}
+                        {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || utilService.getPhrase("dropdown_choose", phrases)}
                         {!isOpen && <ArrowDownIcon />}
                         {isOpen && <ArrowUpIcon />}
                     </button>
@@ -607,7 +607,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                     <span>{params.label}</span>
                     <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`} onClick={toggleDropdown} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggleDropdown() } role='button' tabIndex={0}>
                         <button className="dropdown-toggle">
-                            {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || "בחר"}
+                            {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || utilService.getPhrase("dropdown_choose", phrases)}
                             {!isOpen && <ArrowDownIcon />}
                             {isOpen && <ArrowUpIcon />}
                         </button>
@@ -708,7 +708,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         return  <div className={fieldClass} ref={dropdownRef}>
                     <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`}>
                         <button className="dropdown-toggle" onClick={toggleDropdown}>
-                            {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || "בחר"}
+                            {params.options?.find(option => option.key.toString() === valueToEdit?.toString())?.value || utilService.getPhrase("dropdown_choose", phrases)}
                             {!isOpen && <ArrowDownIcon />}
                             {isOpen && <ArrowUpIcon />}
                         </button>

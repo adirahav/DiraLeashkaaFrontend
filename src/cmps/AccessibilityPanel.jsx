@@ -112,7 +112,7 @@ export function AccessibilityModal() {
                 <div>
                     <div className="header">
                         <label htmlFor="font-slider">
-                            גודל טקסט: {100 * (customeFontSizeState / 16)}%
+                            { utilService.getPhrase("accessibility_font_size", phrases).replace("%1$s", 100 * (customeFontSizeState / 16)) }
                         </label>
                         <a onClick={onReset}>{ utilService.getPhrase("accessibility_button_reset", phrases) }</a>
                     </div>

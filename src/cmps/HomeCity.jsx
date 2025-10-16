@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from "prop-types"
+import { utilService } from '../services/util.service'
+import { useSplash } from '../contexts/SplashContext'
 
 export function HomeCity({ index, city, citiesNames, propertiesCount, selected, onCityPress }) {   
+
+    const { splash } = useSplash()
+    const phrases = splash?.phrases
 
     const [cityIcon, setCityIcon] = useState(null)
 
@@ -52,7 +57,7 @@ export function HomeCity({ index, city, citiesNames, propertiesCount, selected, 
             {cityIcon && <img src={cityIcon} alt='' />}
             <div>
                 {cityLabel} 
-                <span className='desktop'>({propertiesCount === 1 ? "נכס אחד" : `${propertiesCount} נכסים`})</span>
+                <span className='desktop'>({propertiesCount === 1 ? utilService.getPhrase("home_city_one_property", phrases) : utilService.getPhrase("home_city_properties_count", phrases).replace("%1$s", propertiesCount)})</span>
                 <span className='tablet'>({propertiesCount})</span>
             </div>
         </article>

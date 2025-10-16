@@ -74,6 +74,41 @@ export function CalculatorCompare() {
     
     const SCROLL_AMOUNT = 100
 
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            const alertModal = document.querySelector('.alert')
+            const accessibilityModal = document.querySelector('.accessibility-modal')
+            const customDropdown = document.querySelectorAll('.custom-dropdown')
+    
+            if (alertModal || accessibilityModal) {
+                document.querySelectorAll('.custom-dropdown.open')?.forEach(el => el.classList.remove('open'))
+                customDropdown.forEach(el => el.classList.add('disable'))
+            } else {
+                customDropdown.forEach(el => el.classList.remove('disable'))
+            }
+        })
+    
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+        })
+    
+        return () => observer.disconnect()
+    }, [])
+    
+
+    /*useEffect(() => {
+        const handleClick = (e) => {debugger
+            if (e.target.closest('.property-field.warning')) {
+                document.querySelectorAll('.custom-dropdown.open')?.forEach(el => {
+                    el.classList.remove('open')
+                })
+            }
+        }
+        document.addEventListener('click', handleClick)
+        return () => document.removeEventListener('click', handleClick)
+    }, [])*/
+
     //
     useEffect(() => {
         if (!isLoadingState && properties && properties.length > 0) {
@@ -318,12 +353,12 @@ export function CalculatorCompare() {
         const main = mainRef.current
         if (!main) return
         
-        console.log("============================================")
+        /*console.log("============================================")
         console.log("canScrollRight=" + (main.scrollLeft < 0))
         console.log("canScrollLeft=" + (Math.round(main.scrollLeft - 1) > Math.round(main.clientWidth - main.scrollWidth)))
         console.log("             =" + main.scrollLeft)
         console.log("             =" + main.clientWidth)
-        console.log("             =" + main.scrollWidth)
+        console.log("             =" + main.scrollWidth)*/
        
         
         setScroll((prevScroll) => ({
@@ -451,12 +486,15 @@ export function CalculatorCompare() {
         } 
     }
 
+    const titleClass = `${isLoadingState ? "loading0" : ""}`
+    const filterClass = `filter ${isLoadingState ? "loading1" : ""}`
+    
     return (<>
         {(showOverlay || isFirstLoading) && <Overlay />}
-        <h1>{utilService.getPhrase(`calculator_title_compare`, phrases)}</h1>
-        <section className='filter'>
+        <h1 className={titleClass}>{utilService.getPhrase(`calculator_compare_title`, phrases)}</h1>
+        <section className={filterClass}>
             <article className='header'>
-                <h2>בחר דירות להשוואה</h2>  
+                <h2>{utilService.getPhrase(`calculator_compare_choose`, phrases)}</h2>  
                 <FormField type={"BUTTON"} key={keys.resetFilter} params={{...resetFilter, isLinkView: true}} onPress={onResetFilter} />  
             </article>
             <article className='elements'>
@@ -466,7 +504,7 @@ export function CalculatorCompare() {
             </article>
         </section>
         {!isLoadingState && properties !== null && properties.length === 0 && <div className={`main-content no-compared-properties`}>
-            <h3>אין עדיין דירות להשוואה – בחר 2-3 דירות כדי לראות את ההבדלים.</h3>
+            <h3>{utilService.getPhrase(`calculator_compare_no_apartments`, phrases)}</h3>
             <img src={chooseApartments} alt='' />
         </div>}
         {isLoadingState && <div className={`main-content ${viewState} loading`}>

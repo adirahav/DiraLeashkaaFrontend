@@ -334,7 +334,7 @@ export function PropertyPage() {
     const yieldForecastLabelClass = `label-${fragment === 'yield-forecast' ? 'on' : 'off'}`
     const amortizationScheduleLabelClass = `label-${fragment === 'amortization-schedule' ? 'on' : 'off'}`
     const chartLabelClass = `label-${fragment === 'chart' ? 'on' : 'off'}`
-    const dataClass = `data ${fragment} /*${isFirstLoading ? 'loading3' : ''}*/`
+    const dataClass = `data ${fragment} ${lockYields ? 'lock-yields' : ''}`
     
     const titleClass = isLoadingState ? 'loading0' : '' 
     
@@ -358,26 +358,25 @@ export function PropertyPage() {
         {showMobileData === "" && <Header />}
         <main className={mainClass}>
             {(showOverlay || isFirstLoading) && <Overlay />}
-            <h1 className={titleClass}>הערכת עלויות ותשואה לרכישת נכס</h1>
+            <h1 className={titleClass}>{utilService.getPhrase('property_cost_estimate_title', phrases)}</h1>
             <PropertyForm property={property} user={loggedinUser} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyId={propertyId} />
             {property?.showMortgagePrepayment && <>
-                <h2>ריביות ומדדים</h2>
+                <h2>{utilService.getPhrase('property_indexes_and_interests_title', phrases)}</h2>
                 <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />
             </>}
-            {!isFirstLoading && !lockYields && <h1 className={titleClass}>תחזית פיננסית</h1>}
+            {!isFirstLoading && !lockYields && <h1 className={titleClass}>{utilService.getPhrase('property_financial_forecast_title', phrases)}</h1>}
             <section className={dataClass} ref={dataRef}>
                 {!showInterestsContainer && <div className="unavailable-overlay">
                     <img src={iconMissingData} alt='' />
                     <div>
-                        חסרים נתונים לחישוב
+                        {utilService.getPhrase('property_calc_missing_data', phrases)}
                     </div>
                 </div>}
                 {!isFirstLoading && !lockYields && <PropertyYieldForecast data={property?.calcYieldForecast} />}
                 {!isFirstLoading && !lockYields && property?.showMortgagePrepayment && <PropertyAmortizationSchedule data={property?.calcAmortizationSchedule} />}
                 {!isFirstLoading && !lockYields && <PropertyChart data={property?.calcYieldForecast} />}
                 {lockYields && <section className='lock-yields'>
-                    {/*<h3>{utilService.getPhrase('property_lock_yields_missing_data', phrases)}</h3>*/}
-                    <h3>אין מספיק נתונים כדי להציג תחזיות פיננסיות. אנא מלא את כל השדות הנדרשים.</h3>
+                    <h3>{utilService.getPhrase('property_lock_yields_missing_data', phrases)}</h3>
                     <img src={iconMissingData} alt='' />
                 </section>}
                 {isFirstLoading && <section className='loading-calc-yields'>
@@ -386,7 +385,7 @@ export function PropertyPage() {
                 </section>}
                 
             </section>
-            <h1 className={titleClass}>תמונות של הנכס</h1>
+            <h1 className={titleClass}>{utilService.getPhrase('property_images_title', phrases)}</h1>
             <PropertyMedia list={property?.media} onUpload={handleMediaUpload} onRemove={handleMediaRemove} />
             <div className={menuClass}>
                 <ZoomOutIcon className='zoom-out' onClick={handleDisplayInterests} />
@@ -405,7 +404,7 @@ export function PropertyPage() {
                         <img src={iconChart} alt='' /><h3 className={chartLabelClass}>{utilService.getPhrase('property_actions_menu_graph_label', phrases)}</h3>
                     </button>
                 </article>
-                {lockYields && <img src={iconLock} alt='נעול - חסרים נתונים' />}
+                {lockYields && <img src={iconLock} alt={utilService.getPhrase('property_lock_yields_missing_data_alt', phrases)} />}
             </div>
             {showGoToResults && <DoubleArrowDownIcon className='goto-results' onClick={handleGotoResults} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { handleGotoResults() }}} />}
         </main>

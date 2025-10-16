@@ -25,8 +25,26 @@ import imgTargetAudience2 from '../assets/images/landing-target-audience-2.svg'
 import imgTargetAudience3 from '../assets/images/landing-target-audience-3.svg'
 import { LazyLoadMedia } from '../cmps/LazyLoadMedia'
 import WebAdBanner from '../cmps/WebAdBanner'
+import { useSplash } from '../contexts/SplashContext'
+import { utilService } from '../services/util.service'
+import { onLoadingDone, onLoadingStart } from '../store/actions/app.actions'
+import { LoadingIcon } from '../cmps/LoadingIcon'
+import { useSelector } from 'react-redux'
 
 export function LandingPage() {
+
+    const { splash } = useSplash()
+    /*const phrases = splash?.phrases
+
+    const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
+
+    useEffect(() => {
+        if (!phrases) {
+            onLoadingStart()  
+        } else {
+            onLoadingDone() 
+        }
+    }, [splash])*/
 
     // banner
     const bannerRatio = 4.107
@@ -40,7 +58,7 @@ export function LandingPage() {
         const handleResize = () => setBanner(prevBanner => ({
             ...prevBanner,
             width: window.innerWidth,
-            height: window.innerWidth / bannerRatio,
+            height: parseInt(window.innerWidth / bannerRatio),
         }))
     
         window.addEventListener("resize", handleResize)
@@ -53,28 +71,28 @@ export function LandingPage() {
 
     // subtitle
     const subtitle = [
-        "משווים דירות.",
-        "מחשבים תשואות.",
-        "קונים חכם."
+        "משווים דירות.",    //utilService.getPhrase("landing_subtitle1", phrases)
+        "מחשבים תשואות.",   //utilService.getPhrase("landing_subtitle2", phrases)
+        "קונים חכם."        //utilService.getPhrase("landing_subtitle3", phrases)
     ]
 
     // investment budget
     const investmentBudget = {
-        title: "המערכת גם מחשבת את תקרת התקציב האישית שלך לדירה הבאה, כך שתוכל להחליט בביטחון.",
+        title: "המערכת גם מחשבת את תקרת התקציב האישית שלך לדירה הבאה, כך שתוכל להחליט בביטחון.",    //utilService.getPhrase("landing_investmentBudget_title", phrases)
         items: [{
-            text: "חיזוי תשואה לפי הנתונים שלך – לא לפי תחושת בטן",
+            text: "חיזוי תשואה לפי הנתונים שלך – לא לפי תחושת בטן",                 //utilService.getPhrase("landing_investmentBudget_text1", phrases)
             image: imgInvestmentBudget1
         },{
-            text: "חישוב דירה מקסימלית בהתאם ליכולת המימון שלך",
+            text: "חישוב דירה מקסימלית בהתאם ליכולת המימון שלך",                    //utilService.getPhrase("landing_investmentBudget_text2", phrases)
             image: imgInvestmentBudget2
         },{
-            text: "השוואה חכמה בין מספר דירות – ומציאת הדירה המנצחת",
+            text: "השוואה חכמה בין מספר דירות – ומציאת הדירה המנצחת",               //utilService.getPhrase("landing_investmentBudget_text3", phrases)
             image: imgInvestmentBudget3
         },{
-            text: "תמונת מצב מזוקקת: תזרים חודשי, החזר משכנתא, תשואה נטו/ברוטו",
+            text: "תמונת מצב מזוקקת: תזרים חודשי, החזר משכנתא, תשואה נטו/ברוטו",   //utilService.getPhrase("landing_investmentBudget_text4", phrases)
             image: imgInvestmentBudget4
         },{
-            text: "מתאים למשקיעים בתחילת הדרך וגם למנוסים",
+            text: "מתאים למשקיעים בתחילת הדרך וגם למנוסים",                         //utilService.getPhrase("landing_investmentBudget_text5", phrases)
             image: imgInvestmentBudget5
         }]
     }
@@ -163,22 +181,22 @@ export function LandingPage() {
 
     // advantages
     const advantages = {
-        title: "יתרונות",
+        title: "יתרונות",                                                   //utilService.getPhrase("landing_advantages_title", phrases)
         items: [{
-            label: "החלטות מבוססות נתונים:",
-            text: "סוף להתלבטויות אינסופיות.",
+            label: "החלטות מבוססות נתונים:",                                //utilService.getPhrase("landing_advantages_label1", phrases)
+            text: "סוף להתלבטויות אינסופיות.",                              //utilService.getPhrase("landing_advantages_text1", phrases)
             icon: imgHowDoesItWorks1
         },{
-            label: "פחות סיכון, יותר ודאות:",
-            text: "רואה מראש איך המספרים מתנהגים בתנאי ריבית וזמן.",
+            label: "פחות סיכון, יותר ודאות:",                               //utilService.getPhrase("landing_advantages_label2", phrases)
+            text: "רואה מראש איך המספרים מתנהגים בתנאי ריבית וזמן.",        //utilService.getPhrase("landing_advantages_text2", phrases)
             icon: imgHowDoesItWorks2
         },{
-            label: "תמונה מלאה, במקום אלף טאבים וגיליונות:",
-            text: "כל המידע במקום אחד.",
+            label: "תמונה מלאה, במקום אלף טאבים וגיליונות:",                 //utilService.getPhrase("landing_advantages_label3", phrases)   
+            text: "כל המידע במקום אחד.",                                      //utilService.getPhrase("landing_advantages_text3", phrases)
             icon: imgHowDoesItWorks3
         },{
-            label: "בוסט לביטחון בקנייה:",
-            text: "מגיעים לראות דירה כשכבר יודעים מה הגבולות והפוטנציאל.",
+            label: "בוסט לביטחון בקנייה:",                                     //utilService.getPhrase("landing_advantages_label4", phrases) 
+            text: "מגיעים לראות דירה כשכבר יודעים מה הגבולות והפוטנציאל.",  //utilService.getPhrase("landing_advantages_text4", phrases)
             icon: imgHowDoesItWorks4
         }]
     }
@@ -211,12 +229,12 @@ export function LandingPage() {
 
     // signup
     const signup = {
-        title: "הצעד הראשון לדירה משלך",
-        text: "קבל גישה חינם לכלי שמחשב עבורך איזו דירה באמת מתאימה לך – בלי ניחושים ובלי טעויות."
+        title: "הצעד הראשון לדירה משלך",        //utilService.getPhrase("landing_signup_title", phrases)
+        text: "קבל גישה חינם לכלי שמחשב עבורך איזו דירה באמת מתאימה לך – בלי ניחושים ובלי טעויות."  //utilService.getPhrase("landing_signup_text", phrases)
     }
 
     const signupButton = {
-        text: "הירשם עכשיו ללא עלות", 
+        text: "הירשם עכשיו ללא עלות",   //utilService.getPhrase("landing_signup_button", phrases)
         isDisabled: false,
         isLoading: false
     }
@@ -254,20 +272,20 @@ export function LandingPage() {
 
     const cards = {
         items: [{
-            label: "המערכת מדרגת בשבילך",
-            text: "סוף להתלבטויות אינסופיות.",
+            label: "המערכת מדרגת בשבילך",                       //utilService.getPhrase("landing_cards_label1", phrases)
+            text: "סוף להתלבטויות אינסופיות.",                  //utilService.getPhrase("landing_cards_text1", phrases)
             image: imgCard1
         },{
-            label: "איזו דירה תוכל להרשות לעצמך?",
-            text: "בדיקה מיידית לפי הכנסה פנויה והון עצמי",
+            label: "איזו דירה תוכל להרשות לעצמך?",              //utilService.getPhrase("landing_cards_label2", phrases)
+            text: "בדיקה מיידית לפי הכנסה פנויה והון עצמי",    //utilService.getPhrase("landing_cards_text2", phrases)
             image: imgCard2
         },{
-            label: "כמה ישאר לך כל חודש?",
-            text: "תזרים נטו אחרי כל ההוצאות",
+            label: "כמה ישאר לך כל חודש?",                      //utilService.getPhrase("landing_cards_label3", phrases)
+            text: "תזרים נטו אחרי כל ההוצאות",                  //utilService.getPhrase("landing_cards_text3", phrases)
             image: imgCard3
         },{
-            label: "ומה אם הריבית תעלה?",
-            text: "סימולציה בלחיצת כפתור",
+            label: "ומה אם הריבית תעלה?",                       //utilService.getPhrase("landing_cards_label4", phrases)
+            text: "סימולציה בלחיצת כפתור",                      //utilService.getPhrase("landing_cards_text4", phrases)
             image: imgCard4
         }]
     }
@@ -289,33 +307,33 @@ export function LandingPage() {
     // target audience
     const targetAudienceRefs = useRef(null)
     const targetAudience = {
-        title: "למי זה מתאים",
+        title: "למי זה מתאים",          //utilService.getPhrase("landing_target_audience_title", phrases)
         items: [{
-            title: "התחלה חכמה",
-            text: "למי ששוקל לרכוש דירה ראשונה להשקעה ורוצה מספרים ברורים",
+            title: "התחלה חכמה",        //utilService.getPhrase("landing_target_audience_title1", phrases)
+            text: "למי ששוקל לרכוש דירה ראשונה להשקעה ורוצה מספרים ברורים", //utilService.getPhrase("landing_target_audience_text1", phrases)
             icon: imgTargetAudience1
         },{
-            title: "ROI מקסימלי",
-            text: "למשקיעים שמשווים בין כמה אפשרויות ומחפשים את ה-ROI (תשואה על ההשקעה) הכי טוב",
+            title: "ROI מקסימלי",       //utilService.getPhrase("landing_target_audience_title2", phrases)
+            text: "למשקיעים שמשווים בין כמה אפשרויות ומחפשים את ה-ROI (תשואה על ההשקעה) הכי טוב",   //utilService.getPhrase("landing_target_audience_text2", phrases)
             icon: imgTargetAudience2
         },{
-            title: "כדאיות ברורה",
-            text: "לכל מי שרוצה להבין אם העסקה באמת “עובדת” לפני שמתקדמים",
+            title: "כדאיות ברורה",      //utilService.getPhrase("landing_target_audience_title3", phrases)
+            text: "לכל מי שרוצה להבין אם העסקה באמת “עובדת” לפני שמתקדמים", //utilService.getPhrase("landing_target_audience_text3", phrases)    
             icon: imgTargetAudience3
         }]
     }
 
     // guidance
     const guidance = {
-        title: "עצות לדרך",
+        title: "עצות לדרך",     //utilService.getPhrase("landing_guidance_title", phrases)
         items: [{
-            text: "דירה אחת יכולה לשמש כהשקעה ראשונה ולבנות עבורך בסיס יציב להמשך.",
+            text: "דירה אחת יכולה לשמש כהשקעה ראשונה ולבנות עבורך בסיס יציב להמשך.",        //utilService.getPhrase("landing_guidance_text1", phrases)
             icon: imgTargetAudience1
         },{
-            text: "לא צריך להיות גאון אקסל – אנחנו עושים את הכביסה המלוכלכת של המספרים.",
+            text: "לא צריך להיות גאון אקסל – אנחנו עושים את הכביסה המלוכלכת של המספרים.",   //utilService.getPhrase("landing_guidance_text2", phrases)
             icon: imgTargetAudience2
         },{
-            text: "הנתונים כאן הם הערכה – ההחלטה שלך חכמה יותר כשיש לך תמונה מלאה.",
+            text: "הנתונים כאן הם הערכה – ההחלטה שלך חכמה יותר כשיש לך תמונה מלאה.",        //utilService.getPhrase("landing_guidance_text3", phrases)
             icon: imgTargetAudience3
         }]
     }
@@ -327,9 +345,9 @@ export function LandingPage() {
             </section>
 
             <section className='banner'>
-                <LazyLoadMedia mediaUrl={banner.url} mediaWidth={banner.width} mediaHeight={banner.height} isVideo={false} alt={''} />
+                {banner.width && banner.height && <LazyLoadMedia mediaUrl={banner.url} mediaWidth={banner.width} mediaHeight={banner.height} isVideo={false} alt={''} />}
             </section>
-
+                
             <section className='logo'>
                 <img src={imgLogo} alt='' />
             </section>
@@ -411,19 +429,19 @@ export function LandingPage() {
                     {advantages.items.map((item, index) => ( 
                     <li key={index}>
                         <span
-                          className={`bullet ${advantagesVisible ? "visible" : ""}`}
-                          style={{ transitionDelay: `${index * 0.2}s` }} // סטאגר
+                        className={`bullet ${advantagesVisible ? "visible" : ""}`}
+                        style={{ transitionDelay: `${index * 0.2}s` }} // סטאגר
                         >
-                          {index + 1}
+                        {index + 1}
                         </span>
                         <p>
-                          <b>{item.label}</b>
-                          <br />
-                          {item.text}
+                        <b>{item.label}</b>
+                        <br />
+                        {item.text}
                         </p>
                     </li>  
                     
-                 ))}
+                ))}
                 </ul>
             </section>
 
@@ -496,6 +514,8 @@ export function LandingPage() {
             </section>
 
             <Footer className="full" showForAnonimous={true} />
+            
+            
         </main>
         
     </>)

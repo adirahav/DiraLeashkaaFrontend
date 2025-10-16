@@ -64,6 +64,8 @@
         
         svg {
             color: var(--accessibility-modal-icon-close);
+            width: rem-capped(25px, 40px);
+            height: rem-capped(25px, 40px);
         }
     }
     

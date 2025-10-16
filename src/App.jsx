@@ -69,7 +69,8 @@ function RouteGuard({ children }) {
       !window.location.toString().includes("login") && 
       !window.location.toString().includes("forgot-password") && 
       !window.location.toString().includes("terms-of-use") && 
-      !window.location.toString().includes("contact-us")
+      !window.location.toString().includes("contact-us") && 
+      !window.location.toString().includes("landing")
     ) {
     if (!isLoggedinUserCompleted) {
           return <Navigate to='/signup' />
@@ -192,8 +193,6 @@ Orientation.propTypes = {
 }
 
 /*
-+ accesability
-+ נכס -> לוח סילוקין -> ריבית -> ריבית לא תקינה אחרי 60 חודשים 
 - mobile delete - cancel delete the property
 - הוצאות נלוות נוספות
 - להוסיף הון עצמי מהלוואה
@@ -201,19 +200,12 @@ Orientation.propTypes = {
 - במעבר ל-HOME תמיד יש קפיצה כפולה
 
 - sign up loading when no phrases not looks good - desktop / tablet
-- sign up not show title after complete and before move on
-- sign up with just missing accept - jumping to first step
-- home page - when no items the image show slow
 - calculators - transparent cities icons
 
 - app - in menu - web link not opening
 - app - learn native lifesycle
 
-- adirahav76@gmail.com and adi_rahav@yahoo.com - not login properly
-
 - web לשים פרסומות
-+ lazy load
-- סדר במונחים - continue from header
 
 - camera upload not work
 - max price - missing years
@@ -225,4 +217,6 @@ Orientation.propTypes = {
 - Grpc - proto files
 - Graph api
 - cicd
+- cache
+- authentication - JWT
 */

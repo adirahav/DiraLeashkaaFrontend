@@ -158,7 +158,8 @@
                     max-width: unset;
                     padding: 0;
                     margin-bottom: 0;
-
+                    grid-template-rows: unset;
+                    
                     article {
                         &:nth-child(1) {
                            width: calc(100vw - 40px);
@@ -179,6 +180,18 @@
 
     &.compare {
 
+        h1 {
+            height: rem-capped(58px, 96px);
+
+            &.loading0 { 
+                animation: loading0-animation 3s infinite; 
+                color: transparent;
+                width: rem-capped(215px, 435px);
+                height: rem-capped(38px, 76px);
+                margin: 10px 0;
+            }
+        }
+        
         .filter {
             @include inside-container;
             padding: 17px;
@@ -214,18 +227,29 @@
                     &.dropdown {
                         .custom-dropdown {
                             margin: 0;
+                            z-index: 1002;
 
                             .dropdown-toggle {
                                 direction: rtl;
 
                                 & > span {
                                     width: fit-content;
+                                    display: flex;
 
                                     & > span {
                                         line-height: rem(30px);
                                         display: inline-block;
                                         width: fit-content;
                                     }
+                                }
+                            }
+                            
+                            &.disable {
+                                z-index: 999;
+
+                                .dropdown-toggle {
+                                    opacity: 0.2;
+                                    position: relative;
                                 }
                             }
                         }
@@ -308,6 +332,16 @@
                     }
                 }
             }
+
+            &.loading1 { 
+                animation: loading1-animation 3s infinite; 
+                .header h2 { color: transparent; }
+                .elements {
+                    height: rem-capped(50px, 80px);
+                    .custom-dropdown, button { display: none; }
+                }
+            }
+            
         }
 
         .view-controller {
@@ -444,6 +478,7 @@
                         }
 
                         &.dropdown.searchable .custom-dropdown .dropdown-menu {
+                            
                             &.searchable .custom-dropdown .dropdown-menu {
                                 input {
                                     width: rem(135px);
@@ -1043,7 +1078,7 @@
 
                                     .dropdown-menu {
                                         width: calc(100% + rem(60px));
-
+                                            
                                         ul {
                                             height: rem(180px);
 

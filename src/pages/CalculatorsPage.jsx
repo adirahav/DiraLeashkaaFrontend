@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { CalculatorsCalculator } from '../cmps/CalculatorsCalculator'
 import { onLoadingDone, onLoadingStart } from '../store/actions/app.actions'
+import { utilService } from '../services/util.service'
 
 export function CalculatorsPage() {
 
@@ -38,7 +39,7 @@ export function CalculatorsPage() {
     return (<>
         <Header />
         <main className="calculators narrow container">
-            <h1 className={titleClass}>מחשבונים שימושיים</h1>
+            <h1 className={titleClass}>{utilService.getPhrase(`calculators_title`, phrases)}</h1>
             <section>
                 {!isLoadingState && calculators?.map((calculator, index) => (    
                     <CalculatorsCalculator key={index} calculator={calculator} onCalculatorPress={onCalculatorPress} />

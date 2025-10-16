@@ -116,7 +116,8 @@
             box-shadow: unset;
             width: 100%;
             max-width: 300px;
-            
+            grid-template-rows: rem(60px) 1fr;
+
             .title {
                 font-size: rem-capped(30px, 42px);
             }

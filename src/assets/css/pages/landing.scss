@@ -13,10 +13,10 @@
     font-family: open-sans-hebrew-regular;
 
     *,
-*::before,
-*::after {
-  box-sizing: content-box;
-}
+    *::before,
+    *::after {
+        box-sizing: content-box;
+    }
 
     h2 {
         margin: 42px 0 20px;
@@ -72,9 +72,28 @@
             }
         }
 
-        
+        min-height: 90px;
+        height: max-content;
     }
 
+    .loading {
+        margin: 50px auto;
+        display: block;
+        height: 90px;
+        height: max-content;
+
+        svg {
+            width: rem(50px);
+            height: rem(50px);
+            fill: var(--loading-dark);
+            animation-name: loading;
+            animation-duration: .8s;
+            animation-iteration-count: infinite;
+            animation-timing-function: steps(8,end);  
+        }
+    }
+
+    
     .investment-budget {
         margin-top: 14px;
 
@@ -814,7 +833,7 @@
             
             .viewport {
                 .container {
-                    width: calc(100vw - rem-capped(30px, 40px));
+                    width: calc(100vw - rem(40px));
                         
                     .slide {
                         --slide-size: calc((100% - (var(--slide-spacing))));
@@ -1008,3 +1027,4 @@
     }     
 }
   
+
