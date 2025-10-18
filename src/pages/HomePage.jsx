@@ -228,10 +228,8 @@ export function HomePage() {
                 <section>
                     <h2>{utilService.getPhrase("home_start_title", phrases)}</h2>
                     <hr />
-                    {true && <LazyLoadMedia customClass={'tablet'} mediaUrl={mediaLetsStart.url} mediaWidth={mediaLetsStart.width.tablet} mediaHeight={mediaLetsStart.height.tablet} isVideo={false} alt={''} />}
-                    {false && <img className='tablet' src={imgLetsStart} alt='' />}
-                    {true && <LazyLoadMedia customClass={'mobile'} mediaUrl={mediaLetsStart.url} mediaWidth={mediaLetsStart.width.mobile} mediaHeight={mediaLetsStart.height.mobile} isVideo={false} alt={''} />}
-                    {false && <img className='mobile' src={imgLetsStart} alt='' />}
+                    <LazyLoadMedia customClass={'tablet'} mediaUrl={mediaLetsStart.url} mediaWidth={mediaLetsStart.width.tablet} mediaHeight={mediaLetsStart.height.tablet} isVideo={false} alt={''} />
+                    <LazyLoadMedia customClass={'mobile'} mediaUrl={mediaLetsStart.url} mediaWidth={mediaLetsStart.width.mobile} mediaHeight={mediaLetsStart.height.mobile} isVideo={false} alt={''} />
                     <h3>{utilService.getPhrase("home_start_subtitle", phrases)}</h3>
                     <hr />
                     <FormField type={"BUTTON_LONG"} params={letsStartButton} onPress={() =>  navigate(`/property`)} />

@@ -256,6 +256,7 @@ export function CalculatorMaxPrice() {
                 ...prevRentCleaningExpenses, 
                 value: property.calcRentCleaningExpenses
             }))
+            
 
         } catch (error) {
             console.error(`Error load property ${property._id}:`, error)
@@ -353,6 +354,8 @@ export function CalculatorMaxPrice() {
                 <PropertyField type={"NUMBER"} key={keys.structureInsurance} params={structureInsurance} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('structureInsurance', value)} />    
                 <PropertyField type={"CALC"} key={keys.rentCleaningExpenses} params={rentCleaningExpenses} isFirstLoading={isFirstLoading} />            
             </article>
+
+            
         </section>    
     </>
     )

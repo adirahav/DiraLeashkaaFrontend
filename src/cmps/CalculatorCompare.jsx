@@ -11,6 +11,7 @@ import { propertyService } from '../services/property.service.js'
 import { getCompare, saveCompare, resetCompare } from '../store/actions/user.actions.js'
 import missingPictureImage from '../assets/images/missing_picture_white.png'
 import chooseApartments from '../assets/images/choose_apartments.png'
+import chooseApartmentsMobile from '../assets/images/choose_apartments_mobile.png'
 import { FormField } from './FormField.jsx'
 import { ViewComfyIcon, ViewCompactIcon, ScrollArrowLeftIcon, ScrollArrowRightIcon } from '../assets/icons'
 import PropTypes from "prop-types"
@@ -505,7 +506,10 @@ export function CalculatorCompare() {
         </section>
         {!isLoadingState && properties !== null && properties.length === 0 && <div className={`main-content no-compared-properties`}>
             <h3>{utilService.getPhrase(`calculator_compare_no_apartments`, phrases)}</h3>
-            <img src={chooseApartments} alt='' />
+            <img srcSet={`${chooseApartmentsMobile} 767w, ${chooseApartments} 1600w`}
+                 sizes="(max-width: 767px) 100vw, 1600px"
+                 src={chooseApartments}
+                 alt="" />
         </div>}
         {isLoadingState && <div className={`main-content ${viewState} loading`}>
             {[...Array(LOADING_PROPERTIES_COUNT)].map((_, index) => (

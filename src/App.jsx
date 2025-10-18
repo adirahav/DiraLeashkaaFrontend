@@ -208,9 +208,6 @@ Orientation.propTypes = {
 - web לשים פרסומות
 
 - camera upload not work
-- max price - missing years
-
-- support safari
 
 - delete image from cloudinary
 - micro services
