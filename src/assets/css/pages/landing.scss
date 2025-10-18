@@ -37,6 +37,11 @@
 
     .banner {
         grid-column: -1 / 1;
+
+        .loading {
+            display: block;
+            width: 100%;
+        }
     }
 
     .logo {
@@ -76,7 +81,7 @@
         height: max-content;
     }
 
-    .loading {
+    &.loading {
         margin: 50px auto;
         display: block;
         height: 90px;
