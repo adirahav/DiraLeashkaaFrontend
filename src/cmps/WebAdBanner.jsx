@@ -40,7 +40,7 @@ function WebAdBanner() {
   return (
     <>
       {isWeb && <ins
-        className="adsbygoogle"
+        className="web-ad-banner"
         style={{ display: "block" }}
         data-ad-client={clientId}
         data-ad-slot={slotId}
