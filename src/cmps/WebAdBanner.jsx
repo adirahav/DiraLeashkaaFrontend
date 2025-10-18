@@ -19,6 +19,7 @@ function WebAdBanner() {
 
   if (isWeb && isTesting) {
     return (
+      <>
       <div
         style={{
           width: "100%",
@@ -31,8 +32,27 @@ function WebAdBanner() {
           border: "1px dashed #aaa",
           fontSize: 14,
         }}
-      >
-        AdSense placeholder (testing mode)
+      >AdSense placeholder (testing mode)
+      </div>
+      <div className="web-ad-banner" data-ad-format="auto" data-full-width-responsive="true" data-ad-status="unfilled">unfilled</div>
+    </>)
+  }
+
+  if (isWeb && isTesting && false) {
+   return (
+      <div
+        style={{
+          width: "100%",
+          height: 90,
+          backgroundColor: "#eee",
+          color: "#666",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          border: "1px dashed #aaa",
+          fontSize: 14,
+        }}
+      >AdSense placeholder (testing mode)
       </div>
     )
   }
