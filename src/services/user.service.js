@@ -1,5 +1,8 @@
 import { STORAGE_KEY_LAST_LOGGEDIN_EMAIL, STORAGE_KEY_LOGGEDIN_USER } from "./auth.service"
 import { httpService } from "./http.service"
+import { Preferences } from '@capacitor/preferences'
+import { Capacitor } from '@capacitor/core'
+import jwt_decode from "jwt-decode"
 
 const BASE_URL = 'user/'
 
@@ -33,9 +36,9 @@ async function splash() {
     }
 }
 
-async function home(fullData) {
+async function home(fullData, token) {
     try {
-        const home = await httpService.get(BASE_URL + "home?fullData=" + fullData)
+        const home = await httpService.get(BASE_URL + "home?fullData=" + fullData, null, token)
         return home
     } catch(err) {
         console.error("Had problems getting home")
@@ -69,7 +72,7 @@ async function remove(userId) {
     // await fetch({method: 'DELETE', url})
 }
 
-function saveLocalUser(user) {
+function saveLocalUser_USING_COOKIE(user) {
     user = { 
         email: user.email, 
         fullname: user.fullname, 
@@ -87,6 +90,17 @@ function saveLocalUser(user) {
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
     return user
+}
+
+function saveLocalUser(token) {
+    const user = jwt_decode(token)
+    if (Capacitor.isNativePlatform()) {
+        Preferences.set({ key: 'token', value: token }).then(() => {}).catch((err) => {})
+        Preferences.set({ key: 'STORAGE_KEY_LAST_LOGGEDIN_EMAIL', value: user.email }).then(() => {}).catch((err) => {})
+    } else {
+        localStorage.setItem("token", token)
+        localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
+    }
 }
 
 async function save(userToSave) {

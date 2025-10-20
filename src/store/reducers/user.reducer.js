@@ -133,7 +133,7 @@ export function userReducer(state = initialState, action = {}) {
                 }
             }
         case UPDATE_USER:
-            userService.saveLocalUser(action.savedUser)
+            userService.saveLocalUser(action.savedUser)//ADITEST FIX TO JWT
             return {
                 ...state,
                 loggedinUser: action.savedUser,

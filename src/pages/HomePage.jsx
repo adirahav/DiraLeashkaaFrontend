@@ -34,16 +34,8 @@ export function HomePage() {
         }
 
     const [mediaLetsStart, setMediaLetsStart] = useState({
-        width: {
-            web: 504,
-            tablet: 354,
-            mobile: 250
-        },
-        height: {
-            web: 504,
-            tablet: 354,
-            mobile: 250
-        },
+        width: { web: 504, tablet: 354, mobile: 250 },
+        height: { web: 504, tablet: 354, mobile: 250 },
         url: imgLetsStart
     })
 
@@ -123,7 +115,8 @@ export function HomePage() {
     }
 
     const fetchFullHomeData = () => {
-        postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString() })
+        const jwt_token = localStorage.getItem("token") || sessionStorage.getItem("token")
+        postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString(), token: jwt_token })
     }
 
     // my cities

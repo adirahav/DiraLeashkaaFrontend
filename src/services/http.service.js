@@ -12,32 +12,35 @@ var axios = Axios.create({
 })
 
 export const httpService = {
-    get(endpoint, data) {
-        return ajax(endpoint, 'GET', data)
+    get(endpoint, data, token) {
+        return ajax(endpoint, 'GET', data, token)
     },
-    post(endpoint, data) {
-        return ajax(endpoint, 'POST', data)
+    post(endpoint, data, token) {
+        return ajax(endpoint, 'POST', data, token)
     },
-    put(endpoint, data) {
-        return ajax(endpoint, 'PUT', data)
+    put(endpoint, data, token) {
+        return ajax(endpoint, 'PUT', data, token)
     },
-    delete(endpoint, data) {
-        return ajax(endpoint, 'DELETE', data)
+    delete(endpoint, data, token) {
+        return ajax(endpoint, 'DELETE', data, token)
     }
 }
 
-async function ajax(endpoint, method = 'GET', data = null) {
+async function ajax(endpoint, method = 'GET', data = null, token = null) {
     data = {
         ...data,
         platform: "web",
     }
+
+    const jwt_token = token || localStorage.getItem("token") || sessionStorage.getItem("token")
 
     try {
         const res = await axios({
             url: `${BASE_URL}${endpoint}`,
             method,
             data,
-            params: (method === 'GET') ? data : null
+            params: (method === 'GET') ? data : null,
+            headers: jwt_token ? { Authorization: `Bearer ${jwt_token}` } : {},
         })
         return res.data
     } catch (err) {
@@ -45,6 +48,7 @@ async function ajax(endpoint, method = 'GET', data = null) {
         console.dir(err)
         if (err.response && err.response.status === 401) {
             sessionStorage.clear()
+            localStorage.removeItem("token")
             window.location.assign('/')
         }
         throw err

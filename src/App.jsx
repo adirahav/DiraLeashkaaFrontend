@@ -55,7 +55,7 @@ function RouteGuard({ children }) {
   /*useEffect(() => {
     setLoggedIn(loggedinUser !== null)
   }, [loggedinUser])*/
-
+  
   if (loggedinUser === null && !allowAnonymous()) {
     const navigate = localStorage.getItem("email")
                         ? '/login'
@@ -215,5 +215,11 @@ Orientation.propTypes = {
 - Graph api
 - cicd
 - cache
-- authentication - JWT
+- authentication - JWT    
+- docker
+- ENE Testing
+- PWA
+
+https://www.youtube.com/watch?v=acFKylH0rc4
+https://www.youtube.com/watch?v=H_8XHnaoA6s
 */
