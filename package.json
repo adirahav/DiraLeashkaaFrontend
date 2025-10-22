@@ -48,7 +48,11 @@
     "react-scripts": "4.0.0",
     "react-tabs": "^6.0.2",
     "react-thumbnail-creator": "^1.0.2",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "workbox-core": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
