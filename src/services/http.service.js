@@ -31,7 +31,7 @@ async function ajax(endpoint, method = 'GET', data = null, token = null) {
         ...data,
         platform: "web",
     }
-
+גק
     const jwt_token = token || localStorage.getItem("token") || sessionStorage.getItem("token")
 
     try {

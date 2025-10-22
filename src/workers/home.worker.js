@@ -11,7 +11,7 @@ self.onmessage = async (event) => {
             const homeFullData = await userService.home(true, token) 
             self.postMessage({ type: 'fullData', data: homeFullData })
         } catch (error) {
-            self.postMessage({ type: 'error', error: error.message })
+            self.postMessage({ type: 'error', error: error.message })   
         }
     }
   } catch (err) {
