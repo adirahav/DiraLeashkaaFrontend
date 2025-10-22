@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { saveHome } from '../store/actions/user.actions'
+import HomeWorker from '../workers/home.worker.js?worker'
 
 export function useHomeWorker(enabled = true) {
     const workerRef = useRef(null)
@@ -9,10 +10,7 @@ export function useHomeWorker(enabled = true) {
             return
         }
 
-        const newWorker = new Worker(
-            new URL('../workers/home.worker.js', import.meta.url), 
-            { type: 'module' }
-        )
+        const newWorker = new HomeWorker()
 
         workerRef.current = newWorker
 
