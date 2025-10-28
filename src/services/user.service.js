@@ -13,6 +13,7 @@ export const userService = {
     getById,
     remove,
     saveLocalUser,
+    deleteLocalUser,
     save,
     getEmptyUser
 }
@@ -100,6 +101,14 @@ function saveLocalUser(token) {
     } else {
         localStorage.setItem("token", token)
         localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
+    }
+}
+
+function deleteLocalUser() {
+    if (Capacitor.isNativePlatform()) {
+        Preferences.remove({ key: 'token' })
+    } else {
+        localStorage.removeItem("token")
     }
 }
 

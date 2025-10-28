@@ -192,7 +192,7 @@ export function Header() {
     const handleLogout = async (ev) => {
         ev.preventDefault() 
         try {
-            logout()
+            await logout()
             navigate("/login") 
         } catch (error) {
             console.error("Logout failed", error)

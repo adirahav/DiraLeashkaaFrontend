@@ -61,7 +61,7 @@ async function signup(credentials) {
 }
 
 async function logout() {
-    await Preferences.remove({ key: 'token' })
+    userService.deleteLocalUser()
     //sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
     await httpService.post(BASE_URL + 'logout')
 }
