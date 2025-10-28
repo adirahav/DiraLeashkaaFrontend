@@ -40,6 +40,27 @@
                         line-height: normal;
                     }
                 }
+
+                &.dropdown.basic-multiple .custom-dropdown ul li > div > span {
+                    line-height: rem(16px);
+                    white-space: unset;
+
+                    & > div:nth-child(1) {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    & > div:nth-child(2) {
+                        font-size: rem(12px);
+                        color: var(--text-label);
+
+                        & > div {
+                            display: inline-block;
+                            direction: ltr;
+                        }
+                    }
+                }
             }
     
             h3 {
@@ -47,9 +68,9 @@
             }
 
             &:nth-child(3) {
-                *:nth-child(2), *:nth-child(4) { 
+                *:nth-child(2), *:nth-child(3) { 
                     &.property-field {
-                        span {
+                        & > span {
                             line-height: rem(16px);
                         }
                     }

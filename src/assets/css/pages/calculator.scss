@@ -266,7 +266,7 @@
                             }
                         }
 
-                        &.multiple {
+                        &.beautified-multiple {
                             grid-column: 2;
                             
                             .custom-dropdown {
@@ -350,6 +350,10 @@
             top: 72px;
             background: white; 
             z-index: 1001;
+
+            &.overlay {
+                background: transparent; 
+            }
             
             &.has-scroll {
                 display: inline-flex;
@@ -455,46 +459,82 @@
                         display: grid;
                         grid-template-columns: rem(87px) rem(150px) minmax(rem(20px), 1fr);
 
-                        .custom-dropdown,
-                        .custom-dropdown .dropdown-toggle {
-                            width: rem(150px);
-                        }
-
-                        .custom-dropdown .dropdown-menu input {
-                            width: calc(100% - rem(20px));
-                        }
-
-                        .custom-dropdown,
-                        .custom-dropdown .dropdown-toggle,
-                        & > div {
-                            & > input,
-                            & > textarea {
+                        &:not(.basic-multiple) {
+                            
+                            .custom-dropdown,
+                            .custom-dropdown .dropdown-toggle {
                                 width: rem(150px);
                             }
-
-                            & > textarea {
-                                max-width: rem(150px);
+    
+                            .custom-dropdown .dropdown-menu input {
+                                width: calc(100% - rem(20px));
                             }
-                        }
-
-                        &.dropdown.searchable .custom-dropdown .dropdown-menu {
-                            
-                            &.searchable .custom-dropdown .dropdown-menu {
-                                input {
-                                    width: rem(135px);
-                                    margin: 0 rem(6px);
+    
+                            .custom-dropdown,
+                            .custom-dropdown .dropdown-toggle,
+                            & > div {
+                                & > input,
+                                & > textarea {
+                                    width: rem(150px);
+                                }
+    
+                                & > textarea {
+                                    max-width: rem(150px);
+                                }
+                            }
+    
+                            &.dropdown.searchable .custom-dropdown .dropdown-menu {
+                                
+                                &.searchable .custom-dropdown .dropdown-menu {
+                                    input {
+                                        width: rem(135px);
+                                        margin: 0 rem(6px);
+                                    }
+                                }
+                                
+                                &.beautified-multiple .custom-dropdown ui li {
+                                    display: grid;
+                                    grid-template-columns: rem(20px) 1fr 1fr;
                                 }
                             }
                             
-                            &.multiple .custom-dropdown ui li {
-                                display: grid;
-                                grid-template-columns: rem(20px) 1fr 1fr;
+                            span {
+                                line-height: rem(30px);
                             }
                         }
                         
-                        span {
-                            line-height: rem(30px);
-                        }
+
+                        &.dropdown.basic-multiple .custom-dropdown {
+                            width: rem(150px);
+
+                            .dropdown-toggle {
+                                padding: 0 rem(2px);
+
+                                span {
+                                    height: rem(16px);
+                                    direction: rtl;
+                                }
+                            }
+
+                            .dropdown-menu {
+                                ul {
+                                    li {
+                                        div {
+                                            span {
+                                                div {
+                                                    font-size: rem(12px);
+                                                        
+                                                    div {
+                                                        display: inline-block;
+                                                        direction: ltr;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } 
                     }
                 }
 
@@ -564,7 +604,7 @@
                         }
     
                         &:nth-child(3) {
-                            *:nth-child(2), *:nth-child(4) {
+                            *:nth-child(2), *:nth-child(3), *:nth-child(5) {
                                 &.property-field {
                                     span {
                                         line-height: rem(16px);
@@ -922,7 +962,7 @@
                 .elements {
                     .property-field {
                         &.dropdown {
-                            &.multiple {
+                            &.beautified-multiple {
                                 .custom-dropdown {
     
                                     ul li {
@@ -960,7 +1000,7 @@
                     
                     .property-field {
                         &.dropdown {
-                            &.multiple {
+                            &.beautified-multiple {
                                 .custom-dropdown {
 
                                     .dropdown-toggle {
@@ -1055,7 +1095,7 @@
 
                     .property-field {
                         &.dropdown {
-                            &.multiple {
+                            &.beautified-multiple {
                                 .custom-dropdown {
                                     .dropdown-toggle {
                                         font-size: rem-capped(16px, 32px);
@@ -1552,7 +1592,7 @@
                 .elements {
                     .property-field {
                         &.dropdown {
-                            &.multiple {
+                            &.beautified-multiple {
                                 .custom-dropdown {
     
                                     ul li {
@@ -1609,7 +1649,7 @@
             &.compare {
                 .filter {
                     .dropdown {
-                        &.multiple {
+                        &.beautified-multiple {
                             .custom-dropdown {
                                 .dropdown-toggle {
                                     & > span {

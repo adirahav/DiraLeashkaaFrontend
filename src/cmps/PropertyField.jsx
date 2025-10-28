@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 import PropTypes from "prop-types"
 import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, AttentionIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
-import { showWarningAlert } from './Alert'
+import { showWarningAlert, showTooltipAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
 
 export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueChanged, onPercentChanged }) {
-    // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | VISUAL_DROP_DOWN | MULTIPLE_DROP_DOWN | STRING | TEXT_AREA | PERCENT
+    // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | VISUAL_DROP_DOWN | BEAUTIFIED_MULTIPLE_DROP_DOWN | BASIC_MULTIPLE_DROP_DOWN | STRING | TEXT_AREA | PERCENT
 
     const DEBOUNCE_AWAIT = 500
     
@@ -98,9 +98,23 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
 
             setIsChangedByUser(true)
             let value = params.defaultValue === 0 ? "0" : params.defaultValue.toString().replace(/[^0-9]/g, '').replace(/^0+/, '')
+            value = parseInt(value) + parseInt(params.additionalFunding ?? 0)
             value = utilService.formatNumber(value)
 
             setValueToEdit(value)
+        }
+
+        const handleShowFYIAlert = (ev) => {
+            ev.preventDefault()
+            ev.stopPropagation()
+
+            showTooltipAlert({
+                title: "Error",
+                message: params.FYI,
+                closeButton: { show: true, autoClose: false }, 
+                positiveButton: { show: true, text: utilService.getPhrase("dialog_tooltip_button_ok", phrases), onPress: async () => { }, closeAfterPress: true }, 
+                negativeButton: { show: false }, 
+            })
         }
 
         /*const showRollback1 = valueToEdit.replace(/,/g, '') !== params.defaultValue?.toString() && 
@@ -108,13 +122,24 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                              params.defaultValue != undefined && 
                              params.id */
             
-        const showRollback = isFirstLoading || !valueToEdit 
+        /*const showRollback2 = isFirstLoading || !valueToEdit 
                              ? false 
                              //: (!params.value && !params.defaultValue) ||
                              : (!(typeof params.value === 'number') && !(typeof params.defaultValue === 'number')) ||
-                               (valueToEdit?.toString().replace(/,/g, '') !== params.defaultValue?.toString())
-     
-        const fieldClass = 'property-field auto-fill' + (showRollback ? ' roll-back' : '') + (isFirstLoading
+                               (valueToEdit?.toString().replace(/,/g, '') !== params.defaultValue?.toString())*/
+        
+        const showRollback = isFirstLoading || !valueToEdit 
+                             ? false 
+                             : (!(typeof params.value === 'number') && !(typeof params.defaultValue === 'number')) ||
+                               (valueToEdit?.toString().replace(/,/g, '') !==  ((params.defaultValue ?? 0) + (params.additionalFunding ?? 0)).toString())
+        
+        const showFYI = isFirstLoading || !valueToEdit 
+                               ? false 
+                               : ((params.additionalFunding ?? 0) > 0) &&
+                                 (valueToEdit?.toString().replace(/,/g, '') ===  ((params.defaultValue ?? 0) + (params.additionalFunding ?? 0)).toString())
+        
+                            
+        const fieldClass = 'property-field auto-fill' + (showRollback ? ' roll-back' : '') + (showFYI ? ' fyi' : '')  + (isFirstLoading
                                 ? ' loading1' 
                                 : valueToEdit === null || 
                                   valueToEdit.length === 0 
@@ -129,6 +154,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                             onChange={handleValueChange} 
                             {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})} />
                             {showRollback && <RollbackIcons onClick={handleValueRollback} />}
+                            {showFYI && <AttentionIcon onClick={handleShowFYIAlert} />}
                     </div>
                 </div>
     }
@@ -730,14 +756,14 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                 </div>
     }
 
-    function MultipleDropDownn({params, onSetValue}) {
+    function BeautifiedMultipleDropDown({params, onSetValue}) {
         const [isOpen, setIsOpen] = useState(false)
         const [filteredOptions, setFilteredOptions] = useState()
         const [choosenText, setChoosenText] = useState()
 
         const fieldRef = useRef()
         const dropdownRef = useRef()
-
+        
         useEffect(() => {
             if (params.label || params.options || params.selectedValue) {
                 setTimeout(() => {
@@ -783,7 +809,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             }
         }
         
-        const fieldClass = `property-field dropdown multiple ` 
+        const fieldClass = `property-field dropdown beautified-multiple ` 
                                 + (isFirstLoading
                                     ? ' loading6' 
                                     : params?.selectedValue === null || 
@@ -815,6 +841,98 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                             </ul>
                         </div>}
                         
+                    </div>
+                </div>
+    }
+
+    function BasicMultipleDropDown({params, onSetValue}) {
+        const [isOpen, setIsOpen] = useState(false)
+        const [filteredOptions, setFilteredOptions] = useState()
+        const [choosenText, setChoosenText] = useState()
+
+        const fieldRef = useRef()
+        const dropdownRef = useRef()
+        
+        useEffect(() => {
+            if (params.label || params.options || params.selectedValue) {
+                setTimeout(() => {
+                    document.addEventListener('click', handleClickOutside)
+                }, 0)
+            }
+    
+            return () => {
+                document.removeEventListener('click', handleClickOutside)
+            }
+        }, [params.label, params.options, params.selectedValue])
+
+        useEffect(() => {
+            const checkedCound = params.options?.filter(option => option.checked).length ?? 0
+            
+            setChoosenText( 
+                checkedCound > 1
+                ? params?.texts.many.replace('%1$s', checkedCound)
+                : checkedCound === 1
+                    ? params?.texts.one
+                    : params?.texts.any
+            )
+
+            setFilteredOptions(params.options)
+        }, [params?.options])
+
+        const toggleDropdown = (event) => {  
+            event.preventDefault()
+            setIsOpen(true)
+        } 
+
+        const handleCheckboxChanged = (event) => {
+            event.stopPropagation()  
+            const checked = event.target.checked
+            const { id } = event.target
+            
+            const option = params?.options?.find(opt => opt.key == id)
+            if (option) {
+                option.checked = checked
+            }
+
+            onSetValue(checked, id)
+        }
+
+        function handleClickOutside(ev) {
+            if (dropdownRef.current && !dropdownRef.current.contains(ev.target)/* && inputRef.current !== document.activeElement*/) {
+                setIsOpen(false)
+            }
+        }
+        
+        const fieldClass = `property-field dropdown basic-multiple ` 
+                                + (isFirstLoading
+                                    ? ' loading6' 
+                                    : '')
+        
+        return  <div className={fieldClass}>
+                    <span>{params.label}</span>
+                    <div ref={dropdownRef}>
+                        <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`}>
+                            <button className="dropdown-toggle" onClick={toggleDropdown}>
+                                <span dangerouslySetInnerHTML={{ __html: choosenText }} />
+                                {!isOpen && <ArrowDownIcon />}
+                                {isOpen && <ArrowUpIcon />}
+                            </button>
+                            {isOpen && <div className="dropdown-menu">
+                                <ul>
+                                    {filteredOptions.map((option, index) => (
+                                        <li key={index}>
+                                            <input type='checkbox' id={option.key} checked={option.checked} onChange={handleCheckboxChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" ></input>
+                                            {option.image && <img src={option.image} alt={option.value} />}
+                                            <div>
+                                                <span dangerouslySetInnerHTML={{ __html: option.value }}></span>
+                                                {option.info && <span>{option.info}</span>}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>}
+                            
+                        </div>
                     </div>
                 </div>
     }
@@ -1153,7 +1271,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         onSetValue: PropTypes.func
     }
     
-    MultipleDropDownn.propTypes = {
+    BeautifiedMultipleDropDown.propTypes = {
         params: PropTypes.object,
         onSetValue: PropTypes.func
     }
@@ -1214,7 +1332,9 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             
             {type === "VISUAL_DROP_DOWN" && VisualDropDownn({params, onSetValue: onValueChanged})}
             
-            {type === "MULTIPLE_DROP_DOWN" && MultipleDropDownn({params, onSetValue: onValueChanged})}
+            {type === "BEAUTIFIED_MULTIPLE_DROP_DOWN" && BeautifiedMultipleDropDown({params, onSetValue: onValueChanged})}
+            
+            {type === "BASIC_MULTIPLE_DROP_DOWN" && BasicMultipleDropDown({params, onSetValue: onValueChanged})}
             
             {type === "STRING" && String({params, onSetValue: onValueChanged})}
 

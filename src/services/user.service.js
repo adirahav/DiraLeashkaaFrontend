@@ -104,8 +104,17 @@ function saveLocalUser(token) {
 }
 
 async function save(userToSave) {
-    const savedUser = await httpService.put(BASE_URL, userToSave)
+    /*const savedUser = await httpService.put(BASE_URL, userToSave)
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
+    return savedUser*/
+
+    const token = await httpService.put(BASE_URL, userToSave)
+
+    if (token) {
+        userService.saveLocalUser(token)
+    }
+
+    const savedUser = jwt_decode(token)
     return savedUser
 }
 

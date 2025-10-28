@@ -19,7 +19,7 @@ import { Navigate } from 'react-router-dom'
 import { useWindowSize } from '../hooks/useWindowSize'
 
 export function CalculatorCompare() {  
-    const MAX_APARTMENTS_TO_COMPARE = 3
+    const MAX_APARTMENTS_TO_COMPARE = 4
     const LOADING_PROPERTIES_COUNT = 3
 
     const { splash } = useSplash()
@@ -99,7 +99,7 @@ export function CalculatorCompare() {
     
 
     /*useEffect(() => {
-        const handleClick = (e) => {debugger
+        const handleClick = (e) => {
             if (e.target.closest('.property-field.warning')) {
                 document.querySelectorAll('.custom-dropdown.open')?.forEach(el => {
                     el.classList.remove('open')
@@ -470,6 +470,7 @@ export function CalculatorCompare() {
                 fieldValue: fieldValue === '' || fieldValue === 'choose' ? null : fieldValue
             }
             
+            //onLoadingStart()
             setShowOverlay(true)
 
             const savedProperty = await propertyService.save(propertyToUpdate)
@@ -484,7 +485,9 @@ export function CalculatorCompare() {
             setShowOverlay(false) 
         } catch (error) {
             console.error(`Error update property ${propertyId}:`, error)
-        } 
+        } finally {
+            //onLoadingDone()
+        }
     }
 
     const titleClass = `${isLoadingState ? "loading0" : ""}`
@@ -500,7 +503,7 @@ export function CalculatorCompare() {
             </article>
             <article className='elements'>
                 <PropertyField type={"VISUAL_DROP_DOWN"} key={keys.cityFilter} params={cityFilter} isFirstLoading={isFirstLoading} onValueChanged={(value) => onCityChanged(value)} />   
-                <PropertyField type={"MULTIPLE_DROP_DOWN"} key={keys.propertyFilter} params={propertyFilter} isFirstLoading={isFirstLoading} onValueChanged={(checked, propertyId) => onPropertyCheckedChanged(checked, propertyId)} />   
+                <PropertyField type={"BEAUTIFIED_MULTIPLE_DROP_DOWN"} key={keys.propertyFilter} params={propertyFilter} isFirstLoading={isFirstLoading} onValueChanged={(checked, propertyId) => onPropertyCheckedChanged(checked, propertyId)} />   
                 <FormField type={"BUTTON"} key={keys.resetFilter} params={resetFilter} onPress={onResetFilter} />
             </article>
         </section>
@@ -517,7 +520,7 @@ export function CalculatorCompare() {
             ))}
         </div>}
         {!isLoadingState && properties && properties.length > 0 && <>
-            <div className={`view-controller ${scroll.hasScroll ? 'has-scroll': ''}`}>
+            <div className={`view-controller ${scroll.hasScroll ? 'has-scroll': ''} ${showOverlay ? "overlay" : ""}`}>
                 <div className={`view-buttons ${viewState}`}>
                     <h2>תצוגה:</h2>
                     <ViewComfyIcon className='comfy' onClick={() => changeViewState('comfy')} />

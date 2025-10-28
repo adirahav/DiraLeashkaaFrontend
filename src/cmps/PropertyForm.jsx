@@ -7,6 +7,7 @@ import averageReturnImage from '../assets/images/icon_best_average_return.png'
 import averageReturnOnEquityImage from '../assets/images/icon_best_yield_average_return_on_equity.png'
 import totalProfitImage from '../assets/images/icon_best_yield_total_profit.png'
 import npvImage from '../assets/images/icon_best_yield_npv.png'
+import { DollarSign, Wallet } from "lucide-react"
 import PropTypes from "prop-types"
 
 export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPropertyId}) { 
@@ -126,12 +127,35 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         }
     }
 
+    const defultMultipleDropdownState = (labelKey, options) => {
+        const phrase1 = "<div>%1$s</div><div>💰%2$d 💸%3$d</div>"
+        const phrase = "<div>%1$s</div><div>%2$d | <div>%3$d</div></div>"
+
+        return {
+            label: utilService.getPhrase("property_additional_funding_sources_label", phrases), 
+            selectedValue: null, 
+            options: options?.map((option, index) => ({
+                key: option.sourceId,
+                value: phrase
+                  .replace("%1$s", option.source)
+                  .replace("%2$d", utilService.formatBigNumber(option.amount))
+                  .replace("%3$d", utilService.formatBigNumber(option.repayment * -1))
+              })),
+            texts: {
+                any: "ללא",
+                one: "אמצעי מימון אחד",
+                many: "%1$s אמצעי מימון"
+            }
+        }
+    }
+
     const [city, setCity] = useState(defultSearchableDropdownState("property_city_label", "cities", "userCities"))
     const [cityElse, setCityElse] = useState(defultStringState("property_city_else_label", 20))
     const [address, setAddress] = useState(defultStringState("property_address_label", 30))
     const [apartmentType, setApartmentType] = useState(defultDropdownState("property_apartment_type_label", null, "apartmentTypes"))
     const [price, setPrice] = useState(defultNumberState("property_price_label", 9))
     const [equity, setEquity] = useState(defultAutoFillState("property_equity_label", 9))
+    const [additionalFundingSources, setAdditionalFundingSources] = useState(defultMultipleDropdownState("property_additional_funding_sources_label", user?.additionalFundingSources))
     
     const [equityCleaningExpenses, setEquityCleaningExpenses] = useState(defultCalcState("property_equity_cleaning_expenses_label", "property_equity_cleaning_expenses_warning")) 
     const [mortgageRequired, setMortgageRequired] = useState(defultCalcState("property_mortgage_required_label", "property_mortgage_required_warning"))
@@ -176,7 +200,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     useEffect(() => {
         if (!isLoadingState && !property && !queryPropertyId && phrases) {
-            setEquity(prevEquity => ({ ...prevEquity, id: property?._id, value: user?.equity, defaultValue: user?.equity}))
+            setEquity(prevEquity => ({ ...prevEquity, id: property?._id, value: user?.equity, defaultValue: user?.equity }))
             setIncomes(prevIncomes => ({ ...prevIncomes, id: property?._id, value: user?.incomes, defaultValue: user?.incomes}))
             setCommitments(prevCommitments => ({ ...prevCommitments, id: property?._id, value: user?.commitments, defaultValue: user?.commitments}))
         }
@@ -187,12 +211,13 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             setApartmentType(prevApartmentType => ({...prevApartmentType, label: utilService.getPhrase("property_apartment_type_label", phrases)}))
             
             setPrice(prevPrice => ({...prevPrice, label: utilService.getPhrase("property_price_label", phrases)}))
-            setEquity(prevEquity => ({...prevEquity, label: utilService.getPhrase("property_equity_label", phrases)}))
+            setEquity(prevEquity => ({...prevEquity, label: utilService.getPhrase("property_equity_label", phrases), FYI: "ההון הכולל כולל את ההון העצמי שלך ואת מקורות המימון הנוספים שבחרת לשלב."}))
             setEquityCleaningExpenses(prevEquityCleaningExpenses => ({...prevEquityCleaningExpenses, label: utilService.getPhrase("property_equity_cleaning_expenses_label", phrases), warning: utilService.getPhrase("property_equity_cleaning_expenses_warning", phrases)}))
             setMortgageRequired(prevMortgageRequired => ({...prevMortgageRequired, label: utilService.getPhrase("property_mortgage_required_label", phrases), warning: utilService.getPhrase("property_mortgage_required_warning", phrases)}))
             setNote(prevNote => ({...prevNote, label: utilService.getPhrase("property_note_label", phrases)}))
             setIncomes(prevIncomes => ({...prevIncomes, label: utilService.getPhrase("property_incomes_label", phrases)}))
-            setCommitments(prevCommitments => ({...prevCommitments, label: utilService.getPhrase("property_commitments_label", phrases)}))
+            setCommitments(prevCommitments => ({...prevCommitments, label: utilService.getPhrase("property_commitments_label", phrases), FYI: "ההלוואות וההתחייבויות כוללות גם את ההחזרים החודשיים בגין מקורות המימון שבחרת לשלב."}))
+            setAdditionalFundingSources(prevAdditionalFundingSources => ({...prevAdditionalFundingSources, label: utilService.getPhrase("property_additional_funding_sources_label", phrases)}))
             setDisposableIncome(prevDisposableIncome => ({...prevDisposableIncome, label: utilService.getPhrase("property_disposable_income_label", phrases)}))
             setPossibleMonthlyRepayment(prevPossibleMonthlyRepayment => ({...prevPossibleMonthlyRepayment, label: {withPercent: utilService.getPhrase("property_possible_monthly_payment_label", phrases), withCustomValue: utilService.getPhrase("possibleMonthlyRepaymentPercent", phrases)}}))
             
@@ -234,7 +259,6 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
 
     const loadProperty = () => {
         try {
-        
             setCity(prevCity => ({...prevCity, selectedValue: property?.city}))
 
             if (property?.updatedByField !== "cityElse") {
@@ -256,7 +280,8 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                     ...prevEquity, 
                     id: property?._id, 
                     value: queryPropertyId ? property?.calcEquity : user?.equity, 
-                    defaultValue: queryPropertyId ? property?.defaultEquity : user?.equity
+                    defaultValue: queryPropertyId ? property?.defaultEquity : user?.equity,
+                    additionalFunding: property?.calcAdditionalFunding?.totalAmount
                 }))
             }
 
@@ -290,8 +315,19 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
                     ...prevCommitments, 
                     id: property?._id, 
                     value: queryPropertyId ? property?.calcCommitments : user?.commitments, 
-                    defaultValue: queryPropertyId ? property?.defaultCommitments : user?.commitments
+                    defaultValue: queryPropertyId ? property?.defaultCommitments : user?.commitments,
+                    additionalFunding: property?.calcAdditionalFunding?.totalRepayment
                 }))
+            }
+
+            if (property?.updatedByField !== "additionalFundingSources" || !queryPropertyId) {
+                setAdditionalFundingSources(prev => ({
+                    ...prev,
+                    options: prev.options?.map(opt => ({
+                      ...opt,
+                      checked: property?.additionalFundingSources?.includes(opt.key)
+                    }))
+                  }))
             }
 
             setDisposableIncome(prevMortgagePeriod => ({...prevMortgagePeriod, value: property?.calcDisposableIncome}))
@@ -457,6 +493,22 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         onUpdate(fieldName, customPercent) 
     }
 
+    function onDropdownCheckedChanged(fieldName, checked, value) {
+        const parsedValue = isNaN(value) ? value : Number(value)
+      
+        let newArray = property[fieldName] || []
+      
+        if (property[fieldName]?.includes(parsedValue) && !checked) {
+          newArray = property[fieldName].filter(itemValue => itemValue !== parsedValue)
+        } 
+        else if (!property[fieldName]?.includes(parsedValue) && checked) {
+          newArray = [...property[fieldName] || [], parsedValue]
+        }
+      
+        onUpdate(fieldName, newArray)
+    }
+      
+
     const keys = {
         city: "city" + (city.selectedValue ? city.selectedValue : "Default"),
         cityElse: "cityElse" + (cityElse.value ? cityElse.value : "Default"),
@@ -470,6 +522,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
         
         incomes: "incomes" + (incomes.value !== null ? incomes.value : "Default"),
         commitments: "commitments" + (commitments.value !== null ? commitments.value : "Default"),
+        additionalFundingSources: "additionalFundingSources" + (additionalFundingSources ? additionalFundingSources.options?.filter(option => option.checked).length : "Default"),
         disposableIncome: "disposableIncome" + (disposableIncome.value ? disposableIncome.value : "Default"),
         possibleMonthlyRepayment: "possibleMonthlyRepayment" + (possibleMonthlyRepayment.value ? possibleMonthlyRepayment.value : "Default"),
 
@@ -548,6 +601,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             <article>
                 <PropertyField type={"AUTO_FILL"} key={keys.incomes} params={incomes} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('incomes', value)} />    
                 <PropertyField type={"AUTO_FILL"} key={keys.commitments} params={commitments} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('commitments', value)} />   
+                <PropertyField type={"BASIC_MULTIPLE_DROP_DOWN"} key={keys.additionalFundingSources} params={additionalFundingSources} isFirstLoading={isFirstLoading} onValueChanged={(checked, sourceId) => onDropdownCheckedChanged('additionalFundingSources', checked, sourceId)} />
                 <PropertyField type={"CALC"} key={keys.disposableIncome} params={disposableIncome} isFirstLoading={isFirstLoading} />
                 <PropertyField type={"CALC_EDITABLE"} key={keys.possibleMonthlyRepayment} params={possibleMonthlyRepayment} isFirstLoading={isFirstLoading} onValueChanged={(value) => onValueChanged('possibleMonthlyRepaymentCustomValue', value)} onPercentChanged={(percent) => onPercentChanged('possibleMonthlyRepaymentPercent', percent)} />    
             </article>

@@ -41,10 +41,35 @@ export function FinancialDetailsPage() {
         }
     }
 
+    const defultStringState = (name, labelKey, value, errorKey, tooltipKey, maxLength) => {
+        return {
+            name,
+            label: utilService.getPhrase(labelKey, phrases), 
+            value,
+            error: utilService.getPhrase(errorKey, phrases), 
+            tooltip: utilService.getPhrase(tooltipKey, phrases),  
+            maxLength,
+            hasError: false
+        }
+    }
+
     const [financialDetails, setFinancialDetails ] = useState({
-        equity: defultInputState("equity", "signup_equity_label", loggedinUser?.equity, "signup_equity_error", "signup_equity_tooltip"),
+        equity: defultInputState("equity", "signup_equity_label", loggedinUser?.equity, "signup_equity_error", "signup_equity_tooltip", 100),
         incomes: defultInputState("incomes", "signup_incomes_label", loggedinUser?.incomes, "signup_incomes_error", "signup_incomes_tooltip"),
-        commitments: defultInputState("commitments", "signup_commitments_label", loggedinUser?.commitments, "signup_commitments_error", "signup_commitments_tooltip")
+        commitments: defultInputState("commitments", "signup_commitments_label", loggedinUser?.commitments, "signup_commitments_error", "signup_commitments_tooltip"),
+        additionalFundingSources: [{
+                source: defultStringState("source", "signup_additional_funding_sources_source_label", "קרן השתלמות", 100, "signup_additional_funding_sources_source_error", "signup_additional_funding_sources_source_tooltip"),
+                amount: defultInputState("amount", "signup_additional_funding_sources_amount_label", loggedinUser?.equity, "signup_additional_funding_sources_amount_error", "signup_additional_funding_sources_amount_tooltip"),
+                repayment: defultInputState("repayment", "signup_additional_funding_sources_repayment_label", loggedinUser?.commitments, "signup_commitments_error", "signup_commitments_tooltip")
+            },
+            {
+                source: defultStringState("source", "signup_additional_funding_sources_source_label", "קרן פנסיה", 100, "signup_additional_funding_sources_source_error", "signup_additional_funding_sources_source_tooltip"),
+                amount: defultInputState("amount", "signup_additional_funding_sources_amount_label", loggedinUser?.equity, "signup_additional_funding_sources_amount_error", "signup_additional_funding_sources_amount_tooltip"),
+                repayment: defultInputState("repayment", "signup_additional_funding_sources_repayment_label", loggedinUser?.commitments, "signup_additional_funding_sources_repayment_error", "signup_additional_funding_sources_repayment_tooltip")
+            }
+        ]
+            
+        
     })
 
     const [note, setNote] = useState({text: null, type: "error"})

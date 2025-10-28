@@ -13,13 +13,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </Provider>
 )
 
-
+/*
 // רישום Service Worker אחרי הרינדור
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/service-worker.js')
       .then(reg => console.log('Service Worker registered:', reg))
-      .catch(err => console.log('SW registration failed:', err));
-  });
-}
+      .catch(err => console.log('SW registration failed:', err))
+  })
+}*/

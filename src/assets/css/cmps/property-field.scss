@@ -212,6 +212,19 @@
       }
       
     }
+
+    &.fyi {
+      svg {
+        color: var(--property-field-info-icon);
+        margin: rem(5px) 0;
+        user-select: none;
+        width: 1em;
+        height: 1em;
+        font-size: rem(20px);
+      }
+    }
+
+    
   }
 
   &.calc-total {
@@ -458,7 +471,7 @@
       }
     }
 
-    &.multiple {
+    &.beautified-multiple {
       display: inline-flex;
 
       .custom-dropdown {
@@ -556,6 +569,90 @@
               margin-left: rem(10px);
               
               div > span:nth-child(1) {
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.basic-multiple {
+      display: inline-flex;
+
+      .custom-dropdown {
+        
+        .dropdown-toggle {
+          font-size: rem(18px);
+          height: 100%;
+          width: 100%;
+          padding: 0 rem(10px);
+
+          span {
+            width: auto;
+          }
+
+          svg {
+            width: rem(28px);
+            height: rem(28px);
+          }
+        }
+
+        ul {
+          @include scrollbar;
+          box-sizing: border-box;
+          overflow-y: visible;
+          overflow-x: hidden;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          
+          &::-webkit-scrollbar {
+            width: 0;
+          }
+
+          li {
+            @include inside-container;
+            background-color: transparent;
+            width: 100%;
+            box-sizing: border-box;
+            display: grid;
+            margin: rem(10px) 0;
+            align-items: center;
+            direction: rtl;
+            grid-template-columns: rem(26px) 1fr;
+            padding: 0 rem(10px);
+          
+            & > input {
+              width: rem(20px);
+              height: rem(20px);
+              grid-column: 1;
+
+              &:focus-visible {
+                outline: 0;
+              }
+            }
+
+            & > div {
+              grid-column: 2;
+              display: inline-grid;
+              
+              & > span {
+                width: auto;
+                line-height: rem(30px);
+                font-size: rem(14px);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis
+              }
+            }
+
+            &:hover {
+              margin: rem(10px) 0;
+              background-color: transparent;
+            
+              div > span {
                 font-weight: bold;
               }
             }

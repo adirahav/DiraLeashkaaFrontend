@@ -29,6 +29,6 @@ async function archive(propertyId) {
     const data = { 
         "dataToReturn": "home"
     }
-    const home = await httpService.put(BASE_URL + `${propertyId}/archive`, data)
+    const home = await httpService.patch(BASE_URL + `${propertyId}/archive`, data)
     return home
 }

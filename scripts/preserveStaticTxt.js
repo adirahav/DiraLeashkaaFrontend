@@ -1,4 +1,5 @@
 import { copyFile } from 'fs/promises'
+import { readFileSync, writeFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -7,19 +8,20 @@ const __dirname = dirname(__filename)
 
 const adsTxtSrc = join(__dirname, '../ads.txt')
 const appAdsTxtSrc = join(__dirname, '../app-ads.txt')
-const serviceWorkerSrc = join(__dirname, '../service-worker.js')
-const manifestSrc = join(__dirname, '../manifest.json')
-const logo192Src = join(__dirname, '../icon-192x192.png')
-const logo512Src = join(__dirname, '../icon-512x512.png')
-const indexHtmlSrc = join(__dirname, '../dist/index.html')
+//const serviceWorkerSrc = join(__dirname, '../service-worker.js')
+//const manifestSrc = join(__dirname, '../manifest.json')
+//const logo192Src = join(__dirname, '../icon-192x192.png')
+//const logo512Src = join(__dirname, '../icon-512x512.png')
+//const indexHtmlSrc = join(__dirname, '../dist/index.html')
 
-const adsTxtDest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/ads.txt')
-const appAdsTxtDest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/app-ads.txt')
-const serviceWorkerDest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/service-worker.js')
-const manifestDest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/manifest.json')
-const logo192Dest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/assets/icon-192x192.png')
-const logo512Dest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/assets/icon-512x512.png')
-const indexHtmlDest = join(backendPublic, 'index.html')
+const backendPublic = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public')
+const adsTxtDest = join(backendPublic, 'ads.txt')
+const appAdsTxtDest = join(backendPublic, 'app-ads.txt')
+//const serviceWorkerDest = join(backendPublic, 'service-worker.js')
+//const manifestDest = join(backendPublic, 'manifest.json')
+//const logo192Dest = join(backendPublic, 'assets/icon-192x192.png')
+//const logo512Dest = join(backendPublic, 'assets/icon-512x512.png')
+//const indexHtmlDest = join(backendPublic, 'index.html')
 
 try {
   await copyFile(adsTxtSrc, adsTxtDest)
@@ -28,7 +30,7 @@ try {
   await copyFile(appAdsTxtSrc, appAdsTxtDest)
   console.log('app-ads.txt copied ✔️')
 
-  await copyFile(serviceWorkerSrc, serviceWorkerDest)
+  /*await copyFile(serviceWorkerSrc, serviceWorkerDest)
   console.log('service-worker.js copied ✔️')
   
   await copyFile(manifestSrc, manifestDest)
@@ -52,7 +54,7 @@ try {
   }
 
   writeFileSync(indexHtmlDest, indexHtml, 'utf8')
-  console.log('index.html copied ✔️')
+  console.log('index.html copied ✔️')*/
 
 } catch (err) {
   console.error('Error copying static files:', err)

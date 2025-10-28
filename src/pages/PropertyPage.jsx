@@ -221,7 +221,7 @@ export function PropertyPage() {
             const propertyToUpdate = { 
                 propertyId: property?._id,
                 fieldName,
-                fieldValue: fieldValue === '' || fieldValue === 'choose' ? null : fieldValue
+                fieldValue: fieldValue === '' || fieldValue === 'choose' || Array.isArray(fieldValue) && fieldValue.length === 0 ? null : fieldValue
             }
             
             setShowOverlay(true)

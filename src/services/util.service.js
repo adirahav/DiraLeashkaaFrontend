@@ -22,6 +22,7 @@ export const utilService = {
     getFixedParameter, 
     getLocalStorage,
     formatNumber,
+    formatBigNumber,
     formatFloat,
     parseNumber, 
     toSnakeCase,
@@ -77,6 +78,22 @@ function formatNumber(value, allowZero) {
     if (!value || value === '') return ''
     value = value.toString().replace(/,/g, "")
     return parseInt(value, 10).toLocaleString()
+}
+
+function formatBigNumber(value) {
+    if (value === 0) return 0
+    if (!value || value === '') return ''
+    
+    value = Number(value.toString().replace(/,/g, ""))
+    if (isNaN(value)) return ''
+
+    if (value >= 1_000_000) {
+        return (value / 1_000_000).toFixed(value % 1_000_000 === 0 ? 0 : 1) + 'M'
+    } else if (value >= 1_000) {
+        return (value / 1_000).toFixed(value % 1_000 === 0 ? 0 : 1) + 'K'
+    }
+
+    return value.toLocaleString()
 }
 
 function formatFloat(value) {

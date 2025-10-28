@@ -340,11 +340,7 @@ export function LandingPage() {
 
     return (<>
         <main className="landing narrow container full">
-            <section className='ad'>
-                <WebAdBanner />
-            </section>
-
-            <section className='banner'>
+           <section className='banner'>
                 {banner.width && banner.height && <LazyLoadMedia mediaUrl={banner.url} mediaWidth={banner.width} mediaHeight={banner.height} isVideo={false} alt={''} />}
             </section>
                 
@@ -513,6 +509,11 @@ export function LandingPage() {
                 </motion.ul>
             </section>
 
+            <section className='ad'>
+                <WebAdBanner />
+            </section>
+
+            
             <Footer className="full" showForAnonimous={true} />
             
             

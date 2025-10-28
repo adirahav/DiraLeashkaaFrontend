@@ -19,6 +19,7 @@
     
     --text: var(--palette5);
     --text-disable: var(--palette6);
+    --text-label: var(--palette4);
     --text-error: var(--palette6);
     --text-success: var(--palette5);
     --text-message: var(--palette3);
@@ -112,6 +113,7 @@
     --property-field-text: var(--palette5);
     --property-field-input-disabled-text: var(--palette5);
     --property-field-hint: var(--palette5);
+    --property-field-info-icon: var(--palette10);
     --property-field-warning-icon: var(--palette9);
     --property-field-warning-text: var(--palette7);
     --property-media-upload-icon: var(--palette7);

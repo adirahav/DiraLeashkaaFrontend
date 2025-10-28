@@ -195,7 +195,14 @@ Orientation.propTypes = {
 /*
 - mobile delete - cancel delete the property
 - הוצאות נלוות נוספות
-- להוסיף הון עצמי מהלוואה
+- להוסיף הון עצמי מהלוואה/מקור אחר
+- להוסיף שמירה של השוואות
+- ברירום נעלמה הכותרת
+- הוסף נכס בתוך נכס דורס אותו
+- בפרטים אישיים השנת לידה לא נשמרת
+- ב-FOOTER האייקונים בצבע שחור
+- במחשבון השוואות ה-LOADING לא נראה טוב
+- change PUT to PETCH in relevant routes
 
 - במעבר ל-HOME תמיד יש קפיצה כפולה
 
@@ -215,11 +222,17 @@ Orientation.propTypes = {
 - Graph api
 - cicd
 - cache
-- authentication - JWT    
++ authentication - JWT    
 - docker
 - ENE Testing
 - PWA
 
 https://www.youtube.com/watch?v=acFKylH0rc4
 https://www.youtube.com/watch?v=H_8XHnaoA6s
+
+Coding Academy Live - Mastering The Backend - Part1
+https://www.youtube.com/watch?v=mXdAhchL-SQ
+
+Coding Academy Live - Mastering The Backend - Part2
+https://www.youtube.com/watch?v=9VzJtckenYg
 */
