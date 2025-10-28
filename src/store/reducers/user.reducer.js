@@ -47,6 +47,19 @@ export function userReducer(state = initialState, action = {}) {
                 loggedinUser: action.loggedinUser,
                 isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
             }
+        case SIGNUP:
+            //userService.saveLocalUser(action.signupUser)
+            return {
+                ...state,
+                loggedinUser: action.signupUser,
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+            }
+        case LOGOUT:
+            return {
+                ...state,
+                loggedinUser: null,
+                isLoggedinUserCompleted: false
+            }    
         case GET_HOME:
             return {
                 ...state,
@@ -133,7 +146,7 @@ export function userReducer(state = initialState, action = {}) {
                 }
             }
         case UPDATE_USER:
-            userService.saveLocalUser(action.savedUser)//ADITEST FIX TO JWT
+            //userService.saveLocalUser(action.savedUser)//ADITEST FIX TO JWT
             return {
                 ...state,
                 loggedinUser: action.savedUser,
@@ -144,19 +157,6 @@ export function userReducer(state = initialState, action = {}) {
                 ...state,
                 users: state.users.filter(user => user._id !== action.userId),
             }
-        case SIGNUP:
-            userService.saveLocalUser(action.signupUser)
-            return {
-                ...state,
-                loggedinUser: action.signupUser,
-                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
-            }
-        case LOGOUT:
-            return {
-                ...state,
-                loggedinUser: null,
-                isLoggedinUserCompleted: false
-            }    
         default:
             return state
     }

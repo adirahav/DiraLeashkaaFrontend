@@ -9,6 +9,7 @@ import { logService } from '../services/log.service'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
 import { useSplash } from "../contexts/SplashContext"
 import { userService } from '../services/user.service.js'
+import { updateUser } from '../store/actions/user.actions.js'
 
 export function PersonalInfoPage() {
 
@@ -102,7 +103,7 @@ export function PersonalInfoPage() {
         try {
             setNote(prevNote => ({ ...prevNote, text: null }))
             setSubmit(submit => ({ ...submit, isLoading: true }))
-            await userService.save(userToSave)
+            await updateUser(userToSave)
             setNote(prevNote => ({ ...prevNote, type: "message", text: utilService.getPhrase("user_save_success", phrases) }))
         } catch(error) {
             logService.error(TAG, error)

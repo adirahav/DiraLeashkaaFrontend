@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = 'diraleaskaa-cache-v1'
+/*const CACHE_NAME = 'diraleaskaa-cache-v1'
 
 // קבצים קבועים שאנחנו יודעים שיהיו תמיד
 const STATIC_ASSETS = [
@@ -103,3 +103,4 @@ self.addEventListener('fetch', event => {
   )
 })
 
+*/

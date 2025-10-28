@@ -103,9 +103,19 @@ function saveLocalUser(token) {
     }
 }
 
-async function save(userToSave) {
+async function save_USING_COOCKIE(userToSave) {
     const savedUser = await httpService.put(BASE_URL, userToSave)
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
+    return savedUser
+}
+
+async function save(userToSave) {
+    const token = await httpService.put(BASE_URL, userToSave)
+    if (token) {
+        userService.saveLocalUser(token)
+    }
+    //sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
+    const savedUser = jwt_decode(token)
     return savedUser
 }
 

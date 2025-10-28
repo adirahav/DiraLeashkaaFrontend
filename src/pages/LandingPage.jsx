@@ -34,9 +34,9 @@ import { useSelector } from 'react-redux'
 export function LandingPage() {
 
     const { splash } = useSplash()
-    /*const phrases = splash?.phrases
+    const phrases = splash?.phrases
 
-    const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
+    /*const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
 
     useEffect(() => {
         if (!phrases) {
@@ -340,10 +340,6 @@ export function LandingPage() {
 
     return (<>
         <main className="landing narrow container full">
-            <section className='ad'>
-                <WebAdBanner />
-            </section>
-
             <section className='banner'>
                 {banner.width && banner.height && <LazyLoadMedia mediaUrl={banner.url} mediaWidth={banner.width} mediaHeight={banner.height} isVideo={false} alt={''} />}
             </section>
@@ -511,6 +507,10 @@ export function LandingPage() {
                     </motion.li>
                     ))}
                 </motion.ul>
+            </section>
+
+            <section className='ad'>
+                <WebAdBanner />
             </section>
 
             <Footer className="full" showForAnonimous={true} />

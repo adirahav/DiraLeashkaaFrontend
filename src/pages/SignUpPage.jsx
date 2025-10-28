@@ -359,13 +359,11 @@ export function SignUpPage() {
         if (!loggedinUser) {
             await signup(userToSave)
         } else {
-            delete userToSave.email
-            delete userToSave.password 
             await updateUser(userToSave)
         }
         
     }
-    
+
     const handleNext = async (event) => {
         switch (progress.step) {
             case STEP.PRESONAL_INFO:
