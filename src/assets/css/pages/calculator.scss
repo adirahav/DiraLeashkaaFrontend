@@ -430,6 +430,10 @@
             
         }
 
+        .overlay ~ .view-controller {
+            background-color: transparent;
+        }
+
         .main-content {
             display: flex;
             grid-gap: rem(25px);
@@ -734,7 +738,7 @@
 
                                 .property-field {
                                     &:first-of-type {
-                                    margin-top: rem(26px);
+                                        margin-top: rem(26px);
                                     }
                                 }
                             }
@@ -790,6 +794,14 @@
                         padding-right: rem(10px);
 
                         article {
+                            &:nth-child(7), &:nth-child(11) {
+                                .property-field {
+                                    &:first-of-type {
+                                        margin-top: rem(26px);
+                                    }
+                                }
+                            }
+
                             h3 {
                                 color: transparent;
                                 height: rem(19px);

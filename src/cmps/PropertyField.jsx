@@ -907,7 +907,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                         ? ' empty' 
                                                         : '')
 
-        return  <div className={fieldClass}>
+        return  <div className={fieldClass} title={valueToEdit?.toString()}>
                     <span>{params.label}</span>
                     <div className='textarea'>
                         <textarea type='text' value={valueToEdit?.toString()} 
