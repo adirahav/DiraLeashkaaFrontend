@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core'
 import Axios from 'axios'
+import { userService } from './user.service'
 
 const BASE_URL = Capacitor.isNativePlatform()
     ? 'https://diraleashkaa.onrender.com/api/'
@@ -32,11 +33,13 @@ export const httpService = {
 async function ajax(endpoint, method = 'GET', data = null, token = null) {
     data = {
         ...data,
-        platform: "web",
+        platform: Capacitor.isNativePlatform() ? "android" : "web",
     }
 
-    const jwt_token = token || localStorage.getItem("token") || sessionStorage.getItem("token")
+    const savedToken = await userService.getLocalUser()
 
+    const jwt_token = token || savedToken
+    
     try {
         const res = await axios({
             url: `${BASE_URL}${endpoint}`,

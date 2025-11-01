@@ -1,9 +1,10 @@
-import { copyFile } from 'fs/promises'
+import { readFile, writeFile, copyFile } from 'fs/promises'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+const __backendPublic = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public')
 
 const adsTxtSrc = join(__dirname, '../ads.txt')
 const appAdsTxtSrc = join(__dirname, '../app-ads.txt')
@@ -19,7 +20,7 @@ const serviceWorkerDest = join(__dirname, '../../../NodeProjects/diraleashkaa-ba
 const manifestDest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/manifest.json')
 const logo192Dest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/assets/icon-192x192.png')
 const logo512Dest = join(__dirname, '../../../NodeProjects/diraleashkaa-backend/public/assets/icon-512x512.png')
-const indexHtmlDest = join(backendPublic, 'index.html')
+const indexHtmlDest = join(__backendPublic, 'index.html')
 
 try {
   await copyFile(adsTxtSrc, adsTxtDest)
@@ -41,17 +42,17 @@ try {
   console.log('icon-512x512.png copied ✔️')
 
   // index.html
-  let indexHtml = readFileSync(indexHtmlSrc, 'utf8')
+  let indexHtml = await readFile(indexHtmlSrc, 'utf8')
 
   if (!indexHtml.includes('rel="manifest"')) {
     indexHtml = indexHtml.replace(
       '</head>',
       '  <link rel="manifest" href="/manifest.json">\n<meta name="theme-color" content="#1976d2" />\n</head>'
     )
-    console.log('✅ manifest link added to index.html')
+    console.log('manifest link added to index.html ✔️')
   }
 
-  writeFileSync(indexHtmlDest, indexHtml, 'utf8')
+  await writeFile(indexHtmlDest, indexHtml, 'utf8')
   console.log('index.html copied ✔️')
 
 } catch (err) {
