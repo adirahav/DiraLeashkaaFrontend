@@ -61,7 +61,7 @@ export function CalculatorCompare() {
     
     const { screenWidth, screenHeight } = useWindowSize()
 
-    const loggedinUser = authService.getLoggedinUser()
+    const loggedinUserState = useSelector(storeState => storeState.userModule.loggedinUser)
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     const compareState = useSelector(storeState => storeState.userModule.compare)
 
@@ -530,7 +530,7 @@ export function CalculatorCompare() {
             </div>
             <div className={`main-content ${viewState}`} ref={mainRef} onTransitionEnd={handleViewStateTransitionEnd}>
                 {properties.map((property, index) => (
-                    <PropertyForm key={`property-${index}`} property={property} user={loggedinUser} isFirstLoading={isFirstLoading} onUpdate={(fieldName, fieldValue) => updateProperty(property._id, fieldName, fieldValue)} queryPropertyId={property._id} />
+                    <PropertyForm key={`property-${index}`} property={property} user={loggedinUserState} isFirstLoading={isFirstLoading} onUpdate={(fieldName, fieldValue) => updateProperty(property._id, fieldName, fieldValue)} queryPropertyId={property._id} />
                 ))}
             </div>
         </>}

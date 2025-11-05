@@ -33,8 +33,8 @@ export function SignUpPage() {
         step: null,
         direction: null
     })
-    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
     
+    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
     const navigate = useNavigate()
     
     const { splash, setForceFetchSplash } = useSplash()

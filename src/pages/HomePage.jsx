@@ -114,8 +114,8 @@ export function HomePage() {
         } 
     }
 
-    const fetchFullHomeData = () => {
-        const jwt_token = localStorage.getItem("token") || sessionStorage.getItem("token")
+    const fetchFullHomeData = async () => {
+        const jwt_token = await utilService.getFromStorage("token")
         postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString(), token: jwt_token })
     }
 

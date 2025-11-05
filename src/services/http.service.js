@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core'
 import Axios from 'axios'
 import { userService } from './user.service'
+import { utilService } from './util.service'
 
 const BASE_URL = Capacitor.isNativePlatform()
     ? 'https://diraleashkaa.onrender.com/api/'
@@ -36,9 +37,7 @@ async function ajax(endpoint, method = 'GET', data = null, token = null) {
         platform: Capacitor.isNativePlatform() ? "android" : "web",
     }
 
-    const savedToken = await userService.getLocalUser()
-
-    const jwt_token = token || savedToken
+    const jwt_token = token || await userService.getLocalUser()
     
     try {
         const res = await axios({
@@ -54,7 +53,7 @@ async function ajax(endpoint, method = 'GET', data = null, token = null) {
         console.dir(err)
         if (err.response && err.response.status === 401) {
             sessionStorage.clear()
-            localStorage.removeItem("token")
+            utilService.deleteFromStorage("token")
             window.location.assign('/')
         }
         throw err

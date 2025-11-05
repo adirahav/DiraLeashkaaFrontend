@@ -23,7 +23,7 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
             label: utilService.getPhrase(labelKey, phrases), 
             selectedValue: null, 
             options: utilService.getFixedParameter(options, fixedParameters), 
-            suggestedOptions: utilService.getLocalStorage("array", savedSuggested) 
+            suggestedOptions: []
         }
     }
 
@@ -165,6 +165,18 @@ export function PropertyForm({property, user, isFirstLoading, onUpdate, queryPro
     const [yields, setYields] = useState(defultYieldsState("property_price_label", 9))
     
     //const [showMortgagePrepayment, setShowMortgagePrepayment] = useState(true)
+    
+    useEffect(() => {
+        const init = async () => {
+            const suggestedOptions = await utilService.getFromStorage("userCities") || []
+            setCity(prevCity => ({
+                ...prevCity, 
+                suggestedOptions
+            }))
+        }
+
+        init()
+    }, [])
     
     useEffect(() => {
         if (property || !queryPropertyId) {

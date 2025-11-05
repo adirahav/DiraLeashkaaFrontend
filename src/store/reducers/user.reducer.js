@@ -34,8 +34,8 @@ const initialState = {
         allProperties: null,
         comparedPropertyIds: null
     },
-    loggedinUser: authService.getLoggedinUser(),
-    isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+    loggedinUser: null,
+    isLoggedinUserCompleted: null
 }
 
 export function userReducer(state = initialState, action = {}) {

@@ -28,54 +28,64 @@ import { LandingPage } from './pages/LandingPage.jsx'
 import { AccessibilityStatementPage } from './pages/AccessibilityStatementPage.jsx'
 import { AccessibilityPanel } from './cmps/AccessibilityPanel'
 import PropTypes from 'prop-types'
+import { getFromStorage, utilService } from './services/util.service.js'
+import { setLoggedinUser } from './store/actions/user.actions.js'
+import jwt_decode from "jwt-decode"
 
 function RouteGuard({ children }) {
-  //const [isOnline, setIsOnline] = useState(true)
-  //const [isLoggedIn, setLoggedIn] = useState(true)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const [isLoggeinUserInit, setIsLoggeinUserInit] = useState(false)
 
   const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
   const isLoggedinUserCompleted = useSelector(storeState => storeState.userModule.isLoggedinUserCompleted)
   
-  // internet connection
-  /*useInternetStatus((isConnected) => {
-    setIsOnline(isConnected)
-  }, [])
-
-  if (!isOnline) {
-    if (!location.pathname.includes('/error')) {
-      const redirect = new URL(window.location.href).pathname
-      return <Navigate to={`/error?redirect=${encodeURIComponent(redirect)}&errorType=noInternet`} />
+  useEffect(() => {
+    if (SplashScreen && typeof SplashScreen.hide === 'function') {
+      SplashScreen.hide()
+        .catch(err => console.warn('Failed to hide splash screen:', err))
     }
-  } */
+
+    (async () => {
+      const token = await getFromStorage('token')
+      if (token) {
+        const loggedinUser = jwt_decode(token)
+        setLoggedinUser(loggedinUser)
+      }
+
+      setIsLoggeinUserInit(true)
+    })()
+  }, [])
 
   useEffect(() => {
-    SplashScreen.hide()
-  }, [])
+    // only run if user not logged in
+    if (isLoggedinUserCompleted && loggedinUser === null && !allowAnonymous()) {
+      (async () => {
+        try {
+          const email = await utilService.getFromStorage("email")
+          navigate(email ? '/login' : '/landing', { replace: true })
+        } catch (err) {
+          navigate('/landing', { replace: true })
+        }
+      })()
+    }
+  }, [loggedinUser, isLoggedinUserCompleted])
 
-  /*useEffect(() => {
-    setLoggedIn(loggedinUser !== null)
-  }, [loggedinUser])*/
-  
-  if (loggedinUser === null && !allowAnonymous()) {
-    const navigate = localStorage.getItem("email")
-                        ? '/login'
-                        : '/landing' 
-
-    return <Navigate to={`${navigate}`} />
-  }
-
-  if (loggedinUser && 
-      !window.location.toString().includes("signup") && 
-      !window.location.toString().includes("login") && 
-      !window.location.toString().includes("forgot-password") && 
-      !window.location.toString().includes("terms-of-use") && 
-      !window.location.toString().includes("contact-us") && 
+  // If logged in but user not completed
+  useEffect(() => {
+    if (
+      loggedinUser &&
+      !window.location.toString().includes("signup") &&
+      !window.location.toString().includes("login") &&
+      !window.location.toString().includes("forgot-password") &&
+      !window.location.toString().includes("terms-of-use") &&
+      !window.location.toString().includes("contact-us") &&
       !window.location.toString().includes("landing")
     ) {
-    if (!isLoggedinUserCompleted) {
-          return <Navigate to='/signup' />
-    } 
-  }
+      if (!isLoggedinUserCompleted) navigate('/signup', { replace: true })
+    }
+  }, [loggedinUser, isLoggedinUserCompleted])
 
   return children
 }

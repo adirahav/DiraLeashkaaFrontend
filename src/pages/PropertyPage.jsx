@@ -52,7 +52,7 @@ export function PropertyPage() {
     const [showGoToResults, setShowGoToResults] = useState(false)
     const [isDataVisible, setIsDataVisible] = useState(false)
     
-    const loggedinUser = authService.getLoggedinUser()
+    const loggedinUserState = useSelector(storeState => storeState.userModule.loggedinUser)
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
     const { splash } = useSplash()
@@ -359,7 +359,7 @@ export function PropertyPage() {
         <main className={mainClass}>
             {(showOverlay || isFirstLoading) && <Overlay />}
             <h1 className={titleClass}>{utilService.getPhrase('property_cost_estimate_title', phrases)}</h1>
-            <PropertyForm property={property} user={loggedinUser} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyId={propertyId} />
+            <PropertyForm property={property} user={loggedinUserState} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyId={propertyId} />
             {property?.showMortgagePrepayment && <>
                 <h2>{utilService.getPhrase('property_indexes_and_interests_title', phrases)}</h2>
                 <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />
