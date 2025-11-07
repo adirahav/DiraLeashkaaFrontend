@@ -150,6 +150,8 @@ function App() {
   })
 
   useEffect(() => {
+    if (["/login", "/landing", "/signup"].includes(location.pathname)) return
+
     if (Capacitor.isNativePlatform()) {
       const initAdMobConsent = () => {
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.consent) {
@@ -163,7 +165,7 @@ function App() {
 
       document.addEventListener("deviceready", initAdMobConsent, false)
     }
-  }, [])
+  }, [location.pathname])
 
   return (    
     <SplashProvider>
