@@ -205,7 +205,7 @@ export function Header() {
         ev.stopPropagation()
 
         if (location.pathname === "/property") {
-            navigate('/property', { replace: true })
+            navigate('/property', { replace: true })    
         } else {
             navigate("/property")
         }

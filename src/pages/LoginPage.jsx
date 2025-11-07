@@ -54,14 +54,17 @@ export function LoginPage() {
     }, [])
 
     useEffect(() => {
-        setSubmit(submit => ({ ...submit, isDisabled: !utilService.REG_EXP.EMAIL.test(email.value) || !utilService.REG_EXP.PASSWORD.test(password.value) }))
+        setSubmit(submit => ({ 
+            ...submit, 
+            isDisabled: !utilService.REG_EXP.EMAIL.test(email.value) || !utilService.REG_EXP.PASSWORD.test(password.value) 
+        }))
     }, [email, password])
 
     useEffect(() => {
         if (phrases) {
             setEmail(email => ({ ...email, label: utilService.getPhrase("login_email_label", phrases) }))
             setPassword(password => ({ ...password, label: utilService.getPhrase("login_password_label", phrases) }))
-            setSubmit(submit => ({ ...submit, label: utilService.getPhrase("login_submit", phrases) }))
+            setSubmit(submit => ({ ...submit, text: utilService.getPhrase("login_submit", phrases) }))
         }
 
         if (!phrases) {
