@@ -54,7 +54,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
        return  <div className={fieldClass}>
                     <span>{params.label}</span>
                     <div>
-                        <input 
+                        <input
                             value={valueToEdit.toLocaleString()}  
                             onChange={handleValueChange} 
                             {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})} />

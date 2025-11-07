@@ -79,7 +79,6 @@ export function HomePage() {
         if (!phrases || !fixedParameters || !calculators) {
             onLoadingStart()  
         } else {
-            onLoadingDone() 
             setCitiesNames(utilService.getFixedParameter("cities", fixedParameters))
             fetchHomeData() 
         }
@@ -89,6 +88,7 @@ export function HomePage() {
     useEffect(() => {
         if (homeState && homeState.bestYields?.length > 0) {
             setBestYield(homeState.bestYields[0])
+            onLoadingDone() 
         }
     }, [homeState])
 

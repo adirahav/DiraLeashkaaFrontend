@@ -31,6 +31,7 @@ import PropTypes from 'prop-types'
 import { getFromStorage, utilService } from './services/util.service.js'
 import { setLoggedinUser } from './store/actions/user.actions.js'
 import jwt_decode from "jwt-decode"
+import { authService } from './services/auth.service.js'
 
 function RouteGuard({ children }) {
   const navigate = useNavigate()
@@ -59,7 +60,6 @@ function RouteGuard({ children }) {
   }, [])
 
   useEffect(() => {
-    // only run if user not logged in
     if (isLoggedinUserCompleted && loggedinUser === null && !allowAnonymous()) {
       (async () => {
         try {
@@ -74,6 +74,10 @@ function RouteGuard({ children }) {
 
   // If logged in but user not completed
   useEffect(() => {
+    if (!isLoggeinUserInit) {
+      return
+    }
+
     if (
       loggedinUser &&
       !window.location.toString().includes("signup") &&
@@ -85,7 +89,7 @@ function RouteGuard({ children }) {
     ) {
       if (!isLoggedinUserCompleted) navigate('/signup', { replace: true })
     }
-  }, [loggedinUser, isLoggedinUserCompleted])
+  }, [loggedinUser, isLoggedinUserCompleted, isLoggeinUserInit])
 
   return children
 }
@@ -173,7 +177,7 @@ function App() {
                   <Route path="/landing" element={<RouteGuard><LandingPage /></RouteGuard>} />
                   <Route path="/forgot-password" element={<RouteGuard><ForgotPasswordPage /></RouteGuard>} />
                   <Route path="/home" element={<RouteGuard><HomePage /></RouteGuard>} />
-                  <Route path="/property" element={<RouteGuard><Orientation><PropertyPage /></Orientation></RouteGuard>} />
+                  <Route path="/property" element={<RouteGuard><Orientation><PropertyPage key={location.search} /></Orientation></RouteGuard>} />
                   <Route path="/calculators" element={<RouteGuard><CalculatorsPage /></RouteGuard>} />
                   <Route path="/calculator" element={<RouteGuard><CalculatorPage /></RouteGuard>} />
                   <Route path="/personal-info" element={<RouteGuard><PersonalInfoPage /></RouteGuard>} />

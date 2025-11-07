@@ -90,8 +90,7 @@ function getLoggedinUser() {
         
 }
 
-function getLoggedinUserCompleted() {
-    const loggedinUser = getLoggedinUser()
+function getLoggedinUserCompleted(loggedinUser) {
     return (
         loggedinUser && 
         loggedinUser.fullname && 
@@ -106,3 +105,4 @@ function getLoggedinUserCompleted() {
 async function getLastLoggedinEmail() {
     return await utilService.getFromStorage(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
 }
+

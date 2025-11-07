@@ -205,10 +205,10 @@ export function Header() {
         ev.stopPropagation()
 
         if (location.pathname === "/property") {
-            navigate(0)
-          } else {
+            navigate('/property', { replace: true })
+        } else {
             navigate("/property")
-          }
+        }
     }
 
     const openWebBrowser = async (e) => {

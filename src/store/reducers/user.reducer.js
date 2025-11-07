@@ -34,7 +34,7 @@ const initialState = {
         allProperties: null,
         comparedPropertyIds: null
     },
-    loggedinUser: null,
+    loggedinUser: JSON.parse(localStorage.getItem('loggedinUser')) || null,
     isLoggedinUserCompleted: null
 }
 
@@ -45,14 +45,14 @@ export function userReducer(state = initialState, action = {}) {
             return {
                 ...state,
                 loggedinUser: action.loggedinUser,
-                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted(action.loggedinUser)
             }
         case SIGNUP:
             //userService.saveLocalUser(action.signupUser)
             return {
                 ...state,
                 loggedinUser: action.signupUser,
-                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted(action.signupUser)
             }
         case LOGOUT:
             return {
@@ -150,7 +150,7 @@ export function userReducer(state = initialState, action = {}) {
             return {
                 ...state,
                 loggedinUser: action.savedUser,
-                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted(action.savedUser)
             }
         case DELETE_USER:
             return {

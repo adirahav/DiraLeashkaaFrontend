@@ -51,10 +51,11 @@ async function ajax(endpoint, method = 'GET', data = null, token = null) {
     } catch (err) {
         console.error(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(err)
+        
         if (err.response && err.response.status === 401) {
-            sessionStorage.clear()
+            // Unauthorized
             utilService.deleteFromStorage("token")
-            window.location.assign('/')
+            window.location.assign('/login')
         }
         throw err
     }

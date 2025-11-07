@@ -12,6 +12,7 @@ export default defineConfig({
         format: 'es', // ✅ MUST be 'es', not 'iife' or 'umd'
       },
     },
+    target: 'esnext'
   },
   worker: {
     format: 'es', // ✅ Ensure workers are built as ES modules

@@ -83,6 +83,7 @@ function deleteFromStorage(key) {
         Preferences.remove({ key })
     } else {
         localStorage.removeItem(key)
+        sessionStorage.clear()
     }
 }
 
