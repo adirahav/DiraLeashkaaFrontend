@@ -55,7 +55,9 @@ async function ajax(endpoint, method = 'GET', data = null, token = null) {
         if (err.response && err.response.status === 401) {
             // Unauthorized
             utilService.deleteFromStorage("token")
-            window.location.assign('/login')
+
+            const email = await utilService.getFromStorage("email")
+            window.location.assign(email ? '/login' : '/landing')
         }
         throw err
     }
