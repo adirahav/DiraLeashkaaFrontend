@@ -38,9 +38,8 @@ export function HomePage() {
         height: { web: 504, tablet: 354, mobile: 250 },
         url: imgLetsStart
     })
-
+    const [isFirstUse, setIsFirstUse] = useState(true) 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
-    
     const homeState = useSelector(storeState => storeState.userModule.home)
     
     const navigate = useNavigate()
@@ -57,6 +56,15 @@ export function HomePage() {
     
     useEffect(() => {
     
+        // check if user
+        const checkIfFirstUse = async () => {
+            const email = await utilService.getFromStorage("email")
+            setIsFirstUse(email == null || email === "")
+        }
+    
+        checkIfFirstUse()
+        
+
         // app ads
         const loadAd = async () => {
             await AdMob.initialize()
@@ -208,6 +216,10 @@ export function HomePage() {
 
     const mainClass = `home container ${!isLoadingState && homeState.properties?.length === 0 ? 'start' : ''}`
     const swipeToRefreshClass = `swiping-to-refresh ${swipingToRefresh}`
+
+    if (isLoadingState && isFirstUse) {
+        return (<main className='home first-use'></main>)
+    }
 
     if (!isLoadingState && homeState.properties?.length === 0) {
         return (<>

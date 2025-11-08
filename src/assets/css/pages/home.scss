@@ -1026,3 +1026,7 @@
         }
     }
 }
+
+.home.first-use + .accessibility-panel {
+    display: none;
+  }

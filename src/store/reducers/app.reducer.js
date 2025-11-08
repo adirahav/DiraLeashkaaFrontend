@@ -34,7 +34,6 @@ export function appReducer(state = initialState, action = {}) {
             return { ...state, isLoading: false }
 
         case CHANGE_FONT_SIZE:
-
             return { 
                 ...state, 
                 accessibility: {
@@ -44,13 +43,13 @@ export function appReducer(state = initialState, action = {}) {
             }
 
         case TOGGLE_ACCESSIBILITY_PANEL:
-                return { 
-                    ...state, 
-                    accessibility: {
-                        ...state.accessibility,
-                        showAccessibilityPanel: action.showAccessibilityPanel
-                    }
+            return { 
+                ...state, 
+                accessibility: {
+                    ...state.accessibility,
+                    showAccessibilityPanel: action.showAccessibilityPanel
                 }
+            }
 
         default:
             return state

@@ -238,4 +238,10 @@ Orientation.propTypes = {
 
 https://www.youtube.com/watch?v=acFKylH0rc4
 https://www.youtube.com/watch?v=H_8XHnaoA6s
+
+~ רווח פרסומת ב-LOADING
+~ חפש קצר מדי
+~ להגדיל את הכפתורים ללחיצה 
+~ עורך דין גולש למטה
+~ כשאין EMAIL לא להציד LOADING
 */
