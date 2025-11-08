@@ -19,7 +19,7 @@ import { Navigate } from 'react-router-dom'
 import { useWindowSize } from '../hooks/useWindowSize'
 
 export function CalculatorCompare() {  
-    const MAX_APARTMENTS_TO_COMPARE = 4
+    const MAX_APARTMENTS_TO_COMPARE = 3
     const LOADING_PROPERTIES_COUNT = 3
 
     const { splash } = useSplash()

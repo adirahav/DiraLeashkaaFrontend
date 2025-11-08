@@ -687,7 +687,7 @@
 
         .input {
           input {
-            font-size: rem-capped(22px, 36px);
+            font-size: rem-capped(20px, 36px);
             width: rem(50px);
           }
 
@@ -768,7 +768,11 @@ h3 {
   .property-field {
     @include mobile-layout {
       span {
-        width: rem(97px);
+        width: rem(100px);
+      }
+
+      .number-picker {
+        width: fit-content;
       }
     }
   }

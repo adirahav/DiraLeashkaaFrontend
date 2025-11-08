@@ -243,5 +243,4 @@ https://www.youtube.com/watch?v=H_8XHnaoA6s
 ~ חפש קצר מדי
 ~ להגדיל את הכפתורים ללחיצה 
 ~ עורך דין גולש למטה
-~ כשאין EMAIL לא להציד LOADING
 */
