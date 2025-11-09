@@ -224,10 +224,12 @@ export function PropertyPage() {
                 fieldValue: fieldValue === '' || fieldValue === 'choose' ? null : fieldValue
             }
             
+            onLoadingStart()  
             setShowOverlay(true)
             const savedProperty = await propertyService.save(propertyToUpdate)
             setProperty({...savedProperty, updatedByField: fieldName})
-            setShowOverlay(false) 
+            setShowOverlay(false)
+            onLoadingDone()   
         } catch (error) {
             console.error(`Error update property ${propertyId}:`, error)
         } 

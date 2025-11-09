@@ -4,6 +4,7 @@ import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, Attentio
 import { utilService } from '../services/util.service'
 import { showWarningAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
+import { useSelector } from 'react-redux'
 
 export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueChanged, onPercentChanged }) {
     // type: NUMBER | AUTO_FILL | CALC | CALC_BOLD | CALC_EDITABLE | CALC_TOTAL | DROP_DOWN | SEARCHABLE_DROP_DOWN | VISUAL_DROP_DOWN | MULTIPLE_DROP_DOWN | STRING | TEXT_AREA | PERCENT
@@ -12,6 +13,8 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
     
     const { splash } = useSplash()
     const phrases = splash?.phrases
+
+    const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
 
     function Number({params, onSetValue}) {
         const [valueToEdit, setValueToEdit] = useState(utilService.formatNumber(params.value?.toString()))
@@ -34,12 +37,19 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.preventDefault()
             ev.stopPropagation()
 
+            if (isLoadingState) return
+
             let { value } = ev.target
-            if (value === "0") {
+
+            value = value.replace(/[^0-9.,]/g, '')
+            value = value.replace(/^0+/, '')
+
+            /*if (value === "0") {
                 value.replace(/[^0-9]/g, '').replace(/^0+/, '')
-            } 
-           
+            }*/
+            
             value = utilService.formatNumber(value)
+            disabled="disabled"
             setValueToEdit(value)
             setIsChangedByUser(true)
         }
@@ -50,11 +60,11 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                       valueToEdit.length === 0 
                                                         ? ' empty' 
                                                         : '')
-       
-       return  <div className={fieldClass}>
+        let disabled=""    
+        return  <div className={fieldClass}>
                     <span>{params.label}</span>
                     <div>
-                        <input
+                        <input 
                             value={valueToEdit.toLocaleString()}  
                             onChange={handleValueChange} 
                             {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})} />
@@ -82,6 +92,8 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         const handleValueChange = (ev) => {
             ev.preventDefault()
             ev.stopPropagation()
+
+            if (isLoadingState) return
 
             let { value } = ev.target
             if (value === "0") {
@@ -841,6 +853,8 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.preventDefault()
             ev.stopPropagation()
     
+            if (isLoadingState) return
+
             const { value } = ev.target
     
             setValueToEdit(value)
@@ -890,6 +904,8 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             ev.preventDefault()
             ev.stopPropagation()
     
+            if (isLoadingState) return
+            
             const { value } = ev.target
     
             setValueToEdit(value)
@@ -1054,7 +1070,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         const normalizedEdit = normalize(formattedPercentToEdit)
         const normalizedDefault = normalize(formattedDefault)
         
-        console.log(`${params.label}: ${normalizedEdit} !== ${normalizedDefault} + (${JSON.stringify(params.numberPicker)})`)
+        //console.log(`${params.label}: ${normalizedEdit} !== ${normalizedDefault} + (${JSON.stringify(params.numberPicker)})`)
         
         const showRollback = isFirstLoading || !percentToEdit 
             ? false 

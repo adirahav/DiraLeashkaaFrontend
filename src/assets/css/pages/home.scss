@@ -441,6 +441,10 @@
 
     }
 
+    .main-layout:not(.logout) {
+        grid-template-rows: $header-height 1fr auto $footer-height;
+    }
+
     @include tablet-layout {
         & {
             overflow-x: hidden;
@@ -1029,4 +1033,4 @@
 
 .home.first-use + .accessibility-panel {
     display: none;
-  }
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { PropertyField } from './PropertyField.jsx'
 import { utilService } from '../services/util.service.js'
 import { onLoadingStart, onLoadingDone } from '../store/actions/app.actions.js'
@@ -30,6 +30,8 @@ export function CalculatorCompare() {
         selectedValue: null, 
         options: [] 
     })
+
+    const [maxPropertiesToCompare, setMaxPropertiesToCompare] = useState(MAX_APARTMENTS_TO_COMPARE)
 
     const [propertyFilter, setPropertyFilter] = useState({
         selectedValue: null, 
@@ -73,6 +75,8 @@ export function CalculatorCompare() {
         canScrollLeft: false
     })
     
+    const scrollPositionRef = useRef(0)
+
     const SCROLL_AMOUNT = 100
 
     useEffect(() => {
@@ -122,6 +126,12 @@ export function CalculatorCompare() {
             if (!phrases || !fixedParameters) {
                 onLoadingStart()  
             } else {
+                const calculators = utilService.getFixedParameter("calculators", fixedParameters)
+                const comoareMaxProperties = calculators.find(c => c.key === "comoareMaxProperties")?.value
+                if (comoareMaxProperties) {
+                    setMaxPropertiesToCompare(comoareMaxProperties)
+                }
+                
                 onLoadingStart() 
                 setShowOverlay(true)
                 await getCompare()
@@ -164,7 +174,7 @@ export function CalculatorCompare() {
                 })
             
                 const allCities = utilService.getFixedParameter("cities", fixedParameters)
-            
+                 
                 const mappedCities = await Promise.all(
                     uniqueCities
                     .filter(city => city !== "else")
@@ -244,7 +254,7 @@ export function CalculatorCompare() {
                         image: property?.media && property?.media.length > 0 
                                 ? property?.media[0].url 
                                 : missingPictureImage,
-                        enable: compareState.comparedPropertyIds?.includes(property._id) || compareState.comparedPropertyIds?.length < MAX_APARTMENTS_TO_COMPARE,
+                        enable: compareState.comparedPropertyIds?.includes(property._id) || compareState.comparedPropertyIds?.length < maxPropertiesToCompare,
                         checked: compareState.comparedPropertyIds?.includes(property._id)
                     })),
                     selectedValue: compareState.comparedPropertyIds,
@@ -292,7 +302,7 @@ export function CalculatorCompare() {
             options: prevPropertyFilter.options.map(option =>
               option.key === propertyId
                 ? { ...option, checked, enable: true }
-                : { ...option, enable: option.checked || !checked || (checked && compareState.comparedPropertyIds?.length + 1 < MAX_APARTMENTS_TO_COMPARE) }
+                : { ...option, enable: option.checked || !checked || (checked && compareState.comparedPropertyIds?.length + 1 < maxPropertiesToCompare) }
             ),
             selectedValue: prevPropertyFilter.selectedValue.includes(propertyId) && !checked
                                 ? prevPropertyFilter.selectedValue.filter(id => id !== propertyId)
@@ -389,6 +399,38 @@ export function CalculatorCompare() {
         setTimeout(updateScrollButtons, 200)
     }
 
+    const saveScrollPosition = () => {
+        if (mainRef.current) {
+            scrollPositionRef.current = mainRef.current.scrollLeft
+        }
+    }
+
+    const restoreScrollPosition = () => {
+        const el = mainRef.current
+        const pos = scrollPositionRef.current ?? 0
+      
+        if (!el) return
+      
+        el.scrollLeft = pos
+      
+        requestAnimationFrame(() => {
+          const max = Math.max(0, el.scrollWidth - el.clientWidth)
+          const target = Math.min(pos, max)
+          el.scrollTo({ left: target, behavior: 'auto' })
+        })
+      
+        setTimeout(() => {
+          const max = Math.max(0, el.scrollWidth - el.clientWidth)
+          const target = Math.min(pos, max)
+          if (el.scrollLeft !== target) el.scrollLeft = target
+        }, 100)
+      }
+      
+
+    useLayoutEffect(() => {
+        setTimeout(() => restoreScrollPosition(), 0)
+    }, [properties])
+
     // view state
     const changeViewState = (view) => {
         if (view === "comfy" && viewState !== "compact") {
@@ -440,7 +482,8 @@ export function CalculatorCompare() {
     const fetchProperties = async () => {
         try {
             const comparedProperties = await Promise.all(compareState.comparedPropertyIds.map(propertyId => propertyService.getById(propertyId, true)))
-            setProperties(comparedProperties)   
+            setProperties(comparedProperties) 
+            
             setViewState(prevViewState => {
                 return properties?.length > 0
                     ? prevViewState || 'comfy'
@@ -472,6 +515,8 @@ export function CalculatorCompare() {
             
             setShowOverlay(true)
 
+            saveScrollPosition()
+            
             const savedProperty = await propertyService.save(propertyToUpdate)
             setProperties(prevProperties =>
                 prevProperties.map(property => 
