@@ -38,9 +38,8 @@ export function HomePage() {
         height: { web: 504, tablet: 354, mobile: 250 },
         url: imgLetsStart
     })
-
+    const [isFirstUse, setIsFirstUse] = useState(true) 
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
-    
     const homeState = useSelector(storeState => storeState.userModule.home)
     
     const navigate = useNavigate()
@@ -57,6 +56,15 @@ export function HomePage() {
     
     useEffect(() => {
     
+        // check if user
+        const checkIfFirstUse = async () => {
+            const email = await utilService.getFromStorage("email")
+            setIsFirstUse(email == null || email === "")
+        }
+    
+        checkIfFirstUse()
+        
+
         // app ads
         const loadAd = async () => {
             await AdMob.initialize()
@@ -79,7 +87,6 @@ export function HomePage() {
         if (!phrases || !fixedParameters || !calculators) {
             onLoadingStart()  
         } else {
-            onLoadingDone() 
             setCitiesNames(utilService.getFixedParameter("cities", fixedParameters))
             fetchHomeData() 
         }
@@ -89,6 +96,7 @@ export function HomePage() {
     useEffect(() => {
         if (homeState && homeState.bestYields?.length > 0) {
             setBestYield(homeState.bestYields[0])
+            onLoadingDone() 
         }
     }, [homeState])
 
@@ -114,8 +122,8 @@ export function HomePage() {
         } 
     }
 
-    const fetchFullHomeData = () => {
-        const jwt_token = localStorage.getItem("token") || sessionStorage.getItem("token")
+    const fetchFullHomeData = async () => {
+        const jwt_token = await utilService.getFromStorage("token")
         postMessage({ type: 'fetchFullData', getHomeFunc: getHome.toString(), token: jwt_token })
     }
 
@@ -208,6 +216,10 @@ export function HomePage() {
 
     const mainClass = `home container ${!isLoadingState && homeState.properties?.length === 0 ? 'start' : ''}`
     const swipeToRefreshClass = `swiping-to-refresh ${swipingToRefresh}`
+
+    if (isLoadingState && isFirstUse) {
+        return (<main className='home first-use'></main>)
+    }
 
     if (!isLoadingState && homeState.properties?.length === 0) {
         return (<>

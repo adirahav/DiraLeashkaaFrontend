@@ -63,7 +63,10 @@ export function ForgotPasswordPage() {
     const [submit, setSubmit] = useState(defultButtonState("button_send"))
     
     useEffect(() => {
-        setEmail(prevEmail => ({ ...prevEmail, value: authService.getLastLoggedinEmail() }))
+        (async () => {
+            const lastLoggedinEmail = await authService.getLastLoggedinEmail()
+            setEmail(prevEmail => ({ ...prevEmail, value: lastLoggedinEmail ?? '' }))
+          })()
     }, [])
 
 

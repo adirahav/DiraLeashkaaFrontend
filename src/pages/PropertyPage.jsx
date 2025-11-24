@@ -52,7 +52,7 @@ export function PropertyPage() {
     const [showGoToResults, setShowGoToResults] = useState(false)
     const [isDataVisible, setIsDataVisible] = useState(false)
     
-    const loggedinUser = authService.getLoggedinUser()
+    const loggedinUserState = useSelector(storeState => storeState.userModule.loggedinUser)
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
     
     const { splash } = useSplash()
@@ -60,6 +60,8 @@ export function PropertyPage() {
     const fixedParameters = splash?.fixedParameters
     const calculators = splash?.calculators
 
+    const [isWaitingSplash, setIsWaitingSplash] = useState(!phrases || !fixedParameters || !calculators)
+    
     const navigate = useNavigate()
 
     const dataRef = useRef(null)
@@ -94,9 +96,13 @@ export function PropertyPage() {
     })
 
     useEffect(() => {
-        if (!phrases || !fixedParameters || !calculators) {
-            onLoadingStart()  
-        } else {
+        setIsWaitingSplash(!phrases || !fixedParameters || !calculators)
+    }, [phrases])
+
+    useEffect(() => {
+        setIsWaitingSplash(!phrases || !fixedParameters || !calculators)
+    
+        if (!isWaitingSplash) {
             onLoadingDone()  
             
             if (propertyId) {
@@ -104,11 +110,12 @@ export function PropertyPage() {
             } else {
                 setProperty(null)
                 setIsFirstLoading(false)
+                setPreventUpdateServer(true)
                 setShowInterestsContainer(true) 
                 setLockYields(true)
             }
         }
-    }, [phrases])
+    }, [isWaitingSplash])
 
     useEffect(() => {
         if (city) {
@@ -119,6 +126,7 @@ export function PropertyPage() {
     useEffect(() => {
         if (property && !hasOnlyCity(property)) {
             if (showInterestsContainer === null) {
+                setPreventUpdateServer(true)
                 setShowInterestsContainer(property.showInterestsContainer) 
             }
             
@@ -132,6 +140,10 @@ export function PropertyPage() {
     }, [property, propertyId])
 
     useEffect(() => {
+        if (showInterestsContainer === null || preventUpdateServer) {
+            return
+        }
+
         const propertyToUpdate = { 
             propertyId,
             fieldName: 'showInterestsContainer',
@@ -224,10 +236,12 @@ export function PropertyPage() {
                 fieldValue: fieldValue === '' || fieldValue === 'choose' || Array.isArray(fieldValue) && fieldValue.length === 0 ? null : fieldValue
             }
             
+            onLoadingStart()  
             setShowOverlay(true)
             const savedProperty = await propertyService.save(propertyToUpdate)
             setProperty({...savedProperty, updatedByField: fieldName})
-            setShowOverlay(false) 
+            setShowOverlay(false)
+            onLoadingDone()   
         } catch (error) {
             console.error(`Error update property ${propertyId}:`, error)
         } 
@@ -304,6 +318,7 @@ export function PropertyPage() {
     }
 
     const handleDisplayInterests = async () => {
+        setPreventUpdateServer(false)
         setShowInterestsContainer(!showInterestsContainer)
     } 
 
@@ -359,7 +374,7 @@ export function PropertyPage() {
         <main className={mainClass}>
             {(showOverlay || isFirstLoading) && <Overlay />}
             <h1 className={titleClass}>{utilService.getPhrase('property_cost_estimate_title', phrases)}</h1>
-            <PropertyForm property={property} user={loggedinUser} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyId={propertyId} />
+            <PropertyForm property={property} user={loggedinUserState} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyId={propertyId} />
             {property?.showMortgagePrepayment && <>
                 <h2>{utilService.getPhrase('property_indexes_and_interests_title', phrases)}</h2>
                 <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />

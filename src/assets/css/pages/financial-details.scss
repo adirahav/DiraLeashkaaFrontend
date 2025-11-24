@@ -2,18 +2,106 @@
     .additional-funding-sources {
         h3 {
             margin-top: 30px;
+            display: inline-flex;
+        }
+
+        & > svg {
+            top: 5px;
+            position: relative;
+            fill: var(--icon-color);
         }
 
         ul {
             list-style: none;
-            margin: 0;
             padding: 0;
 
             li {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(rem(120px), 1fr));  
+                display: flex;
+                align-items: center; 
+                gap: 10px; 
+
+                .form-field {
+                    width: 140px;
+                    margin: rem(5px) 0;
+
+                    label {
+                        width: calc(100% - 2px);
+
+                        input {
+                            width: 100%;
+
+                            &:valid + span {
+                                width: 100%;
+                                margin-right: 10px;
+                            }
+                        }
+                    }
+                }
+
+                svg {
+                    width: rem(20px);
+                    height: rem(20px);
+                    
+                    &.icon-delete {
+                        fill: var(--icon-delete); 
+                    }
+    
+                    &.icon-add {
+                        &.enable {
+                            fill: var(--icon-color); 
+                            pointer-events: auto;
+                        }
+
+                        &.disable {
+                            fill: var(--icon-disabled); 
+                            pointer-events: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include mobile-layout {
+        .additional-funding-sources {
+            ul {
+                li {
+                    display: grid;
+                    grid-template-areas:
+                            "s s s s i"
+                            "a a r r i";
+                    column-gap: 10px;
+                    row-gap: 0;
+                    margin-bottom: 15px;
+                
+                    & > div:nth-child(1) {
+                        grid-area: s;
+                        width: 100%;
+
+                        label input:valid + span {
+                            transform: scale(0.8333333333) translateY(-12px) translateX(70px);
+                        }
+                    }
+
+                    & > div:nth-child(2) {
+                        grid-area: a;
+                    }
+
+                    & > div:nth-child(3) {
+                        grid-area: r;
+                    }
+
+                    & > svg:nth-child(4) {
+                        grid-area: i;
+                        width: rem(26px);
+                        height: rem(26px);
+                    }
+                }
             }
         }
     }
     
 }
+
+
+        

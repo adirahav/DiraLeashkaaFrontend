@@ -28,54 +28,64 @@ import { LandingPage } from './pages/LandingPage.jsx'
 import { AccessibilityStatementPage } from './pages/AccessibilityStatementPage.jsx'
 import { AccessibilityPanel } from './cmps/AccessibilityPanel'
 import PropTypes from 'prop-types'
+import { getFromStorage, utilService } from './services/util.service.js'
+import { setLoggedinUser } from './store/actions/user.actions.js'
+import jwt_decode from "jwt-decode"
+import { authService } from './services/auth.service.js'
 
 function RouteGuard({ children }) {
-  //const [isOnline, setIsOnline] = useState(true)
-  //const [isLoggedIn, setLoggedIn] = useState(true)
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
+  const [isLoggeinUserInit, setIsLoggeinUserInit] = useState(false)
+
+  const loggedinUserState = useSelector(storeState => storeState.userModule.loggedinUser)
   const isLoggedinUserCompleted = useSelector(storeState => storeState.userModule.isLoggedinUserCompleted)
-  
-  // internet connection
-  /*useInternetStatus((isConnected) => {
-    setIsOnline(isConnected)
-  }, [])
-
-  if (!isOnline) {
-    if (!location.pathname.includes('/error')) {
-      const redirect = new URL(window.location.href).pathname
-      return <Navigate to={`/error?redirect=${encodeURIComponent(redirect)}&errorType=noInternet`} />
-    }
-  } */
 
   useEffect(() => {
-    SplashScreen.hide()
+    if (SplashScreen && typeof SplashScreen.hide === 'function') {
+      SplashScreen.hide()
+        .catch(err => console.warn('Failed to hide splash screen:', err))
+    }
+
+    (async () => {
+      const token = await getFromStorage('token')
+      if (token) {
+        const loggedinUser = jwt_decode(token)
+        const isTokenExoired = utilService.isTokenExoired(loggedinUser.exp)
+        setLoggedinUser(isTokenExoired ? null : loggedinUser)
+      }
+
+      setIsLoggeinUserInit(true)
+    })()
   }, [])
 
-  /*useEffect(() => {
-    setLoggedIn(loggedinUser !== null)
-  }, [loggedinUser])*/
-  
-  if (loggedinUser === null && !allowAnonymous()) {
-    const navigate = localStorage.getItem("email")
-                        ? '/login'
-                        : '/landing' 
+  useEffect(() => {
+    if (isLoggedinUserCompleted && loggedinUserState === null && !allowAnonymous()) {
+      (async () => {
+        try {
+          const email = await utilService.getFromStorage("email")
+          navigate(email ? '/login' : '/landing', { replace: true })
+        } catch (err) {
+          navigate('/landing', { replace: true })
+        }
+      })()
+    }
+  }, [loggedinUserState, isLoggedinUserCompleted])
 
-    return <Navigate to={`${navigate}`} />
-  }
+  // If logged in but user not completed
+  useEffect(() => {
+    if (!isLoggeinUserInit) {
+      return
+    }
 
-  if (loggedinUser && 
-      !window.location.toString().includes("signup") && 
-      !window.location.toString().includes("login") && 
-      !window.location.toString().includes("forgot-password") && 
-      !window.location.toString().includes("terms-of-use") && 
-      !window.location.toString().includes("contact-us") && 
-      !window.location.toString().includes("landing")
-    ) {
-    if (!isLoggedinUserCompleted) {
-          return <Navigate to='/signup' />
-    } 
-  }
+    if (!loggedinUserState && !allowAnonymous()) {
+      navigate('/login', { replace: true })
+    } else if (loggedinUserState && !allowAnonymous() && !isLoggedinUserCompleted) {
+      navigate('/signup', { replace: true })
+    }
+
+  }, [loggedinUserState, isLoggedinUserCompleted, isLoggeinUserInit])
 
   return children
 }
@@ -105,8 +115,8 @@ function allowAnonymous() {
 }
 
 function App() {
-  const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
-  const mainLayoutClass = `main-layout ${allowAnonymous() && !loggedinUser ? 'logout' : ''} ${Capacitor.getPlatform()}`
+  const loggedinUserState = useSelector(storeState => storeState.userModule.loggedinUser)
+  const mainLayoutClass = `main-layout ${allowAnonymous() && !loggedinUserState ? 'logout' : ''} ${Capacitor.getPlatform()}`
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -136,6 +146,8 @@ function App() {
   })
 
   useEffect(() => {
+    if (["/login", "/landing", "/signup"].includes(location.pathname)) return
+
     if (Capacitor.isNativePlatform()) {
       const initAdMobConsent = () => {
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.consent) {
@@ -149,7 +161,7 @@ function App() {
 
       document.addEventListener("deviceready", initAdMobConsent, false)
     }
-  }, [])
+  }, [location.pathname])
 
   return (    
     <SplashProvider>
@@ -163,7 +175,7 @@ function App() {
                   <Route path="/landing" element={<RouteGuard><LandingPage /></RouteGuard>} />
                   <Route path="/forgot-password" element={<RouteGuard><ForgotPasswordPage /></RouteGuard>} />
                   <Route path="/home" element={<RouteGuard><HomePage /></RouteGuard>} />
-                  <Route path="/property" element={<RouteGuard><Orientation><PropertyPage /></Orientation></RouteGuard>} />
+                  <Route path="/property" element={<RouteGuard><Orientation><PropertyPage key={location.search} /></Orientation></RouteGuard>} />
                   <Route path="/calculators" element={<RouteGuard><CalculatorsPage /></RouteGuard>} />
                   <Route path="/calculator" element={<RouteGuard><CalculatorPage /></RouteGuard>} />
                   <Route path="/personal-info" element={<RouteGuard><PersonalInfoPage /></RouteGuard>} />
@@ -193,6 +205,7 @@ Orientation.propTypes = {
 }
 
 /*
+- db indexes
 - mobile delete - cancel delete the property
 - הוצאות נלוות נוספות
 - להוסיף הון עצמי מהלוואה/מקור אחר
@@ -203,7 +216,7 @@ Orientation.propTypes = {
 - ב-FOOTER האייקונים בצבע שחור
 - במחשבון השוואות ה-LOADING לא נראה טוב
 - change PUT to PETCH in relevant routes
-
+- using externalId
 - במעבר ל-HOME תמיד יש קפיצה כפולה
 
 - sign up loading when no phrases not looks good - desktop / tablet
@@ -229,6 +242,8 @@ Orientation.propTypes = {
 
 https://www.youtube.com/watch?v=acFKylH0rc4
 https://www.youtube.com/watch?v=H_8XHnaoA6s
+
+~ רווח פרסומת ב-LOADING
 
 Coding Academy Live - Mastering The Backend - Part1
 https://www.youtube.com/watch?v=mXdAhchL-SQ

@@ -33,8 +33,8 @@ export function SignUpPage() {
         step: null,
         direction: null
     })
-    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
     
+    const loggedinUser = useSelector(storeState => storeState.userModule.loggedinUser)
     const navigate = useNavigate()
     
     const { splash, setForceFetchSplash } = useSplash()
@@ -359,13 +359,11 @@ export function SignUpPage() {
         if (!loggedinUser) {
             await signup(userToSave)
         } else {
-            delete userToSave.email
-            delete userToSave.password 
             await updateUser(userToSave)
         }
         
     }
-    
+
     const handleNext = async (event) => {
         switch (progress.step) {
             case STEP.PRESONAL_INFO:
@@ -522,7 +520,7 @@ export function SignUpPage() {
                 </ul>
                 <article className={articleClass}>
                     {progress.step === STEP.PRESONAL_INFO && <UserPersonalInfo personalInfo={personalInfo} onChange={handleValueChanged} onSubmit={handleNext} />}
-                    {progress.step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} onSubmit={handleNext} />}
+                    {progress.step === STEP.FINANCIAL_DETAILS && <UserFinancialDetails financialDetails={financialDetails} onChange={handleValueChanged} onSubmit={handleNext} showAdditionalFundingSources={false} />}
                     {progress.step === STEP.TERMS_OF_USE && <UserTermsOfUse termsOfUse={termsOfUse} onChange={handleValueChanged} />}
                     {progress.step === STEP.COMPLETE && <UserTermsOfUse termsOfUse={termsOfUse} />}
                     

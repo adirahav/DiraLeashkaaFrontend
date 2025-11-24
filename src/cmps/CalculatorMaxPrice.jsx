@@ -18,9 +18,9 @@ export function CalculatorMaxPrice() {
 
     const navigate = useNavigate()
 
+    const loggedinUserState = useSelector(storeState => storeState.userModule.loggedinUser)
     const isLoadingState = useSelector(storeState => storeState.appModule.isLoading)
-    const loggedinUser = authService.getLoggedinUser()
-
+    
     const [property, setProperty] = useState()
     const [isFirstLoading, setIsFirstLoading] = useState(true)
     const [showOverlay, setShowOverlay] = useState(false)
@@ -156,9 +156,9 @@ export function CalculatorMaxPrice() {
 
     useEffect(() => {
        if (!isLoadingState  && !isFirstLoading && !property) {
-            setEquity(prevEquity => ({ ...prevEquity, value: loggedinUser?.equity, defaultValue: loggedinUser?.equity }))
-            setIncomes(prevIncomes => ({ ...prevIncomes, value: loggedinUser?.incomes, defaultValue: loggedinUser?.incomes }))
-            setCommitments(prevCommitments => ({ ...prevCommitments,value: loggedinUser?.commitments, defaultValue: loggedinUser?.commitments }))
+            setEquity(prevEquity => ({ ...prevEquity, value: loggedinUserState?.equity, defaultValue: loggedinUserState?.equity }))
+            setIncomes(prevIncomes => ({ ...prevIncomes, value: loggedinUserState?.incomes, defaultValue: loggedinUserState?.incomes }))
+            setCommitments(prevCommitments => ({ ...prevCommitments,value: loggedinUserState?.commitments, defaultValue: loggedinUserState?.commitments }))
         }
     }, [isLoadingState])
 
@@ -189,7 +189,7 @@ export function CalculatorMaxPrice() {
             setMortgageRequired(prevMortgageRequired => ({
                 ...prevMortgageRequired, 
                 value: property.calcMortgageRequired,
-                hasWarning: !loggedinUser.calcCanTakeMortgage && property.calcMortgageRequired > 0
+                hasWarning: !loggedinUserState.calcCanTakeMortgage && property.calcMortgageRequired > 0
             }))
             
             if (property.updatedByField !== "incomes") {

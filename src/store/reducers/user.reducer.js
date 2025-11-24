@@ -34,8 +34,8 @@ const initialState = {
         allProperties: null,
         comparedPropertyIds: null
     },
-    loggedinUser: authService.getLoggedinUser(),
-    isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+    loggedinUser: JSON.parse(localStorage.getItem('loggedinUser')) || null,
+    isLoggedinUserCompleted: null
 }
 
 export function userReducer(state = initialState, action = {}) {
@@ -45,8 +45,21 @@ export function userReducer(state = initialState, action = {}) {
             return {
                 ...state,
                 loggedinUser: action.loggedinUser,
-                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted(action.loggedinUser)
             }
+        case SIGNUP:
+            //userService.saveLocalUser(action.signupUser)
+            return {
+                ...state,
+                loggedinUser: action.signupUser,
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted(action.signupUser)
+            }
+        case LOGOUT:
+            return {
+                ...state,
+                loggedinUser: null,
+                isLoggedinUserCompleted: false
+            }    
         case GET_HOME:
             return {
                 ...state,
@@ -133,30 +146,17 @@ export function userReducer(state = initialState, action = {}) {
                 }
             }
         case UPDATE_USER:
-            userService.saveLocalUser(action.savedUser)//ADITEST FIX TO JWT
+            //userService.saveLocalUser(action.savedUser)//ADITEST FIX TO JWT
             return {
                 ...state,
                 loggedinUser: action.savedUser,
-                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
+                isLoggedinUserCompleted: authService.getLoggedinUserCompleted(action.savedUser)
             }
         case DELETE_USER:
             return {
                 ...state,
                 users: state.users.filter(user => user._id !== action.userId),
             }
-        case SIGNUP:
-            userService.saveLocalUser(action.signupUser)
-            return {
-                ...state,
-                loggedinUser: action.signupUser,
-                isLoggedinUserCompleted: authService.getLoggedinUserCompleted()
-            }
-        case LOGOUT:
-            return {
-                ...state,
-                loggedinUser: null,
-                isLoggedinUserCompleted: false
-            }    
         default:
             return state
     }

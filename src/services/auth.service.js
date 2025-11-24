@@ -1,5 +1,6 @@
 import { httpService } from './http.service'
 import { userService } from './user.service.js'
+import { utilService } from '../services/util.service'
 import { Preferences } from '@capacitor/preferences'
 import { Capacitor } from '@capacitor/core'
 import jwt_decode from "jwt-decode"
@@ -61,7 +62,7 @@ async function signup(credentials) {
 }
 
 async function logout() {
-    await Preferences.remove({ key: 'token' })
+    userService.deleteLocalUser()
     //sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
     await httpService.post(BASE_URL + 'logout')
 }
@@ -71,18 +72,14 @@ function getLoggedinUser_USING_COOKIE() {
 }
 
 function getLoggedinUser() {
-    let token
-
-    if (Capacitor.isNativePlatform()) {
-        //const { value: token } = await Preferences.get({ key: 'token' })
-        Preferences.get({ key: 'token' })
-            .then(({ value }) => {
-                token = value
-            })
-            .catch((err) => {})
-    } else {
-        token = localStorage.getItem("token")
-    }
+    let token 
+    
+    utilService.getFromStorage('token')
+        .then(({ value }) => {
+            token = value
+        })
+        .catch((err) => {
+        })
 
     if (!token) {
         return null
@@ -93,8 +90,7 @@ function getLoggedinUser() {
         
 }
 
-function getLoggedinUserCompleted() {
-    const loggedinUser = getLoggedinUser()
+function getLoggedinUserCompleted(loggedinUser) {
     return (
         loggedinUser && 
         loggedinUser.fullname && 
@@ -106,6 +102,7 @@ function getLoggedinUserCompleted() {
         !!loggedinUser.termsOfUseAccept) 
 }
 
-function getLastLoggedinEmail() {
-    return localStorage.getItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
+async function getLastLoggedinEmail() {
+    return await utilService.getFromStorage(STORAGE_KEY_LAST_LOGGEDIN_EMAIL)
 }
+

@@ -1,3 +1,4 @@
+import { utilService } from "../../services/util.service.js"
 import { LOADING_START, LOADING_DONE, GET_MODAL_DATA, CHANGE_FONT_SIZE, TOGGLE_ACCESSIBILITY_PANEL, STORAGE_KEY_CUSTOME_FONT_SIZE, STORAGE_SHOW_ACCESSIBILITY_PANEL } from "../reducers/app.reducer.js"
 import { store } from "../store.js"
 
@@ -32,8 +33,8 @@ export function onToggleModal(modalData = null) {
     }
 }
 
-export function onChangeFontSize(customeFontSize = null) {
-    localStorage.setItem(STORAGE_KEY_CUSTOME_FONT_SIZE, customeFontSize)
+export async function onChangeFontSize(customeFontSize = null) {
+    await utilService.getFromStorage(STORAGE_KEY_CUSTOME_FONT_SIZE, customeFontSize)
     
     try {
         store.dispatch({
@@ -46,8 +47,8 @@ export function onChangeFontSize(customeFontSize = null) {
     }
 }
 
-export function onToggleAccessibilityPanel(showAccessibilityPanel) {
-    localStorage.setItem(STORAGE_SHOW_ACCESSIBILITY_PANEL, showAccessibilityPanel)
+export async function onToggleAccessibilityPanel(showAccessibilityPanel) {
+    await utilService.getFromStorage(STORAGE_SHOW_ACCESSIBILITY_PANEL, showAccessibilityPanel)
     
     try {
         store.dispatch({

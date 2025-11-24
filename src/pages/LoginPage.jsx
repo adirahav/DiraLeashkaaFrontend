@@ -38,7 +38,7 @@ export function LoginPage() {
         }
     }
 
-    const [email, setEmail] = useState(defultInputState("email", "login_email_label", authService.getLastLoggedinEmail()))
+    const [email, setEmail] = useState(defultInputState("email", "login_email_label", ""))
     const [password, setPassword] = useState(defultInputState("password", "login_password_label", ""))
     const [submit, setSubmit] = useState(defultButtonState("login_submit"))
     
@@ -47,18 +47,24 @@ export function LoginPage() {
             navigate(`/home`)
         }
 
-        setEmail(email => ({ ...email, value: authService.getLastLoggedinEmail() }))
+        authService.getLastLoggedinEmail().then((reponse) => {
+            setEmail(email => ({ ...email, value: reponse }))
+        }).catch((reasone) => {})
+        
     }, [])
 
     useEffect(() => {
-        setSubmit(submit => ({ ...submit, isDisabled: !utilService.REG_EXP.EMAIL.test(email.value) || !utilService.REG_EXP.PASSWORD.test(password.value) }))
+        setSubmit(submit => ({ 
+            ...submit, 
+            isDisabled: !utilService.REG_EXP.EMAIL.test(email.value) || !utilService.REG_EXP.PASSWORD.test(password.value) 
+        }))
     }, [email, password])
 
     useEffect(() => {
         if (phrases) {
             setEmail(email => ({ ...email, label: utilService.getPhrase("login_email_label", phrases) }))
             setPassword(password => ({ ...password, label: utilService.getPhrase("login_password_label", phrases) }))
-            setSubmit(submit => ({ ...submit, label: utilService.getPhrase("login_submit", phrases) }))
+            setSubmit(submit => ({ ...submit, text: utilService.getPhrase("login_submit", phrases) }))
         }
 
         if (!phrases) {
@@ -96,7 +102,8 @@ export function LoginPage() {
             await login(email.value, password.value)
             
             setForceFetchSplash(true)
-            navigate(`/home`)
+            
+            navigate(isLoggedinUserCompleted ? `/home` : `/signup`)
 
         } catch (error) {
             setError(utilService.getPhrase("login_credentials_error", phrases))

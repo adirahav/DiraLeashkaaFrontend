@@ -13,6 +13,8 @@ export const userService = {
     getById,
     remove,
     saveLocalUser,
+    getLocalUser,
+    deleteLocalUser,
     save,
     getEmptyUser
 }
@@ -92,28 +94,46 @@ function saveLocalUser_USING_COOKIE(user) {
     return user
 }
 
-function saveLocalUser(token) {
+async function saveLocalUser(token) {
     const user = jwt_decode(token)
     if (Capacitor.isNativePlatform()) {
-        Preferences.set({ key: 'token', value: token }).then(() => {}).catch((err) => {})
-        Preferences.set({ key: 'STORAGE_KEY_LAST_LOGGEDIN_EMAIL', value: user.email }).then(() => {}).catch((err) => {})
+        await Preferences.set({ key: 'token', value: token })
+        await Preferences.set({ key: 'STORAGE_KEY_LAST_LOGGEDIN_EMAIL', value: user.email })
     } else {
         localStorage.setItem("token", token)
         localStorage.setItem(STORAGE_KEY_LAST_LOGGEDIN_EMAIL, user.email)
     }
 }
 
-async function save(userToSave) {
-    /*const savedUser = await httpService.put(BASE_URL, userToSave)
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
-    return savedUser*/
-
-    const token = await httpService.put(BASE_URL, userToSave)
-
-    if (token) {
-        userService.saveLocalUser(token)
+export async function getLocalUser() {
+    if (Capacitor.isNativePlatform()) {
+        const { value } = await Preferences.get({ key: 'token' })
+        return value
+    } else {
+        return localStorage.getItem("token") || sessionStorage.getItem("token")
     }
+}
 
+function deleteLocalUser() {
+    if (Capacitor.isNativePlatform()) {
+        Preferences.remove({ key: 'token' })
+    } else {
+        localStorage.removeItem("token")
+    }
+}
+
+async function save_USING_COOCKIE(userToSave) {
+    const savedUser = await httpService.put(BASE_URL, userToSave)
+    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
+    return savedUser
+}
+
+async function save(userToSave) {
+    const token = await httpService.put(BASE_URL, userToSave)
+    if (token) {
+        await userService.saveLocalUser(token)
+    }
+    //sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(savedUser))
     const savedUser = jwt_decode(token)
     return savedUser
 }

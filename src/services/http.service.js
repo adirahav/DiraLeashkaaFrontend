@@ -1,5 +1,7 @@
 import { Capacitor } from '@capacitor/core'
 import Axios from 'axios'
+import { userService } from './user.service'
+import { utilService } from './util.service'
 
 const BASE_URL = Capacitor.isNativePlatform()
     ? 'https://diraleashkaa.onrender.com/api/'
@@ -32,11 +34,11 @@ export const httpService = {
 async function ajax(endpoint, method = 'GET', data = null, token = null) {
     data = {
         ...data,
-        platform: "web",
+        platform: Capacitor.isNativePlatform() ? "android" : "web",
     }
 
-    const jwt_token = token || localStorage.getItem("token") || sessionStorage.getItem("token")
-
+    const jwt_token = token || await userService.getLocalUser()
+    
     try {
         const res = await axios({
             url: `${BASE_URL}${endpoint}`,
@@ -49,10 +51,13 @@ async function ajax(endpoint, method = 'GET', data = null, token = null) {
     } catch (err) {
         console.error(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(err)
+        
         if (err.response && err.response.status === 401) {
-            sessionStorage.clear()
-            localStorage.removeItem("token")
-            window.location.assign('/')
+            // Unauthorized
+            utilService.deleteFromStorage("token")
+
+            const email = await utilService.getFromStorage("email")
+            window.location.assign(email ? '/login' : '/landing')
         }
         throw err
     }

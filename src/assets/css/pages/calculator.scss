@@ -235,7 +235,7 @@
                                 & > span {
                                     width: fit-content;
                                     display: flex;
-
+                                    
                                     & > span {
                                         line-height: rem(30px);
                                         display: inline-block;
@@ -432,6 +432,14 @@
             }
     
             
+        }
+
+        .overlay ~ .view-controller {
+            background-color: transparent;
+        }
+
+        .overlay ~ .filter .elements .property-field .custom-dropdown .dropdown-toggle {
+            background-color: var(--property-field-overlay-background);
         }
 
         .main-content {
@@ -752,6 +760,14 @@
                                     color: transparent;
                                 }
                             }
+
+                            &.textarea {
+                                .textarea {
+                                    textarea {
+                                        height: rem(30px)!important;
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -774,7 +790,7 @@
 
                                 .property-field {
                                     &:first-of-type {
-                                    margin-top: rem(26px);
+                                        margin-top: rem(26px);
                                     }
                                 }
                             }
@@ -830,6 +846,14 @@
                         padding-right: rem(10px);
 
                         article {
+                            &:nth-child(7), &:nth-child(11) {
+                                .property-field {
+                                    &:first-of-type {
+                                        margin-top: rem(26px);
+                                    }
+                                }
+                            }
+
                             h3 {
                                 color: transparent;
                                 height: rem(19px);

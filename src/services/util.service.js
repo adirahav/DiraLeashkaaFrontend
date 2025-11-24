@@ -1,4 +1,5 @@
 import { Capacitor } from "@capacitor/core"
+import { Preferences } from '@capacitor/preferences'
 
 const PLATFORM = {
     MOBILE: "MOBILE",
@@ -29,14 +30,20 @@ export const utilService = {
     toKebabCase,
 
     makeId,
-    saveToStorage,
-    loadFromStorage,
+    //saveToStorage,
+    //loadFromStorage,
     getPlatform,
     getShareMenu,
     debounce,
     throttle,
     priceFormat,
     percentFormat,
+
+    saveToStorage,
+    getFromStorage,
+    deleteFromStorage,
+    isTokenExoired,
+
     PLATFORM,
     REG_EXP,
 }
@@ -62,14 +69,23 @@ function getFixedParameter(key, fixedParameters) {
 }
 
 function getLocalStorage(type, key) {
-    if (localStorage.getItem(key)) {
-        return localStorage.getItem(key)
+    if (this.getFromStorage(key)) {
+        return this.getFromStorage(key)
     } else {
         if (type === "array") {
             return []
         } else {
             return null
         }
+    }
+}
+
+function deleteFromStorage(key) {
+    if (Capacitor.isNativePlatform()) {
+        Preferences.remove({ key })
+    } else {
+        localStorage.removeItem(key)
+        sessionStorage.clear()
     }
 }
 
@@ -121,14 +137,14 @@ function makeId(length = 5) {
     return text
 }
 
-function saveToStorage(key, value) {
+/*function saveToStorage(key, value) {
     localStorage[key] = JSON.stringify(value)
 }
 
 function loadFromStorage(key, defaultValue = null) {
     const value = localStorage[key] || defaultValue
     return JSON.parse(value)
-}
+}*/
 
 function getPlatform() {
     return window.innerWidth <= MEDIA_WIDTH.MOBILE
@@ -213,4 +229,27 @@ Number.prototype.fractionToFloatFormat = function(digits) {
     } else {
         return (0).toFixed(digits)
     }
+}
+
+
+export async function getFromStorage(key) {
+    if (Capacitor.isNativePlatform()) {
+        const { value } = await Preferences.get({ key })
+        return value
+    } else {
+        return localStorage.getItem(key) || sessionStorage.getItem(key)
+    }
+}
+
+export async function saveToStorage(key, value) {
+    if (Capacitor.isNativePlatform()) {
+        await Preferences.set({ key, value })
+    } else {
+        localStorage.setItem(key, value)
+    }
+}
+
+export function isTokenExoired(expiredTime) {
+    const currentTime = Math.floor(Date.now() / 1000) 
+    return expiredTime < currentTime
 }

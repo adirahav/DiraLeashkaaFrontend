@@ -128,18 +128,16 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                              : (!(typeof params.value === 'number') && !(typeof params.defaultValue === 'number')) ||
                                (valueToEdit?.toString().replace(/,/g, '') !== params.defaultValue?.toString())*/
         
-        const showRollback = isFirstLoading || !valueToEdit 
-                             ? false 
-                             : (!(typeof params.value === 'number') && !(typeof params.defaultValue === 'number')) ||
-                               (valueToEdit?.toString().replace(/,/g, '') !==  ((params.defaultValue ?? 0) + (params.additionalFunding ?? 0)).toString())
-        
-        const showFYI = isFirstLoading || !valueToEdit 
+        const isReadOnly = isFirstLoading || !valueToEdit 
                                ? false 
-                               : ((params.additionalFunding ?? 0) > 0) &&
-                                 (valueToEdit?.toString().replace(/,/g, '') ===  ((params.defaultValue ?? 0) + (params.additionalFunding ?? 0)).toString())
-        
+                               : params.isReadOnly
                             
-        const fieldClass = 'property-field auto-fill' + (showRollback ? ' roll-back' : '') + (showFYI ? ' fyi' : '')  + (isFirstLoading
+        const showRollback = isFirstLoading || !valueToEdit || isReadOnly
+                               ? false 
+                               : (!(typeof params.value === 'number') && !(typeof params.defaultValue === 'number')) ||
+                                 (valueToEdit?.toString().replace(/,/g, '') !==  ((params.defaultValue ?? 0) + (params.additionalFunding ?? 0)).toString())
+          
+        const fieldClass = 'property-field auto-fill' + (showRollback ? ' roll-back' : '') + (isReadOnly ? ' fyi' : '')  + (isFirstLoading
                                 ? ' loading1' 
                                 : valueToEdit === null || 
                                   valueToEdit.length === 0 
@@ -152,9 +150,11 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                         <input 
                             value={valueToEdit.toLocaleString()}  
                             onChange={handleValueChange} 
+                            readOnly={isReadOnly}
+                            disabled={isReadOnly}
                             {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})} />
                             {showRollback && <RollbackIcons onClick={handleValueRollback} />}
-                            {showFYI && <AttentionIcon onClick={handleShowFYIAlert} />}
+                            {isReadOnly && <AttentionIcon onClick={handleShowFYIAlert} />}
                     </div>
                 </div>
     }
@@ -640,7 +640,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                         {isOpen && <div className="dropdown-menu">
                             <input placeholder={"חפש..."} value={searchToEdit} onChange={handleSearchChange} />
                             <ul>
-                                {filteredOptions.map((option, index) => (
+                                {filteredOptions?.map((option, index) => (
                                     <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleOptionPress() } role='button' tabIndex={0}>{option.value}</li>
                                 ))}
                             </ul>
@@ -740,7 +740,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                         </button>
                         {isOpen && <div className="dropdown-menu">
                             <ul>
-                                {filteredOptions.map((option, index) => (
+                                {filteredOptions?.map((option, index) => (
                                     <li key={index} id={option.key} className={option.suggested ? "suggested" : ""} onClick={handleOptionPress} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleOptionPress() } role='button' tabIndex={0}>
                                         {option.image && <img src={option.image} alt={option.value} />}
                                         <div>
@@ -828,7 +828,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                         </button>
                         {isOpen && <div className="dropdown-menu">
                             <ul>
-                                {filteredOptions.map((option, index) => (
+                                {filteredOptions?.map((option, index) => (
                                     <li key={index}>
                                         <input type='checkbox' id={option.key} checked={option.checked} onChange={handleCheckboxChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" disabled={!option.enable} ></input>
                                         {option.image && <img src={option.image} alt={option.value} />}
@@ -875,7 +875,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                     ? params?.texts.one
                     : params?.texts.any
             )
-
+            
             setFilteredOptions(params.options)
         }, [params?.options])
 
@@ -902,7 +902,7 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                 setIsOpen(false)
             }
         }
-        
+
         const fieldClass = `property-field dropdown basic-multiple ` 
                                 + (isFirstLoading
                                     ? ' loading6' 
@@ -912,14 +912,14 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                     <span>{params.label}</span>
                     <div ref={dropdownRef}>
                         <div ref={fieldRef} className={`custom-dropdown ${isOpen ? "open" : ""}`}>
-                            <button className="dropdown-toggle" onClick={toggleDropdown}>
+                            <button readOnly={params.isReadOnly} disabled={params.isReadOnly} className="dropdown-toggle" onClick={toggleDropdown}>
                                 <span dangerouslySetInnerHTML={{ __html: choosenText }} />
                                 {!isOpen && <ArrowDownIcon />}
                                 {isOpen && <ArrowUpIcon />}
                             </button>
                             {isOpen && <div className="dropdown-menu">
                                 <ul>
-                                    {filteredOptions.map((option, index) => (
+                                    {filteredOptions ? filteredOptions?.map((option, index) => (
                                         <li key={index}>
                                             <input type='checkbox' id={option.key} checked={option.checked} onChange={handleCheckboxChanged} required autoCapitalize="off" autoCorrect="off" autoComplete="off" ></input>
                                             {option.image && <img src={option.image} alt={option.value} />}
@@ -928,7 +928,11 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                                                 {option.info && <span>{option.info}</span>}
                                             </div>
                                         </li>
-                                    ))}
+                                    )) : 
+                                        <li className='empty'>
+                                            לא הוגדרו מקורות מימון
+                                        </li>
+                                    }
                                 </ul>
                             </div>}
                             
@@ -1171,8 +1175,6 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         
         const normalizedEdit = normalize(formattedPercentToEdit)
         const normalizedDefault = normalize(formattedDefault)
-        
-        console.log(`${params.label}: ${normalizedEdit} !== ${normalizedDefault} + (${JSON.stringify(params.numberPicker)})`)
         
         const showRollback = isFirstLoading || !percentToEdit 
             ? false 

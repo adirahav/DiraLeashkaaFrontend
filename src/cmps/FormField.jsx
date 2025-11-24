@@ -407,7 +407,7 @@ export function FormField({type = "STRING", params, onChange, onPress, onEnter }
 
     function Button({params, onPress, type}) {
         const fieldClass = `form-field button${params.isDisabled ? ' disabled': ''}${params.isLoading ? ' loading': ''}${params.isLinkView ? ' link': ''} ${type}`
-        
+       
         return  <div className={fieldClass}>
                     <MaterialButton variant="contained" className='positive' onClick={onPress} disabled={params.isDisabled}>
                         {!params.isLoading && <span dangerouslySetInnerHTML={{ __html: params.text }}></span>}

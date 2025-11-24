@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { utilService } from "../services/util.service"
 import logoDesktop from '../assets/images/icon_web.png'
 import logoTablet from '../assets/images/icon.png'
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate, useLocation } from "react-router-dom"
 import { useSelector } from 'react-redux'                   
 import { IconSizes, MenuIcon, CalculateIcon, ContactUsIcon, FinancialDetailsIcon, LogoutIcon, 
          PersonalDetailsIcon, ShareIcon, TermsOfUseIcon, AccessibilityStatementIcon,
@@ -20,6 +20,7 @@ const { PLATFORM } = utilService
 export function Header() {
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
@@ -192,10 +193,21 @@ export function Header() {
     const handleLogout = async (ev) => {
         ev.preventDefault() 
         try {
-            logout()
+            await logout()
             navigate("/login") 
         } catch (error) {
             console.error("Logout failed", error)
+        }
+    }
+
+    const handleAddPropertyClick = (ev) => {
+        ev.preventDefault()
+        ev.stopPropagation()
+
+        if (location.pathname === "/property") {
+            navigate('/property', { replace: true })    
+        } else {
+            navigate("/property")
         }
     }
 
@@ -240,7 +252,7 @@ export function Header() {
                     <li><NavLink to="/calculators"><CalculateIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_calculators", phrases)}</span></NavLink></li>
                     <li><NavLink to="/personal-info"><PersonalDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_personal_details", phrases)}</span></NavLink></li>
                     <li><NavLink to="/financial-details"><FinancialDetailsIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_financial_details", phrases)}</span></NavLink></li>
-                    <li><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyWeb} params={addPropertyWeb} /></NavLink></li>
+                    <li><FormField type={"BUTTON"} key={keys.addPropertyWeb} params={addPropertyWeb} onPress={handleAddPropertyClick} /></li>
                     <li className="logout"><button onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_logout", phrases)}</span></button></li>
                 </ul>
             </nav>
@@ -262,7 +274,7 @@ export function Header() {
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
                     <li><a href={share?.moreUrl} onClick={openWebBrowser} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? (<WebIcon sx={IconSizes.Small} />) : (<AndroidIcon sx={IconSizes.Small} />)}<span>{share?.moreText}</span></a></li>
                     <li><NavLink to="/accessibility-statement"><AccessibilityStatementIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_accessibility_statement", phrases)}</span></NavLink></li>
-                    <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
+                    <li className="add-property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} onPress={handleAddPropertyClick} /></li>
                 </ul>
                 <ul className="bottom">
                     <li className="version"><span>v {parseFloat(share?.versionNumber).toFixed(1)}</span></li>
@@ -292,7 +304,7 @@ export function Header() {
                     <li><NavLink to={share?.url} rel="nofollow noopener" target="_blank"><ShareIcon sx={IconSizes.Small} /><span>{share?.text}</span></NavLink></li>
                     <li><a href={share?.moreUrl} onClick={openWebBrowser} rel="nofollow noopener" target="_blank">{share?.moreIcon === "web" ? (<WebIcon sx={IconSizes.Small} />) : (<AndroidIcon sx={IconSizes.Small} />)}<span>{share?.moreText}</span></a></li>
                     <li><NavLink to="/accessibility-statement"><AccessibilityStatementIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_accessibility_statement", phrases)}</span></NavLink></li>
-                    <li className="add-property"><NavLink to="/property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} /></NavLink></li>
+                    <li className="add-property"><FormField type={"BUTTON"} key={keys.addPropertyTablet} params={addPropertyTablet} onPress={handleAddPropertyClick} /></li>
                
                     <li className="divider"></li>
                     <li className="logout"><button onClick={handleLogout}><LogoutIcon sx={IconSizes.Small} /><span>{utilService.getPhrase("drawer_logout", phrases)}</span></button></li>
