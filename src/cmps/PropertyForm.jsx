@@ -9,7 +9,7 @@ import totalProfitImage from '../assets/images/icon_best_yield_total_profit.png'
 import npvImage from '../assets/images/icon_best_yield_npv.png'
 import PropTypes from "prop-types"
 
-export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyId}) { 
+export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyUUID}) { 
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
@@ -128,11 +128,11 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
         }
     }
 
-    const defultMultipleDropdownState = (labelKey, options) => {
+    const defultMultipleDropdownState = (labelKey, options, tooltipKey) => {
         const phrase = "<div>%1$s</div><div>%2$d | <div>%3$d</div></div>"
 
         return {
-            label: utilService.getPhrase("property_additional_funding_sources_label", phrases), 
+            label: utilService.getPhrase(labelKey, phrases), 
             selectedValue: null, 
             options: options?.map((option, index) => ({
                 key: option.uuid,
@@ -146,7 +146,8 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
                 one: "אמצעי מימון אחד",
                 many: "%1$s אמצעי מימון"
             },
-            isReadOnly: false
+            isReadOnly: false,
+            tooltip: "לא הוגדרו אמצעי מימון נוספים. לצורך הגדרה, יש לעבור למסך “נתונים כלכליים”."
         }
     }
 
@@ -157,7 +158,7 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
     const [price, setPrice] = useState(defultNumberState("property_price_label", 9))
     const [equity, setEquity] = useState(defultAutoFillState("property_equity_label", 9))
     
-    const [additionalFundingSources, setAdditionalFundingSources] = useState(defultMultipleDropdownState("property_additional_funding_sources_label", loggedinUserState?.additionalFundingSources))
+    const [additionalFundingSources, setAdditionalFundingSources] = useState(defultMultipleDropdownState("property_additional_funding_sources_label", loggedinUserState?.additionalFundingSources, "property_additional_funding_sources_tooltip"))
     
     const [equityCleaningExpenses, setEquityCleaningExpenses] = useState(defultCalcState("property_equity_cleaning_expenses_label", "property_equity_cleaning_expenses_warning")) 
     const [mortgageRequired, setMortgageRequired] = useState(defultCalcState("property_mortgage_required_label", "property_mortgage_required_warning"))
@@ -175,7 +176,7 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
     const [lawyer, setLawyer] = useState(defultCalcEditableState("property_lawyer_label", "property_lawyer_label_without_value", "lawyerPercent"))
     const [realEstateAgent, setRealEstateAgent] = useState(defultCalcEditableState("property_real_estate_agent_label", "property_real_estate_agent_label_without_value", "realEstateAgentPercent"))
     
-    const [brokerMortgage, setBrokerMortgage] = useState(defultNumberState("property_broker_mortgage_label", 5))
+    const [brokerMortgage, setBrokerMortgage] = useState(defultNumberState("property_broker_mortgage_label", 6))
     const [repairing, setRepairing] = useState(defultNumberState("property_repairing_label", 7))
     const [incidentalsTotal, setIncidentalsTotal] = useState(defultCalcTotalState("property_incidentals_total_label"))
     
@@ -205,15 +206,15 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
     }, [])
     
     useEffect(() => {
-        if (property || !queryPropertyId) {
+        if (property || !queryPropertyUUID) {
             setTimeout(() => {
                 loadProperty()
             }, [0])      
         } 
-    }, [queryPropertyId, property])
+    }, [queryPropertyUUID, property])
 
     useEffect(() => {
-        if (!isLoadingState && !property && !queryPropertyId && phrases) {
+        if (!isLoadingState && !property && !queryPropertyUUID && phrases) {
             setEquity(prevEquity => ({ ...prevEquity, id: property?._id, value: loggedinUserState?.equity, defaultValue: loggedinUserState?.equity }))
             setIncomes(prevIncomes => ({ ...prevIncomes, id: property?._id, value: loggedinUserState?.incomes, defaultValue: loggedinUserState?.incomes}))
             setCommitments(prevCommitments => ({ ...prevCommitments, id: property?._id, value: loggedinUserState?.commitments, defaultValue: loggedinUserState?.commitments}))
@@ -235,6 +236,7 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
             setNote(prevNote => ({...prevNote, label: utilService.getPhrase("property_note_label", phrases)}))
             setIncomes(prevIncomes => ({...prevIncomes, label: utilService.getPhrase("property_incomes_label", phrases)}))
             setCommitments(prevCommitments => ({...prevCommitments, label: utilService.getPhrase("property_commitments_label", phrases), FYI: "ההלוואות וההתחייבויות כוללות גם את ההחזרים החודשיים בגין מקורות המימון שבחרת לשלב."}))
+            
             setAdditionalFundingSources(prevAdditionalFundingSources => ({
                 ...prevAdditionalFundingSources, 
                 label: utilService.getPhrase("property_additional_funding_sources_label", phrases), 
@@ -302,12 +304,12 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
                 setPrice(prevPrice => ({...prevPrice, value: property?.price}))
             }
             
-            if (property?.updatedByField !== "equity" || !queryPropertyId) {
+            if (property?.updatedByField !== "equity" || !queryPropertyUUID) {
                 setEquity(prevEquity=> ({
                     ...prevEquity, 
                     id: property?._id, 
-                    value: queryPropertyId ? property?.calcEquity : loggedinUserState?.equity, 
-                    defaultValue: queryPropertyId ? property?.defaultEquity : loggedinUserState?.equity,
+                    value: queryPropertyUUID ? property?.calcEquity : loggedinUserState?.equity, 
+                    defaultValue: queryPropertyUUID ? property?.defaultEquity : loggedinUserState?.equity,
                     isReadOnly: property?.calcAdditionalFunding?.totalAmount > 0
                 }))
             }
@@ -328,26 +330,26 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
                 setNote(prevNote => ({...prevNote, value: property?.note}))
             }
 
-            if (property?.updatedByField !== "incomes" || !queryPropertyId) {
+            if (property?.updatedByField !== "incomes" || !queryPropertyUUID) {
                 setIncomes(prevIncomes => ({
                     ...prevIncomes, 
                     id: property?._id, 
-                    value: queryPropertyId ? property?.calcIncomes : loggedinUserState?.incomes, 
-                    defaultValue: queryPropertyId ? property?.defaultIncomes : loggedinUserState?.incomes
+                    value: queryPropertyUUID ? property?.calcIncomes : loggedinUserState?.incomes, 
+                    defaultValue: queryPropertyUUID ? property?.defaultIncomes : loggedinUserState?.incomes
                 }))
             }
 
-            if (property?.updatedByField !== "commitments" || !queryPropertyId) {
+            if (property?.updatedByField !== "commitments" || !queryPropertyUUID) {
                 setCommitments(prevCommitments => ({
                     ...prevCommitments, 
                     id: property?._id, 
-                    value: queryPropertyId ? property?.calcCommitments : loggedinUserState?.commitments, 
-                    defaultValue: queryPropertyId ? property?.defaultCommitments : loggedinUserState?.commitments,
+                    value: queryPropertyUUID ? property?.calcCommitments : loggedinUserState?.commitments, 
+                    defaultValue: queryPropertyUUID ? property?.defaultCommitments : loggedinUserState?.commitments,
                     isReadOnly: property?.calcAdditionalFunding?.totalAmount > 0
                 }))
             }
 
-            if (property?.updatedByField !== "additionalFundingSources" || !queryPropertyId) {
+            if (property?.updatedByField !== "additionalFundingSources" || !queryPropertyUUID) {
                 setAdditionalFundingSources(prev => ({
                     ...prev,
                     options: prev.options?.map(opt => ({
@@ -466,7 +468,7 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
 
             
         } catch (error) {
-            console.error(`Error load property ${property?._id || queryPropertyId}:`, error)
+            console.error(`Error load property ${property?._id || queryPropertyUUID}:`, error)
         } 
     }
 
@@ -561,7 +563,7 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
         
         incomes: "incomes" + (incomes.value !== null ? incomes.value : "Default"),
         commitments: "commitments" + (commitments.value !== null ? commitments.value : "Default"),
-        additionalFundingSources: "additionalFundingSources" + (additionalFundingSources ? additionalFundingSources.options?.filter(option => option.checked).length : "Default"),
+        additionalFundingSources: "additionalFundingSources" + (additionalFundingSources && additionalFundingSources.options ? additionalFundingSources.options.filter(option => option.checked).length : "Default"),
         disposableIncome: "disposableIncome" + (disposableIncome.value ? disposableIncome.value : "Default"),
         possibleMonthlyRepayment: "possibleMonthlyRepayment" + (possibleMonthlyRepayment.value ? possibleMonthlyRepayment.value : "Default"),
 
@@ -590,7 +592,8 @@ export function PropertyForm({property, isFirstLoading, onUpdate, queryPropertyI
         yieldAverageReturn: "yieldAverageReturn" + (yields.averageReturn.value !== null ? yields.averageReturn.value : "Default"),
         yieldAverageReturnOnEquity: "yieldAverageReturnOnEquity" + (yields.averageReturnOnEquity.value !== null ? yields.averageReturnOnEquity.value : "Default"),
     }
-
+//console.log("key1="+keys.additionalFundingSources)
+//console.log("key2="+additionalFundingSources?.options?.length)
    /* useEffect(() => {
         (async () => {
             if (!isLoadingState) {
@@ -742,5 +745,5 @@ PropertyForm.propTypes = {
   
     isFirstLoading: PropTypes.bool,  
     onUpdate: PropTypes.func,
-    queryPropertyId: PropTypes.string,
+    queryPropertyUUID: PropTypes.string,
 }

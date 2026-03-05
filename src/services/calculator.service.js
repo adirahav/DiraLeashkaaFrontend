@@ -3,11 +3,35 @@ import { httpService } from "./http.service"
 const BASE_URL = 'calculator/'
 
 export const calculatorService = {
+    getCalculators,
+    getCalculator,
     getMaxPrice,
     updateMaxPrice,
     getCompare,
     saveCompare,
     resetCompare
+}
+
+// get list
+async function getCalculators() {
+    try {
+        const calculators = await httpService.get(BASE_URL)
+        return calculators
+    } catch(err) {
+        console.error(`Had problems getting calculators`)
+        throw err
+    }
+}
+
+// get calculator
+async function getCalculator(calculatorUUID) {
+    try {
+        const calculator = await httpService.get(BASE_URL + calculatorUUID)
+        return calculator
+    } catch(err) {
+        console.error(`Had problems getting calculator`)
+        throw err
+    }
 }
 
 // max price
@@ -47,20 +71,20 @@ async function getCompare() {
     }
 }
 
-async function saveCompare(currentComparedPropertyIds, checked, propertyId) {
+async function saveCompare(currentComparedPropertiesUUIDs, checked, propertyUUID) {
     try {
-        const updatedComparedPropertyIds = checked 
-            ? !currentComparedPropertyIds.includes(propertyId)
-                ? [...currentComparedPropertyIds, propertyId]
-                : currentComparedPropertyIds
-            : currentComparedPropertyIds.filter(id => id !== propertyId)
+        const updatedComparedPropertiesUUIDs = checked 
+            ? !currentComparedPropertiesUUIDs.includes(propertyUUID)
+                ? [...currentComparedPropertiesUUIDs, propertyUUID]
+                : currentComparedPropertiesUUIDs
+            : currentComparedPropertiesUUIDs.filter(id => id !== propertyUUID)
         
         const data = { 
-            propertiesIds: updatedComparedPropertyIds
+            propertyUUIDs: updatedComparedPropertiesUUIDs
         }
 
         await httpService.put(BASE_URL + "compare", data)
-        return updatedComparedPropertyIds
+        return updatedComparedPropertiesUUIDs
     } catch(err) {
         console.error("Had problems save compare")
         throw err
@@ -69,14 +93,14 @@ async function saveCompare(currentComparedPropertyIds, checked, propertyId) {
 
 async function resetCompare() {
     try {
-        const updatedComparedPropertyIds = []
+        const updatedComparedPropertiesUUIDs = []
         
         const data = { 
-            propertiesIds: updatedComparedPropertyIds
+            propertiesUUIDs: updatedComparedPropertiesUUIDs
         }
 
         await httpService.put(BASE_URL + "compare", data)
-        return updatedComparedPropertyIds
+        return updatedComparedPropertiesUUIDs
     } catch(err) {
         console.error("Had problems reset compare")
         throw err

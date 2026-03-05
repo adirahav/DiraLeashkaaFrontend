@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../cmps/Header'
 import { Footer } from '../cmps/Footer'
 import { useSplash } from '../contexts/SplashContext'
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { CalculatorsCalculator } from '../cmps/CalculatorsCalculator'
 import { onLoadingDone, onLoadingStart } from '../store/actions/app.actions'
 import { utilService } from '../services/util.service'
+import { calculatorService } from '../services/calculator.service'
 
 export function CalculatorsPage() {
 
@@ -19,19 +20,39 @@ export function CalculatorsPage() {
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
-    const calculators = splash?.calculators
 
+    const [calculators, setCalculators] = useState()
+    
     useEffect(() => {
-        if (!phrases || !fixedParameters || !calculators) {
+        if (!phrases || !fixedParameters) {
             onLoadingStart()  
         } else {
-            onLoadingDone()  
+            fetchCalculators() 
         }
 
-    }, [phrases, fixedParameters, calculators])
+    }, [phrases, fixedParameters])
 
+    const fetchCalculators = async () => {
+        try {
+            onLoadingStart() 
+            //setShowOverlay(true)
+
+            const fetchInitialData = async () => {
+                const allCalculators = await calculatorService.getCalculators()
+                setCalculators(allCalculators)
+                onLoadingDone() 
+            }
+
+            fetchInitialData()
+        } catch (error) {
+            console.error(`Error fetching calculators:`, error)
+            //setShowOverlay(false)
+            onLoadingDone() 
+        } 
+    }
+    
     function onCalculatorPress(ev, calculator) {
-        navigate(`/calculator?calculatorId=${calculator._id}`)
+        navigate(`/calculator?calculatorUUID=${calculator.uuid}`)
     }
 
     const titleClass = isLoadingState ? 'loading0' : '' 

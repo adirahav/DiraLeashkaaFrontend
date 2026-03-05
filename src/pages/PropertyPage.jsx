@@ -37,7 +37,7 @@ import { Capacitor } from '@capacitor/core'
 export function PropertyPage() {
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
-    let propertyId = queryParams.get('propertyId')
+    let propertyUUID = queryParams.get('propertyUUID')
     const city = queryParams.get('city')
     
     const [property, setProperty] = useState(null)
@@ -58,9 +58,9 @@ export function PropertyPage() {
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
-    const calculators = splash?.calculators
+    //const calculators = splash?.calculators
 
-    const [isWaitingSplash, setIsWaitingSplash] = useState(!phrases || !fixedParameters || !calculators)
+    const [isWaitingSplash, setIsWaitingSplash] = useState(!phrases || !fixedParameters/* || !calculators*/)
     
     const navigate = useNavigate()
 
@@ -96,16 +96,16 @@ export function PropertyPage() {
     })
 
     useEffect(() => {
-        setIsWaitingSplash(!phrases || !fixedParameters || !calculators)
+        setIsWaitingSplash(!phrases || !fixedParameters /*|| !calculators*/)
     }, [phrases])
 
     useEffect(() => {
-        setIsWaitingSplash(!phrases || !fixedParameters || !calculators)
+        setIsWaitingSplash(!phrases || !fixedParameters /*|| !calculators*/)
     
         if (!isWaitingSplash) {
             onLoadingDone()  
             
-            if (propertyId) {
+            if (propertyUUID) {
                 fetchProperty() 
             } else {
                 setProperty(null)
@@ -133,11 +133,11 @@ export function PropertyPage() {
             setLockYields(property.calcYieldForecast === null) 
         } 
 
-        if (!propertyId && property?._id) {
-            propertyId = property?._id
-            window.history.pushState(null, '', `/property?propertyId=${propertyId}`)
+        if (!propertyUUID && property?.uuid) {
+            propertyUUID = property?.uuid
+            window.history.pushState(null, '', `/property?propertyUUID=${propertyUUID}`)
         }
-    }, [property, propertyId])
+    }, [property, propertyUUID])
 
     useEffect(() => {
         if (showInterestsContainer === null || preventUpdateServer) {
@@ -145,18 +145,18 @@ export function PropertyPage() {
         }
 
         const propertyToUpdate = { 
-            propertyId,
+            propertyUUID,
             fieldName: 'showInterestsContainer',
             fieldValue: showInterestsContainer
         }
         
-        if (!preventUpdateServer && propertyId) {
+        if (!preventUpdateServer && propertyUUID) {
             propertyService.save(propertyToUpdate)
         }
 
         setPreventUpdateServer(false)
         
-    }, [showInterestsContainer, preventUpdateServer, propertyId])
+    }, [showInterestsContainer, preventUpdateServer, propertyUUID])
 
     useEffect(() => {
         switch (fragment) {
@@ -207,17 +207,17 @@ export function PropertyPage() {
         try {
           onLoadingStart()  
           setShowOverlay(true)
-          const property = await propertyService.getById(propertyId)
+          const property = await propertyService.getById(propertyUUID)
           setProperty(property)   
           setIsFirstLoading(false)
           setShowOverlay(false)
         } catch (error) {
-          console.error(`Error fetching property ${propertyId}:`, error)
+          console.error(`Error fetching property ${propertyUUID}:`, error)
           navigate("/home") 
         } finally {
           onLoadingDone()  
         }
-    }, [propertyId, navigate, onLoadingStart, onLoadingDone])
+    }, [propertyUUID, navigate, onLoadingStart, onLoadingDone])
 
     const updateProperty = async (fieldName, fieldValue) => {
         try {
@@ -231,7 +231,7 @@ export function PropertyPage() {
             }
 
             const propertyToUpdate = { 
-                propertyId: property?._id,
+                propertyUUID: property?.uuid,
                 fieldName,
                 fieldValue: fieldValue === '' || fieldValue === 'choose' || Array.isArray(fieldValue) && fieldValue.length === 0 ? null : fieldValue
             }
@@ -243,7 +243,7 @@ export function PropertyPage() {
             setShowOverlay(false)
             onLoadingDone()   
         } catch (error) {
-            console.error(`Error update property ${propertyId}:`, error)
+            console.error(`Error update property ${propertyUUID}:`, error)
         } 
     }
     
@@ -374,7 +374,7 @@ export function PropertyPage() {
         <main className={mainClass}>
             {(showOverlay || isFirstLoading) && <Overlay />}
             <h1 className={titleClass}>{utilService.getPhrase('property_cost_estimate_title', phrases)}</h1>
-            <PropertyForm property={property} user={loggedinUserState} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyId={propertyId} />
+            <PropertyForm property={property} user={loggedinUserState} isFirstLoading={isFirstLoading} onUpdate={updateProperty} queryPropertyUUID={propertyUUID} />
             {property?.showMortgagePrepayment && <>
                 <h2>{utilService.getPhrase('property_indexes_and_interests_title', phrases)}</h2>
                 <PropertyInterests fragment={fragment} property={property} display={showInterestsContainer} onUpdate={updateProperty} onCloseInterests={handleDisplayInterests} />

@@ -63,7 +63,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
 
     useEffect(() => {
         aboutDeleteIdRef.current = aboutDeleteIdState
-        if (property && aboutDeleteIdRef.current !== property?._id /*&& longPressedIdRef.current !== property?._id*/) {
+        if (property && aboutDeleteIdRef.current !== property?.uuid /*&& longPressedIdRef.current !== property?.uuid*/) {
             setDeleteStatus('')
         }
     }, [aboutDeleteIdState])
@@ -74,7 +74,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
 
     useEffect(() => {
         aboutActionIdRef.current = aboutActionIdState
-        if (property && aboutActionIdRef.current !== property?._id) {
+        if (property && aboutActionIdRef.current !== property?.uuid) {
             setActionStatus('')
         }
     }, [aboutActionIdState])
@@ -120,7 +120,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     const handleBeforeDelete = () => {
         if (!isDeletingRef.current) {
             setDeleteStatus('before-deleting')
-            onAboutDeletingProperty(property._id) 
+            onAboutDeletingProperty(property.uuid) 
             setDeleteButtons((prevDeleteButtons) => {
                 return {
                     confirm: { ...prevDeleteButtons.confirm, text: utilService.getPhrase("button_delete", phrases), isDisabled: false, isLoading: false },
@@ -131,7 +131,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     }
 
     const handleConfirmDelete = (ev) => {
-        if (property._id === aboutDeleteIdRef.current && !isDeletingRef.current) {
+        if (property.uuid === aboutDeleteIdRef.current && !isDeletingRef.current) {
             setDeleteButtons((prevDeleteButtons) => {
                 return {
                     confirm: { ...prevDeleteButtons.confirm, isLoading: true },
@@ -145,14 +145,14 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     }
 
     const handleCancleDelete = () => {
-        if (property._id === aboutDeleteIdRef.current) {
+        if (property.uuid === aboutDeleteIdRef.current) {
             setDeleteStatus('')
             onAboutDeletingProperty(null)
         }
     }
 
     function handleClickOutside(ev) {
-        if (property?._id === aboutDeleteIdRef.current && 
+        if (property?.uuid === aboutDeleteIdRef.current && 
             !isDeletingRef.current &&
             !ev.target.closest('.delete-overlay') && 
             !ev.target.parentElement.className.baseVal?.includes("icon-delete") &&
@@ -160,7 +160,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
             handleCancleDelete(ev)
         }
 
-        if (property?._id === aboutActionIdRef.current && 
+        if (property?.uuid === aboutActionIdRef.current && 
             !isActingRef.current &&
             !ev.target.closest('.actions-overlay') && 
             !ev.target.parentElement.className.baseVal?.includes("icon-delete") &&
@@ -185,7 +185,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
                 setDeleteStatus('')
                 onAboutDeletingProperty(null)
                 setActionStatus('before-acting')
-                onAboutActingProperty(property._id) 
+                onAboutActingProperty(property.uuid) 
             }   
         } else if (startX >= 80 && actionStatus === 'before-acting') {
             handleCancleDelete(event)
@@ -201,7 +201,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     }*/
 
     const handleCancleAction = () => {
-        if (property._id === aboutActionIdRef.current) {
+        if (property.uuid === aboutActionIdRef.current) {
             setActionStatus('')
             onAboutActingProperty(null)
         }
@@ -216,7 +216,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
 
     const articleClass = (!property
                             ? `loading${index} `
-                            : !property._id 
+                            : !property.uuid 
                                 ? 'add-new '
                                 : '')
                        + (awaitOnLoading ? 'await ' : '')
@@ -247,7 +247,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
     return (
         <article ref={propertyRef} className={articleClass} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
             <div className='container'>
-                {property && property._id && 
+                {property && property.uuid && 
                     <div className='media'>
                         {(property?.media || [{url:missingPictureImage}]).map((media, index) => (
                             <img key={index} src={media.url} className={picturesClasses[index]} alt='' />
@@ -268,12 +268,12 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
                         {showMissDataIcon && <MissDataIcon sx={IconSizes.Small} titleAccess='חסרים נתונים' />}
                     </div>
                     <div className={actionsClass}>
-                        {property && property?._id && <DeleteIcon className='icon-delete' sx={IconSizes.Small} title='מחק' onClick={handleBeforeDelete} />}  
-                        {property && property?._id && <EditIcon className='icon-edit' sx={IconSizes.Small} title='ערוך' onClick={handleEdit} />}  
+                        {property && property?.uuid && <DeleteIcon className='icon-delete' sx={IconSizes.Small} title='מחק' onClick={handleBeforeDelete} />}  
+                        {property && property?.uuid && <EditIcon className='icon-edit' sx={IconSizes.Small} title='ערוך' onClick={handleEdit} />}  
                     </div>
                 </div>
             </div>
-            {property && property._id && <div className='delete-overlay'>
+            {property && property.uuid && <div className='delete-overlay'>
                 <div>
                     {deleteStatus === 'before-deleting' && 
                         <div>
@@ -286,11 +286,11 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
                     {deleteStatus === 'deleting' && <img src={deletingIcon} alt='מחק'/>}
                 </div>
             </div>}
-            {property && property._id && <div className='mobile actions-overlay'>
+            {property && property.uuid && <div className='mobile actions-overlay'>
                 {actionStatus === 'before-acting' && 
                     <div>
                         <div onClick={handleActionPress} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleActionPress() } role='button' tabIndex={0}>
-                            {property && property?._id && <>
+                            {property && property?.uuid && <>
                                 <DeleteIcon className='icon-delete' sx={IconSizes.Small} title='מחק'  /> 
                                 <span className='label-delete' >מחק</span>
                             </>}     
@@ -306,7 +306,7 @@ export function HomeProperty({ index, property, isBestYield, fullData, onPropert
 HomeProperty.propTypes = {
     index: PropTypes.number,
     property: PropTypes.shape({
-        _id: PropTypes.string,
+        uuid: PropTypes.string,
         media: PropTypes.arrayOf(
             PropTypes.shape({
                 url: PropTypes.string

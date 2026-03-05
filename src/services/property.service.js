@@ -8,27 +8,27 @@ export const propertyService = {
     archive
 }
 
-async function getById(propertyId, calcYields = false) {
+async function getById(propertyUUID, calcYields = false) {
     try {
-        const property = await httpService.get(BASE_URL + propertyId + "?calcYields=" + calcYields)
+        const property = await httpService.get(BASE_URL + propertyUUID + "?calcYields=" + calcYields)
         return property
     } catch(err) {
-        console.error(`Had problems getting property ${propertyId}`)
+        console.error(`Had problems getting property ${propertyUUID}`)
         throw err
     }
 }
 
 async function save(propertyToSave) {
-    propertyToSave.propertyId = propertyToSave.propertyId || ''
-    const method = propertyToSave.propertyId ? 'put' : 'post'
+    propertyToSave.propertyUUID = propertyToSave.propertyUUID || ''
+    const method = propertyToSave.propertyUUID ? 'put' : 'post'
     const savedProperty = await httpService[method](BASE_URL, propertyToSave)
     return savedProperty
 }
 
-async function archive(propertyId) {
+async function archive(propertyUUID) {
     const data = { 
         "dataToReturn": "home"
     }
-    const home = await httpService.patch(BASE_URL + `${propertyId}/archive`, data)
+    const home = await httpService.patch(BASE_URL + `${propertyUUID}/archive`, data)
     return home
 }

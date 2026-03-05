@@ -586,6 +586,18 @@
 
             .property-field {
                 margin: 7px 0;
+
+                &.warning {
+                    svg {
+                        margin: rem(5px) rem(5px) rem(5px) 0;
+                    }
+                }
+
+                &.tooltip {
+                    svg {
+                        margin: auto rem(7px) auto 0;
+                    }
+                }
             }
 
             hr {

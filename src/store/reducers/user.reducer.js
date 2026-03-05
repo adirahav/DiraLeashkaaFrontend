@@ -32,7 +32,7 @@ const initialState = {
     },
     compare: {
         allProperties: null,
-        comparedPropertyIds: null
+        comparedPropertiesUUIDs: null
     },
     loggedinUser: JSON.parse(localStorage.getItem('loggedinUser')) || null,
     isLoggedinUserCompleted: null
@@ -78,7 +78,7 @@ export function userReducer(state = initialState, action = {}) {
                 compare: {
                     ...state.compare,
                     allProperties: action.compare?.allProperties,
-                    comparedPropertyIds: action.compare?.comparedPropertyIds
+                    comparedPropertiesUUIDs: action.compare?.comparedPropertiesUUIDs
                 }
             }
         case SAVE_COMPARE:
@@ -86,7 +86,7 @@ export function userReducer(state = initialState, action = {}) {
                 ...state,
                 compare: {
                     ...state.compare,
-                    comparedPropertyIds: action.updatedComparedPropertyIds
+                    comparedPropertiesUUIDs: action.updatedComparedPropertiesUUIDs
                 }
             }
         case ABOUT_DELETE_PROPERTY:
@@ -94,7 +94,7 @@ export function userReducer(state = initialState, action = {}) {
                 ...state,
                 home: {
                     ...state.home,
-                    aboutDeleteId: action.propertyId
+                    aboutDeleteId: action.propertyUUID
                 }
             }
         case DELETING_PROPERTY_START:
@@ -118,7 +118,7 @@ export function userReducer(state = initialState, action = {}) {
                 ...state,
                 home: {
                     ...state.home,
-                    aboutActionId: action.propertyId
+                    aboutActionId: action.propertyUUID
                 }
             }
         case ACTING_PROPERTY_START:
@@ -142,7 +142,7 @@ export function userReducer(state = initialState, action = {}) {
                 ...state,
                 home: {
                     ...state.home,
-                    longPressed: action.propertyId
+                    longPressed: action.propertyUUID
                 }
             }
         case UPDATE_USER:

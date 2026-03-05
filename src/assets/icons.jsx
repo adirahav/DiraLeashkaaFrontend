@@ -20,7 +20,8 @@ import {
     Slideshow as MovieIcon,
     Photo as PictureIcon,
     VolumeOff as MuteIcon,
-    VolumeUp as SoundIcon
+    VolumeUp as SoundIcon,
+    Lock as LockIcon
 } from '@mui/icons-material'
 
 
@@ -77,7 +78,8 @@ export {
     MovieIcon,
     PictureIcon,
     MuteIcon,
-    SoundIcon
+    SoundIcon,
+    LockIcon
 }
 
 export const IconSizes = { 

@@ -7,34 +7,51 @@ import { CalculatorMaxPrice } from '../cmps/CalculatorMaxPrice'
 import { CalculatorCompare } from '../cmps/CalculatorCompare'
 import { onLoadingDone, onLoadingStart } from '../store/actions/app.actions'
 import { utilService } from '../services/util.service'
+import { calculatorService } from '../services/calculator.service'
 
 export function CalculatorPage() {
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
-    let calculatorId = queryParams.get('calculatorId')
+    const calculatorUUID = queryParams.get('calculatorUUID')
     
     const navigate = useNavigate()
 
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
-    const calculators = splash?.calculators
+    //const calculators = splash?.calculators
     
     const [type, setType] = useState()
 
     useEffect(() => {
-        if (!phrases || !fixedParameters || !calculators) {
+        if (!phrases || !fixedParameters /*|| !calculators*/) {
             onLoadingStart()  
         } else {
-            const calculator = calculators?.find(calculator => calculator._id === calculatorId)
-            if (!calculator) {
-                navigate("/home") 
-            }
-            setType(calculator?.type) 
-            onLoadingDone()  
+            fetchCalculator()
         }
-    }, [phrases, fixedParameters, calculators, calculatorId, navigate])
+    }, [phrases, fixedParameters, /*calculators,*/ calculatorUUID, navigate])
 
+    const fetchCalculator = async () => {
+        try {
+            onLoadingStart() 
+            
+            const fetchInitialData = async () => {
+                const calculator = await calculatorService.getCalculator(calculatorUUID) 
+                if (!calculator) {
+                    navigate("/home") 
+                }
+                setType(calculator?.type) 
+                onLoadingDone()  
+            }
+
+            fetchInitialData()
+        } catch (error) {
+            console.error(`Error fetching calculators:`, error)
+            //setShowOverlay(false)
+            onLoadingDone() 
+        } 
+    }
+    
     const mainClass = `calculator ${utilService.toKebabCase(type)}`
 
     return (<>

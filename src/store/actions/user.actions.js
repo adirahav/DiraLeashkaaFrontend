@@ -56,15 +56,15 @@ export async function getCompare() {
     }
 }
 
-export async function saveCompare(checked, propertyId) {
+export async function saveCompare(checked, propertyUUID) {
     try {
         store.dispatch({ type: LOADING_START })
         
         const state = store.getState()
-        const currentComparedPropertyIds = state.userModule.compare?.comparedPropertyIds || []
+        const currentComparedPropertiesUUIDs = state.userModule.compare?.comparedPropertiesUUIDs || []
 
-        const updatedComparedPropertyIds = await calculatorService.saveCompare(currentComparedPropertyIds, checked, propertyId) 
-        store.dispatch({type: SAVE_COMPARE, updatedComparedPropertyIds})
+        const updatedComparedPropertiesUUIDs = await calculatorService.saveCompare(currentComparedPropertiesUUIDs, checked, propertyUUID) 
+        store.dispatch({type: SAVE_COMPARE, updatedComparedPropertiesUUIDs})
 
     } catch(err) {
         console.error("Had issues saving compare data")
@@ -77,8 +77,8 @@ export async function saveCompare(checked, propertyId) {
 export async function resetCompare() {
     try {
         store.dispatch({ type: LOADING_START })
-        const updatedComparedPropertyIds = await calculatorService.resetCompare() 
-        store.dispatch({type: SAVE_COMPARE, updatedComparedPropertyIds})
+        const updatedComparedPropertiesUUIDs = await calculatorService.resetCompare() 
+        store.dispatch({type: SAVE_COMPARE, updatedComparedPropertiesUUIDs})
 
     } catch(err) {
         console.error("Had issues reseting compare data")
@@ -88,9 +88,9 @@ export async function resetCompare() {
     }
 }
 
-export async function onDeleteProperty(propertyId) {
+export async function onDeleteProperty(propertyUUID) {
     try {
-        const home = await propertyService.archive(propertyId)
+        const home = await propertyService.archive(propertyUUID)
         store.dispatch({type: GET_HOME, home})
     } catch(err) {
         console.error("Had issues delete property")
@@ -98,9 +98,9 @@ export async function onDeleteProperty(propertyId) {
     }
 }
 
-export function onAboutDeletingProperty(propertyId) {
+export function onAboutDeletingProperty(propertyUUID) {
     try {
-        store.dispatch({ type: ABOUT_DELETE_PROPERTY, propertyId })
+        store.dispatch({ type: ABOUT_DELETE_PROPERTY, propertyUUID })
     } catch(err) {
         console.error("Had issues start deleting property")
         throw err
@@ -126,9 +126,9 @@ export function onDeletingPropertyDone() {
 }
 
 /**/
-export async function onActionProperty(propertyId) {
+export async function onActionProperty(propertyUUID) {
     try {
-        const home = await propertyService.archive(propertyId)
+        const home = await propertyService.archive(propertyUUID)
         store.dispatch({type: GET_HOME, home})
     } catch(err) {
         console.error("Had issues action property")
@@ -136,9 +136,9 @@ export async function onActionProperty(propertyId) {
     }
 }
 
-export function onAboutActingProperty(propertyId) {
+export function onAboutActingProperty(propertyUUID) {
     try {
-        store.dispatch({ type: ABOUT_ACTION_PROPERTY, propertyId })
+        store.dispatch({ type: ABOUT_ACTION_PROPERTY, propertyUUID })
     } catch(err) {
         console.error("Had issues start acting property")
         throw err
@@ -163,9 +163,9 @@ export function onActingPropertyDone() {
     }
 }
 
-export function onLongPressProperty(propertyId) {
+export function onLongPressProperty(propertyUUID) {
     try {
-        store.dispatch({ type: LONG_PRESSED_PROPERTY, propertyId })
+        store.dispatch({ type: LONG_PRESSED_PROPERTY, propertyUUID })
     } catch(err) {
         console.error("Had issues long press property")
         throw err

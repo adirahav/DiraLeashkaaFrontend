@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import PropTypes from "prop-types"
-import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, AttentionIcon } from '../assets/icons'
+import { ArrowDownIcon, ArrowUpIcon, CancelIcon, OKIcon, RollbackIcons, AttentionIcon, HelpIcon } from '../assets/icons'
 import { utilService } from '../services/util.service'
 import { showWarningAlert, showTooltipAlert } from './Alert'
 import { useSplash } from '../contexts/SplashContext'
@@ -54,10 +54,14 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
        return  <div className={fieldClass}>
                     <span>{params.label}</span>
                     <div>
-                        <input 
+                        <input
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             value={valueToEdit.toLocaleString()}  
-                            onChange={handleValueChange} 
-                            {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})} />
+                            onChange={handleValueChange}
+                            {...(params.maxLength > -1 ? { maxLength: params.maxLength } : {})}
+                            />
                     </div>
                 </div>
     }
@@ -866,12 +870,12 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
         }, [params.label, params.options, params.selectedValue])
 
         useEffect(() => {
-            const checkedCound = params.options?.filter(option => option.checked).length ?? 0
+            const checkedCount = params.options?.filter(option => option.checked).length ?? 0
             
             setChoosenText( 
-                checkedCound > 1
-                ? params?.texts.many.replace('%1$s', checkedCound)
-                : checkedCound === 1
+                checkedCount > 1
+                ? params?.texts.many.replace('%1$s', checkedCount)
+                : checkedCount === 1
                     ? params?.texts.one
                     : params?.texts.any
             )
@@ -903,11 +907,21 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
             }
         }
 
-        const fieldClass = `property-field dropdown basic-multiple ` 
-                                + (isFirstLoading
-                                    ? ' loading6' 
-                                    : '')
-        
+        function handleShowInfoAlert(ev) {
+            ev.preventDefault()
+            ev.stopPropagation()
+
+            showTooltipAlert({
+                title: "Error",
+                message: params.tooltip,
+                closeButton: { show: true, autoClose: false }, 
+                positiveButton: { show: true, text: utilService.getPhrase("dialog_tooltip_button_ok", phrases), onPress: async () => { }, closeAfterPress: true }, 
+                negativeButton: { show: false }, 
+            })
+        }
+
+        const fieldClass = `property-field dropdown basic-multiple ${params.tooltip ? ' tooltip' : ''} ${isFirstLoading ? ' loading6' : ''}` 
+                              
         return  <div className={fieldClass}>
                     <span>{params.label}</span>
                     <div ref={dropdownRef}>
@@ -937,7 +951,9 @@ export function PropertyField({type = "NUMBER", params, isFirstLoading, onValueC
                             </div>}
                             
                         </div>
+                        {!isFirstLoading && params.tooltip && <HelpIcon onClick={handleShowInfoAlert} />}
                     </div>
+                   
                 </div>
     }
 

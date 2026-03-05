@@ -1,0 +1,58 @@
+openapi: 3.0.3
+info:
+  title: EmotionsLogic API
+  description: API for analyzing human speech for genuine emotions
+  version: 1.0.0
+servers:
+  - url: https://api.emotionslogic.com
+    description: Production server
+paths:
+  /analyze:
+    post:
+      summary: Analyze audio file for emotions
+      description: Accepts an audio file and optional metadata, returns emotion analysis results
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Audio file to analyze
+                language:
+                  type: string
+                  description: Optional. Language of the audio.
+                userId:
+                  type: string
+                  description: Optional. ID of the user uploading the audio.
+              required:
+                - file
+      responses:
+        '200':
+          description: Successful analysis
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emotions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Emotion type (e.g., happy, sad, angry)
+                        confidence:
+                          type: number
+                          description: Confidence score between 0 and 1
+                  duration:
+                    type: number
+                    description: Duration of analyzed audio in seconds
+        '400':
+          description: Bad request - missing file or invalid parameters
+        '500':
+          description: Internal server error

@@ -47,7 +47,7 @@ export function HomePage() {
     const { splash } = useSplash()
     const phrases = splash?.phrases
     const fixedParameters = splash?.fixedParameters
-    const calculators = splash?.calculators
+    //const calculators = splash?.calculators
 
     const [citiesNames, setCitiesNames] = useState()
     const { postMessage } = useHomeWorker(true)
@@ -84,7 +84,7 @@ export function HomePage() {
     }, [])
 
     useEffect(() => {
-        if (!phrases || !fixedParameters || !calculators) {
+        if (!phrases || !fixedParameters/* || !calculators*/) {
             onLoadingStart()  
         } else {
             setCitiesNames(utilService.getFixedParameter("cities", fixedParameters))
@@ -146,19 +146,19 @@ export function HomePage() {
     
     // city properties
     function onPropertyPress(ev, property) {
-        if (property._id === homeState.aboutDeleteId && !homeState.isDeleting) {
+        if (property.uuid === homeState.aboutDeleteId && !homeState.isDeleting) {
             ev.preventDefault()
             ev.stopPropagation()
             onDeletingProperty(property)
-        } else if (!property._id) {
+        } else if (!property.uuid) {
             navigate(`/property?city=${property.city}`)
         } else {
-            navigate(`/property?propertyId=${property._id}`)
+            navigate(`/property?propertyUUID=${property.uuid}`)
         }
     }
 
     async function onDeletingProperty(property) {
-        const propertyId = property._id
+        const propertyUUID = property.uuid
         const city = property.city
         
         onDeletingPropertyStart()
@@ -166,7 +166,7 @@ export function HomePage() {
 
         const deleteStartTime = new Date()
     
-        await onDeleteProperty(propertyId)
+        await onDeleteProperty(propertyUUID)
     
         const deleteEndTime = new Date()
     

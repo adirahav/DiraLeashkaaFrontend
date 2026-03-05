@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { utilService } from '../services/util.service'
-import iconLock from '../assets/images/icon_lock.svg'
 import { useSplash } from '../contexts/SplashContext'
 import { FormField } from './FormField'
 import PropTypes from "prop-types"
+import { LockIcon } from '../assets/icons.jsx'
 
 export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) {   
     const { splash } = useSplash()
@@ -61,7 +61,7 @@ export function CalculatorsCalculator({ index, calculator, onCalculatorPress }) 
             </div>
             <div>
                 {!calculator?.isLock && !calculator?.isComingSoon && <FormField type={"BUTTON_LONG"} params={enterButton} onPress={(ev) =>  handleCalculatorPress(ev, calculator)} />}
-                {calculator?.isLock && !calculator?.isComingSoon && <img src={iconLock} alt={utilService.getPhrase("calculator_locked_alt", phrases)} />}
+                {calculator?.isLock && !calculator?.isComingSoon && <LockIcon alt={utilService.getPhrase("calculator_locked_alt", phrases)} />}
                 {calculator?.isComingSoon && <span>{utilService.getPhrase("calculator_coming_soon", phrases)}</span>}
             </div>
             

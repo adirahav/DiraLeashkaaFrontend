@@ -68,8 +68,7 @@
             }
 
             svg {
-                float: left;
-                margin: 0 2px 2px 0;
+                margin: 0 auto;
             }
             
             &.loading0 { animation: loading0-animation 3s infinite; * {  display: none; } }

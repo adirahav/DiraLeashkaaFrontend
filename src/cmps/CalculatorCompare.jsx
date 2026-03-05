@@ -143,7 +143,7 @@ export function CalculatorCompare() {
     
     useEffect(() => {
         const init = async () => {
-            if (compareState.comparedPropertyIds) {
+            if (compareState.comparedPropertiesUUIDs) {
                 onLoadingStart() 
                 setShowOverlay(true)
                 await fetchProperties() 
@@ -155,7 +155,7 @@ export function CalculatorCompare() {
         }
 
         init()
-    }, [compareState.comparedPropertyIds])
+    }, [compareState.comparedPropertiesUUIDs])
 
     useEffect(() => {
         const loadCities = async () => {
@@ -248,16 +248,16 @@ export function CalculatorCompare() {
                 setPropertyFilter(prevPropertyFilter => ({
                     ...prevPropertyFilter,
                     options: selectedCityProperties?.map(property => ({
-                        key: property._id,
+                        key: property.uuid,
                         value: handleGetValue(property?.city, property?.cityElse, property?.address),
                         info: property.note,
                         image: property?.media && property?.media.length > 0 
                                 ? property?.media[0].url 
                                 : missingPictureImage,
-                        enable: compareState.comparedPropertyIds?.includes(property._id) || compareState.comparedPropertyIds?.length < maxPropertiesToCompare,
-                        checked: compareState.comparedPropertyIds?.includes(property._id)
+                        enable: compareState.comparedPropertiesUUIDs?.includes(property.uuid) || compareState.comparedPropertiesUUIDs?.length < maxPropertiesToCompare,
+                        checked: compareState.comparedPropertiesUUIDs?.includes(property.uuid)
                     })),
-                    selectedValue: compareState.comparedPropertyIds,
+                    selectedValue: compareState.comparedPropertiesUUIDs,
                 }))
             }
         }
@@ -278,7 +278,7 @@ export function CalculatorCompare() {
             cityFilter: "cityFilter" + (cityFilter.selectedValue ? cityFilter.selectedValue : "Choose"),
             propertyFilter: "propertyFilter" //+ /*(cityFilter.selectedValue ? cityFilter.selectedValue : "Choose") + */(propertyFilter.options.filter(option => option.checked).map(option => option.key).join('_'))
         })
-    }, [cityFilter.selectedValue, propertyFilter/*, compareState.comparedPropertyIds*/])
+    }, [cityFilter.selectedValue, propertyFilter/*, compareState.comparedPropertiesUUIDs*/])
 
     // filter
     /*const fetchCompareData = async () => {
@@ -296,23 +296,23 @@ export function CalculatorCompare() {
         }))
     }
 
-    async function onPropertyCheckedChanged(checked, propertyId) {
+    async function onPropertyCheckedChanged(checked, propertyUUID) {
         setPropertyFilter(prevPropertyFilter => ({
             ...prevPropertyFilter,
             options: prevPropertyFilter.options.map(option =>
-              option.key === propertyId
+              option.key === propertyUUID
                 ? { ...option, checked, enable: true }
-                : { ...option, enable: option.checked || !checked || (checked && compareState.comparedPropertyIds?.length + 1 < maxPropertiesToCompare) }
+                : { ...option, enable: option.checked || !checked || (checked && compareState.comparedPropertiesUUIDs?.length + 1 < maxPropertiesToCompare) }
             ),
-            selectedValue: prevPropertyFilter.selectedValue.includes(propertyId) && !checked
-                                ? prevPropertyFilter.selectedValue.filter(id => id !== propertyId)
-                                : !prevPropertyFilter.selectedValue.includes(propertyId) && checked
-                                    ? [...prevPropertyFilter.selectedValue, propertyId]
+            selectedValue: prevPropertyFilter.selectedValue.includes(propertyUUID) && !checked
+                                ? prevPropertyFilter.selectedValue.filter(id => id !== propertyUUID)
+                                : !prevPropertyFilter.selectedValue.includes(propertyUUID) && checked
+                                    ? [...prevPropertyFilter.selectedValue, propertyUUID]
                                     : prevPropertyFilter.selectedValue
        
         }))
  
-        await saveCompare(checked, propertyId)
+        await saveCompare(checked, propertyUUID)
     }
 
     const onResetFilter = async () => {
@@ -481,7 +481,7 @@ export function CalculatorCompare() {
     // main
     const fetchProperties = async () => {
         try {
-            const comparedProperties = await Promise.all(compareState.comparedPropertyIds.map(propertyId => propertyService.getById(propertyId, true)))
+            const comparedProperties = await Promise.all(compareState.comparedPropertiesUUIDs.map(propertyUUID => propertyService.getById(propertyUUID, true)))
             setProperties(comparedProperties) 
             
             setViewState(prevViewState => {
@@ -490,17 +490,17 @@ export function CalculatorCompare() {
                     : 'comfy'
             })
         } catch (error) {
-            console.error(`Error fetching properties ${JSON.stringify(compareState.comparedPropertyIds)}:`, error)
+            console.error(`Error fetching properties ${JSON.stringify(compareState.comparedPropertiesUUIDs)}:`, error)
             Navigate("/home") 
         } 
     }
 
-    const updateProperty = async (propertyId, fieldName, fieldValue) => {
+    const updateProperty = async (propertyUUID, fieldName, fieldValue) => {
         try {
             if (fieldName === "city") {
                 setProperties(prevProperties =>
                     prevProperties.map(property =>
-                        property.propertyId === propertyId
+                        property.propertyUUID === propertyUUID
                             ? {...property, city: fieldName}
                             : property
                     )
@@ -508,7 +508,7 @@ export function CalculatorCompare() {
             }
 
             const propertyToUpdate = { 
-                propertyId,
+                propertyUUID,
                 fieldName,
                 fieldValue: fieldValue === '' || fieldValue === 'choose' ? null : fieldValue
             }
@@ -521,7 +521,7 @@ export function CalculatorCompare() {
             const savedProperty = await propertyService.save(propertyToUpdate)
             setProperties(prevProperties =>
                 prevProperties.map(property => 
-                    property._id === propertyId
+                    property.uuid === propertyUUID
                         ? {...savedProperty, updatedByField: fieldName}
                         : property
                 )
@@ -529,7 +529,7 @@ export function CalculatorCompare() {
             
             setShowOverlay(false) 
         } catch (error) {
-            console.error(`Error update property ${propertyId}:`, error)
+            console.error(`Error update property ${propertyUUID}:`, error)
         } finally {
             //onLoadingDone()
         }
@@ -548,7 +548,7 @@ export function CalculatorCompare() {
             </article>
             <article className='elements'>
                 <PropertyField type={"VISUAL_DROP_DOWN"} key={keys.cityFilter} params={cityFilter} isFirstLoading={isFirstLoading} onValueChanged={(value) => onCityChanged(value)} />   
-                <PropertyField type={"BEAUTIFIED_MULTIPLE_DROP_DOWN"} key={keys.propertyFilter} params={propertyFilter} isFirstLoading={isFirstLoading} onValueChanged={(checked, propertyId) => onPropertyCheckedChanged(checked, propertyId)} />   
+                <PropertyField type={"BEAUTIFIED_MULTIPLE_DROP_DOWN"} key={keys.propertyFilter} params={propertyFilter} isFirstLoading={isFirstLoading} onValueChanged={(checked, propertyUUID) => onPropertyCheckedChanged(checked, propertyUUID)} />   
                 <FormField type={"BUTTON"} key={keys.resetFilter} params={resetFilter} onPress={onResetFilter} />
             </article>
         </section>
@@ -578,7 +578,7 @@ export function CalculatorCompare() {
             </div>
             <div className={`main-content ${viewState}`} ref={mainRef} onTransitionEnd={handleViewStateTransitionEnd}>
                 {properties.map((property, index) => (
-                    <PropertyForm key={`property-${index}`} property={property} isFirstLoading={isFirstLoading} onUpdate={(fieldName, fieldValue) => updateProperty(property._id, fieldName, fieldValue)} queryPropertyId={property._id} />
+                    <PropertyForm key={`property-${index}`} property={property} isFirstLoading={isFirstLoading} onUpdate={(fieldName, fieldValue) => updateProperty(property.uuid, fieldName, fieldValue)} queryPropertyUUID={property.uuid} />
                 ))}
             </div>
         </>}
