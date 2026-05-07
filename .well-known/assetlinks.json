@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.emotiologic.apptone.app",
+    "sha256_cert_fingerprints": ["87:71:68:50:7A:D1:3F:1D:B3:E0:B4:D7:86:68:5D:97:13:EA:95:44:55:5A:8B:B1:BA:27:15:4D:B5:BD:9D:D2"]
+  }
+}]

@@ -29,37 +29,37 @@ export function HomeBestYield({ property }) {
     
     return (
         <>
-            {property && <>
+            {(property && property.calcYields) && <>
                 {address && <h2>{address}</h2>}
                 <div>
                     <div className='data'>
                         <article>
                             <img src={averageReturnImage} alt='' />
                             <h3>{utilService.getPhrase("home_best_yield_average_return", phrases)}</h3>
-                            <span>{utilService.percentFormat(property.averageReturn)}</span>
+                            <span>{utilService.percentFormat(property.calcYields.averageReturn)}</span>
                         </article>
                         <article>
                             <img src={averageReturnOnEquityImage} alt='' />
                             <h3>{utilService.getPhrase("home_best_yield_average_return_on_equity", phrases)}</h3>
-                            <span>{utilService.percentFormat(property.averageReturnOnEquity)}</span>
+                            <span>{utilService.percentFormat(property.calcYields.averageReturnOnEquity)}</span>
                         </article>
                         <article>
                             <img src={totalProfitImage} alt='' />
                             <h3>{utilService.getPhrase("home_best_yield_total_profit", phrases)}</h3>
-                            <span>{utilService.priceFormat(property.profit)}</span>
+                            <span>{utilService.priceFormat(property.calcYields.profit)}</span>
                         </article>
                         <article>
                             <img src={npvImage} alt='' />
                             <h3>{utilService.getPhrase("home_best_yield_total_profit_npv", phrases)}</h3>
-                            <span>{utilService.priceFormat(property.profitNpv)}</span>
+                            <span>{utilService.priceFormat(property.calcYields.profitNpv)}</span>
                         </article>
                     </div>
                     <div className='chart'>
-                        <YieldChart rawData={JSON.parse(property.yieldForecast)} />
+                        <YieldChart rawData={JSON.parse(property.calcYields.yieldForecast)} />
                     </div>
                 </div>
             </>}
-            {!property && <>
+            {(!property || !property.calcYields) && <>
                 <h2 className='loading0'>&nbsp;</h2>
                 <div>
                     <div className='data'>
